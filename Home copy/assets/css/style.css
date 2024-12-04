@@ -2,12 +2,12 @@
     position: relative;
     /* top: -8rem; */
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: var(--gap);
     min-height: 100vh;
 }
 
-.intro-img{
+.intro-text-content, .intro-img{
     display: flex;
     flex-flow: column wrap;
     justify-content: center;
@@ -85,15 +85,12 @@
 }
 
 .contact-form {
-    justify-content: center;
+    grid-column: span 2;
 }
 
 .contact-form .form-grid{
     border: none;
     display: block;
-    justify-content: center;
-    flex-flow: row wrap;
-    gap: var(--gap);
 }
 
 .form-grid legend{
@@ -103,21 +100,32 @@
 }
 
 .form-group{
-    flex: 1 1 32rem;
+    padding: 12px;
 }
 
 .form-group label{
     display: block;
     margin-bottom: 1rem;
 }
-
+.form-group input {
+    width: 600px;
+    height: 90px;
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px; /* Deixa os cantos arredondados */
+    box-sizing: border-box;
+}
 .form-group input, .form-group textarea{
     border: none;
     background: var(--white-color);
     padding: 1.5rem 2rem;
-    width: 100%;
-    font-size: 3rem;
+    font-size: 2rem;
     outline: none;
+}
+
+.form-group textarea {
+    width: 100%;
 }
 
 .form-group input:focus, .form-group textarea:focus{
@@ -141,10 +149,6 @@
 
 .form-group ::placeholder{
     color: var(--light-gray-color);
-}
-
-.form-f {
-    justify-content: center;
 }
 
 .footer{
