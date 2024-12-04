@@ -34,36 +34,43 @@
 
    <div class="menu-spacing"></div>
 
-    <section id="contact" class="main-bg section">
-        <div class="main-content intro-content">
-            <div class="intro-text-content">
-                <div class="contact-form">
-                    <fieldset class="form-grid">
-                        <h2>Entrar</h2>
-                        <legend></legend>
-                        <div class="form-group">
-                            <label for="first-name">Email</label>
-                            <input type="text" name="first-name" id="first-name" placeholder="Insira seu Email">
-                        </div>
-                        <div class="form-group">
-                            <label for="last-name">Senha</label>
-                            <input type="password" name="last-name" id="last-name" placeholder="Insira sua senha">
-                        </div>
-                        <div class="form-group">
-                            <p><a href="/recuperar_senha">
-                                Esqueceu a senha?</a>
-                            </p>
-                        </div>
-                        
-                        <div class="form-group">
-                            <button type="submit">Entrar</button>
-                        </div>
-                    </fieldset>
-                 </div>
-            
-            </div>
+   <section id="contact" class="main-bg section">
+    <div class="main-content intro-content" style = "zoom: 0.6;">
+        <div class="contact-form">
+            <fieldset class="form-grid">
+                <h2 style="text-align: center; width: 100%;">Cadastre-se</h2>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="Insira seu Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="nome-pessoa">Nome</label>
+                    <input type="text" name="nome-pessoa" id="nome-pessoa" placeholder="Insira seu nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" name="senha" id="senha" placeholder="Insira sua senha" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha2">Repita a Senha</label>
+                    <input type="password" name="senha2" id="senha2" placeholder="Repita sua senha" required>
+                </div>
+                <div class="form-group">
+                    <label for="cpf">CPF</label>
+                    <input type="text" name="cpf" id="cpf" placeholder="Insira o CPF" required>
+                </div>
+                <div class="form-group" style="text-align: center; width: 100%;">
+                    <p>Já possui uma conta? <a href="../Login/TelaLogin.html">Entrar</a></p>
+                </div>
+                <div class="form-group" style="text-align: center; width: 100%; margin-top: -80px;">
+                    <button type="submit">Criar Conta</button>
+                </div>
+                
+            </fieldset>
         </div>
-    </section>
+        
+    </div>
+</section>
 
     <footer id="footer" class="white-bg footer">
         <p><a rel="nofollow" target="_blank" href="https://www.google.com/">Feito com <span class="heart">♥</span> por TechFree</a></p>
