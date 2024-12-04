@@ -90,7 +90,9 @@
 
 .contact-form .form-grid{
     border: none;
-    display: block;
+    display: flex;
+    flex-flow: row wrap;
+    gap: var(--gap);
 }
 
 .form-grid legend{
