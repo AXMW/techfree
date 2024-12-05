@@ -9,6 +9,11 @@
     background: var(--white-color);
 }
 
+.white-bg-two{
+    background-image: url('../img/white-bg-2.svg');
+    background-position: center center;
+}
+
 .main-content{
     max-width: 120rem;
     margin: 0 auto;
