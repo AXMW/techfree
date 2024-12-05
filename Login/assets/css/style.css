@@ -187,6 +187,29 @@
     transform: rotate(-90deg);
 }
 
+.div-section-zoom {
+    zoom: 0.6;
+}
+
+.space-from-top-h2 {
+    margin-top: 50px;
+}
+
+.space-from-top-label {
+    margin-top: 10px;
+}
+
+.fill-in {
+    width: 100%;
+}
+
+.align-my-text {
+    text-align: center;
+}
+
+.reduce-space-little {
+    margin-top: -20px;
+}
 
 @media (max-width: 800px) {
     .intro-content, .grid{
