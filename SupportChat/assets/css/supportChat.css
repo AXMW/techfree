@@ -1,0 +1,140 @@
+.open-btn {
+    cursor: pointer;
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--white-color);
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100%;
+    border: 0.2rem solid var(--light-gray-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.open-btn i{
+    font-size: 24px;
+    color: var(--primary-color)
+    
+}
+
+
+.chat-popup {
+    display: none;
+    position: fixed;
+    bottom: 0rem;
+    right: 7rem;
+    z-index: 9;
+    width: 320px
+    
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 400px;
+    background: white;
+    border-radius: 10px 10px 6px 6px;
+    border: 0.2rem solid var(--light-gray-color);
+}
+
+.chat-window-head {
+    display: flex;
+    justify-content: space-between;
+    background: var(--primary-color);
+    padding: 16px 14px;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.chat-window-head i{
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.chat-window-head h4{
+    color: white;
+    font-weight: 500;
+    font-size: 30px
+}
+
+.close-btn {
+    color: white;
+    cursor: pointer;
+}
+
+.msg-container {
+    padding: 12px 10px;
+    height: 300px;
+    margin: 10px 0;
+}
+
+.msg {
+    background-color: #e4e3ee;
+    height: 60px;
+    padding: 10px 16px;
+    border-radius: 50px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.msg p{
+    font-size: 12px;
+    line-height: 1.8;
+    margin-bottom: 10px;
+}
+
+.msg span{
+    font-size: 10px;
+    color: grey;
+}
+
+.chat-box-container {
+    display: flex;
+    height: 46px;
+    margin-bottom: 16px;
+    padding: 0px 14px;
+}
+
+.chat-box {
+    display: flex;
+    justify-content: space-between;
+    width: 100%
+    overflow: hidden;
+    border-radius: 30px;
+    background: #f5f5f5;
+    border: 1px solid grey;
+}
+
+.form-container input {
+    width: 80%;
+    padding: 4px;
+    height: 44px;
+    padding-left: 16px;
+    border: none;
+    background: #f1f1f1;
+    border-radius: 30px;
+}
+
+.form-container input:focus {
+    outline: none;
+    background: #f5f5f5;
+}
+
+.send-btn, .btn{
+    width: 60px;
+    background: var(--primary-color);
+    color: white;
+    
+    border-radius: 0 30px 30px 0;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 300ms;
+}
+
+.btn:hover, open-btn:hover {
+    opacity: 0.9;
+}
