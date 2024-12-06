@@ -20,17 +20,50 @@
     <label class="close-menu-label" for="close-menu" title="close menu"></label>
     <aside class="menu white-bg">
         <div class="main-content menu-content">
-            <h1 onclick="getElementById('close-menu').checked = false;"><a href="#">LOGO</a></h1>
+            <h1 onclick="getElementById('close-menu').checked = false;"><a href="#">TECHFREE</a></h1>
+            <div class="search-bar">
+                <div class="search">
+                    <input id="1" type="text" placeholder="Busque por cargos ou empresas...">
+                </div>
+            
+                <div class="search">
+                    <input id="2" type="text" placeholder="Busque por cidade ou estado...">
+                </div>
+                <div>
+                    <button class="icon"><b>Pesquisar</b></button>
+                </div>
+            
+            </div>
             <nav>
                 <ul onclick="getElementById('close-menu').checked = false;">
-                    <li><a href="#intro">intro</a></li>
-                    <li><a href="#top3">top 3</a></li>
-                    <li><a href="#gallery">gallery</a></li>
-                    <li><a href="#work">work</a></li>
-                    <li><a href="#pricing">pricing</a></li>
-                    <li><a href="#contact">contact</a></li>
+                    <li><a class="links-header" href="#">Feed</a></li>
+                    <li><a class="links-header" href="#">FAQ</a></li>
+                    <li><a class="links-header" href="#"><i class="fa fa-user"></i></a></li>
+                    <li><button class="notificacao-icon" onClick="openNotify()"><i class="fa fa-bell notificacao-icon"></i></button></li>
                 </ul>
             </nav>
+        </div>
+  
+        <div class="notify-popup" id="notify-form-container">
+            <form action="#" class="notify-container">
+                <div class="notificacao-container">
+                    <div class="notificacao">
+                        <a href="#"><p>Nova vaga publicada pela empresa BairesDev</p></a>
+                    </div>
+                    <div class="notificacao">
+                        <a href="#"><p>Nova vaga publicada pela empresa Turing</p></a>
+                    </div>
+                    <div class="notificacao">
+                        <a href="#"><p>Nova vaga publicada pela empresa Workana</p></a>
+                    </div>
+                    <div class="notificacao">
+                        <a href="#"><p>Nova vaga publicada pela empresa Talent Group</p></a>
+                    </div>
+                    <div class="notificacao">
+                        <a href="#"><p>Nova vaga publicada pela empresa TecSoft Solutions</p></a>
+                    </div>
+                </div>
+            </form>
         </div>
    </aside>
 
@@ -215,4 +248,6 @@
 
 
    <script src="./js/SupportChat.js"></script>
+   <script src="./js/notificacao.js"></script>
+   
 </html>
