@@ -88,9 +88,15 @@
     grid-column: span 2;
 }
 
-.contact-form .form-grid{
+.contact-form {
     border: none;
     display: block;
+}
+
+.form-grid{
+    border: none;
+    display: block;
+    text-align: center;
 }
 
 .form-grid legend{
@@ -209,6 +215,51 @@
 
 .reduce-space-little {
     margin-top: -20px;
+}
+
+.faq-item {
+    margin-bottom: 15px;
+    font-size: 40px;
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 2000px;
+    height: 120px;
+}
+
+.faq-answer {
+    text-align: left;
+    padding: 15px;
+    background-color: rgb(2, 33, 100);
+    border-right: 3px solid rgb(83, 122, 207);
+    display: none;
+    border-radius: 0 0 15px 15px;
+    border-bottom: 1px solid rgb(81, 135, 250);
+    padding: 30px;
+    width: 2000px;
+}
+
+.toggle-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.toggle-button:focus {
+    outline: none;
+}
+
+.faq-answer p {
+    margin: 0;
 }
 
 @media (max-width: 800px) {
