@@ -177,7 +177,7 @@
 
 .back-to-top{
     position: fixed;
-    bottom: 2rem;
+    bottom: 7rem;
     right: 2rem;
     background: var(--white-color);
     width: 4rem;
@@ -188,6 +188,7 @@
     justify-content: center;
     align-items: center;
     transform: rotate(-90deg);
+    color: var(--primary-color)
 }
 
 .div-section-zoom {

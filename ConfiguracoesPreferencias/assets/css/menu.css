@@ -111,19 +111,19 @@
 }
 
 .notificacao-container {
-    //padding: 8px 8px;
+    /*padding: 8px 8px; */
     height: 300px;
     margin: 10px 0;
 }
 
 .notificacao {
-    //margin-bottom: 1rem;
+    /*margin-bottom: 1rem;*/
     background-color: #e4e3ee;
     border: 0.1rem solid var(--white-color);
 
     height: 60px;
     padding: 10px 16px;
-    //border-radius: 50px;
+    /*border-radius: 50px;*/
     width: 100%;
     display: flex;
     flex-direction: column;
