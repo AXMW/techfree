@@ -154,6 +154,10 @@
     color: var(--light-gray-color);
 }
 
+.form-group select {
+    height: 85px;
+}
+
 .footer{
     text-align: center;
 }
