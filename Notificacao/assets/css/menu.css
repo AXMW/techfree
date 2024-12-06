@@ -143,3 +143,7 @@
 .notificacao a{
     color: var(--primary-color);
 }
+
+.links-header {
+    color: var(--primary-color);
+}
