@@ -1,0 +1,83 @@
+.titulo-vaga {
+    font-size: 3rem;
+}
+
+.vaga-content p{
+    margin-bottom: 0px;
+}
+
+.vaga-desc {
+    text-align: left;
+    font-style: normal;
+    margin-top: 2rem;
+    display:block;
+}
+
+.vaga-desc h2{
+    font-size: 60px
+   
+}
+
+.inscrever {
+    align-self: flex-start;
+    border: 0.5rem solid var(--white-color);
+    background: none;
+    color: var(--white-color);
+    padding: 1.5rem 2rem;
+    font-size: 3rem;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+}
+
+.inscrever:hover {
+    background: var(--white-color);
+    color: var(--primary-color);
+}
+
+.vaga-main-content {
+    display: flex;
+    justify-content: space-between
+}
+
+.vaga-content i{
+    font-size: 24px;
+}
+
+.descricao-vaga {
+    display:flex;
+    margin: 0 0rem 0 10rem;
+}
+
+.recomendacao-vagas {
+    padding: 3rem 3rem;
+    background: var(--light-grey);
+
+}
+
+.job-group {
+    border: 0.2rem solid var(--light-gray-color);
+    background: var(--primary-color);
+    color: var(--white-color);
+    padding: 1rem 1rem;
+    margin-bottom: 2rem;
+}
+
+.recomendacao-vagas h4{
+    font-size: 25px;
+}
+
+.recomendacao-vagas p{
+    font-size: 20px;
+    margin-bottom: 3px;
+}
+
+.recomenda button{
+    align-self: flex-start;
+    border: 0.3rem solid var(--white-color);
+    background: none;
+    color: var(--white-color);
+    padding: 1rem 1.5rem;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+}
