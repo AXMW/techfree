@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/elements.css">
+    <link rel="stylesheet" href="assets/css/classes.css">
+    <link rel="stylesheet" href="assets/css/menu.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,900;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet"> 
+</head> 
+<body>
+    <input id="close-menu" class="close-menu" type="checkbox" aria-label="Close menu" role="button">
+    <label class="close-menu-label" for="close-menu" title="close menu"></label>
+    <aside class="menu white-bg">
+        <div class="main-content menu-content">
+            <h1 onclick="getElementById('close-menu').checked = false;"><a href="#">LOGO</a></h1>
+            <nav>
+                <ul onclick="getElementById('close-menu').checked = false;">
+                    <li><a href="#intro">intro</a></li>
+                    <li><a href="#top3">top 3</a></li>
+                    <li><a href="#gallery">gallery</a></li>
+                    <li><a href="#work">work</a></li>
+                    <li><a href="#pricing">pricing</a></li>
+                    <li><a href="#contact">contact</a></li>
+                </ul>
+            </nav>
+        </div>
+   </aside>
+
+   <div class="menu-spacing"></div>
+
+   <section id="contact" class="main-bg section">
+    <div class="main-content intro-content div-section-zoom">
+        <div class="contact-form">
+            <fieldset class="form-grid">
+                <h2 class="align-my-text fill-in">Editar Perfil</h2>
+                <div class="form-group">
+                    <label for="nome-pessoa">Nome</label>
+                    <input type="text" name="nome-pessoa" id="nome-pessoa" placeholder="Insira seu nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="Insira seu Email" required>
+                </div>
+                    <div class="form-group">
+                        <label for="cpf">CPF</label>
+                        <input type="text" name="cpf" id="cpf" placeholder="Seu CPF" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" name="telefone" id="telefone" placeholder="(XX) XXXXX-XXXX" required>
+                    </div>
+                <div class="form-group">
+                    <label for="cpf">Descrição Pessoal</label>
+                    <input type="text" name="cpf" id="cpf" placeholder="Insira o CPF" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="linkedin">LinkedIn</label>
+                    <input type="url" name="linkedin" id="linkedin" placeholder="URL do seu LinkedIn">
+                </div>
+                <div class="form-group">
+                    <label for="area-atuacao"> <br><br><br><br> Área de Atuação</label>
+                    <select name="area-atuacao" id="area-atuacao" required>
+                        <option value="">Selecione sua área</option>
+                        <option value="programador">Programador</option>
+                        <option value="designer">Designer</option>
+                        <option value="escritor">Escritor</option>
+                        <option value="tradutor">Tradutor</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="idiomas">Idiomas</label>
+                    <select name="idiomas" id="idiomas" multiple>
+                        <option value="portugues">Português</option>
+                        <option value="ingles">Inglês</option>
+                        <option value="espanhol">Espanhol</option>
+                        <option value="frances">Francês</option>
+                        <option value="alemao">Alemão</option>
+                    </select>
+                </div>
+                <div class="form-group align-my-text fill-in">
+                    <button type="submit">Salvar alterações</button>
+                </div>
+                
+            </fieldset>
+        </div>
+        
+    </div>
+</section>
+
+    <footer id="footer" class="white-bg footer">
+        <p><a rel="nofollow" target="_blank" href="https://www.google.com/">Feito com <span class="heart">♥</span> por TechFree</a></p>
+    </footer>
+
+    <a class="back-to-top" href="#">⮞</a>
+
+
+   
+</html>
