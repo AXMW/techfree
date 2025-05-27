@@ -41,6 +41,9 @@ public class Projeto {
     @JoinColumn(name = "empresa_id", nullable = false)
     private Empresa empresa;
 
+    @ManyToOne
+    private Freelancer freelancerSelecionado;
+
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
 

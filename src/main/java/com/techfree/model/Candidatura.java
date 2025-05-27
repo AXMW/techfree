@@ -1,8 +1,9 @@
 package com.techfree.model;
 import jakarta.persistence.*;
 import lombok.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
+import com.techfree.enums.StatusCandidatura;
 
 @Entity
 @Table(name = "candidaturas")
@@ -19,14 +20,16 @@ public class Candidatura {
     @Column(columnDefinition = "TEXT")
     private String mensagem;
 
-    private BigDecimal valorProposto;
+    @Builder.Default
+    private LocalDate data = LocalDate.now();
 
     @Column(name = "data_candidatura")
     private LocalDateTime dataCandidatura;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatusCandidatura status;
+    private StatusCandidatura status = StatusCandidatura.ENVIADA;
 
     @ManyToOne
     @JoinColumn(name = "freelancer_id", nullable = false)

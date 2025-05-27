@@ -20,9 +20,11 @@ public class Certificado {
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
+    private String instituicao;
+
     private String urlCertificado;
 
-    private LocalDate dataEmissao;
+    private LocalDate dataConclusao;
 
     @ManyToOne
     @JoinColumn(name = "freelancer_id", nullable = false)

@@ -1,16 +1,40 @@
 package com.techfree.service;
+import com.techfree.model.Candidatura;
 import com.techfree.model.Empresa;
+import com.techfree.model.Freelancer;
 import com.techfree.model.Projeto;
 import com.techfree.repository.EmpresaRepository;
+import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.ProjetoRepository;
+import com.techfree.service.email.EmailTemplateService;
+import com.techfree.repository.CandidaturaRepository;
+import com.techfree.enums.StatusCandidatura;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.techfree.dto.ProjetoRequestDTO;
+import com.techfree.dto.SelecionarFreelancerRequestDTO;
+
 import java.util.List;
 
 @Service
 public class ProjetoService {
+
+    @Autowired
     private final ProjetoRepository projetoRepository;
+
+    @Autowired
+    private FreelancerRepository freelancerRepository;
+
+    @Autowired
+    private CandidaturaRepository candidaturaRepository;
+
+    @Autowired
+    private NotificacaoService notificacaoService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     public ProjetoService(ProjetoRepository projetoRepository) {
@@ -69,5 +93,40 @@ public class ProjetoService {
         }
 
         projetoRepository.delete(projeto);
+    }
+
+    public void selecionarFreelancer(String emailEmpresa, SelecionarFreelancerRequestDTO dto) {
+        Projeto projeto = projetoRepository.findById(dto.getProjetoId())
+            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+
+    if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
+        throw new RuntimeException("Você não tem permissão para selecionar freelancer nesse projeto.");
+    }
+
+    Freelancer freelancer = freelancerRepository.findById(dto.getFreelancerId())
+            .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+
+    // 1️⃣ Verifica se esse freelancer se candidatou ao projeto
+    Candidatura candidatura = candidaturaRepository.findByProjetoAndFreelancer(projeto, freelancer)
+            .orElseThrow(() -> new RuntimeException("Esse freelancer não se candidatou ao projeto."));
+
+    // 2️⃣ Atualiza status da candidatura para "Selecionado"
+    candidatura.setStatus(StatusCandidatura.ACEITA);
+    candidaturaRepository.save(candidatura);
+
+    // 3️⃣ Atualiza o projeto
+    projeto.setFreelancerSelecionado(freelancer);
+    projetoRepository.save(projeto);
+
+    // 4️⃣ Cria uma notificação persistente
+    notificacaoService.criarNotificacao(freelancer.getUsuario(), 
+        "Você foi selecionado para o projeto: " + projeto.getTitulo());
+
+    // 5️⃣ Envia um e-mail
+    emailService.enviar(
+        freelancer.getUsuario().getEmail(),
+        "Você foi selecionado para o projeto " + projeto.getTitulo(),
+        EmailTemplateService.templateSelecionadoProjeto(freelancer.getNome(), projeto.getTitulo())
+    );
     }
 }

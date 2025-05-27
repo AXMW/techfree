@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.techfree.dto.ProjetoRequestDTO;
 import com.techfree.dto.ProjetoResponseDTO;
+import com.techfree.dto.SelecionarFreelancerRequestDTO;
 import com.techfree.model.Projeto;
 import com.techfree.service.ProjetoService;
 
@@ -65,5 +66,14 @@ public class ProjetoController {
 
         projetoService.deletarProjeto(id, auth.getName());
         return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('EMPRESA')")
+    @PostMapping("/selecionar-freelancer")
+    public ResponseEntity<?> selecionarFreelancer(@RequestBody SelecionarFreelancerRequestDTO dto,
+                                                Authentication auth) {
+        String email = auth.getName();
+        projetoService.selecionarFreelancer(email, dto);
+        return ResponseEntity.ok().build();
     }
 }
