@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>FAQ - TechFree</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bs-theme-overrides.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,600,700,800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Azeret+Mono:400,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700,900&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body, main, section.bg-dark {
+            /*background: #00294B !important;*/
+            min-height: 100vh;
+        }
+        .faq-header {
+            background: rgba(0,0,0,0.18);
+            color: #fff;
+            border-radius: 1.5rem;
+            padding: 2.5rem 2rem 2rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            text-align: center;
+        }
+        .faq-header h1 {
+            font-weight: 800;
+            color: #fff;
+        }
+        .faq-header p {
+            color: #FF6F00;
+            font-size: 1.2rem;
+            margin-bottom: 0;
+        }
+        .faq-search {
+            max-width: 500px;
+            margin: 0 auto 2.5rem auto;
+        }
+        .faq-search input {
+            background: #22243a;
+            color: #fff;
+            border: 1px solid #44495a;
+            border-radius: 0.7rem;
+        }
+        .faq-search input:focus {
+            background: #22243a;
+            color: #fff;
+            border-color: #FF6F00;
+        }
+        .accordion-item {
+            background: rgba(255,255,255,0.07);
+            border: none;
+            border-radius: 1rem !important;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+        }
+        .accordion-button {
+            background: transparent;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 1rem !important;
+            box-shadow: none;
+            transition: background 0.2s, color 0.2s;
+        }
+        .accordion-button:not(.collapsed) {
+            background: #FF6F00;
+            color: #fff;
+        }
+        .accordion-button:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255,111,0,0.15);
+        }
+        .accordion-body {
+            color: #fff;
+            font-size: 1.05rem;
+            background: transparent;
+        }
+        .faq-icon {
+            color: #FF6F00;
+            margin-right: 0.7rem;
+            font-size: 1.3rem;
+        }
+        @media (max-width: 767px) {
+            .faq-header {
+                padding: 1.5rem 1rem 1rem 1rem;
+            }
+            .faq-search {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md sticky-top py-3 navbar-dark" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 60px;height: 60px;background: #00294B;">
+                    <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="54" height="33" style="margin-left: 3px;">
+                </span>
+            </a>
+            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
+                <span class="visually-hidden">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="/Inicio.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/faq.html">FAQ</a></li>
+                </ul>
+                <a class="btn btn-primary shadow" role="button" href="signup.html">Entrar</a>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <section class="bg-dark py-5">
+            <div class="container">
+                <div class="faq-header mb-4">
+                    <h1>Perguntas Frequentes</h1>
+                    <p>Tire suas dúvidas sobre o sistema de Freelancers TechFree</p>
+                </div>
+                <div class="faq-search mb-4">
+                    <input type="text" class="form-control" id="faqSearch" placeholder="Buscar por palavra-chave...">
+                </div>
+                <div class="accordion" id="faqAccordion">
+                    <!-- FAQ 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq1-heading">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                                <span class="faq-icon"><i class="bi bi-question-circle"></i></span>
+                                O que é a plataforma TechFree?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" aria-labelledby="faq1-heading" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                A TechFree é uma plataforma que conecta empresas, estudantes e instituições de ensino para realização de projetos reais, facilitando a contratação de freelancers e a validação de experiências práticas.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq2-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                                <span class="faq-icon"><i class="bi bi-person-badge"></i></span>
+                                Como faço para me cadastrar como freelancer?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" aria-labelledby="faq2-heading" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Basta clicar em "Entrar" no menu superior e seguir o processo de cadastro, preenchendo seus dados e habilidades. Após o cadastro, você poderá se candidatar a projetos e vagas disponíveis.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq3-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                                <span class="faq-icon"><i class="bi bi-building"></i></span>
+                                Empresas podem publicar projetos? Como funciona?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" aria-labelledby="faq3-heading" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Sim! Empresas podem publicar projetos detalhando requisitos, prazos e tecnologias desejadas. Os freelancers interessados se candidatam e a empresa pode selecionar o melhor perfil para cada vaga.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 4 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq4-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                                <span class="faq-icon"><i class="bi bi-shield-lock"></i></span>
+                                Meus dados estão seguros na plataforma?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" aria-labelledby="faq4-heading" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Sim, levamos a segurança a sério. Seus dados são protegidos e utilizados apenas para fins de conexão entre empresas, freelancers e instituições, conforme nossa política de privacidade.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 5 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq5-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
+                                <span class="faq-icon"><i class="bi bi-award"></i></span>
+                                Projetos realizados contam como estágio ou experiência?
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" aria-labelledby="faq5-heading" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Sim! Projetos aprovados podem gerar certificados válidos como estágio supervisionado, além de enriquecer seu portfólio e currículo.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 6 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq6-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" aria-expanded="false" aria-controls="faq6">
+                                <span class="faq-icon"><i class="bi bi-cash-stack"></i></span>
+                                Como funciona o pagamento dos freelancers?
+                            </button>
+                        </h2>
+                        <div id="faq6" class="accordion-collapse collapse" aria-labelledby="faq6-heading" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                O pagamento é acordado entre empresa e freelancer antes do início do projeto. A plataforma pode oferecer suporte para garantir a segurança das transações.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 7 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq7-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7" aria-expanded="false" aria-controls="faq7">
+                                <span class="faq-icon"><i class="bi bi-lightbulb"></i></span>
+                                Sou estudante, posso participar mesmo sem experiência?
+                            </button>
+                        </h2>
+                        <div id="faq7" class="accordion-collapse collapse" aria-labelledby="faq7-heading" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Claro! A plataforma é feita para ajudar estudantes a ganharem experiência prática. Você pode se candidatar a projetos de acordo com seu nível de conhecimento.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 8 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq8-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8" aria-expanded="false" aria-controls="faq8">
+                                <span class="faq-icon"><i class="bi bi-people"></i></span>
+                                Como as instituições de ensino participam?
+                            </button>
+                        </h2>
+                        <div id="faq8" class="accordion-collapse collapse" aria-labelledby="faq8-heading" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Instituições podem validar projetos, acompanhar o progresso dos alunos e emitir certificados, integrando a experiência prática ao currículo acadêmico.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 9 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq9-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9" aria-expanded="false" aria-controls="faq9">
+                                <span class="faq-icon"><i class="bi bi-gear"></i></span>
+                                Como posso alterar meus dados ou configurações?
+                            </button>
+                        </h2>
+                        <div id="faq9" class="accordion-collapse collapse" aria-labelledby="faq9-heading" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Basta acessar a página de configurações de perfil, onde você pode atualizar informações pessoais, preferências de notificação e segurança da conta.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 10 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq10-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10" aria-expanded="false" aria-controls="faq10">
+                                <span class="faq-icon"><i class="bi bi-question-circle"></i></span>
+                                Ainda tenho dúvidas, como posso falar com o suporte?
+                            </button>
+                        </h2>
+                        <div id="faq10" class="accordion-collapse collapse" aria-labelledby="faq10-heading" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Você pode acessar a Central de Ajuda ou entrar em contato pelo email suporte@techfree.com. Nossa equipe está pronta para ajudar!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-dark mt-5">
+        <div class="container py-4 py-lg-5">
+            <div class="row justify-content-center">
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Dúvidas</h3>
+                    <ul class="list-unstyled">
+                        <li>FAQ</li>
+                        <li><a href="#">Central de ajuda</a></li>
+                        <li>Política de privacidade</li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Sobre</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Publique seu projeto</a></li>
+                        <li><a href="#">Cadastro</a></li>
+                        <li><a href="#">Lista de freelancers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
+                    <div class="fw-bold d-flex align-items-center mb-2">
+                        <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 40px;height: 40px;background: #00294B;">
+                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30" height="23" style="height: 18px;">
+                        </span>
+                        <span>TechFree</span>
+                    </div>
+                    <p class="text-muted">Feito com muito amor e dedicação por alunos da Fatec Carapicuíba!❤️</p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-muted d-flex justify-content-between align-items-center pt-3">
+                <p class="mb-0">Copyright © 2025 TechFree</p>
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item"><i class="bi bi-github"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-twitter"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-instagram"></i></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        // Filtro de busca dinâmica nas perguntas
+        document.getElementById('faqSearch').addEventListener('input', function () {
+            const search = this.value.toLowerCase();
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(search) ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

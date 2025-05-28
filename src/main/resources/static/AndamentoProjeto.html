@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Andamento do Projeto - TechFree</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bs-theme-overrides.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,600,700,800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Azeret+Mono:400,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700,900&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        main, section.bg-dark {
+            /*background: #00294B !important;*/
+            min-height: 100vh;
+        }
+        .project-header {
+            background: rgba(0,0,0,0.18);
+            color: #fff;
+            border-radius: 1rem;
+            padding: 2rem 2rem 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        .project-header h1,
+        .project-header .fs-5,
+        .project-header .badge,
+        .project-header span,
+        .project-header i {
+            color: #fff !important;
+        }
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            margin-top: 1.5rem;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 22px;
+            right: -50%;
+            width: 100%;
+            height: 4px;
+            background: #44495a;
+            z-index: 0;
+        }
+        .step.active .step-circle,
+        .step.completed .step-circle {
+            background: #FF6F00;
+            color: #fff;
+            border: none;
+        }
+        .step.completed .step-circle {
+            background: #1e824c;
+        }
+        .step .step-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #44495a;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem auto;
+            font-size: 1.4rem;
+            font-weight: 700;
+            border: 2px solid #fff;
+            z-index: 1;
+            position: relative;
+        }
+        .step-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .upload-card, .info-card {
+            background: rgba(255,255,255,0.07);
+            color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            padding: 2rem 2rem 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+        .upload-btn {
+            background: #FF6F00;
+            color: #fff;
+            font-weight: 700;
+            border: none;
+        }
+        .upload-btn:hover {
+            background: #ff8c33;
+            color: #fff;
+        }
+        .section-title {
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+        .info-card h5, .info-card h6, .info-card strong {
+            color: #fff;
+        }
+        .info-card ul, .info-card li, .info-card p {
+            color: #fff;
+        }
+        .company-logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #f1f1f1;
+            border: 2px solid #00294B;
+        }
+        .link-input {
+            border-radius: 0.5rem;
+        }
+        .form-label, .form-control::placeholder {
+            color: #fff !important;
+            opacity: 0.8;
+        }
+        .form-control {
+            background: #22243a;
+            color: #fff;
+            border: 1px solid #44495a;
+        }
+        .form-control:focus {
+            background: #22243a;
+            color: #fff;
+            border-color: #FF6F00;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md sticky-top py-3 navbar-dark" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 60px;height: 60px;background: #00294B;">
+                    <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="54" height="33" style="margin-left: 3px;">
+                </span>
+            </a>
+            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
+                <span class="visually-hidden">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="/Inicio.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contacts.html">FAQ</a></li>
+                </ul>
+                <a class="btn btn-primary shadow" role="button" href="signup.html">Entrar</a>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <section class="bg-dark py-5">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="project-header mb-4">
+                            <h1 class="display-6 fw-bold mb-2">Andamento do Projeto</h1>
+                            <div class="fs-5 mb-1">Plataforma de Gestão de Projetos Integrados</div>
+                            <div class="d-flex align-items-center mb-2">
+                                <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" class="company-logo me-3" alt="Logo da Empresa">
+                                <span class="fw-semibold">TechFree</span>
+                            </div>
+                        </div>
+                        <!-- Stepper visual de etapas -->
+                        <div class="stepper">
+                            <div class="step completed">
+                                <div class="step-circle"><i class="bi bi-check-lg"></i></div>
+                                <div class="step-label">Recebido</div>
+                            </div>
+                            <div class="step active">
+                                <div class="step-circle">2</div>
+                                <div class="step-label">Em andamento</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-circle">3</div>
+                                <div class="step-label">Revisão</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-circle">4</div>
+                                <div class="step-label">Finalizado</div>
+                            </div>
+                        </div>
+                        <!-- Card de upload -->
+                        <div class="upload-card mb-4">
+                            <h2 class="section-title">Envio do Projeto</h2>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="fileUpload" class="form-label">Selecione o arquivo do projeto</label>
+                                    <input class="form-control" type="file" id="fileUpload" accept=".zip,.rar,.pdf,.docx,.pptx,.xlsx,.txt,.jpg,.png">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="linkProjeto" class="form-label">Ou envie o link do projeto hospedado</label>
+                                    <input type="url" class="form-control link-input" id="linkProjeto" placeholder="https://meuprojeto.com">
+                                </div>
+                                <button type="submit" class="btn upload-btn mt-2"><i class="bi bi-upload me-2"></i>Enviar Projeto</button>
+                            </form>
+                        </div>
+                        <!-- Card de instruções -->
+                        <div class="info-card">
+                            <h5>O que fazer nesta etapa?</h5>
+                            <ul>
+                                <li>Leia atentamente os requisitos do projeto abaixo;</li>
+                                <li>Desenvolva a solução conforme solicitado;</li>
+                                <li>Faça o upload do arquivo ou envie o link do projeto hospedado;</li>
+                                <li>Após o envio, aguarde a revisão do responsável.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Sidebar com detalhes -->
+                    <div class="col-lg-4">
+                        <div class="info-card mb-4">
+                            <h5 class="mb-3">Detalhes do Projeto</h5>
+                            <ul class="list-unstyled mb-2">
+                                <li><strong>Status:</strong> <span class="badge bg-success">Em andamento</span></li>
+                                <li><strong>Prazo:</strong> 20/06/2025</li>
+                                <li><strong>Tipo:</strong> Projeto Integrador</li>
+                                <li><strong>Ferramentas:</strong> React, Node.js, MongoDB</li>
+                            </ul>
+                        </div>
+                        <div class="info-card">
+                            <h6 class="fw-bold mb-2">Contato do Orientador</h6>
+                            <p class="mb-1"><i class="bi bi-envelope"></i> orientador@techfree.com</p>
+                            <p class="mb-0"><i class="bi bi-whatsapp"></i> (11) 99999-9999</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-dark mt-5">
+        <div class="container py-4 py-lg-5">
+            <div class="row justify-content-center">
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Dúvidas</h3>
+                    <ul class="list-unstyled">
+                        <li>FAQ</li>
+                        <li><a href="#">Central de ajuda</a></li>
+                        <li>Política de privacidade</li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Sobre</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Publique seu projeto</a></li>
+                        <li><a href="#">Cadastro</a></li>
+                        <li><a href="#">Lista de freelancers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
+                    <div class="fw-bold d-flex align-items-center mb-2">
+                        <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 40px;height: 40px;background: #00294B;">
+                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30" height="23" style="height: 18px;">
+                        </span>
+                        <span>TechFree</span>
+                    </div>
+                    <p class="text-muted">Feito com muito amor e dedicação por alunos da Fatec Carapicuíba!❤️</p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-muted d-flex justify-content-between align-items-center pt-3">
+                <p class="mb-0">Copyright © 2025 TechFree</p>
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item"><i class="bi bi-github"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-twitter"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-instagram"></i></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

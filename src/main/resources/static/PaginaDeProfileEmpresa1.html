@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Meu Perfil - TechFree</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bs-theme-overrides.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,600,700,800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Azeret+Mono:400,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700,900&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        main, section.bg-dark {
+            /*background: #00294B !important;*/
+            min-height: 100vh;
+        }
+        .profile-header {
+            background: rgba(0,0,0,0.18);
+            color: #fff;
+            border-radius: 1.5rem;
+            padding: 2.5rem 2rem 2rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: relative; /* <-- Adicione esta linha */
+        }
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #FF6F00;
+            background: #fff;
+            object-fit: contain;
+        }
+        .profile-info h2 {
+            color: #fff;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+        }
+        .profile-info .role {
+            color: #FF6F00;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .profile-info .location {
+            color: #bdbdbd;
+            font-size: 1rem;
+        }
+        .profile-section {
+            background: rgba(255,255,255,0.07);
+            color: #fff;
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            padding: 2rem 2rem 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+        .profile-section h4 {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .profile-section ul {
+            padding-left: 1.2rem;
+        }
+        .invite-card {
+            background: rgba(255,255,255,0.10);
+            border-radius: 1.2rem;
+            padding: 2rem 2rem 1.5rem 2rem;
+            color: #fff;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+        }
+        .invite-card h5 {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .invite-card select {
+            background: #22243a;
+            color: #fff;
+            border: 1px solid #44495a;
+            border-radius: 0.5rem;
+        }
+        .invite-card select:focus {
+            background: #22243a;
+            color: #fff;
+            border-color: #FF6F00;
+        }
+        .invite-btn {
+            background: #FF6F00;
+            color: #fff;
+            font-weight: 700;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 2.5rem;
+            margin-top: 1rem;
+            transition: background 0.2s;
+        }
+        .invite-btn:hover {
+            background: #ff8c33;
+            color: #fff;
+        }
+        .profile-contact i {
+            color: #FF6F00;
+            margin-right: 0.5rem;
+        }
+        .profile-contact span {
+            color: #fff;
+        }
+        .profile-social a {
+            color: #fff;
+            margin-right: 1rem;
+            font-size: 1.4rem;
+            transition: color 0.2s;
+        }
+        .profile-social a:hover {
+            color: #FF6F00;
+        }
+        .profile-timeline {
+            border-left: 3px solid #FF6F00;
+            padding-left: 1.5rem;
+            margin-left: 0.5rem;
+        }
+        .profile-timeline .timeline-item {
+            margin-bottom: 1.5rem;
+        }
+        .profile-timeline .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        .timeline-title {
+            font-weight: 700;
+            color: #FF6F00;
+        }
+        .timeline-period {
+            font-size: 0.95rem;
+            color: #bdbdbd;
+        }
+        .profile-certificates .badge {
+            background: #fff;
+            color: #00294B;
+            margin-right: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid #FF6F00;
+        }
+        .profile-rating {
+            color: #FFD700;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .profile-feedback {
+            background: rgba(255,255,255,0.10);
+            border-radius: 0.8rem;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            font-size: 0.98rem;
+        }
+        .profile-flags {
+            margin-top: 0.5rem;
+        }
+        .profile-flags-box {
+            min-width: 70px;
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .flag-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #ff4d4f;
+            color: #ff4d4f;
+            font-size: 0.95rem;
+            background: transparent;
+            transition: background 0.2s;
+        }
+        .flag-circle:not(:last-child) {
+            margin-right: 0.2rem;
+        }
+        .flag-circle.filled {
+            background: #ff4d4f;
+            color: #fff;
+            border-color: #ff4d4f;
+        }
+        .flag-circle.filled i {
+            color: #fff;
+        }
+        .flag-circle i {
+            color: #ff4d4f;
+            font-size: 0.85em;
+        }
+        .flags-text {
+            font-size: 0.97rem;
+            color: #fff;
+            margin-left: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md sticky-top py-3 navbar-dark" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 60px;height: 60px;background: #00294B;">
+                    <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="54" height="33" style="margin-left: 3px;">
+                </span>
+            </a>
+            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
+                <span class="visually-hidden">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="/Inicio.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contacts.html">FAQ</a></li>
+                </ul>
+                <a class="btn btn-primary shadow" role="button" href="signup.html">Entrar</a>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <section class="bg-dark py-5">
+            <div class="container">
+                <!-- Profile Header -->
+                <div class="profile-header mb-4"></div>
+                <!-- Sobre, Projetos, Feedback -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="profile-section mb-4">
+                            <h4>Sobre a Empresa</h4>
+                            <p>
+                                A TechFree conecta empresas, estudantes e instituições para realização de projetos reais, promovendo inovação e desenvolvimento de talentos.
+                            </p>
+                        </div>
+                        <div class="profile-section mb-4">
+                            <h4>Projetos Publicados</h4>
+                            <div class="profile-timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-title">Plataforma de Gestão de Projetos Integrados</div>
+                                    <div class="timeline-period">2024-2025</div>
+                                    <div>Projeto para conectar empresas e estudantes em desafios reais.</div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-title">App de Saúde Mental</div>
+                                    <div class="timeline-period">2023-2024</div>
+                                    <div>Aplicativo focado em bem-estar e acompanhamento psicológico.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-section mb-4">
+                            <h4>Feedbacks de Freelancers</h4>
+                            <div class="profile-feedback">
+                                "Ótima empresa para projetos colaborativos, comunicação clara e pagamentos em dia."
+                            </div>
+                            <div class="profile-feedback">
+                                "Equipe aberta a novas ideias e muito profissionalismo no acompanhamento dos projetos."
+                            </div>
+                            <div class="profile-feedback">
+                                "Ambiente inovador e respeito com os freelancers. Recomendo!"
+                            </div>
+                            <div class="profile-feedback">
+                                "Processos bem definidos e feedbacks constantes durante o projeto."
+                            </div>
+                            <div class="profile-feedback">
+                                "Pagamento sempre em dia e abertura para sugestões técnicas."
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card lateral -->
+                    <div class="col-lg-4">
+                        <div class="invite-card">
+                            <h5>Publicar Nova Oportunidade</h5>
+                            <a href="ListagemDeProjetosVagas.html" class="btn invite-btn w-100 mt-2"><i class="bi bi-plus-circle"></i> Publicar Oportunidade</a>
+                        </div>
+                        <div class="invite-card mt-4">
+                            <h5>Atualize informações</h5>
+                            <button type="button" class="invite-btn w-100 mt-2">
+                                <i class="bi bi-pencil-square"></i> Alterar Perfil
+                            </button>
+                        </div>
+                        <div class="invite-card mt-4">
+                            <h5>Conclusão do perfil</h5>
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span style="color:#fff;font-weight:600;">Progresso</span>
+                                <span id="empresaProfileProgressPercent" style="color:#FF6F00;font-weight:700;">0%</span>
+                            </div>
+                            <div class="progress mb-4" style="height: 1.1rem; border-radius:0.7rem;">
+                                <div id="empresaProfileProgressBar" class="progress-bar bg-warning" role="progressbar" style="width: 0%; font-weight:700; color:#22243a;">
+                                    0%
+                                </div>
+                            </div>
+                            <ul id="empresaProfileMissingFields" class="mt-3 mb-0" style="color:#ff4d4f; font-size:1rem; list-style:disc inside;"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-dark mt-5">
+        <div class="container py-4 py-lg-5">
+            <div class="row justify-content-center">
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Dúvidas</h3>
+                    <ul class="list-unstyled">
+                        <li>FAQ</li>
+                        <li><a href="#">Central de ajuda</a></li>
+                        <li>Política de privacidade</li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Sobre</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Publique seu projeto</a></li>
+                        <li><a href="#">Cadastro</a></li>
+                        <li><a href="#">Lista de freelancers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
+                    <div class="fw-bold d-flex align-items-center mb-2">
+                        <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 40px;height: 40px;background: #00294B;">
+                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30" height="23" style="height: 18px;">
+                        </span>
+                        <span>TechFree</span>
+                    </div>
+                    <p class="text-muted">Feito com muito amor e dedicação por alunos da Fatec Carapicuíba!❤️</p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-muted d-flex justify-content-between align-items-center pt-3">
+                <p class="mb-0">Copyright © 2025 TechFree</p>
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item"><i class="bi bi-github"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-twitter"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-instagram"></i></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+const empresaProfileData = {
+    nome: "TechFree",
+    avatar: "assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png",
+    cargo: "Plataforma de Gestão de Projetos",
+    contato: {
+        email: "contato@techfree.com",
+        telefone: "(11) 12345-6789"
+    },
+    redes: [
+        { icon: "bi-linkedin", link: "#" },
+        { icon: "bi-globe", link: "#" }
+    ],
+    flags: 1, // <-- Adicione o número de flags aqui
+    sobre: "A TechFree conecta empresas, estudantes e instituições para realização de projetos reais, promovendo inovação e desenvolvimento de talentos.",
+    projetos: [
+        {
+            titulo: "Plataforma de Gestão de Projetos Integrados",
+            periodo: "2024-2025",
+            descricao: "Projeto para conectar empresas e estudantes em desafios reais."
+        },
+        {
+            titulo: "App de Saúde Mental",
+            periodo: "2023-2024",
+            descricao: "Aplicativo focado em bem-estar e acompanhamento psicológico."
+        }
+    ],
+    feedbacks: [
+        {
+            texto: "Ótima empresa para projetos colaborativos, comunicação clara e pagamentos em dia."
+        },
+        {
+            texto: "Equipe aberta a novas ideias e muito profissionalismo no acompanhamento dos projetos."
+        },
+        {
+            texto: "Ambiente inovador e respeito com os freelancers. Recomendo!"
+        },
+        {
+            texto: "Processos bem definidos e feedbacks constantes durante o projeto."
+        },
+        {
+            texto: "Pagamento sempre em dia e abertura para sugestões técnicas."
+        }
+    ]
+};
+
+function renderEmpresaProfile(profile) {
+    // Flags
+    let flagsHtml = '';
+    for (let i = 0; i < 3; i++) {
+        flagsHtml += `
+            <span class="flag-circle${i < (profile.flags || 0) ? ' filled' : ''}">
+                <i class="bi bi-flag-fill" style="font-size:0.8em;${i < (profile.flags || 0) ? '' : 'opacity:0;'}"></i>
+            </span>
+        `;
+    }
+
+    // Header
+    document.querySelector('.profile-header').innerHTML = `
+        <img src="${profile.avatar}" class="profile-avatar" alt="Logo da Empresa">
+        <div class="profile-info flex-grow-1">
+            <h2>${profile.nome}</h2>
+            <div class="role mb-1">${profile.cargo}</div>
+            <div class="profile-contact mt-2">
+                <div><i class="bi bi-envelope"></i><span>${profile.contato.email}</span></div>
+                <div><i class="bi bi-telephone"></i><span>${profile.contato.telefone}</span></div>
+            </div>
+            <div class="profile-social mt-3">
+                ${profile.redes.map(r => `<a href="${r.link}" target="_blank" rel="noopener noreferrer"><i class="bi ${r.icon}"></i></a>`).join('')}
+            </div>
+        </div>
+        <div class="profile-flags-box d-flex flex-column align-items-center">
+            <div class="d-flex align-items-center gap-2 mb-1">
+                ${flagsHtml}
+            </div>
+            <span class="flags-text mt-1">
+                ${(profile.flags || 0)}/3 flags
+            </span>
+        </div>
+    `;
+}
+
+// Chame a função após o DOM estar pronto:
+document.addEventListener('DOMContentLoaded', function() {
+    renderEmpresaProfile(empresaProfileData);
+    atualizarBarraProgressoEmpresa(empresaProfileData);
+});
+
+// Adapte para empresa:
+function calcularProgressoEmpresa(profile) {
+    const campos = [
+        { nome: "Logo", valor: profile.avatar },
+        { nome: "Nome", valor: profile.nome },
+        { nome: "Descrição", valor: profile.sobre },
+        { nome: "E-mail", valor: profile.contato.email },
+        { nome: "Telefone", valor: profile.contato.telefone },
+        { nome: "LinkedIn", valor: (profile.redes && profile.redes[0]?.link) ? profile.redes[0].link : "" },
+        { nome: "Site", valor: (profile.redes && profile.redes[1]?.link) ? profile.redes[1].link : "" },
+        { nome: "Projetos Publicados", valor: (profile.projetos && profile.projetos.length > 0) ? "ok" : "" }
+    ];
+    const total = campos.length;
+    const preenchidos = campos.filter(c => c.valor && String(c.valor).trim() !== "").length;
+    const faltando = campos.filter(c => !c.valor || String(c.valor).trim() === "").map(c => c.nome);
+    const porcentagem = Math.round((preenchidos / total) * 100);
+    return { porcentagem, faltando };
+}
+
+function atualizarBarraProgressoEmpresa(profile) {
+    const { porcentagem, faltando } = calcularProgressoEmpresa(profile);
+    const bar = document.getElementById('empresaProfileProgressBar');
+    const percent = document.getElementById('empresaProfileProgressPercent');
+    const missing = document.getElementById('empresaProfileMissingFields');
+    if(bar && percent) {
+        bar.style.width = porcentagem + "%";
+        bar.textContent = porcentagem + "%";
+        percent.textContent = porcentagem + "%";
+    }
+    if(missing) {
+        if(faltando.length === 0) {
+            missing.innerHTML = `<li style="color:#28a745;">Tudo preenchido! 🎉</li>`;
+        } else {
+            missing.innerHTML = `<div class="mb-2" style="color:#fff;font-weight:600;margin-left:-2rem;">Itens ainda não preenchidos:</div>` +
+                faltando.map(f => `<li>${f}</li>`).join('');
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    atualizarBarraProgressoEmpresa(empresaProfileData);
+});
+</script>
+</body>
+</html>

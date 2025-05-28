@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Gerenciar Projetos - TechFree</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bs-theme-overrides.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,600,700,800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Azeret+Mono:400,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700,900&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body, main, section.bg-dark {
+            /*background: #00294B !important;*/
+            min-height: 100vh;
+        }
+        .manage-header {
+            background: rgba(0,0,0,0.18);
+            color: #fff;
+            border-radius: 1.5rem;
+            padding: 2.5rem 2rem 2rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            text-align: center;
+        }
+        .manage-header h1 {
+            font-weight: 800;
+            color: #fff;
+        }
+        .manage-header p {
+            color: #FF6F00;
+            font-size: 1.2rem;
+            margin-bottom: 0;
+        }
+        .project-filters {
+            background: rgba(255,255,255,0.07);
+            border-radius: 1rem;
+            padding: 1.2rem 2rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .project-filters input,
+        .project-filters select {
+            background: #22243a;
+            color: #fff;
+            border: 1px solid #44495a;
+            border-radius: 0.5rem;
+        }
+        .project-filters input:focus,
+        .project-filters select:focus {
+            background: #22243a;
+            color: #fff;
+            border-color: #FF6F00;
+        }
+        .project-tabs .nav-link {
+            color: #fff;
+            font-weight: 600;
+            border-radius: 0.7rem 0.7rem 0 0;
+            padding: 0.8rem 1.5rem;
+            transition: background 0.2s, color 0.2s;
+            font-size: 1.08rem;
+        }
+        .project-tabs .nav-link.active, .project-tabs .nav-link:hover {
+            background: #FF6F00;
+            color: #fff;
+        }
+        .project-list {
+            margin-top: 1.5rem;
+        }
+        .project-card {
+            background: rgba(255,255,255,0.07);
+            color: #fff;
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: box-shadow 0.2s;
+        }
+        .project-card:hover {
+            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+        }
+        .project-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .project-status {
+            font-size: 0.98rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            padding: 0.2rem 0.8rem;
+            display: inline-block;
+            margin-left: 0.7rem;
+        }
+        .status-aberto {
+            background: #198754;
+            color: #fff;
+        }
+        .status-fechado {
+            background: #6c757d;
+            color: #fff;
+        }
+        .status-andamento {
+            background: #FF6F00;
+            color: #fff;
+        }
+        .project-actions .btn {
+            margin-right: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .project-meta {
+            color: #bdbdbd;
+            font-size: 0.97rem;
+        }
+        .manage-header,
+        .project-filters,
+        .project-tabs,
+        .project-list {
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 767px) {
+            .manage-header,
+            .project-filters,
+            .project-tabs,
+            .project-list {
+                max-width: 98vw;
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+            .project-filters {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.7rem;
+                padding: 1rem;
+            }
+            .project-tabs .nav-link {
+                font-size: 1rem;
+                padding: 0.7rem 0.8rem;
+            }
+            .project-card {
+                padding: 1.2rem 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md sticky-top py-3 navbar-dark" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 60px;height: 60px;background: #00294B;">
+                    <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="54" height="33" style="margin-left: 3px;">
+                </span>
+            </a>
+            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
+                <span class="visually-hidden">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link active" href="/Inicio.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/faq.html">FAQ</a></li>
+                </ul>
+                <a class="btn btn-primary shadow" role="button" href="signup.html">Entrar</a>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <section class="bg-dark py-5">
+            <div class="container">
+                <div class="manage-header mb-4">
+                    <h1>Gerenciar Projetos</h1>
+                    <p>Visualize, filtre e gerencie todos os seus projetos em um só lugar</p>
+                </div>
+                <!-- Filtros -->
+                <div class="project-filters mb-4" style="justify-content: flex-start; gap: 0.7rem;">
+                    <input type="text" class="form-control" id="searchInput" style="max-width: 320px;" placeholder="Buscar por nome, tecnologia...">
+                    <button class="btn btn-info" id="clearFilters"><i class="bi bi-x-circle"></i> Limpar</button>
+                </div>
+                <!-- Tabs de status -->
+                <ul class="nav project-tabs nav-tabs mb-3" id="projectTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="tab-todos" data-bs-toggle="tab" data-bs-target="#todos" type="button" role="tab">Todos</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-oportunidades" data-bs-toggle="tab" data-bs-target="#oportunidades" type="button" role="tab">Oportunidades</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-andamento" data-bs-toggle="tab" data-bs-target="#andamento" type="button" role="tab">Em Andamento</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab-fechados" data-bs-toggle="tab" data-bs-target="#fechados" type="button" role="tab">Fechados</button>
+                    </li>
+                </ul>
+                <!-- Lista de projetos -->
+                <div class="tab-content project-list" id="projectTabContent">
+                    <!-- Todos os Projetos -->
+                    <div class="tab-pane fade show active" id="todos" role="tabpanel">
+                        <div id="list-todos"></div>
+                    </div>
+                    <!-- Projetos Oportunidades -->
+                    <div class="tab-pane fade" id="oportunidades" role="tabpanel">
+                        <div id="list-oportunidades"></div>
+                    </div>
+                    <!-- Projetos Em Andamento -->
+                    <div class="tab-pane fade" id="andamento" role="tabpanel">
+                        <div id="list-andamento"></div>
+                    </div>
+                    <!-- Projetos Fechados -->
+                    <div class="tab-pane fade" id="fechados" role="tabpanel">
+                        <div id="list-fechados"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-dark mt-5">
+        <div class="container py-4 py-lg-5">
+            <div class="row justify-content-center">
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Dúvidas</h3>
+                    <ul class="list-unstyled">
+                        <li>FAQ</li>
+                        <li><a href="#">Central de ajuda</a></li>
+                        <li>Política de privacidade</li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Sobre</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Publique seu projeto</a></li>
+                        <li><a href="#">Cadastro</a></li>
+                        <li><a href="#">Lista de freelancers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
+                    <div class="fw-bold d-flex align-items-center mb-2">
+                        <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 40px;height: 40px;background: #00294B;">
+                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30" height="23" style="height: 18px;">
+                        </span>
+                        <span>TechFree</span>
+                    </div>
+                    <p class="text-muted">Feito com muito amor e dedicação por alunos da Fatec Carapicuíba!❤️</p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-muted d-flex justify-content-between align-items-center pt-3">
+                <p class="mb-0">Copyright © 2025 TechFree</p>
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item"><i class="bi bi-github"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-twitter"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-instagram"></i></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        // Exemplo de projetos simulados
+        const projects = [
+            {
+                title: "Plataforma de Gestão de Projetos Integrados",
+                status: "aberto",
+                tech: ["React", "Node.js"],
+                date: "10/05/2025",
+                desc: "Sistema web para conectar empresas, estudantes e instituições.",
+                id: 1
+            },
+            {
+                title: "Sistema de Controle de Estoque",
+                status: "andamento",
+                tech: ["Angular", "Firebase"],
+                date: "15/04/2025",
+                desc: "Dashboard de estoque com relatórios e integração mobile.",
+                id: 2
+            },
+            {
+                title: "App de Saúde Mental",
+                status: "fechado",
+                tech: ["Flutter", "Firebase"],
+                date: "20/02/2025",
+                desc: "Aplicativo mobile para acompanhamento de saúde mental.",
+                id: 3
+            },
+            {
+                title: "Portal de Notícias Universitárias",
+                status: "aberto",
+                tech: ["WordPress", "PHP"],
+                date: "01/06/2025",
+                desc: "Portal para publicação de notícias e eventos acadêmicos.",
+                id: 4
+            },
+            {
+                title: "E-commerce de Produtos Artesanais",
+                status: "andamento",
+                tech: ["Shopify", "UX/UI"],
+                date: "28/03/2025",
+                desc: "Loja virtual para artesãos com integração de pagamentos.",
+                id: 5
+            },
+            {
+                title: "Sistema de Reservas de Salas",
+                status: "fechado",
+                tech: ["Vue.js", "Laravel"],
+                date: "12/01/2025",
+                desc: "Sistema web para reservas de salas em empresas.",
+                id: 6
+            }
+        ];
+
+        function renderProjects() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            document.getElementById('list-todos').innerHTML = '';
+            document.getElementById('list-oportunidades').innerHTML = '';
+            document.getElementById('list-andamento').innerHTML = '';
+            document.getElementById('list-fechados').innerHTML = '';
+            projects.forEach(p => {
+                let show = true;
+                if (search && !(p.title.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search) || p.tech.join(',').toLowerCase().includes(search))) show = false;
+                if (!show) return;
+                const card = document.createElement('div');
+                card.className = 'project-card';
+
+                // Botões padrão
+                let actions = `
+                    <button class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Visualizar</button>
+                `;
+
+                // Se não for fechado, mostra editar e desativar
+                if (p.status !== 'fechado') {
+                    actions += `
+                        <button class="btn btn-outline-info btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+                        <button class="btn btn-outline-danger btn-sm"><i class="bi bi-slash-circle"></i> Desativar</button>
+                    `;
+                }
+
+                // Se for fechado, mostra baixar certificado
+                if (p.status === 'fechado') {
+                    actions += `<button class="btn btn-success btn-sm"><i class="bi bi-download"></i> Baixar certificado</button>`;
+                }
+
+                // Se for oportunidade, mostra ver candidatos
+                if (p.status === 'aberto') {
+                    actions += `<button class="btn btn-outline-warning btn-sm"><i class="bi bi-people"></i> Ver candidatos</button>`;
+                }
+
+                card.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="project-title">${p.title}</span>
+                        <span class="project-status status-${p.status}">${p.status === 'aberto' ? 'Oportunidade' : p.status === 'andamento' ? 'Em Andamento' : 'Fechado'}</span>
+                    </div>
+                    <div class="project-meta mb-1"><i class="bi bi-calendar-event"></i> ${p.date} &nbsp; | &nbsp; <i class="bi bi-code-slash"></i> ${p.tech.join(', ')}</div>
+                    <div class="mb-2">${p.desc}</div>
+                    <div class="project-actions">
+                        ${actions}
+                    </div>
+                `;
+                document.getElementById('list-todos').appendChild(card.cloneNode(true));
+                if (p.status === 'aberto') document.getElementById('list-oportunidades').appendChild(card.cloneNode(true));
+                if (p.status === 'andamento') document.getElementById('list-andamento').appendChild(card.cloneNode(true));
+                if (p.status === 'fechado') document.getElementById('list-fechados').appendChild(card.cloneNode(true));
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', renderProjects);
+        document.getElementById('clearFilters').addEventListener('click', function () {
+            document.getElementById('searchInput').value = '';
+            renderProjects();
+        });
+        renderProjects();
+    </script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Configurações de Perfil - TechFree</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bs-theme-overrides.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,600,700,800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Azeret+Mono:400,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700,900&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body, main, section.bg-dark {
+            /*background: #00294B !important;*/
+            min-height: 100vh;
+        }
+        .settings-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .settings-nav {
+            background: rgba(255,255,255,0.07);
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            padding: 2rem 1.5rem;
+            min-width: 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .settings-nav .nav-link {
+            color: #fff;
+            font-weight: 600;
+            border-radius: 0.7rem;
+            padding: 0.8rem 1rem;
+            transition: background 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 1.08rem;
+        }
+        .settings-nav .nav-link.active, .settings-nav .nav-link:hover {
+            background: #FF6F00;
+            color: #fff;
+        }
+        .settings-content {
+            flex: 1;
+            background: rgba(255,255,255,0.10);
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+            padding: 2.5rem 2rem 2rem 2rem;
+            color: #fff;
+            min-width: 320px;
+        }
+        .settings-content h3 {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+        .form-label, .form-check-label {
+            color: #fff;
+            font-weight: 500;
+        }
+        .form-control, .form-select {
+            background: #22243a;
+            color: #fff;
+            border: 1px solid #44495a;
+            border-radius: 0.5rem;
+        }
+        .form-control:focus, .form-select:focus {
+            background: #22243a;
+            color: #fff;
+            border-color: #FF6F00;
+        }
+        .btn-primary {
+            background: #FF6F00;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: #ff8c33;
+        }
+        @media (max-width: 991px) {
+            .settings-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .settings-nav {
+                flex-direction: row;
+                min-width: 0;
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+                justify-content: space-between;
+            }
+            .settings-nav .nav-link {
+                font-size: 1rem;
+                padding: 0.7rem 0.8rem;
+            }
+        }
+        .navbar-nav.mx-auto {
+            display: flex;
+            justify-content: center !important;
+            width: 100%;
+            gap: 2rem;
+        }
+        .navbar-nav.ms-auto {
+            gap: 0.7rem !important;
+        }
+        .nav-item .bi-bell {
+            position: relative;
+        }
+        .nav-item .notification-badge {
+            position: absolute;
+            right: -12px;
+            top: 2px;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            background: #dc3545;
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 700;
+            min-width: 18px;
+            text-align: center;
+            z-index: 2;
+        }
+        .dropdown-menu-notification .dropdown-item {
+            white-space: normal;
+            font-size: 1.05rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            line-height: 1.4;
+        }
+        .dropdown-menu-notification .dropdown-item i {
+            font-size: 1.3rem;
+            margin-right: 0.7rem;
+            vertical-align: middle;
+        }
+        .dropdown-menu .dropdown-item:hover,
+        .dropdown-menu .dropdown-item:focus,
+        .dropdown-menu-notification .dropdown-item:hover,
+        .dropdown-menu-notification .dropdown-item:focus {
+            background: #FF6F00 !important;
+            color: #ffffff !important;
+            transition: background 0.15s;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md sticky-top py-3 navbar-dark" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 60px;height: 60px;background: #00294B;">
+                    <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="54" height="33" style="margin-left: 3px;">
+                </span>
+            </a>
+            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
+                <span class="visually-hidden">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Inicio.html">Início</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="projetoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Projeto
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="projetoDropdown">
+                            <li><a class="dropdown-item" href="/GerenciarProjetos.html"><i class="bi bi-kanban"></i> Gerenciar Projetos</a></li>
+                            <li><a class="dropdown-item" href="/publicarVaga.html"><i class="bi bi-plus-circle"></i> Abrir oportunidade</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto d-flex flex-row align-items-center">
+                    <!-- Notificações -->
+                    <li class="nav-item dropdown" style="position:relative;">
+                        <a class="nav-link position-relative" href="#" id="notificacoesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding-right: 0.7rem;">
+                            <i class="bi bi-bell" style="font-size: 1.5rem;"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-notification" aria-labelledby="notificacoesDropdown" style="min-width: 320px;">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-info-circle"></i>
+                                    <span>
+                                        <strong>Nova mensagem em um projeto:</strong><br>
+                                        Você recebeu uma nova mensagem no projeto <b>Plataforma de Gestão</b>. Clique para visualizar.
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-person-check"></i>
+                                    <span>
+                                        <strong>Sua candidatura foi aprovada:</strong><br>
+                                        Parabéns! Você foi aprovado para participar do projeto <b>App de Saúde Mental</b>.
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-calendar-event"></i>
+                                    <span>
+                                        <strong>Reunião agendada:</strong><br>
+                                        Uma reunião está marcada para amanhã às 14h no projeto <b>Sistema de Controle de Estoque</b>.
+                                    </span>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center text-info" href="#">Ver todas notificações</a></li>
+                        </ul>
+                    </li>
+                    <!-- Perfil -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="perfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle" style="font-size: 1.6rem;"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="perfilDropdown">
+                            <li><a class="dropdown-item" href="/ConfiguracoesDePerfil.html"><i class="bi bi-gear"></i> Configurações</a></li>
+                            <li><a class="dropdown-item" href="/VerPerfil.html"><i class="bi bi-person"></i> Ver Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <section class="bg-dark py-5">
+            <div class="container">
+                <h2 class="fw-bold text-center mb-5" style="color:#fff;">Configurações de Perfil</h2>
+                <div class="settings-container">
+                    <!-- Navegação lateral -->
+                    <nav class="settings-nav nav flex-column me-3" id="settingsTabs" role="tablist">
+                        <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#profile-info" role="tab"><i class="bi bi-person"></i> Profile Information</a>
+                        <a class="nav-link" id="account-tab" data-bs-toggle="tab" href="#account-settings" role="tab"><i class="bi bi-gear"></i> Account Settings</a>
+                        <a class="nav-link" id="security-tab" data-bs-toggle="tab" href="#security" role="tab"><i class="bi bi-shield-lock"></i> Security</a>
+                        <a class="nav-link" id="notification-tab" data-bs-toggle="tab" href="#notification" role="tab"><i class="bi bi-bell"></i> Notification</a>
+                    </nav>
+                    <!-- Conteúdo das configurações -->
+                    <div class="settings-content tab-content">
+                        <!-- Profile Information -->
+                        <div class="tab-pane fade show active" id="profile-info" role="tabpanel">
+                            <h3>Informações do Perfil</h3>
+                            <form id="profileForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="name">Nome Completo</label>
+                                            <input class="form-control" type="text" id="name" placeholder="Seu nome completo">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="location">Localização</label>
+                                            <input class="form-control" type="text" id="location" placeholder="Cidade, Estado">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="skills">Habilidades</label>
+                                            <input class="form-control" type="text" id="skills" placeholder="Ex: React, Node.js, UX/UI">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="linkedin">LinkedIn</label>
+                                            <input class="form-control" type="url" id="linkedin" placeholder="URL do seu LinkedIn">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="github">GitHub</label>
+                                            <input class="form-control" type="url" id="github" placeholder="URL do seu GitHub">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="portfolio">Portfólio</label>
+                                            <input class="form-control" type="url" id="portfolio" placeholder="URL do seu portfólio">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="birthdate">Data de Nascimento</label>
+                                            <input class="form-control" type="date" id="birthdate">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="gender">Gênero</label>
+                                            <select class="form-select" id="gender">
+                                                <option value="">Selecione</option>
+                                                <option>Masculino</option>
+                                                <option>Feminino</option>
+                                                <option>Outro</option>
+                                                <option>Prefiro não informar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="bio">Bio</label>
+                                            <textarea class="form-control" id="bio" rows="2" placeholder="Fale um pouco sobre você"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-outline-info w-100" data-bs-toggle="modal" data-bs-target="#expModal">
+                                                <i class="bi bi-briefcase"></i> Gerenciar Experiências Profissionais
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-primary mt-2" type="button">Salvar Alterações</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Modal de Experiências Profissionais -->
+                        <div class="modal fade" id="expModal" tabindex="-1" aria-labelledby="expModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
+                                <div class="modal-content" style="background: #23243a; color: #fff;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="expModalLabel"><i class="bi bi-briefcase"></i> Experiências Profissionais</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Lista de experiências já existentes -->
+                                        <div id="exp-list">
+                                            <!-- Exemplo de experiência -->
+                                            <div class="border rounded p-2 mb-2">
+                                                <div class="fw-bold">Fatec Carapicuíba</div>
+                                                <div class="text-info small">Desenvolvedor Front-end</div>
+                                                <div class="small mb-1">Desenvolvimento de aplicações web para projetos acadêmicos.</div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <form id="addExpForm">
+                                            <div class="mb-2">
+                                                <label class="form-label" for="expEmpresa">Empresa</label>
+                                                <input class="form-control form-control-sm" type="text" id="expEmpresa" placeholder="Nome da empresa">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label" for="expCargo">Cargo/Função</label>
+                                                <input class="form-control form-control-sm" type="text" id="expCargo" placeholder="Ex: Desenvolvedor Front-end">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label" for="expDesc">Descrição</label>
+                                                <textarea class="form-control form-control-sm" id="expDesc" rows="2" placeholder="Descreva suas atividades"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-info btn-sm w-100 mt-2"><i class="bi bi-plus-circle"></i> Adicionar Experiência</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Account Settings -->
+                        <div class="tab-pane fade" id="account-settings" role="tabpanel">
+                            <h3>Configurações da Conta</h3>
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input class="form-control" type="email" id="email" placeholder="Seu email">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="phone">Telefone</label>
+                                    <input class="form-control" type="tel" id="phone" placeholder="(xx) xxxxx-xxxx">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="language">Idioma Preferido</label>
+                                    <select class="form-select" id="language">
+                                        <option>Português</option>
+                                        <option>Inglês</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary mt-2" type="button">Salvar Alterações</button>
+                            </form>
+                        </div>
+                        <!-- Security -->
+                        <div class="tab-pane fade" id="security" role="tabpanel">
+                            <h3>Segurança</h3>
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label" for="current-password">Senha Atual</label>
+                                    <input class="form-control" type="password" id="current-password" placeholder="Senha atual">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="new-password">Nova Senha</label>
+                                    <input class="form-control" type="password" id="new-password" placeholder="Nova senha">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="confirm-password">Confirmar Nova Senha</label>
+                                    <input class="form-control" type="password" id="confirm-password" placeholder="Confirme a nova senha">
+                                </div>
+                                <button class="btn btn-primary mt-2" type="button">Alterar Senha</button>
+                            </form>
+                        </div>
+                        <!-- Notification -->
+                        <div class="tab-pane fade" id="notification" role="tabpanel">
+                            <h3>Notificações</h3>
+                            <form>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="notif-email" checked>
+                                    <label class="form-check-label" for="notif-email">Receber notificações por email</label>
+                                </div>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="notif-app" checked>
+                                    <label class="form-check-label" for="notif-app">Receber notificações no app</label>
+                                </div>
+                                <button class="btn btn-primary mt-2" type="button">Salvar Preferências</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-dark mt-5">
+        <div class="container py-4 py-lg-5">
+            <div class="row justify-content-center">
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Dúvidas</h3>
+                    <ul class="list-unstyled">
+                        <li>FAQ</li>
+                        <li><a href="#">Central de ajuda</a></li>
+                        <li>Política de privacidade</li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Sobre</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Publique seu projeto</a></li>
+                        <li><a href="#">Cadastro</a></li>
+                        <li><a href="#">Lista de freelancers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
+                    <div class="fw-bold d-flex align-items-center mb-2">
+                        <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 40px;height: 40px;background: #00294B;">
+                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30" height="23" style="height: 18px;">
+                        </span>
+                        <span>TechFree</span>
+                    </div>
+                    <p class="text-muted">Feito com muito amor e dedicação por alunos da Fatec Carapicuíba!❤️</p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-muted d-flex justify-content-between align-items-center pt-3">
+                <p class="mb-0">Copyright © 2025 TechFree</p>
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item"><i class="bi bi-github"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-twitter"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-instagram"></i></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

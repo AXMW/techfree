@@ -1,0 +1,44 @@
+.mw-login {
+  max-width: 400px;
+}
+
+.mg-login {
+  padding-bottom: 150px;
+  padding-top: 50px;
+}
+
+.font-small {
+  font-size: small;
+}
+
+.input-description {
+  margin-left: 15px;
+  text-align: left;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.mw-signUp {
+  max-width: 550px;
+}
+
+.bs-icon-selected {
+  color: var(--bs-white) initial !important;
+  background: #0068be !important;
+}
+
+.mg-signUp {
+  margin-left: 0px;
+  margin-bottom: 0px;
+  padding-bottom: 60px;
+  padding-top: 0px;
+  padding-right: 0px;
+}
+
+.mg-reset {
+  padding-bottom: 200px;
+  padding-top: 50px;
+}
+

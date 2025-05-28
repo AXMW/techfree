@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Lista de Candidatos - TechFree</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bs-theme-overrides.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,600,700,800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Azeret+Mono:400,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700,900&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        main, section.bg-dark {
+            /*background: #00294B !important;*/
+            min-height: 100vh;
+        }
+        .candidates-header {
+            background: rgba(0,0,0,0.18);
+            color: #fff;
+            border-radius: 1rem;
+            padding: 2rem 2rem 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        .candidates-header h1,
+        .candidates-header .fs-5,
+        .candidates-header .badge,
+        .candidates-header span,
+        .candidates-header i {
+            color: #fff !important;
+        }
+        .candidate-card {
+            background: rgba(255,255,255,0.07);
+            color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: box-shadow 0.2s;
+        }
+        .candidate-card:hover {
+            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+        }
+        .candidate-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #f1f1f1;
+            border: 2px solid #FF6F00;
+        }
+        .candidate-info h5 {
+            margin-bottom: 0.2rem;
+            color: #fff;
+        }
+        .candidate-info .badge {
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+        .candidate-actions {
+            margin-left: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .candidate-actions .btn {
+            min-width: 120px;
+        }
+        .pagination {
+            justify-content: center;
+        }
+        .pagination .page-link {
+            background: #22243a;
+            color: #fff;
+            border: none;
+            margin: 0 0.2rem;
+        }
+        .pagination .page-link.active, .pagination .active>.page-link {
+            background: #FF6F00;
+            color: #fff;
+        }
+        .pagination .page-link:focus {
+            box-shadow: none;
+        }
+        .search-bar {
+            background: rgba(255,255,255,0.07);
+            border-radius: 1rem;
+            padding: 1rem 2rem;
+            margin-bottom: 2rem;
+            color: #fff;
+        }
+        .search-bar input {
+            background: #22243a;
+            color: #fff;
+            border: 1px solid #44495a;
+        }
+        .search-bar input:focus {
+            background: #22243a;
+            color: #fff;
+            border-color: #FF6F00;
+        }
+        .candidates-header,
+        .search-bar,
+        #candidates-list,
+        nav[aria-label="Paginação de candidatos"] {
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .candidate-card {
+            padding: 1.2rem 1.2rem;
+        }
+        @media (max-width: 767px) {
+            .candidates-header,
+            .search-bar,
+            #candidates-list,
+            nav[aria-label="Paginação de candidatos"] {
+                max-width: 98vw;
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+            .candidate-card {
+                padding: 1rem 0.5rem;
+            }
+        }
+        .navbar-nav.mx-auto {
+            display: flex;
+            justify-content: center !important;
+            width: 100%;
+            gap: 2rem;
+        }
+        .navbar-nav.ms-auto {
+            gap: 0.7rem !important;
+        }
+        .nav-item .bi-bell {
+            position: relative;
+        }
+        .nav-item .notification-badge {
+            position: absolute;
+            right: -12px;
+            top: 2px;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            background: #dc3545;
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 700;
+            min-width: 18px;
+            text-align: center;
+            z-index: 2;
+        }
+        .dropdown-menu-notification .dropdown-item {
+            white-space: normal;
+            font-size: 1.05rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            line-height: 1.4;
+        }
+        .dropdown-menu-notification .dropdown-item i {
+            font-size: 1.3rem;
+            margin-right: 0.7rem;
+            vertical-align: middle;
+        }
+        .dropdown-menu .dropdown-item:hover,
+        .dropdown-menu .dropdown-item:focus,
+        .dropdown-menu-notification .dropdown-item:hover,
+        .dropdown-menu-notification .dropdown-item:focus {
+            background: #FF6F00 !important; 
+            color: #ffffff !important;
+            transition: background 0.15s;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md sticky-top py-3 navbar-dark" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 60px;height: 60px;background: #00294B;">
+                    <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="54" height="33" style="margin-left: 3px;">
+                </span>
+            </a>
+            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
+                <span class="visually-hidden">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Inicio.html">Início</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="projetoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Projeto
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="projetoDropdown">
+                            <li><a class="dropdown-item" href="/GerenciarProjetos.html"><i class="bi bi-kanban"></i> Gerenciar Projetos</a></li>
+                            <li><a class="dropdown-item" href="/publicarVaga.html"><i class="bi bi-plus-circle"></i> Abrir oportunidade</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto d-flex flex-row align-items-center">
+                    <!-- Notificações -->
+                    <li class="nav-item dropdown" style="position:relative;">
+                        <a class="nav-link position-relative" href="#" id="notificacoesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding-right: 0.7rem;">
+                            <i class="bi bi-bell" style="font-size: 1.5rem;"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-notification" aria-labelledby="notificacoesDropdown" style="min-width: 320px;">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-info-circle"></i>
+                                    <span>
+                                        <strong>Nova mensagem em um projeto:</strong><br>
+                                        Você recebeu uma nova mensagem no projeto <b>Plataforma de Gestão</b>. Clique para visualizar.
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-person-check"></i>
+                                    <span>
+                                        <strong>Sua candidatura foi aprovada:</strong><br>
+                                        Parabéns! Você foi aprovado para participar do projeto <b>App de Saúde Mental</b>.
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-calendar-event"></i>
+                                    <span>
+                                        <strong>Reunião agendada:</strong><br>
+                                        Uma reunião está marcada para amanhã às 14h no projeto <b>Sistema de Controle de Estoque</b>.
+                                    </span>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center text-info" href="#">Ver todas notificações</a></li>
+                        </ul>
+                    </li>
+                    <!-- Perfil -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="perfilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle" style="font-size: 1.6rem;"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="perfilDropdown">
+                            <li><a class="dropdown-item" href="/ConfiguracoesDePerfil.html"><i class="bi bi-gear"></i> Configurações</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <section class="bg-dark py-5">
+            <div class="container">
+                <div class="candidates-header mb-4">
+                    <h1 class="display-6 fw-bold mb-2">Candidatos ao Projeto</h1>
+                    <div class="fs-5 mb-1">Veja e gerencie os candidatos aplicados para este projeto</div>
+                </div>
+                <div class="search-bar mb-4">
+                    <form class="row g-2 align-items-center">
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" placeholder="Buscar candidato por nome, habilidade, etc.">
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <button type="submit" class="btn btn-info"><i class="bi bi-search"></i> Buscar</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Lista de candidatos -->
+                <div id="candidates-list">
+                    <div class="candidate-card">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="candidate-avatar" alt="Avatar">
+                        <div class="candidate-info">
+                            <h5>Lucas Silva</h5>
+                            <span class="badge bg-info">React</span>
+                            <span class="badge bg-info">Node.js</span>
+                            <span class="badge bg-info">TypeScript</span>
+                            <div class="small mt-1"><i class="bi bi-envelope"></i> lucas@email.com</div>
+                            <div class="small"><i class="bi bi-telephone"></i> (11) 91234-5678</div>
+                        </div>
+                        <div class="candidate-actions">
+                            <button class="btn btn-success btn-sm"><i class="bi bi-check-circle"></i> Aprovar</button>
+                            <button class="btn btn-danger btn-sm"><i class="bi bi-x-circle"></i> Rejeitar</button>
+                            <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Ver Perfil</a>
+                        </div>
+                    </div>
+                    <div class="candidate-card">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="candidate-avatar" alt="Avatar">
+                        <div class="candidate-info">
+                            <h5>Maria Oliveira</h5>
+                            <span class="badge bg-info">Python</span>
+                            <span class="badge bg-info">Django</span>
+                            <span class="badge bg-info">SQL</span>
+                            <div class="small mt-1"><i class="bi bi-envelope"></i> maria@email.com</div>
+                            <div class="small"><i class="bi bi-telephone"></i> (11) 99876-5432</div>
+                        </div>
+                        <div class="candidate-actions">
+                            <button class="btn btn-success btn-sm"><i class="bi bi-check-circle"></i> Aprovar</button>
+                            <button class="btn btn-danger btn-sm"><i class="bi bi-x-circle"></i> Rejeitar</button>
+                            <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Ver Perfil</a>
+                        </div>
+                    </div>
+                    <div class="candidate-card">
+                        <img src="https://randomuser.me/api/portraits/men/65.jpg" class="candidate-avatar" alt="Avatar">
+                        <div class="candidate-info">
+                            <h5>João Souza</h5>
+                            <span class="badge bg-info">Java</span>
+                            <span class="badge bg-info">Spring</span>
+                            <span class="badge bg-info">AWS</span>
+                            <div class="small mt-1"><i class="bi bi-envelope"></i> joao@email.com</div>
+                            <div class="small"><i class="bi bi-telephone"></i> (11) 93456-7890</div>
+                        </div>
+                        <div class="candidate-actions">
+                            <button class="btn btn-success btn-sm"><i class="bi bi-check-circle"></i> Aprovar</button>
+                            <button class="btn btn-danger btn-sm"><i class="bi bi-x-circle"></i> Rejeitar</button>
+                            <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Ver Perfil</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Paginação moderna -->
+                <nav aria-label="Paginação de candidatos" class="mt-4">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+                        </li>
+                        <li class="page-item active"><span class="page-link">1</span></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-dark mt-5">
+        <div class="container py-4 py-lg-5">
+            <div class="row justify-content-center">
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Dúvidas</h3>
+                    <ul class="list-unstyled">
+                        <li>FAQ</li>
+                        <li><a href="#">Central de ajuda</a></li>
+                        <li>Política de privacidade</li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Sobre</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Publique seu projeto</a></li>
+                        <li><a href="#">Cadastro</a></li>
+                        <li><a href="#">Lista de freelancers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
+                    <div class="fw-bold d-flex align-items-center mb-2">
+                        <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 40px;height: 40px;background: #00294B;">
+                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30" height="23" style="height: 18px;">
+                        </span>
+                        <span>TechFree</span>
+                    </div>
+                    <p class="text-muted">Feito com muito amor e dedicação por alunos da Fatec Carapicuíba!❤️</p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-muted d-flex justify-content-between align-items-center pt-3">
+                <p class="mb-0">Copyright © 2025 TechFree</p>
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item"><i class="bi bi-github"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-twitter"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-instagram"></i></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

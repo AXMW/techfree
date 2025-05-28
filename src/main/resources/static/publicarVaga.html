@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Publicar Vaga - TechFree</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bs-theme-overrides.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,600,700,800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Azeret+Mono:400,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700,900&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        main, section.bg-dark {
+            min-height: 100vh;
+        }
+        .vaga-form-container {
+            max-width: 1350px !important;
+            margin: 0 auto;
+        }
+        .vaga-form-section {
+            background: rgba(255,255,255,0.09);
+            color: #fff;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+            padding: 3.5rem 3rem 2.5rem 3rem;
+            margin-bottom: 2.5rem;
+        }
+        .vaga-form-section h2 {
+            color: #fff;
+            font-weight: 900;
+            margin-bottom: 2.5rem;
+            letter-spacing: 0.5px;
+        }
+        .form-label {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.2px;
+        }
+        .form-control, .form-select {
+            background: #22243a;
+            color: #fff;
+            border: 1.5px solid #44495a;
+            border-radius: 0.7rem;
+            font-size: 1.08rem;
+            padding: 0.9rem 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .form-control:focus, .form-select:focus {
+            background: #22243a;
+            color: #fff;
+            border-color: #FF6F00;
+            box-shadow: 0 0 0 0.15rem rgba(255,111,0,0.15);
+        }
+        .btn-secondary {
+            background: #FF6F00;
+            color: #fff;
+            font-weight: 800;
+            border: none;
+            border-radius: 0.7rem;
+            padding: 1rem 2.5rem;
+            margin-top: 2rem;
+            font-size: 1.15rem;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+            box-shadow: 0 2px 12px rgba(255,111,0,0.08);
+        }
+        .btn-primary:hover {
+            background: #ff8c33;
+            color: #fff;
+        }
+        .required {
+            color: #FF6F00;
+            margin-left: 2px;
+        }
+        .vaga-form-section small {
+            color: #bdbdbd;
+        }
+        .tags-input-wrapper {
+            background: #22243a;
+            border: 1.5px solid #44495a;
+            border-radius: 0.7rem;
+            min-height: 48px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 0.5rem 0.7rem;
+            margin-bottom: 0.5rem;
+        }
+        .tags-input-wrapper input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            outline: none;
+            min-width: 120px;
+            font-size: 1.08rem;
+            margin-left: 0.3rem;
+        }
+        .tag {
+            background: #FF6F00;
+            color: #fff;
+            border-radius: 0.5rem;
+            padding: 0.3rem 0.9rem 0.3rem 0.7rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.01rem;
+        }
+        .tag .remove-tag {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .tag .remove-tag:hover {
+            opacity: 1;
+            color: #22243a;
+        }
+        @media (max-width: 991px) {
+            .vaga-form-section {
+                padding: 2rem 1rem 1.5rem 1rem;
+            }
+            .vaga-form-container {
+                max-width: 98vw !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md sticky-top py-3 navbar-dark" id="mainNav">
+        <div class="container"><a class="navbar-brand d-flex align-items-center" href="/" style="filter: blur(0px) brightness(100%) saturate(100%);"><span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 60px;height: 60px;color: var(--bs-primary);background: #00294B;border-color: #00294b;"><img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="54" height="33" style="margin-left: 3px;"></span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="/Inicio.html">Inicio</a></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"><a class="nav-link pe-3" href="/contacts.html">FAQ</a></li>
+                </ul><a class="btn btn-primary shadow" role="button" href="signup.html">Entrar</a>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <section class="bg-dark py-5">
+            <div class="vaga-form-container">
+                <form class="vaga-form-section" id="vagaForm" autocomplete="off">
+                    <h2>Publicar Nova Vaga</h2>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label for="titulo" class="form-label">Título da Vaga <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" required placeholder="Ex: Desenvolvedor Front-end">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="grau" class="form-label">Grau de Experiência <span class="required">*</span></label>
+                            <select class="form-select" id="grau" name="grau" required>
+                                <option value="">Selecione...</option>
+                                <option>Júnior</option>
+                                <option>Pleno</option>
+                                <option>Sênior</option>
+                                <option>Todos os níveis</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="pagamento" class="form-label">Pagamento <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="pagamento" name="pagamento" required placeholder="Ex: R$ 2.000 - R$ 3.000">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Requisitos <span class="required">*</span></label>
+                            <div class="tags-input-wrapper mt-2 flex-wrap" id="tagsInputWrapper" style="position: relative;">
+                                <input type="text" id="techSearch" class="form-control border-0 shadow-none p-0 m-0" style="background: transparent; min-width: 120px; flex: 1 0 120px;" placeholder="Pesquise ou digite e pressione Enter...">
+                                <div id="techDropdown" class="bg-dark border rounded shadow-sm position-absolute w-100 mt-1" style="z-index: 10; display: none; max-height: 220px; overflow-y: auto; left: 0; top: 100%;">
+                                    <!-- Opções serão inseridas via JS -->
+                                </div>
+                            </div>
+                            <small class="text-muted">Sugestões: JavaScript, Python, Java, C#, PHP, SQL, React, Node.js, etc.</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dataInicio" class="form-label">Data de Início <span class="required">*</span></label>
+                            <input type="date" class="form-control" id="dataInicio" name="dataInicio" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="duracao" class="form-label">Duração do Projeto <span class="required">*</span></label>
+                            <select class="form-select" id="duracao" name="duracao" required>
+                                <option value="">Selecione...</option>
+                                <option value="1">1 mês</option>
+                                <option value="3">3 meses</option>
+                                <option value="6">6 meses</option>
+                                <option value="12">12 meses</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="descricao" class="form-label">Descrição da Vaga <span class="required">*</span></label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="3" required placeholder="Descreva o projeto, desafios e responsabilidades..."></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="contato" class="form-label">Email para Contato <span class="required">*</span></label>
+                            <input type="email" class="form-control" id="contato" name="contato" required placeholder="empresa@email.com">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="anexo" class="form-label">Anexar Arquivo (opcional)</label>
+                            <input type="file" class="form-control" id="anexo" name="anexo" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+                            <small>Adicione um briefing, imagem ou documento complementar.</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dataLimite" class="form-label">Data Limite <span class="required">*</span></label>
+                            <input type="date" class="form-control" id="dataLimite" name="dataLimite" required readonly>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-secondary w-100">Publicar Vaga</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <!-- FOOTER PADRÃO -->
+    <footer class="bg-dark mt-5">
+        <div class="container py-4 py-lg-5">
+            <div class="row justify-content-center">
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Dúvidas</h3>
+                    <ul class="list-unstyled">
+                        <li>FAQ</li>
+                        <li><a href="#">Central de ajuda</a></li>
+                        <li>Política de privacidade</li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
+                    <h3 class="fs-6 fw-bold">Sobre</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Publique seu projeto</a></li>
+                        <li><a href="#">Cadastro</a></li>
+                        <li><a href="#">Lista de freelancers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
+                    <div class="fw-bold d-flex align-items-center mb-2">
+                        <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 40px;height: 40px;background: #00294B;">
+                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30" height="23" style="height: 18px;">
+                        </span>
+                        <span>TechFree</span>
+                    </div>
+                    <p class="text-muted">Feito com muito amor e dedicação por alunos da Fatec Carapicuíba!❤️</p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-muted d-flex justify-content-between align-items-center pt-3">
+                <p class="mb-0">Copyright © 2025 TechFree</p>
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item"><i class="bi bi-github"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-twitter"></i></li>
+                    <li class="list-inline-item"><i class="bi bi-instagram"></i></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        // TAGS INPUT PARA REQUISITOS
+        const tagsInputWrapper = document.getElementById('tagsInputWrapper');
+        const techSearch = document.getElementById('techSearch');
+        const techDropdown = document.getElementById('techDropdown');
+        let tags = [];
+
+        // Sugestões básicas (pode expandir)
+        const sugestoes = [
+            "JavaScript", "Python", "Java", "C#", "PHP", "SQL", "React", "Node.js", "TypeScript", "Vue.js", "Angular", "Ruby", "C++", "Flutter", "Dart"
+        ];
+
+        // Renderiza opções filtradas (sem checkbox)
+        function renderDropdown(filter = "") {
+            techDropdown.innerHTML = "";
+            let filtered = sugestoes.filter(s => s.toLowerCase().includes(filter.toLowerCase()) && !tags.includes(s));
+            if (filter && !sugestoes.map(s=>s.toLowerCase()).includes(filter.toLowerCase()) && !tags.includes(filter)) {
+                filtered.unshift(filter);
+            }
+            if (filtered.length === 0) {
+                techDropdown.style.display = "none";
+                return;
+            }
+            filtered.forEach(opt => {
+                const div = document.createElement('div');
+                div.className = "px-3 py-2";
+                div.style.cursor = "pointer";
+                div.textContent = opt;
+                div.onclick = function() {
+                    addTag(opt);
+                    techDropdown.style.display = "none";
+                    techSearch.value = "";
+                    techSearch.focus();
+                };
+                techDropdown.appendChild(div);
+            });
+            techDropdown.style.display = "block";
+        }
+
+        // Adiciona tag visual e lógica
+        function addTag(tag) {
+            if (tags.includes(tag)) return;
+            tags.push(tag);
+            const tagEl = document.createElement('span');
+            tagEl.className = 'tag';
+            tagEl.textContent = tag;
+            const removeBtn = document.createElement('span');
+            removeBtn.className = 'remove-tag';
+            removeBtn.innerHTML = '&times;';
+            removeBtn.onclick = function () {
+                tags = tags.filter(t => t !== tag);
+                tagEl.remove();
+            };
+            tagEl.appendChild(removeBtn);
+            tagsInputWrapper.insertBefore(tagEl, techSearch);
+        }
+
+        // Pesquisa dinâmica e seleção por Enter
+        techSearch.addEventListener('input', function () {
+            renderDropdown(this.value.trim());
+        });
+        techSearch.addEventListener('focus', function () {
+            renderDropdown(this.value.trim());
+        });
+        techSearch.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                let val = this.value.trim();
+                if (val && !tags.includes(val)) {
+                    addTag(val);
+                }
+                this.value = "";
+                techDropdown.style.display = "none";
+            }
+        });
+        document.addEventListener('click', function(e) {
+            if (!techSearch.contains(e.target) && !techDropdown.contains(e.target)) {
+                techDropdown.style.display = "none";
+            }
+        });
+
+        // Ao enviar o form, adiciona as tags como campos ocultos
+        document.getElementById('vagaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Remove campos ocultos antigos
+            document.querySelectorAll('.hidden-tag').forEach(el => el.remove());
+            tags.forEach(tag => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'requisitos[]';
+                input.value = tag;
+                input.className = 'hidden-tag';
+                this.appendChild(input);
+            });
+
+            // Exemplo de envio: alert e reset
+            alert('Vaga publicada com sucesso!');
+            this.reset();
+            // Limpa tags
+            tags = [];
+            document.querySelectorAll('.tag').forEach(el => el.remove());
+        });
+
+        // DURAÇÃO DO PROJETO: define data limite automaticamente
+        const duracaoSelect = document.getElementById('duracao');
+        const dataInicioInput = document.getElementById('dataInicio');
+        const dataLimiteInput = document.getElementById('dataLimite');
+
+        function calcularDataLimite() {
+            const meses = parseInt(duracaoSelect.value, 10);
+            const dataInicio = dataInicioInput.value;
+            if (!meses || !dataInicio) {
+                dataLimiteInput.value = '';
+                return;
+            }
+            const data = new Date(dataInicio);
+            data.setMonth(data.getMonth() + meses);
+            // Ajusta para o último dia do mês se necessário
+            if (data.getDate() !== new Date(data.getFullYear(), data.getMonth(), 0).getDate()) {
+                data.setDate(data.getDate() - 1);
+            }
+            dataLimiteInput.value = data.toISOString().split('T')[0];
+        }
+
+        duracaoSelect.addEventListener('change', calcularDataLimite);
+        dataInicioInput.addEventListener('change', calcularDataLimite);
+    </script>
+</body>
+</html>
