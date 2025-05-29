@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 import java.util.List;
 
+import com.techfree.dto.ProjetoFiltroDTO;
 import com.techfree.dto.ProjetoRequestDTO;
 import com.techfree.dto.ProjetoResponseDTO;
 import com.techfree.dto.SelecionarFreelancerRequestDTO;
@@ -75,5 +76,11 @@ public class ProjetoController {
         String email = auth.getName();
         projetoService.selecionarFreelancer(email, dto);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/filtrar")
+    public ResponseEntity<List<Projeto>> filtrarProjetos(@RequestBody ProjetoFiltroDTO filtro) {
+        List<Projeto> projetos = projetoService.filtrarProjetos(filtro);
+        return ResponseEntity.ok(projetos);
     }
 }

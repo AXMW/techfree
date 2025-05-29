@@ -33,6 +33,10 @@ public class Projeto {
 
     private String emailPraContato;
 
+    private String area;
+    
+    private String tipo;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusProjeto status;

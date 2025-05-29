@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 public class RegistroFreelancerDTO {
 
     @NotBlank
-    private String nomeCompleto;
+    private String nome;
 
     @NotBlank
     @Email

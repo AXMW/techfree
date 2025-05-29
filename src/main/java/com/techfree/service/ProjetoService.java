@@ -7,12 +7,15 @@ import com.techfree.repository.EmpresaRepository;
 import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.ProjetoRepository;
 import com.techfree.service.email.EmailTemplateService;
+import com.techfree.specifications.ProjetoSpecification;
 import com.techfree.repository.CandidaturaRepository;
 import com.techfree.enums.StatusCandidatura;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.techfree.dto.ProjetoFiltroDTO;
 import com.techfree.dto.ProjetoRequestDTO;
 import com.techfree.dto.SelecionarFreelancerRequestDTO;
 
@@ -128,5 +131,9 @@ public class ProjetoService {
         "Você foi selecionado para o projeto " + projeto.getTitulo(),
         EmailTemplateService.templateSelecionadoProjeto(freelancer.getNome(), projeto.getTitulo())
     );
+    }
+
+    public List<Projeto> filtrarProjetos(ProjetoFiltroDTO filtro) {
+        return projetoRepository.findAll(ProjetoSpecification.comFiltros(filtro));
     }
 }
