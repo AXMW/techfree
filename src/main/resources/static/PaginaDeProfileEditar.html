@@ -354,6 +354,12 @@
                             <h4>Experiência Profissional</h4>
                             <div class="profile-timeline" id="profileExperiencia"></div>
                         </div>
+                        <!-- EXPERIÊNCIA ACADÊMICA -->
+                        <div class="profile-section mb-4 position-relative">
+                            <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="experienciaAcademica" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                            <h4>Experiência Acadêmica</h4>
+                            <div class="profile-timeline" id="profileExperienciaAcademica"></div>
+                        </div>
                         <!-- CERTIFICADOS -->
                         <div class="profile-section mb-4 profile-certificates position-relative">
                             <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="certificados" title="Editar"><i class="bi bi-pencil-square"></i></button>
@@ -478,6 +484,20 @@ const profileData = {
             cargo: "Desenvolvedor Frontend",
             tempo: "2022-2023",
             descricao: "Criação de dashboards, relatórios e integração mobile."
+        }
+    ],
+    experienciaAcademica: [
+        {
+            instituicao: "FATEC Carapicuíba",
+            curso: "Análise e Desenvolvimento de Sistemas",
+            periodo: "2022-2025",
+            descricao: "Graduação focada em desenvolvimento de software, banco de dados e projetos práticos."
+        },
+        {
+            instituicao: "ETEC São Paulo",
+            curso: "Técnico em Informática",
+            periodo: "2020-2021",
+            descricao: "Curso técnico com ênfase em lógica de programação, redes e suporte."
         }
     ]
 };
@@ -609,6 +629,15 @@ function renderProfile(profile) {
         </div>
     `).join('');
 
+    // Experiência Acadêmica
+    let experienciaAcademicaHtml = (profile.experienciaAcademica || []).map((exp, idx) => `
+        <div class="timeline-item" data-expacad-idx="${idx}">
+            <div class="timeline-title">${exp.instituicao}</div>
+            <div class="timeline-period">${exp.curso} (${exp.periodo})</div>
+            <div>${exp.descricao}</div>
+        </div>
+    `).join('');
+
     // Monta o HTML
     document.querySelector('.profile-header').innerHTML = `
         <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="header" title="Editar"><i class="bi bi-pencil-square"></i></button>
@@ -630,6 +659,7 @@ function renderProfile(profile) {
 
     // Experiência
     document.getElementById('profileExperiencia').innerHTML = experienciaHtml;
+    document.getElementById('profileExperienciaAcademica').innerHTML = experienciaAcademicaHtml;
 
     // Certificados
     document.getElementById('profileCertificados').innerHTML = certificadosHtml;
@@ -815,6 +845,72 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 `;
                 break;
+            case 'experienciaAcademica':
+                title.textContent = 'Editar Experiência Acadêmica';
+                html = (profileData.experienciaAcademica || []).map((exp, idx) => {
+                    let [anoInicio, anoFim] = (exp.periodo || '').split('-');
+                    const anoAtual = new Date().getFullYear();
+                    return `
+                    <div class="mb-3 border rounded p-2" id="expacad-card-${idx}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="timeline-title" style="font-weight:700;color:#FF6F00;">${exp.instituicao}</div>
+                                <div class="timeline-period" style="font-size:0.95rem;color:#bdbdbd;">${exp.curso} (${exp.periodo})</div>
+                                <div>${exp.descricao}</div>
+                            </div>
+                            <div class="d-flex align-items-center gap-1">
+                                <button type="button" class="btn btn-edit-icon btn-expacad-edit" data-idx="${idx}" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                                <button type="button" class="btn btn-edit-icon btn-expacad-remove" data-idx="${idx}" title="Excluir"><i class="bi bi-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="expacad-edit-fields mt-3" style="display:none;">
+                            <label class="form-label">Instituição</label>
+                            <input type="text" class="form-control mb-1" value="${exp.instituicao}">
+                            <label class="form-label">Curso</label>
+                            <input type="text" class="form-control mb-1" value="${exp.curso}">
+                            <label class="form-label">Período</label>
+                            <div class="d-flex gap-2 align-items-center mb-1 flex-wrap">
+                                <input type="number" class="form-control" style="max-width:100px;" min="1900" max="${anoAtual}" placeholder="Ano início" value="${anoInicio || ''}">
+                                <span style="color:#fff;">até</span>
+                                <input type="number" class="form-control" style="max-width:100px;" min="1900" max="${anoAtual}" placeholder="Ano fim" value="${anoFim || ''}">
+                            </div>
+                            <label class="form-label">Descrição</label>
+                            <textarea class="form-control" rows="2">${exp.descricao}</textarea>
+                            <button type="button" class="btn btn-success mt-2 btn-expacad-save" data-idx="${idx}" style="min-width:120px;"><i class="bi bi-check"></i> Salvar</button>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+                html += `
+                <div id="expacad-add-card" style="display:none;">
+                    <div class="mb-3 border rounded p-3 bg-dark">
+                        <div class="fw-bold mb-2" style="color:#FF6F00;">Nova experiência acadêmica</div>
+                        <label class="form-label">Instituição</label>
+                        <input type="text" class="form-control mb-1" id="expacadAddInstituicao">
+                        <label class="form-label">Curso</label>
+                        <input type="text" class="form-control mb-1" id="expacadAddCurso">
+                        <label class="form-label">Período</label>
+                        <div class="d-flex gap-2 align-items-center mb-1 flex-wrap">
+                            <input type="number" class="form-control" style="max-width:100px;" min="1900" max="${new Date().getFullYear()}" placeholder="Ano início" id="expacadAddAnoInicio">
+                            <span style="color:#fff;">até</span>
+                            <input type="number" class="form-control" style="max-width:100px;" min="1900" max="${new Date().getFullYear()}" placeholder="Ano fim" id="expacadAddAnoFim">
+                        </div>
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" rows="2" id="expacadAddDescricao"></textarea>
+                        <div class="d-flex gap-2 mt-3">
+                            <button type="button" class="btn btn-primary flex-fill" id="btnAddExpAcad"><i class="bi bi-check-lg"></i> Adicionar</button>
+                            <button type="button" class="btn btn-outline-secondary flex-fill" id="btnCancelAddExpAcad">Cancelar</button>
+                        </div>
+                        <div id="expacadAddError" class="text-danger mt-2" style="display:none;font-size:0.98rem;"></div>
+                    </div>
+                </div>
+                <div class="mb-3" id="expacad-add-btn-wrapper">
+                    <button type="button" class="btn btn-success w-100" id="btnShowAddExpAcad" style="font-weight:600;">
+                        <i class="bi bi-plus-lg"></i> Adicionar experiência acadêmica
+                    </button>
+                </div>
+                `;
+                break;
             default:
                 title.textContent = 'Editar';
                 html = '';
@@ -869,12 +965,39 @@ document.addEventListener('DOMContentLoaded', function() {
                     const card = document.getElementById(`exp-card-${idx}`);
                     const inputs = card.querySelectorAll('input');
                     const textarea = card.querySelector('textarea');
-                    const empresa = inputs[0].value;
-                    const cargo = inputs[1].value;
-                    const anoInicio = inputs[2].value;
-                    const anoFim = inputs[3].value;
+                    const empresa = inputs[0].value.trim();
+                    const cargo = inputs[1].value.trim();
+                    const anoInicio = inputs[2].value.trim();
+                    const anoFim = inputs[3].value.trim();
                     const tempo = anoInicio && anoFim ? `${anoInicio}-${anoFim}` : '';
-                    const descricao = textarea.value;
+                    const descricao = textarea.value.trim();
+                    let errorDiv = card.querySelector('.exp-edit-error');
+                    if (!errorDiv) {
+                        errorDiv = document.createElement('div');
+                        errorDiv.className = 'text-danger mt-2 exp-edit-error';
+                        errorDiv.style.fontSize = '0.98rem';
+                        card.querySelector('.exp-edit-fields').appendChild(errorDiv);
+                    }
+                    // Validação de campos obrigatórios
+                    if(!empresa || !cargo || !anoInicio || !anoFim || !descricao) {
+                        errorDiv.textContent = "Preencha todos os campos para salvar.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    // Validação de ano mínimo/máximo
+                    const anoAtual = new Date().getFullYear();
+                    if(Number(anoInicio) < 1900 || Number(anoFim) < 1900 || Number(anoInicio) > anoAtual || Number(anoFim) > anoAtual) {
+                        errorDiv.textContent = "O ano de início e fim devem ser datas entre 1900 e o ano atual.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    // Validação de ordem dos anos
+                    if(Number(anoInicio) > Number(anoFim)) {
+                        errorDiv.textContent = "O ano de início não pode ser maior que o ano de fim.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    errorDiv.style.display = "none";
                     profileData.experiencia[idx] = { empresa, cargo, tempo, descricao };
                     fillPopup('experiencia');
                 };
@@ -910,6 +1033,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         errorDiv.style.display = "block";
                         return;
                     }
+                    // Validação de ano mínimo
+                    if(Number(anoInicio) < 1900 || Number(anoFim) < 1900 || Number(anoInicio) > new Date().getFullYear() || Number(anoFim) > new Date().getFullYear()) {
+                        errorDiv.textContent = "O ano de início e fim devem ser datas entre 1900 e o ano atual.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    // Validação de ordem dos anos
+                    if(Number(anoInicio) > Number(anoFim)) {
+                        errorDiv.textContent = "O ano de início não pode ser maior que o ano de fim.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
                     errorDiv.style.display = "none";
                     profileData.experiencia.push({
                         empresa,
@@ -921,14 +1056,119 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
             }
         }
-        // Dentro da função fillPopup(type), após inserir os campos no DOM:
-        if(type === 'header') {
-            // ...código existente para montar html...
-            // Após fields.innerHTML = html;
-            setTimeout(() => {
-                const whatsappInput = document.getElementById('editWhatsapp');
-                if (whatsappInput) aplicarMascaraTelefone(whatsappInput);
-            }, 0);
+        if(type === 'experienciaAcademica') {
+            // Expandir edição
+            document.querySelectorAll('.btn-expacad-edit').forEach(btn => {
+                btn.onclick = function() {
+                    const idx = btn.getAttribute('data-idx');
+                    const card = document.getElementById(`expacad-card-${idx}`);
+                    const fields = card.querySelector('.expacad-edit-fields');
+                    fields.style.display = fields.style.display === 'none' ? 'block' : 'none';
+                };
+            });
+            // Excluir experiência acadêmica
+            document.querySelectorAll('.btn-expacad-remove').forEach(btn => {
+                btn.onclick = function() {
+                    const idx = btn.getAttribute('data-idx');
+                    profileData.experienciaAcademica.splice(idx, 1);
+                    fillPopup('experienciaAcademica');
+                };
+            });
+            // Salvar experiência acadêmica editada
+            document.querySelectorAll('.btn-expacad-save').forEach(btn => {
+                btn.onclick = function() {
+                    const idx = btn.getAttribute('data-idx');
+                    const card = document.getElementById(`expacad-card-${idx}`);
+                    const inputs = card.querySelectorAll('input');
+                    const textarea = card.querySelector('textarea');
+                    const instituicao = inputs[0].value.trim();
+                    const curso = inputs[1].value.trim();
+                    const anoInicio = inputs[2].value.trim();
+                    const anoFim = inputs[3].value.trim();
+                    const periodo = anoInicio && anoFim ? `${anoInicio}-${anoFim}` : '';
+                    const descricao = textarea.value.trim();
+                    let errorDiv = card.querySelector('.expacad-edit-error');
+                    if (!errorDiv) {
+                        errorDiv = document.createElement('div');
+                        errorDiv.className = 'text-danger mt-2 expacad-edit-error';
+                        errorDiv.style.fontSize = '0.98rem';
+                        card.querySelector('.expacad-edit-fields').appendChild(errorDiv);
+                    }
+                    // Validação de campos obrigatórios
+                    if(!instituicao || !curso || !anoInicio || !anoFim || !descricao) {
+                        errorDiv.textContent = "Preencha todos os campos para salvar.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    // Validação de ano mínimo/máximo
+                    const anoAtual = new Date().getFullYear();
+                    if(Number(anoInicio) < 1900 || Number(anoFim) < 1900 || Number(anoInicio) > anoAtual || Number(anoFim) > anoAtual) {
+                        errorDiv.textContent = "O ano de início e fim devem ser datas entre 1900 e o ano atual.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    // Validação de ordem dos anos
+                    if(Number(anoInicio) > Number(anoFim)) {
+                        errorDiv.textContent = "O ano de início não pode ser maior que o ano de fim.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    errorDiv.style.display = "none";
+                    profileData.experienciaAcademica[idx] = { instituicao, curso, periodo, descricao };
+                    fillPopup('experienciaAcademica');
+                };
+            });
+
+            // Adicionar nova experiência acadêmica
+            const btnShowAddExpAcad = document.getElementById('btnShowAddExpAcad');
+            const expacadAddCard = document.getElementById('expacad-add-card');
+            if(btnShowAddExpAcad && expacadAddCard) {
+                btnShowAddExpAcad.onclick = function() {
+                    expacadAddCard.style.display = 'block';
+                    btnShowAddExpAcad.disabled = true;
+                };
+            }
+            const btnCancelAddExpAcad = document.getElementById('btnCancelAddExpAcad');
+            if(btnCancelAddExpAcad && expacadAddCard && btnShowAddExpAcad) {
+                btnCancelAddExpAcad.onclick = function() {
+                    expacadAddCard.style.display = 'none';
+                    btnShowAddExpAcad.disabled = false;
+                };
+            }
+            const btnAddExpAcad = document.getElementById('btnAddExpAcad');
+            if(btnAddExpAcad) {
+                btnAddExpAcad.onclick = function() {
+                    const instituicao = document.getElementById('expacadAddInstituicao').value.trim();
+                    const curso = document.getElementById('expacadAddCurso').value.trim();
+                    const anoInicio = document.getElementById('expacadAddAnoInicio').value.trim();
+                    const anoFim = document.getElementById('expacadAddAnoFim').value.trim();
+                    const periodo = anoInicio && anoFim ? `${anoInicio}-${anoFim}` : '';
+                    const descricao = document.getElementById('expacadAddDescricao').value.trim();
+                    const errorDiv = document.getElementById('expacadAddError');
+                    if(!instituicao || !curso || !anoInicio || !anoFim || !descricao) {
+                        errorDiv.textContent = "Preencha todos os campos para adicionar uma experiência acadêmica.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    // Validação de ano mínimo
+                    if(Number(anoInicio) < 1900 || Number(anoFim) < 1900 || Number(anoInicio) > new Date().getFullYear() || Number(anoFim) > new Date().getFullYear()) {
+                        errorDiv.textContent = "O ano de início e fim devem ser datas entre 1900 e o ano atual.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    // Validação de ordem dos anos
+                    if(Number(anoInicio) > Number(anoFim)) {
+                        errorDiv.textContent = "O ano de início não pode ser maior que o ano de fim.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    errorDiv.style.display = "none";
+                    profileData.experienciaAcademica.push({
+                        instituicao, curso, periodo, descricao
+                    });
+                    fillPopup('experienciaAcademica');
+                };
+            }
         }
     }
 
@@ -1083,7 +1323,8 @@ function calcularProgressoPerfil(profile) {
         { nome: "Sobre", valor: profile.sobre },
         { nome: "Habilidades", valor: (profile.habilidades && profile.habilidades.length > 0) ? "ok" : "" },
         { nome: "Certificados", valor: (profile.certificados && profile.certificados.length > 0) ? "ok" : "" },
-        { nome: "Experiência Profissional", valor: (profile.experiencia && profile.experiencia.length > 0) ? "ok" : "" }
+        { nome: "Experiência Profissional", valor: (profile.experiencia && profile.experiencia.length > 0) ? "ok" : "" },
+        { nome: "Experiência Acadêmica", valor: (profile.experienciaAcademica && profile.experienciaAcademica.length > 0) ? "ok" : "" }
     ];
     const total = campos.length;
     const preenchidos = campos.filter(c => c.valor && String(c.valor).trim() !== "").length;
@@ -1147,6 +1388,15 @@ function renderProfile(profile) {
         </div>
     `).join('');
 
+    // Experiência Acadêmica
+    let experienciaAcademicaHtml = (profile.experienciaAcademica || []).map((exp, idx) => `
+        <div class="timeline-item" data-expacad-idx="${idx}">
+            <div class="timeline-title">${exp.instituicao}</div>
+            <div class="timeline-period">${exp.curso} (${exp.periodo})</div>
+            <div>${exp.descricao}</div>
+        </div>
+    `).join('');
+
     // Monta o HTML
     document.querySelector('.profile-header').innerHTML = `
         <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="header" title="Editar"><i class="bi bi-pencil-square"></i></button>
@@ -1168,6 +1418,7 @@ function renderProfile(profile) {
 
     // Experiência
     document.getElementById('profileExperiencia').innerHTML = experienciaHtml;
+    document.getElementById('profileExperienciaAcademica').innerHTML = experienciaAcademicaHtml;
 
     // Certificados
     document.getElementById('profileCertificados').innerHTML = certificadosHtml;

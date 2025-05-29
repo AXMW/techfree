@@ -254,6 +254,10 @@
                             <h4>Experiência Profissional</h4>
                             <div class="profile-timeline" id="profileExperiencia"></div>
                         </div>
+                        <div class="profile-section mb-4">
+                            <h4>Experiência Acadêmica</h4>
+                            <div class="profile-timeline" id="profileExperienciaAcademica"></div>
+                        </div>
                         <div class="profile-section mb-4 profile-certificates">
                             <h4>Certificados</h4>
                             <div id="profileCertificados"></div>
@@ -374,6 +378,20 @@ const profileData = {
             descricao: "Criação de dashboards, relatórios e integração mobile."
         }
     ],
+    experienciaAcademica: [
+        {
+            instituicao: "FATEC Carapicuíba",
+            curso: "Análise e Desenvolvimento de Sistemas",
+            periodo: "2022-2025",
+            descricao: "Graduação focada em desenvolvimento de software, banco de dados e projetos práticos."
+        },
+        {
+            instituicao: "ETEC São Paulo",
+            curso: "Técnico em Informática",
+            periodo: "2020-2021",
+            descricao: "Curso técnico com ênfase em lógica de programação, redes e suporte."
+        }
+    ],
     feedbacks: [
         {
             empresa: "MindCare",
@@ -438,6 +456,15 @@ function renderProfile(profile) {
         </div>
     `).join('');
 
+    // Experiência Acadêmica
+    let experienciaAcademicaHtml = profile.experienciaAcademica.map(exp => `
+        <div class="timeline-item">
+            <div class="timeline-title">${exp.instituicao}</div>
+            <div class="timeline-period">${exp.curso} (${exp.periodo})</div>
+            <div>${exp.descricao}</div>
+        </div>
+    `).join('');
+
     // Feedbacks (apenas os 3 primeiros)
     let feedbacksHtml = profile.feedbacks.slice(0, 3).map(fb => `
         <div class="profile-feedback">
@@ -479,6 +506,9 @@ function renderProfile(profile) {
     // Experiência
     document.getElementById('profileExperiencia').innerHTML = experienciaHtml;
 
+    // Experiência Acadêmica
+    document.getElementById('profileExperienciaAcademica').innerHTML = experienciaAcademicaHtml;
+
     // Certificados
     document.getElementById('profileCertificados').innerHTML = certificadosHtml;
 
@@ -496,7 +526,8 @@ function calcularProgressoPerfil(profile) {
         { nome: "Sobre", valor: profile.sobre },
         { nome: "Habilidades", valor: (profile.habilidades && profile.habilidades.length > 0) ? "ok" : "" },
         { nome: "Certificados", valor: (profile.certificados && profile.certificados.length > 0) ? "ok" : "" },
-        { nome: "Experiência Profissional", valor: (profile.experiencia && profile.experiencia.length > 0) ? "ok" : "" }
+        { nome: "Experiência Profissional", valor: (profile.experiencia && profile.experiencia.length > 0) ? "ok" : "" },
+        { nome: "Experiência Acadêmica", valor: (profile.experienciaAcademica && profile.experienciaAcademica.length > 0) ? "ok" : "" }
     ];
     const total = campos.length;
     const preenchidos = campos.filter(c => c.valor && String(c.valor).trim() !== "").length;

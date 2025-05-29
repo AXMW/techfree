@@ -260,21 +260,7 @@
                         </div>
                         <div class="profile-section mb-4">
                             <h4>Feedbacks de Freelancers</h4>
-                            <div class="profile-feedback">
-                                "Ótima empresa para projetos colaborativos, comunicação clara e pagamentos em dia."
-                            </div>
-                            <div class="profile-feedback">
-                                "Equipe aberta a novas ideias e muito profissionalismo no acompanhamento dos projetos."
-                            </div>
-                            <div class="profile-feedback">
-                                "Ambiente inovador e respeito com os freelancers. Recomendo!"
-                            </div>
-                            <div class="profile-feedback">
-                                "Processos bem definidos e feedbacks constantes durante o projeto."
-                            </div>
-                            <div class="profile-feedback">
-                                "Pagamento sempre em dia e abertura para sugestões técnicas."
-                            </div>
+                            <div id="empresaProfileFeedbacks"></div>
                         </div>
                     </div>
                     <!-- Card lateral -->
@@ -430,10 +416,21 @@ function renderEmpresaProfile(profile) {
     `;
 }
 
+function renderEmpresaFeedbacks(profile) {
+    const feedbacksHtml = (profile.feedbacks || []).slice(0, 3).map(fb => `
+        <div class="profile-feedback">
+            "${fb.texto}"
+        </div>
+    `).join('');
+    const container = document.getElementById('empresaProfileFeedbacks');
+    if (container) container.innerHTML = feedbacksHtml;
+}
+
 // Chame a função após o DOM estar pronto:
 document.addEventListener('DOMContentLoaded', function() {
     renderEmpresaProfile(empresaProfileData);
     atualizarBarraProgressoEmpresa(empresaProfileData);
+    renderEmpresaFeedbacks(empresaProfileData); // <-- Adicione esta linha
 });
 
 // Adapte para empresa:

@@ -598,12 +598,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     const anoInicio = inputs[1].value.trim();
                     const anoFim = inputs[2].value.trim();
                     const descricao = textarea.value.trim();
+                    const anoAtual = new Date().getFullYear();
+
                     // Validação obrigatória
                     if(!titulo || !anoInicio || !anoFim || !descricao) {
                         errorDiv.textContent = "Preencha todos os campos para salvar o projeto.";
                         errorDiv.style.display = "block";
                         return;
                     }
+                    // Validação de ano mínimo/máximo
+                    if(Number(anoInicio) < 1900 || Number(anoFim) < 1900 || Number(anoInicio) > anoAtual || Number(anoFim) > anoAtual) {
+                        errorDiv.textContent = "O ano de início e fim devem ser datas entre 1900 e o ano atual.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    // Validação de ordem dos anos
                     if(Number(anoInicio) > Number(anoFim)) {
                         errorDiv.textContent = "Ano início não pode ser maior que ano fim.";
                         errorDiv.style.display = "block";
@@ -643,8 +652,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     const anoFim = document.getElementById('projAddAnoFim').value.trim();
                     const descricao = document.getElementById('projAddDescricao').value.trim();
                     const errorDiv = document.getElementById('projAddError');
+                    const anoAtual = new Date().getFullYear();
+
                     if(!titulo || !anoInicio || !anoFim || !descricao) {
                         errorDiv.textContent = "Preencha todos os campos para adicionar um projeto.";
+                        errorDiv.style.display = "block";
+                        return;
+                    }
+                    if(Number(anoInicio) < 1900 || Number(anoFim) < 1900 || Number(anoInicio) > anoAtual || Number(anoFim) > anoAtual) {
+                        errorDiv.textContent = "O ano de início e fim devem ser datas entre 1900 e o ano atual.";
                         errorDiv.style.display = "block";
                         return;
                     }
