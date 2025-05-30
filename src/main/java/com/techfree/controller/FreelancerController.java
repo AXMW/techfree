@@ -25,7 +25,7 @@ public class FreelancerController {
         this.freelancerRepository = freelancerRepository;
     }
 
-    @GetMapping("/perfil")
+    @GetMapping("/perfil/verPerfil")
     @PreAuthorize("hasRole('FREELANCER')")
     public Freelancer verPerfil(Authentication authentication) {
         String email = authentication.getName(); // vem do JWT

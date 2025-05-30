@@ -31,7 +31,7 @@ public class EmpresaController {
         this.empresaRepository = empresaRepository;
     }
 
-    @GetMapping("/perfil")
+    @GetMapping("/perfil/verPerfil")
     @PreAuthorize("hasRole('EMPRESA')")
     public Empresa verPerfil(Authentication authentication) {
         String email = authentication.getName(); // vem do JWT

@@ -22,6 +22,10 @@ public class Certificado {
 
     private String instituicao;
 
+    private String tipo;
+
+    private LocalDate dataEmissao;
+
     private String urlCertificado;
 
     private LocalDate dataConclusao;

@@ -37,6 +37,10 @@ public class Projeto {
     
     private String tipo;
 
+    private String cnpj;
+
+    private boolean ativo;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusProjeto status;

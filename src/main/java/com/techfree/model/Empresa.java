@@ -17,13 +17,19 @@ public class Empresa {
 
     private String razaoSocial;
 
+    private String email;
+
     private String nomeFantasia;
 
     private String telefone;
 
+    private String tipo;
+
     private String bio;
 
     private String site;
+
+    private boolean ativo;
 
     @Column(unique = true, nullable = false)
     private String cnpj;

@@ -1,6 +1,8 @@
 package com.techfree.service.email;
 import com.techfree.enums.StatusCandidatura;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EmailTemplateService {
     public String gerarTemplate(String nomeFreelancer, String tituloProjeto, StatusCandidatura status) {
         String statusTexto = status == StatusCandidatura.ACEITA ? "aceita" : "recusada";

@@ -25,6 +25,8 @@ public class Freelancer {
 
     private String nome;
 
+    private String username;
+
     private String telefone;
 
     private String areaAtuacao;
@@ -36,6 +38,10 @@ public class Freelancer {
     private String linkedin;
 
     private String portfolio;
+
+    private String email;
+
+    private String roles;
 
     private List<String> habilidades;
 
@@ -50,6 +56,9 @@ public class Freelancer {
 
     @Column(name = "data_cadastro")
     private LocalDateTime dataCadastro;
+
+    @Column(nullable = false)
+    private boolean enabled = true;
 
     @PrePersist
     public void prePersist() {
