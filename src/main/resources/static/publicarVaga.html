@@ -39,6 +39,10 @@
             margin-bottom: 0.5rem;
             letter-spacing: 0.2px;
         }
+        .automatic {
+            background: transparent !important;
+            border: transparent !important;
+        }
         .form-control, .form-select {
             background: #22243a;
             color: #fff;
@@ -182,15 +186,13 @@
                             <label for="dataInicio" class="form-label">Data de Início <span class="required">*</span></label>
                             <input type="date" class="form-control" id="dataInicio" name="dataInicio" required>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="duracao" class="form-label">Duração do Projeto <span class="required">*</span></label>
-                            <select class="form-select" id="duracao" name="duracao" required>
-                                <option value="">Selecione...</option>
-                                <option value="1">1 mês</option>
-                                <option value="3">3 meses</option>
-                                <option value="6">6 meses</option>
-                                <option value="12">12 meses</option>
-                            </select>
+                            <input type="number" class="form-control" id="duracao" name="duracao" required placeholder="Em meses" min="1">
+                        </div>
+                        <div id="limite" class="col-md-3 invisible">
+                            <label for="dataLimite" class="form-label">Data Limite <span class="required">*</span></label>
+                            <input type="date" class="form-control automatic" id="dataLimite" name="dataLimite" required readonly>
                         </div>
                         <div class="col-12">
                             <label for="descricao" class="form-label">Descrição da Vaga <span class="required">*</span></label>
@@ -204,10 +206,6 @@
                             <label for="anexo" class="form-label">Anexar Arquivo (opcional)</label>
                             <input type="file" class="form-control" id="anexo" name="anexo" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                             <small>Adicione um briefing, imagem ou documento complementar.</small>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="dataLimite" class="form-label">Data Limite <span class="required">*</span></label>
-                            <input type="date" class="form-control" id="dataLimite" name="dataLimite" required readonly>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-secondary w-100">Publicar Vaga</button>
@@ -370,6 +368,7 @@
             const dataInicio = dataInicioInput.value;
             if (!meses || !dataInicio) {
                 dataLimiteInput.value = '';
+                document.getElementById('limite').classList.add('invisible');
                 return;
             }
             const data = new Date(dataInicio);
@@ -379,6 +378,7 @@
                 data.setDate(data.getDate() - 1);
             }
             dataLimiteInput.value = data.toISOString().split('T')[0];
+            document.getElementById('limite').classList.remove('invisible');
         }
 
         duracaoSelect.addEventListener('change', calcularDataLimite);
