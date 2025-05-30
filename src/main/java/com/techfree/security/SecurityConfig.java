@@ -28,7 +28,17 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers(
+                    "/auth/**",
+                    "/login.html",
+                    "/signUp.html",
+                    "/Dashboard.html",
+                    "/css/**",
+                    "/js/**",
+                    "/images/**",
+                    "/assets/**",
+                    "/favicon.ico"
+                ).permitAll()
                 .requestMatchers("/empresa/**").hasRole("EMPRESA")
                 .requestMatchers("/freelancer/**").hasRole("FREELANCER")
                 .requestMatchers("/certificados/**").hasRole("FREELANCER")
