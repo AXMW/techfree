@@ -642,6 +642,43 @@
             }
         });
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tenta buscar perfil de freelancer, se falhar tenta empresa
+    function atualizarPerfil(url) {
+        return fetch(url, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        .then(res => res.ok ? res.json() : Promise.reject())
+        .then(data => {
+            // Atualiza nome
+            const nameSpan = document.querySelector('.profile-name');
+            if (nameSpan && data.nome) {
+                nameSpan.textContent = data.nome;
+            }
+            // Atualiza foto
+            const icon = document.querySelector('.dropdown-profile-header .bi-person-circle');
+            if (icon && data.fotoUrl) {
+                icon.outerHTML = `<img src="${data.fotoUrl}" alt="Foto de perfil" class="rounded-circle" style="width:2.2rem;height:2.2rem;object-fit:cover;">`;
+            }
+        });
+    }
+
+    atualizarPerfil('/freelancer/perfil/verPerfil')
+        .catch(() => atualizarPerfil('/empresa/perfil/verPerfil'))
+        .catch(() => {/* fallback: mantém padrão */});
+});
+</script>
 </body>
 
 </html>
+@GetMapping("/perfil/verPerfil")
+@PreAuthorize("hasRole('FREELANCER')")
+public Freelancer verPerfil(Authentication authentication) {
+    String email = authentication.getName(); // vem do JWT
+
+    Optional<Freelancer> freelancer = freelancerRepository.findByEmail(email);
+    return freelancer.orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+}
