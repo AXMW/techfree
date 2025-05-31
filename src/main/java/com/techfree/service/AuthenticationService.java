@@ -60,9 +60,14 @@ public class AuthenticationService {
   
 
     public LoginResponseDTO login(LoginRequestDTO loginDTO) {
+        
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getSenha())
         );
+        
+        if (!auth.isAuthenticated()) {
+            throw new RuntimeException("Usuário ou senha inválidos");
+        }
 
         Usuario usuario = (Usuario) auth.getPrincipal();
         String token = jwtUtil.gerarToken(usuario.getEmail());
