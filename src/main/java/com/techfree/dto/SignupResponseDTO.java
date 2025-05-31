@@ -7,11 +7,11 @@ import com.techfree.enums.TipoUsuario;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SingupResponseDTO {
+public class SignupResponseDTO {
     private String name;
     private String tipoUsuario;
 
-    public SingupResponseDTO(String name, TipoUsuario tipoUsuario) {
+    public SignupResponseDTO(String name, TipoUsuario tipoUsuario) {
         this.name = name;
         this.tipoUsuario = tipoUsuario.name();
     }

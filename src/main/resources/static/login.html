@@ -120,7 +120,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         const response = await fetch('/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ "email": email, "senha": password })
         });
 
         if (response.ok) {

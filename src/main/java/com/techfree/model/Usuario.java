@@ -1,5 +1,8 @@
 package com.techfree.model;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;

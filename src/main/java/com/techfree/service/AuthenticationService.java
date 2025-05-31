@@ -13,7 +13,7 @@ import com.techfree.service.email.EmailTemplateService;
 import com.techfree.model.Role;
 import com.techfree.repository.RoleRepository;
 import java.util.Set;
-import com.techfree.dto.SingupResponseDTO;
+import com.techfree.dto.SignupResponseDTO;
 
 
 import lombok.RequiredArgsConstructor;
@@ -75,7 +75,7 @@ public class AuthenticationService {
         return new LoginResponseDTO(token, usuario.getTipo());
     }
 
-    public SingupResponseDTO registerFreelancer(RegistroFreelancerDTO dto) {
+    public SignupResponseDTO registerFreelancer(RegistroFreelancerDTO dto) {
         Usuario usuario = new Usuario();
         usuario.setEmail(dto.getEmail());
         usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
@@ -104,7 +104,7 @@ public class AuthenticationService {
             EmailTemplateService.templateBoasVindas(freelancer.getNome(), "Freelancer")
         );
 
-        return new SingupResponseDTO(freelancer.getNome(), freelancer.getUsuario().getTipo());
+        return new SignupResponseDTO(freelancer.getNome(), freelancer.getUsuario().getTipo());
     }
 
     public LoginResponseDTO registerEmpresa(RegistroEmpresaDTO dto) {

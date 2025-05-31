@@ -310,5 +310,46 @@
         });
     }
 </script>
+<script>
+document.getElementById('formPessoa').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    // Pegue os valores dos campos
+    const nome = this.name.value;
+    const cpf = this.cpf.value;
+    const email = this.email.value;
+    const senha = this.password.value;
+
+    // Monte o objeto conforme seu DTO de registro
+    const payload = {
+        nome: nome,
+        email: email,
+        senha: senha,
+        telefone: '123456789',
+        cpf: cpf,
+        areaEspecialidade: 'Teste'
+        // Adicione outros campos se necessário
+    };
+
+    try {
+        const response = await fetch('/auth/register/freelancer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            alert('Cadastro realizado com sucesso! Faça login para continuar.');
+            window.location.href = 'login.html';
+        } else {
+            const data = await response.json();
+            alert(data.message || 'Erro ao cadastrar. Verifique os dados e tente novamente.');
+        }
+    } catch (err) {
+        alert('Erro ao conectar ao servidor.');
+        console.log(err);
+    }
+});
+</script>
 </body>
 </html>

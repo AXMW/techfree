@@ -12,7 +12,8 @@ import com.techfree.dto.RecuperarSenhaRequestDTO;
 import com.techfree.dto.RegistroEmpresaDTO;
 import com.techfree.dto.RegistroFreelancerDTO;
 import com.techfree.dto.ResetarSenhaDTO;
-import com.techfree.dto.SingupResponseDTO;
+import com.techfree.dto.SignupResponseDTO;
+import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,17 +24,17 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginDTO) {
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginDTO) {
         return ResponseEntity.ok(authenticationService.login(loginDTO));
     }
 
     @PostMapping("/register/freelancer")
-    public ResponseEntity<SingupResponseDTO> registerFreelancer(@RequestBody RegistroFreelancerDTO dto) {
+    public ResponseEntity<SignupResponseDTO> registerFreelancer(@Valid @RequestBody RegistroFreelancerDTO dto) {
         return ResponseEntity.ok(authenticationService.registerFreelancer(dto));
     }
 
     @PostMapping("/register/empresa")
-    public ResponseEntity<LoginResponseDTO> registerEmpresa(@RequestBody RegistroEmpresaDTO dto) {
+    public ResponseEntity<LoginResponseDTO> registerEmpresa(@Valid @RequestBody RegistroEmpresaDTO dto) {
         return ResponseEntity.ok(authenticationService.registerEmpresa(dto));
     }
 
