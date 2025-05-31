@@ -360,10 +360,7 @@ document.getElementById('formEmpresa').addEventListener('submit', async function
     const nomeFantasia = this.name.value;
     const cnpj = this.cnpj.value;
     const email = this.email.value;
-    const senha = this.passwordEmpresa.value;
-    console.log(cnpj)
-    console.log(passwordEmpresa)
-    console.log(passwordEmpresa.value)
+    const senha = this.elements.passwordEmpresa.value;
 
     // Monte o objeto conforme seu DTO de registro
     const payload = {
