@@ -10,12 +10,17 @@ import com.techfree.model.Usuario;
 import com.techfree.repository.UsuarioRepository;
 import com.techfree.security.JwtUtil;
 import com.techfree.service.email.EmailTemplateService;
+import com.techfree.model.Role;
+import com.techfree.repository.RoleRepository;
+import java.util.Set;
+import com.techfree.dto.SingupResponseDTO;
 
 
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +54,9 @@ public class AuthenticationService {
 
     @Autowired
     private TokenRecuperacaoSenhaRepository tokenRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
   
 
     public LoginResponseDTO login(LoginRequestDTO loginDTO) {
@@ -62,16 +70,28 @@ public class AuthenticationService {
         return new LoginResponseDTO(token, usuario.getTipo());
     }
 
-    public LoginResponseDTO registerFreelancer(RegistroFreelancerDTO dto) {
+    public SingupResponseDTO registerFreelancer(RegistroFreelancerDTO dto) {
+        Usuario usuario = new Usuario();
+        usuario.setEmail(dto.getEmail());
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        usuario.setTipo(TipoUsuario.FREELANCER);
+
+        Role roleFreelancer = roleRepository.findByNome("FREELANCER")
+            .orElseThrow(() -> new RuntimeException("Role FREELANCER não encontrada"));
+            Set<Role> sla = new HashSet<Role>();
+            sla.add(roleFreelancer);
+        usuario.setRoles(sla);
+        usuarioRepository.save(usuario);
+
+        
         Freelancer freelancer = new Freelancer();
-        freelancer.getUsuario().setEmail(dto.getEmail());
-        freelancer.getUsuario().setSenha(passwordEncoder.encode(dto.getSenha()));
         freelancer.setNome(dto.getNome());
-        freelancer.getUsuario().setTipo(TipoUsuario.FREELANCER);
+        freelancer.setUsuario(usuario);
+        freelancer.setTelefone(dto.getTelefone());
+        freelancer.setCpf(dto.getCpf());
+        freelancer.setAreaAtuacao(dto.getAreaEspecialidade());
 
         usuarioRepository.save(freelancer.getUsuario());
-
-        String token = jwtUtil.gerarToken(freelancer.getUsuario().getEmail());
 
         emailService.enviarEmail(
             freelancer.getUsuario().getEmail(),
@@ -79,7 +99,7 @@ public class AuthenticationService {
             EmailTemplateService.templateBoasVindas(freelancer.getNome(), "Freelancer")
         );
 
-        return new LoginResponseDTO(token, freelancer.getUsuario().getTipo());
+        return new SingupResponseDTO(freelancer.getNome(), freelancer.getUsuario().getTipo());
     }
 
     public LoginResponseDTO registerEmpresa(RegistroEmpresaDTO dto) {

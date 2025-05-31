@@ -12,6 +12,7 @@ import com.techfree.dto.RecuperarSenhaRequestDTO;
 import com.techfree.dto.RegistroEmpresaDTO;
 import com.techfree.dto.RegistroFreelancerDTO;
 import com.techfree.dto.ResetarSenhaDTO;
+import com.techfree.dto.SingupResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/register/freelancer")
-    public ResponseEntity<LoginResponseDTO> registerFreelancer(@RequestBody RegistroFreelancerDTO dto) {
+    public ResponseEntity<SingupResponseDTO> registerFreelancer(@RequestBody RegistroFreelancerDTO dto) {
         return ResponseEntity.ok(authenticationService.registerFreelancer(dto));
     }
 
