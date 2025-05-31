@@ -170,7 +170,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="pagamento" class="form-label">Pagamento <span class="required">*</span></label>
-                            <input type="text" class="form-control" id="pagamento" name="pagamento" required placeholder="Ex: R$ 2.000 - R$ 3.000">
+                            <input type="text" class="form-control" id="pagamento" name="pagamento" required placeholder="Ex: R$ 2.000,00">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Requisitos <span class="required">*</span></label>
@@ -383,6 +383,21 @@
 
         duracaoSelect.addEventListener('change', calcularDataLimite);
         dataInicioInput.addEventListener('change', calcularDataLimite);
+
+        // FORMATAÇÃO DO CAMPO DE PAGAMENTO
+        const pagamentoInput = document.getElementById('pagamento');
+
+        pagamentoInput.addEventListener('input', function () {
+            // Remove tudo que não for número
+            let valor = this.value.replace(/\D/g, '');
+            if (valor.length === 0) {
+                this.value = '';
+                return;
+            }
+            // Formata para moeda brasileira
+            valor = (parseInt(valor, 10) / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            this.value = valor;
+        });
     </script>
 </body>
 </html>

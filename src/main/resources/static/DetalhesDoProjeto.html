@@ -266,48 +266,41 @@
     </footer>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script>
-        // Modelo JSON de exemplo
+        // Novo modelo JSON sem statusProcesso
         const projeto = {
             titulo: "Plataforma de Gestão de Projetos Integrados",
             empresa: "TechFree",
             status: "Aberto",
-            statusProcesso: "Recebendo candidaturas",
             grau: "Pleno",
-            modalidade: "Remoto",
-            prazo: "3 meses",
-            locais: ["Remoto", "São Paulo, SP"],
-            faixa: "R$ 2.000 - R$ 3.000",
-            carga: "20h/semana",
-            inicio: "01/06/2025",
-            tipoContrato: "PJ",
-            certificacao: "Sim, válida como estágio",
-            tecnologias: ["React", "Node.js", "Bootstrap 5", "MongoDB", "Git/GitHub", "Figma"],
-            descricao: "Desenvolva uma plataforma web para conectar empresas, estudantes e instituições de ensino, facilitando a gestão de projetos integrados, acompanhamento de entregas e geração de certificados. O projeto visa criar um ambiente moderno, seguro e intuitivo, promovendo a colaboração e o desenvolvimento de competências práticas.",
-            requisitos: [
-                "Conhecimento em desenvolvimento web (front-end e back-end);",
-                "Experiência com React e Node.js;",
-                "Capacidade de trabalhar em equipe e boa comunicação;",
-                "Comprometimento com prazos e entregas semanais;",
-                "Desejável experiência prévia em projetos colaborativos."
-            ],
-            diferenciais: [
-                "Experiência com TypeScript e testes automatizados;",
-                "Conhecimento em UX/UI e Figma;",
-                "Participação em hackathons ou projetos open source;"
-            ],
-            beneficios: [
-                "Certificação válida como estágio;",
-                "Mentoria com profissionais do mercado;",
-                "Possibilidade de contratação ao final do projeto;",
-                "Ambiente inovador e colaborativo;",
-                "Flexibilidade de horários."
-            ],
-            infoAdicional: [
-                "Empresa com cultura de inovação e diversidade.",
-                "Dress code casual.",
-                "Política de diversidade ativa.",
-                "Plano de carreira acelerado."
-            ],
+            pagamento: "R$ 5.000,00",
+            dataInicio: "01/06/2025",
+            duracao: "3 meses",
+            dataLimite: "01/09/2025",
+            requisitos: ["React", "Node.js", "Bootstrap 5", "MongoDB", "Git/GitHub", "Figma"],
+            descricao: `
+                Desenvolva uma plataforma web para conectar empresas, estudantes e instituições de ensino, facilitando a gestão de projetos integrados, acompanhamento de entregas e geração de certificados. O projeto visa criar um ambiente moderno, seguro e intuitivo, promovendo a colaboração e o desenvolvimento de competências práticas.<br><br>
+                <strong>Diferenciais:</strong>
+                <ul>
+                    <li>Experiência com TypeScript e testes automatizados;</li>
+                    <li>Conhecimento em UX/UI e Figma;</li>
+                    <li>Participação em hackathons ou projetos open source;</li>
+                </ul>
+                <strong>Benefícios:</strong>
+                <ul>
+                    <li>Certificação válida como estágio;</li>
+                    <li>Mentoria com profissionais do mercado;</li>
+                    <li>Possibilidade de contratação ao final do projeto;</li>
+                    <li>Ambiente inovador e colaborativo;</li>
+                    <li>Flexibilidade de horários.</li>
+                </ul>
+                <strong>Informações Adicionais:</strong>
+                <ul>
+                    <li>Empresa com cultura de inovação e diversidade.</li>
+                    <li>Dress code casual.</li>
+                    <li>Política de diversidade ativa.</li>
+                    <li>Plano de carreira acelerado.</li>
+                </ul>
+            `,
             publicada: "18/05/2025",
             anexo: {
                 nome: "Briefing_Plataforma.pdf",
@@ -338,62 +331,28 @@
                         <div class="info-value">${projeto.grau}</div>
                     </div>
                     <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-geo-alt"></i> Modalidade</div>
-                        <div class="info-value">${projeto.modalidade}</div>
+                        <div class="info-label"><i class="bi bi-cash-coin"></i> Pagamento</div>
+                        <div class="info-value">${projeto.pagamento}</div>
                     </div>
                     <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-clock-history"></i> Prazo</div>
-                        <div class="info-value">${projeto.prazo}</div>
+                        <div class="info-label"><i class="bi bi-calendar-event"></i> Data de Início</div>
+                        <div class="info-value">${projeto.dataInicio}</div>
                     </div>
                     <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-building"></i> Locais</div>
-                        <div class="info-value">${projeto.locais.join(', ')}</div>
+                        <div class="info-label"><i class="bi bi-hourglass-split"></i> Duração</div>
+                        <div class="info-value">${projeto.duracao}</div>
                     </div>
                     <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-cash-coin"></i> Faixa</div>
-                        <div class="info-value">${projeto.faixa}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-hourglass-split"></i> Carga Horária</div>
-                        <div class="info-value">${projeto.carga}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-calendar-event"></i> Início</div>
-                        <div class="info-value">${projeto.inicio}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-briefcase"></i> Tipo de Contrato</div>
-                        <div class="info-value">${projeto.tipoContrato}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-award"></i> Certificação</div>
-                        <div class="info-value">${projeto.certificacao}</div>
+                        <div class="info-label"><i class="bi bi-calendar-check"></i> Data Limite</div>
+                        <div class="info-value">${projeto.dataLimite}</div>
                     </div>
                 </div>
-                <div class="section-title mt-4"><i class="bi bi-code-slash"></i> Tecnologias e Ferramentas</div>
+                <div class="section-title mt-4"><i class="bi bi-code-slash"></i> Requisitos</div>
                 <div class="mb-3">
-                    ${projeto.tecnologias.map(tec => `<span class="badge badge-tech">${tec}</span>`).join('')}
+                    ${projeto.requisitos.map(tec => `<span class="badge badge-tech">${tec}</span>`).join('')}
                 </div>
                 <div class="section-title">Descrição do Projeto</div>
                 <p class="fs-5 text-muted">${projeto.descricao}</p>
-                <div class="section-title">Requisitos</div>
-                <ul class="fs-6 text-muted">
-                    ${projeto.requisitos.map(r => `<li>${r}</li>`).join('')}
-                </ul>
-                <div class="section-title">Diferenciais</div>
-                <ul class="fs-6 text-muted">
-                    ${projeto.diferenciais.map(d => `<li>${d}</li>`).join('')}
-                </ul>
-                <div class="section-title">Benefícios</div>
-                <ul class="fs-6 text-muted">
-                    ${projeto.beneficios.map(b => `<li>${b}</li>`).join('')}
-                </ul>
-                <div class="section-title">Informações Adicionais</div>
-                <ul class="fs-6 text-muted">
-                    ${projeto.infoAdicional.map(i => `<li>${i}</li>`).join('')}
-                </ul>
-                <div class="section-title">Status do Processo</div>
-                <div class="mb-3"><span class="badge bg-success">${projeto.statusProcesso}</span></div>
                 <div class="project-anexo">
                     <i class="bi bi-paperclip"></i>
                     <strong>Anexo:</strong> <a href="${projeto.anexo.url}" class="link-light text-decoration-underline" target="_blank">${projeto.anexo.nome}</a>
@@ -412,16 +371,14 @@
                 <ul class="list-unstyled mb-3">
                     <li><strong>Status:</strong> <span class="project-status">${projeto.status}</span></li>
                     <li><strong>Empresa:</strong> ${projeto.empresa}</li>
-                    <li><strong>Local:</strong> ${projeto.locais.join(', ')}</li>
-                    <li><strong>Início:</strong> ${projeto.inicio}</li>
-                    <li><strong>Duração:</strong> ${projeto.prazo}</li>
-                    <li><strong>Tipo:</strong> Projeto Integrador</li>
-                    <li><strong>Faixa:</strong> ${projeto.faixa}</li>
-                    <li><strong>Carga:</strong> ${projeto.carga}</li>
-                    <li><strong>Certificação:</strong> ${projeto.certificacao}</li>
+                    <li><strong>Data de Início:</strong> ${projeto.dataInicio}</li>
+                    <li><strong>Duração:</strong> ${projeto.duracao}</li>
+                    <li><strong>Data Limite:</strong> ${projeto.dataLimite}</li>
+                    <li><strong>Pagamento:</strong> ${projeto.pagamento}</li>
+                    <li><strong>Grau:</strong> ${projeto.grau}</li>
                 </ul>
                 <div class="mb-3">
-                    ${projeto.tecnologias.slice(0,3).map(tec => `<span class="badge badge-tech">${tec}</span>`).join('')}
+                    ${projeto.requisitos.slice(0,3).map(tec => `<span class="badge badge-tech">${tec}</span>`).join('')}
                 </div>
                 <div class="project-anexo">
                     <i class="bi bi-paperclip"></i>
