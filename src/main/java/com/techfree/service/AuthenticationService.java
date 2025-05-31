@@ -107,17 +107,27 @@ public class AuthenticationService {
         return new SignupResponseDTO(freelancer.getNome(), freelancer.getUsuario().getTipo());
     }
 
-    public LoginResponseDTO registerEmpresa(RegistroEmpresaDTO dto) {
+    public SignupResponseDTO registerEmpresa(RegistroEmpresaDTO dto) {
+
+        Usuario usuario = new Usuario();
+        usuario.setEmail(dto.getEmail());
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        usuario.setTipo(TipoUsuario.EMPRESA);
+
+        Role roleEmpresa = roleRepository.findByNome("EMPRESA")
+            .orElseThrow(() -> new RuntimeException("Role EMPRESA não encontrada"));
+            Set<Role> sla = new HashSet<Role>();
+            sla.add(roleEmpresa);
+        usuario.setRoles(sla);
+        usuarioRepository.save(usuario);
+
         Empresa empresa = new Empresa();
-        empresa.getUsuario().setEmail(dto.getEmail());
-        empresa.getUsuario().setSenha(passwordEncoder.encode(dto.getSenha()));
         empresa.setNomeFantasia(dto.getNomeFantasia());
+        empresa.setRazaoSocial(dto.getRazaoSocial());
+        empresa.setUsuario(usuario);
         empresa.setCnpj(dto.getCnpj());
-        empresa.getUsuario().setTipo(TipoUsuario.EMPRESA);
+        empresa.setTelefone(dto.getTelefone());
 
-        usuarioRepository.save(empresa.getUsuario());
-
-        String token = jwtUtil.gerarToken(empresa.getUsuario().getEmail());
 
         emailService.enviarEmail(
             empresa.getUsuario().getEmail(),
@@ -125,7 +135,7 @@ public class AuthenticationService {
             EmailTemplateService.templateBoasVindas(empresa.getNomeFantasia(), "Empresa")
         );
 
-        return new LoginResponseDTO(token, empresa.getUsuario().getTipo());
+        return new SignupResponseDTO(empresa.getNomeFantasia(), empresa.getUsuario().getTipo());
     }
 
     public void solicitarRecuperacaoSenha(RecuperarSenhaRequestDTO dto) {

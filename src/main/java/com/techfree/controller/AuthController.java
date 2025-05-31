@@ -34,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/register/empresa")
-    public ResponseEntity<LoginResponseDTO> registerEmpresa(@Valid @RequestBody RegistroEmpresaDTO dto) {
+    public ResponseEntity<SignupResponseDTO> registerEmpresa(@Valid @RequestBody RegistroEmpresaDTO dto) {
         return ResponseEntity.ok(authenticationService.registerEmpresa(dto));
     }
 

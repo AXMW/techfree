@@ -22,11 +22,5 @@ public class RegistroEmpresaDTO {
     private String cnpj;
 
     @NotBlank
-    private String descricao;
-
-    @NotBlank
     private String telefone;
-
-    @NotBlank
-    private String site;
 }

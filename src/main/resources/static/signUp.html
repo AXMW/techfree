@@ -149,11 +149,11 @@
         <input class="form-control" type="email" name="email" placeholder="Email">
     </div>
     <div class="mb-3 fade-input">
-        <input class="shadow form-control" type="password" name="password" placeholder="Senha">
+        <input class="shadow form-control" type="password" name="passwordEmpresa" placeholder="Senha">
         <p class="d-xxl-flex justify-content-xxl-start font-small input-description">Requisitos da senha</p>
     </div>
     <div class="mb-4 fade-input">
-        <input class="shadow form-control" type="password" name="password" placeholder="Confirmar senha">
+        <input class="shadow form-control" type="password" name="passwordEmpresa1" placeholder="Confirmar senha">
     </div>
     <div class="mb-1 fade-input">
         <button class="btn btn-primary shadow d-block w-100" type="submit">Criar Perfil</button>
@@ -333,6 +333,52 @@ document.getElementById('formPessoa').addEventListener('submit', async function(
 
     try {
         const response = await fetch('/auth/register/freelancer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            alert('Cadastro realizado com sucesso! Faça login para continuar.');
+            window.location.href = 'login.html';
+        } else {
+            const data = await response.json();
+            alert(data.message || 'Erro ao cadastrar. Verifique os dados e tente novamente.');
+        }
+    } catch (err) {
+        alert('Erro ao conectar ao servidor.');
+        console.log(err);
+    }
+});
+</script>
+<script>
+document.getElementById('formEmpresa').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    // Pegue os valores dos campos
+    const razaoSocial = this.razaoSocial.value;
+    const nomeFantasia = this.name.value;
+    const cnpj = this.cnpj.value;
+    const email = this.email.value;
+    const senha = this.passwordEmpresa.value;
+    console.log(cnpj)
+    console.log(passwordEmpresa)
+    console.log(passwordEmpresa.value)
+
+    // Monte o objeto conforme seu DTO de registro
+    const payload = {
+        nomeFantasia: nomeFantasia,
+        razaoSocial: razaoSocial,
+        email: email,
+        senha: senha,
+        cnpj: cnpj,
+        telefone: '123456789'
+        
+        // Adicione outros campos se necessário
+    };
+
+    try {
+        const response = await fetch('/auth/register/empresa', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
