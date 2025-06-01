@@ -10,49 +10,7 @@
     <link rel="stylesheet" href="assets/css/bs-theme-overrides.css">
     <link rel="stylesheet" href="assets/css/untitled-1.css">
     <link rel="stylesheet" href="assets/css/untitled.css">
-    <style>
-        /* Fade-in animation for inputs */
-        .fade-input {
-            opacity: 0;
-            animation: fadeInInput 0.5s forwards;
-        }
-
-        @keyframes fadeInInput {
-            to {
-                opacity: 1;
-            }
-        }
-
-        .btn-primary,
-        .icon-selector {
-            transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
-        }
-
-        .btn-primary:hover,
-        .btn-primary:focus {
-            transform: scale(1.04);
-        }
-
-        .icon-selector:hover {
-            transform: scale(1.10) rotate(-2deg);
-            box-shadow: 0 2px 16px #ff6f0033;
-        }
-
-        /* Aumenta a largura do card/container de cadastro */
-        .mw-signUp {
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        #formPessoa, #formEmpresa {
-        width: 80%;
-        max-width: 650px;
-        margin-left: auto;
-        margin-right: auto;
-        }
-        
-    </style>
+    <link rel="stylesheet" href="assets/css/genericstyles.css">
 </head>
 
 <body>
@@ -122,7 +80,7 @@
                             <p class="d-xxl-flex justify-content-xxl-start font-small input-description">Requisitos da senha</p>
                         </div>
                         <div class="mb-4 fade-input">
-                            <input class="shadow form-control" type="password" name="password" placeholder="Confirmar senha">
+                            <input class="shadow form-control" type="password" name="passwordConfirm" placeholder="Confirmar senha">
                         </div>
                         <div class="mb-1 fade-input"><button class="btn btn-primary shadow d-block w-100" type="submit">Criar Perfil</button></div>
                         <div class="mb-4 fade-input">
@@ -153,7 +111,7 @@
         <p class="d-xxl-flex justify-content-xxl-start font-small input-description">Requisitos da senha</p>
     </div>
     <div class="mb-4 fade-input">
-        <input class="shadow form-control" type="password" name="passwordEmpresa1" placeholder="Confirmar senha">
+        <input class="shadow form-control" type="password" name="passwordEmpresaConfirm" placeholder="Confirmar senha">
     </div>
     <div class="mb-1 fade-input">
         <button class="btn btn-primary shadow d-block w-100" type="submit">Criar Perfil</button>
@@ -189,210 +147,6 @@
     </footer>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bold-and-dark.js"></script>
-    <script>
-        // Torna os ícones clicáveis e alterna a seleção
-        document.querySelectorAll('.icon-selector').forEach(function(icon) {
-            icon.addEventListener('click', function() {
-                document.querySelectorAll('.icon-selector').forEach(function(i) {
-                    i.classList.remove('bs-icon-selected');
-                });
-                this.classList.add('bs-icon-selected');
-            });
-        });
-
-        // Função para fade nos inputs
-        function fadeInputs(form) {
-            const inputs = form.querySelectorAll('.fade-input');
-            inputs.forEach((el, idx) => {
-                el.style.animation = 'none';
-                void el.offsetWidth;
-                el.style.animation = `fadeInInput 0.5s forwards`;
-                el.style.animationDelay = (0.06 * idx) + 's';
-            });
-        }
-
-        // Alterna os formulários e aplica fade nos inputs
-        const formPessoa = document.getElementById('formPessoa');
-        const formEmpresa = document.getElementById('formEmpresa');
-        document.getElementById('iconPessoa').addEventListener('click', function () {
-            formPessoa.style.display = '';
-            formEmpresa.style.display = 'none';
-            fadeInputs(formPessoa);
-        });
-        document.getElementById('iconEmpresa').addEventListener('click', function () {
-            formPessoa.style.display = 'none';
-            formEmpresa.style.display = '';
-            fadeInputs(formEmpresa);
-        });
-        // Inicialização: só o de pessoa ativo e fade nos inputs
-        formPessoa.style.display = '';
-        formEmpresa.style.display = 'none';
-        fadeInputs(formPessoa);
-
-        // Lógica para mostrar/ocultar campos de instituição
-        const isInstituicao = document.getElementById('isInstituicao');
-        const instituicaoCampos = document.getElementById('instituicaoCampos');
-        const tipoVinculo = document.getElementById('tipoVinculo');
-        const campoOutroVinculo = document.getElementById('campoOutroVinculo');
-        const nomeInstituicaoSelect = document.getElementById('nomeInstituicaoSelect');
-        const campoOutraInstituicao = document.getElementById('campoOutraInstituicao');
-        const cursoArea = document.getElementById('cursoArea');
-        const campoOutroCurso = document.getElementById('campoOutroCurso');
-
-        isInstituicao.addEventListener('change', function() {
-            if (this.checked) {
-                instituicaoCampos.style.display = '';
-                fadeInputs(instituicaoCampos);
-            } else {
-                instituicaoCampos.style.display = 'none';
-            }
-        });
-
-        tipoVinculo.addEventListener('change', function() {
-            if (this.value === 'outro') {
-                campoOutroVinculo.style.display = '';
-            } else {
-                campoOutroVinculo.style.display = 'none';
-            }
-        });
-
-        // Nome da instituição: mostra campo de texto se "Outro"
-        nomeInstituicaoSelect.addEventListener('change', function() {
-            if (this.value === 'outro') {
-                campoOutraInstituicao.style.display = '';
-            } else {
-                campoOutraInstituicao.style.display = 'none';
-            }
-        });
-
-        cursoArea.addEventListener('change', function() {
-            if (this.value === 'Outro') {
-                campoOutroCurso.style.display = '';
-            } else {
-                campoOutroCurso.style.display = 'none';
-            }
-        });
-    </script>
-    <!-- Adicione este script ao final do seu arquivo, antes do </body> -->
-<script>
-    // Máscara para CPF
-    function maskCPF(value) {
-        return value
-            .replace(/\D/g, '') // Remove tudo que não é dígito
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-    }
-
-    // Máscara para CNPJ
-    function maskCNPJ(value) {
-        return value
-            .replace(/\D/g, '')
-            .replace(/^(\d{2})(\d)/, '$1.$2')
-            .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
-            .replace(/\.(\d{3})(\d)/, '.$1/$2')
-            .replace(/(\d{4})(\d)/, '$1-$2');
-    }
-
-    // Aplica máscara ao CPF
-    const cpfInput = document.getElementById('cpf');
-    if (cpfInput) {
-        cpfInput.addEventListener('input', function () {
-            this.value = maskCPF(this.value);
-        });
-    }
-
-    // Aplica máscara ao CNPJ
-    const cnpjInput = document.getElementById('cnpj');
-    if (cnpjInput) {
-        cnpjInput.addEventListener('input', function () {
-            this.value = maskCNPJ(this.value);
-        });
-    }
-</script>
-<script>
-document.getElementById('formPessoa').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    // Pegue os valores dos campos
-    const nome = this.name.value;
-    const cpf = this.cpf.value;
-    const email = this.email.value;
-    const senha = this.password.value;
-
-    // Monte o objeto conforme seu DTO de registro
-    const payload = {
-        nome: nome,
-        email: email,
-        senha: senha,
-        telefone: '123456789',
-        cpf: cpf,
-        areaEspecialidade: 'Teste'
-        // Adicione outros campos se necessário
-    };
-
-    try {
-        const response = await fetch('/auth/register/freelancer', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        if (response.ok) {
-            alert('Cadastro realizado com sucesso! Faça login para continuar.');
-            window.location.href = 'login.html';
-        } else {
-            const data = await response.json();
-            alert(data.message || 'Erro ao cadastrar. Verifique os dados e tente novamente.');
-        }
-    } catch (err) {
-        alert('Erro ao conectar ao servidor.');
-        console.log(err);
-    }
-});
-</script>
-<script>
-document.getElementById('formEmpresa').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    // Pegue os valores dos campos
-    const razaoSocial = this.razaoSocial.value;
-    const nomeFantasia = this.name.value;
-    const cnpj = this.cnpj.value;
-    const email = this.email.value;
-    const senha = this.elements.passwordEmpresa.value;
-
-    // Monte o objeto conforme seu DTO de registro
-    const payload = {
-        nomeFantasia: nomeFantasia,
-        razaoSocial: razaoSocial,
-        email: email,
-        senha: senha,
-        cnpj: cnpj,
-        telefone: '123456789'
-        
-        // Adicione outros campos se necessário
-    };
-
-    try {
-        const response = await fetch('/auth/register/empresa', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        if (response.ok) {
-            alert('Cadastro realizado com sucesso! Faça login para continuar.');
-            window.location.href = 'login.html';
-        } else {
-            const data = await response.json();
-            alert(data.message || 'Erro ao cadastrar. Verifique os dados e tente novamente.');
-        }
-    } catch (err) {
-        alert('Erro ao conectar ao servidor.');
-        console.log(err);
-    }
-});
-</script>
+    <script src="assets/js/signUp.js"></script>
 </body>
 </html>
