@@ -34,10 +34,6 @@ public class Projeto {
     private String emailPraContato;
 
     private String area;
-    
-    private String tipo;
-
-    private String cnpj;
 
     private boolean ativo;
 

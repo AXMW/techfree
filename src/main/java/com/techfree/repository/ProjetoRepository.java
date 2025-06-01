@@ -9,10 +9,6 @@ public interface ProjetoRepository extends JpaRepository<Projeto, Long>, JpaSpec
     Optional<Projeto> findByTitulo(String titulo);
     List<Projeto> findByEmpresaId(Long id);
     List<Projeto> findByAtivo(boolean ativo);
-    List<Projeto> findByAtivoAndTipo(boolean ativo, String tipo);
-    List<Projeto> findByTipo(String tipo);
-    List<Projeto> findByTipoAndAtivo(String tipo, boolean ativo);
-    List<Projeto> findByTipoAndAtivoAndTitulo(String tipo, boolean ativo, String titulo);
-    List<Projeto> findByTipoAndAtivoAndCnpj(String tipo, boolean ativo, String cnpj);
+    List<Projeto> findByAtivoAndTitulo(boolean ativo, String titulo);
     
 }
