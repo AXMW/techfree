@@ -48,6 +48,13 @@ public class FreelancerController {
         if (dados.getNome() != null) freelancer.setNome(dados.getNome());
         if (dados.getBio() != null) freelancer.setBio(dados.getBio());
         if (dados.getHabilidades() != null) freelancer.setHabilidades(dados.getHabilidades());
+        if (dados.getTecnologias() != null) freelancer.setTecnologias(dados.getTecnologias());
+        if (dados.getTelefone() != null) freelancer.setTelefone(dados.getTelefone());
+        if (dados.getAreaAtuacao() != null) freelancer.setAreaAtuacao(dados.getAreaAtuacao());
+        if (dados.getGithub() != null) freelancer.setGithub(dados.getGithub());
+        if (dados.getLinkedin() != null) freelancer.setLinkedin(dados.getLinkedin());
+        if (dados.getPortfolio() != null) freelancer.setPortfolio(dados.getPortfolio());
+        if(dados.getHabilidades() != null) freelancer.setHabilidades(dados.getHabilidades());
 
         freelancerRepository.save(freelancer);
         return ResponseEntity.ok(freelancer);

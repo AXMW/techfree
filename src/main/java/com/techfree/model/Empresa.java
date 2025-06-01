@@ -23,8 +23,6 @@ public class Empresa {
 
     private String telefone;
 
-    private String tipo;
-
     private String bio;
 
     private String site;

@@ -57,6 +57,7 @@ public class EmpresaController {
         if(dadosAtualizados.getTelefone() != null) empresa.setTelefone(dadosAtualizados.getTelefone());
         if(dadosAtualizados.getBio() != null) empresa.setBio(dadosAtualizados.getBio());
         if(dadosAtualizados.getSite() != null) empresa.setSite(dadosAtualizados.getSite());
+        if(dadosAtualizados.getDescricao() != null) empresa.setDescricao(dadosAtualizados.getDescricao());
 
         empresaRepository.save(empresa);
         return ResponseEntity.ok(empresa);

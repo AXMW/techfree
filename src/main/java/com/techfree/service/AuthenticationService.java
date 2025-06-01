@@ -7,6 +7,7 @@ import com.techfree.model.Empresa;
 import com.techfree.model.Freelancer;
 import com.techfree.model.TokenRecuperacaoSenha;
 import com.techfree.model.Usuario;
+import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.UsuarioRepository;
 import com.techfree.security.JwtUtil;
 import com.techfree.service.email.EmailTemplateService;
@@ -33,10 +34,15 @@ import com.techfree.dto.RegistroEmpresaDTO;
 import com.techfree.dto.RegistroFreelancerDTO;
 import com.techfree.dto.ResetarSenhaDTO;
 import com.techfree.repository.TokenRecuperacaoSenhaRepository;
+import com.techfree.repository.EmpresaRepository;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+
+    private final FreelancerRepository freelancerRepository;
+
+    private final EmpresaRepository empresaRepository;
 
     @Autowired
     private final AuthenticationManager authenticationManager;
@@ -57,7 +63,6 @@ public class AuthenticationService {
 
     @Autowired
     private RoleRepository roleRepository;
-  
 
     public LoginResponseDTO login(LoginRequestDTO loginDTO) {
         
@@ -91,12 +96,13 @@ public class AuthenticationService {
         
         Freelancer freelancer = new Freelancer();
         freelancer.setNome(dto.getNome());
+        freelancer.setEmail(dto.getEmail());
         freelancer.setUsuario(usuario);
         freelancer.setTelefone(dto.getTelefone());
         freelancer.setCpf(dto.getCpf());
         freelancer.setAreaAtuacao(dto.getAreaEspecialidade());
 
-        usuarioRepository.save(freelancer.getUsuario());
+        freelancerRepository.save(freelancer);
 
         emailService.enviarEmail(
             freelancer.getUsuario().getEmail(),
@@ -127,7 +133,9 @@ public class AuthenticationService {
         empresa.setUsuario(usuario);
         empresa.setCnpj(dto.getCnpj());
         empresa.setTelefone(dto.getTelefone());
+        empresa.setEmail(dto.getEmail());
 
+        empresaRepository.save(empresa);
 
         emailService.enviarEmail(
             empresa.getUsuario().getEmail(),
