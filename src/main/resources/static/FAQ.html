@@ -11,86 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Azeret+Mono:400,700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700,900&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        body, main, section.bg-dark {
-            /*background: #00294B !important;*/
-            min-height: 100vh;
-        }
-        .faq-header {
-            background: rgba(0,0,0,0.18);
-            color: #fff;
-            border-radius: 1.5rem;
-            padding: 2.5rem 2rem 2rem 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-            text-align: center;
-        }
-        .faq-header h1 {
-            font-weight: 800;
-            color: #fff;
-        }
-        .faq-header p {
-            color: #FF6F00;
-            font-size: 1.2rem;
-            margin-bottom: 0;
-        }
-        .faq-search {
-            max-width: 500px;
-            margin: 0 auto 2.5rem auto;
-        }
-        .faq-search input {
-            background: #22243a;
-            color: #fff;
-            border: 1px solid #44495a;
-            border-radius: 0.7rem;
-        }
-        .faq-search input:focus {
-            background: #22243a;
-            color: #fff;
-            border-color: #FF6F00;
-        }
-        .accordion-item {
-            background: rgba(255,255,255,0.07);
-            border: none;
-            border-radius: 1rem !important;
-            margin-bottom: 1.2rem;
-            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-        }
-        .accordion-button {
-            background: transparent;
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.1rem;
-            border-radius: 1rem !important;
-            box-shadow: none;
-            transition: background 0.2s, color 0.2s;
-        }
-        .accordion-button:not(.collapsed) {
-            background: #FF6F00;
-            color: #fff;
-        }
-        .accordion-button:focus {
-            box-shadow: 0 0 0 0.2rem rgba(255,111,0,0.15);
-        }
-        .accordion-body {
-            color: #fff;
-            font-size: 1.05rem;
-            background: transparent;
-        }
-        .faq-icon {
-            color: #FF6F00;
-            margin-right: 0.7rem;
-            font-size: 1.3rem;
-        }
-        @media (max-width: 767px) {
-            .faq-header {
-                padding: 1.5rem 1rem 1rem 1rem;
-            }
-            .faq-search {
-                max-width: 100%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/genericstyles.css">
 </head>
 
 <body>
@@ -324,15 +245,6 @@
         </div>
     </footer>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script>
-        // Filtro de busca dinâmica nas perguntas
-        document.getElementById('faqSearch').addEventListener('input', function () {
-            const search = this.value.toLowerCase();
-            document.querySelectorAll('.accordion-item').forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(search) ? '' : 'none';
-            });
-        });
-    </script>
+    <script src="assets/js/faq.js"></script>
 </body>
 </html>

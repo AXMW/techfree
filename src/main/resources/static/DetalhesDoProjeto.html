@@ -11,181 +11,18 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Azeret+Mono:400,700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700,900&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        main, section.bg-dark {
-            min-height: 100vh;
-        }
-        .project-header {
-            background: rgba(255,255,255,0.09);
-            color: #fff;
-            border-radius: 1.5rem;
-            box-shadow: 0 4px 32px rgba(0,0,0,0.10);
-            padding: 3.2rem 3rem 2.7rem 3rem;
-            margin-bottom: 2.5rem;
-        }
-        .project-header h1 {
-            color: #FF6F00;
-            font-weight: 900;
-            margin-bottom: 1.2rem;
-            letter-spacing: 0.5px;
-            font-size: 2.2rem;
-        }
-        .project-header .company-logo {
-            width: 70px;
-            height: 70px;
-            object-fit: contain;
-            border-radius: 50%;
-            background: #f1f1f1;
-            border: 2.5px solid #FF6F00;
-        }
-        .project-header .fs-5 {
-            color: #fff;
-        }
-        .project-header .badge,
-        .project-header span,
-        .project-header i {
-            color: #fff !important;
-        }
-        .badge-tech {
-            background: #FF6F00;
-            color: #fff;
-            font-weight: 600;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-            font-size: 0.98rem;
-            border-radius: 0.5rem;
-            padding: 0.35em 1em;
-        }
-        .section-title {
-            font-weight: 800;
-            color: #FF6F00;
-            margin-bottom: 1rem;
-            font-size: 1.18rem;
-            letter-spacing: 0.5px;
-        }
-        .project-status {
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 0.4rem 1rem;
-            border-radius: 1rem;
-            background: #1e824c; /* verde escuro */
-            color: #fff;
-        }
-        .project-meta {
-            color: #bdbdbd;
-            font-size: 1.01rem;
-            margin-bottom: 1.2rem;
-        }
-        .project-extra-info {
-            background: rgba(255,255,255,0.07);
-            border-radius: 1rem;
-            padding: 1.2rem 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 12px rgba(255,111,0,0.04);
-        }
-        .project-extra-info .info-label {
-            color: #fff;
-            font-size: 1.01rem;
-            font-weight: 600;
-            margin-bottom: 0.1rem;
-        }
-        .project-extra-info .info-value {
-            color: #FF6F00;
-            font-size: 1.01rem;
-            font-weight: 700;
-            margin-bottom: 0.7rem;
-        }
-        .project-publisher {
-            margin-top: 2.2rem;
-            padding: 1.2rem 1.5rem;
-            background: rgba(255,255,255,0.07);
-            border-radius: 1rem;
-            color: #fff;
-            font-size: 1.05rem;
-        }
-        .project-publisher .bi-person-circle {
-            color: #FF6F00;
-            font-size: 1.5rem;
-            margin-right: 0.7rem;
-        }
-        .project-anexo {
-            margin-top: 1.2rem;
-            background: rgba(255,255,255,0.08);
-            border-radius: 0.7rem;
-            padding: 0.8rem 1.2rem;
-            color: #fff;
-            font-size: 1.05rem;
-        }
-        .project-anexo i {
-            color: #FF6F00;
-            margin-right: 0.5rem;
-        }
-        /* Sidebar */
-        .sidebar-card {
-            background: #d3d3d3 !important;
-            color: #222 !important;
-            border-radius: 1rem;
-            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-            padding: 2rem 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .sidebar-card h5,
-        .sidebar-card h6,
-        .sidebar-card strong {
-            color: #00294B !important;
-        }
-        .sidebar-card a,
-        .sidebar-card p,
-        .sidebar-card li {
-            color: #222 !important;
-        }
-        .sidebar-card .badge-tech {
-            background: #00294B;
-            color: #fff;
-        }
-        .sidebar-card .project-status {
-            background: #1e824c !important; /* verde escuro */
-            color: #fff !important;
-        }
-        .sidebar-card .project-status.closed {
-            background: #ffeaea;
-            color: #c0392b;
-        }
-        .sidebar-card .project-anexo {
-            background: #e9ecef;
-            color: #00294B;
-        }
-        .sidebar-card .project-anexo a {
-            color: #FF6F00;
-        }
-        .apply-btn {
-            font-size: 1.1rem;
-            font-weight: 700;
-            padding: 0.75rem 2.5rem;
-        }
-        .badge.bg-success,
-        .badge.bg-success[href] {
-            background-color: #1e824c !important; /* verde escuro */
-            color: #fff !important;
-            border-color: #1e824c !important;
-        }
-        @media (max-width: 991px) {
-            .project-header, .sidebar-card {
-                padding: 1.5rem 0.7rem;
-            }
-            .project-header h1 {
-                font-size: 1.4rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/genericstyles.css">
 </head>
 
 <body>
     <nav class="navbar navbar-expand-md sticky-top py-3 navbar-dark" id="mainNav">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="/">
-                <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 60px;height: 60px;background: #00294B;">
-                    <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="54" height="33" style="margin-left: 3px;">
+                <span
+                    class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon"
+                    style="width: 60px;height: 60px;background: #00294B;">
+                    <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="54" height="33"
+                        style="margin-left: 3px;">
                 </span>
             </a>
             <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
@@ -243,10 +80,14 @@
                         <li><a href="#">Lista de freelancers</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
+                <div
+                    class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
                     <div class="fw-bold d-flex align-items-center mb-2">
-                        <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 40px;height: 40px;background: #00294B;">
-                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30" height="23" style="height: 18px;">
+                        <span
+                            class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon"
+                            style="width: 40px;height: 40px;background: #00294B;">
+                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30"
+                                height="23" style="height: 18px;">
                         </span>
                         <span>TechFree</span>
                     </div>
@@ -265,132 +106,7 @@
         </div>
     </footer>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script>
-        // Novo modelo JSON sem statusProcesso
-        const projeto = {
-            titulo: "Plataforma de Gestão de Projetos Integrados",
-            empresa: "TechFree",
-            status: "Aberto",
-            grau: "Pleno",
-            pagamento: "R$ 5.000,00",
-            dataInicio: "01/06/2025",
-            duracao: "3 meses",
-            dataLimite: "01/09/2025",
-            requisitos: ["React", "Node.js", "Bootstrap 5", "MongoDB", "Git/GitHub", "Figma"],
-            descricao: `
-                Desenvolva uma plataforma web para conectar empresas, estudantes e instituições de ensino, facilitando a gestão de projetos integrados, acompanhamento de entregas e geração de certificados. O projeto visa criar um ambiente moderno, seguro e intuitivo, promovendo a colaboração e o desenvolvimento de competências práticas.<br><br>
-                <strong>Diferenciais:</strong>
-                <ul>
-                    <li>Experiência com TypeScript e testes automatizados;</li>
-                    <li>Conhecimento em UX/UI e Figma;</li>
-                    <li>Participação em hackathons ou projetos open source;</li>
-                </ul>
-                <strong>Benefícios:</strong>
-                <ul>
-                    <li>Certificação válida como estágio;</li>
-                    <li>Mentoria com profissionais do mercado;</li>
-                    <li>Possibilidade de contratação ao final do projeto;</li>
-                    <li>Ambiente inovador e colaborativo;</li>
-                    <li>Flexibilidade de horários.</li>
-                </ul>
-                <strong>Informações Adicionais:</strong>
-                <ul>
-                    <li>Empresa com cultura de inovação e diversidade.</li>
-                    <li>Dress code casual.</li>
-                    <li>Política de diversidade ativa.</li>
-                    <li>Plano de carreira acelerado.</li>
-                </ul>
-            `,
-            publicada: "18/05/2025",
-            anexo: {
-                nome: "Briefing_Plataforma.pdf",
-                url: "#"
-            },
-            publicador: {
-                nome: "Marina Souza",
-                cargo: "Gestora de Projetos",
-                email: "marina@techfree.com"
-            }
-        };
-
-        // Preenche o header principal do projeto
-        function preencherProjeto(projeto) {
-            document.getElementById('projectHeader').innerHTML = `
-                <div class="d-flex align-items-center mb-3">
-                    <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" class="company-logo me-3" alt="Logo da Empresa">
-                    <div>
-                        <h1 class="fw-bold mb-1">${projeto.titulo}</h1>
-                        <span class="fs-5 fw-semibold">${projeto.empresa}</span>
-                        <span class="project-status ms-2">${projeto.status}</span>
-                        <div class="project-meta mt-1"><i class="bi bi-clock"></i> Publicado em ${projeto.publicada}</div>
-                    </div>
-                </div>
-                <div class="project-extra-info row">
-                    <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-person-badge"></i> Grau</div>
-                        <div class="info-value">${projeto.grau}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-cash-coin"></i> Pagamento</div>
-                        <div class="info-value">${projeto.pagamento}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-calendar-event"></i> Data de Início</div>
-                        <div class="info-value">${projeto.dataInicio}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-hourglass-split"></i> Duração</div>
-                        <div class="info-value">${projeto.duracao}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label"><i class="bi bi-calendar-check"></i> Data Limite</div>
-                        <div class="info-value">${projeto.dataLimite}</div>
-                    </div>
-                </div>
-                <div class="section-title mt-4"><i class="bi bi-code-slash"></i> Requisitos</div>
-                <div class="mb-3">
-                    ${projeto.requisitos.map(tec => `<span class="badge badge-tech">${tec}</span>`).join('')}
-                </div>
-                <div class="section-title">Descrição do Projeto</div>
-                <p class="fs-5 text-muted">${projeto.descricao}</p>
-                <div class="project-anexo">
-                    <i class="bi bi-paperclip"></i>
-                    <strong>Anexo:</strong> <a href="${projeto.anexo.url}" class="link-light text-decoration-underline" target="_blank">${projeto.anexo.nome}</a>
-                </div>
-                <div class="project-publisher">
-                    <i class="bi bi-person-circle"></i>
-                    Publicado por <strong>${projeto.publicador.nome}</strong> (${projeto.publicador.cargo}) &nbsp; | &nbsp; <i class="bi bi-envelope"></i> ${projeto.publicador.email}
-                </div>
-            `;
-        }
-
-        // Preenche o resumo lateral
-        function preencherSidebar(projeto) {
-            document.getElementById('sidebarResumo').innerHTML = `
-                <h5 class="fw-bold mb-3">Resumo do Projeto</h5>
-                <ul class="list-unstyled mb-3">
-                    <li><strong>Status:</strong> <span class="project-status">${projeto.status}</span></li>
-                    <li><strong>Empresa:</strong> ${projeto.empresa}</li>
-                    <li><strong>Data de Início:</strong> ${projeto.dataInicio}</li>
-                    <li><strong>Duração:</strong> ${projeto.duracao}</li>
-                    <li><strong>Data Limite:</strong> ${projeto.dataLimite}</li>
-                    <li><strong>Pagamento:</strong> ${projeto.pagamento}</li>
-                    <li><strong>Grau:</strong> ${projeto.grau}</li>
-                </ul>
-                <div class="mb-3">
-                    ${projeto.requisitos.slice(0,3).map(tec => `<span class="badge badge-tech">${tec}</span>`).join('')}
-                </div>
-                <div class="project-anexo">
-                    <i class="bi bi-paperclip"></i>
-                    <strong>Anexo:</strong> <a href="${projeto.anexo.url}" target="_blank">${projeto.anexo.nome}</a>
-                </div>
-                <a href="#" class="btn btn-info w-100 apply-btn shadow mt-4">Candidatar-se</a>
-            `;
-        }
-
-        // Inicialização
-        preencherProjeto(projeto);
-        preencherSidebar(projeto);
-    </script>
+    <script src="assets/js/detalhesprojeto.js"></script>
 </body>
+
 </html>
