@@ -1129,12 +1129,6 @@ section.bg-dark {
 
 /* Estilo ListaCandidatos */
 
-main,
-section.bg-dark {
-    /*background: #00294B !important;*/
-    min-height: 100vh;
-}
-
 .candidates-header {
     background: rgba(0, 0, 0, 0.18);
     color: #fff;
@@ -1396,4 +1390,2092 @@ section.bg-dark {
     .project-card {
         padding: 1rem 0.7rem;
     }
+}
+
+/* Estilos PaginaDeProfile1 */
+
+.profile-header {
+    background: rgba(0, 0, 0, 0.18);
+    color: #fff;
+    border-radius: 1.5rem;
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: space-between;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #FF6F00;
+    background: #fff;
+}
+
+.profile-info h2 {
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+}
+
+.profile-info .role {
+    color: #FF6F00;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.profile-info .location {
+    color: #bdbdbd;
+    font-size: 1rem;
+}
+
+.profile-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.5rem;
+    /* Espaço entre badges na horizontal e vertical */
+}
+
+.profile-badges .badge {
+    background: #FF6F00;
+    color: #fff;
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.profile-section {
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    padding: 2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-section h4 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.profile-section ul {
+    padding-left: 1.2rem;
+}
+
+.invite-card {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 1.2rem;
+    padding: 2rem 2rem 1.5rem 2rem;
+    color: #fff;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.invite-card h5 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.invite-card select {
+    background: #22243a;
+    color: #fff;
+    border: 1px solid #44495a;
+    border-radius: 0.5rem;
+}
+
+.invite-card select:focus {
+    background: #22243a;
+    color: #fff;
+    border-color: #FF6F00;
+}
+
+.invite-btn {
+    background: #FF6F00;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2.5rem;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+.invite-btn:hover {
+    background: #ff8c33;
+    color: #fff;
+}
+
+.profile-contact i {
+    color: #FF6F00;
+    margin-right: 0.5rem;
+}
+
+.profile-contact span {
+    color: #fff;
+}
+
+.profile-social a {
+    color: #fff;
+    margin-right: 1rem;
+    font-size: 1.4rem;
+    transition: color 0.2s;
+}
+
+.profile-social a:hover {
+    color: #FF6F00;
+}
+
+.profile-timeline {
+    border-left: 3px solid #FF6F00;
+    padding-left: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.profile-timeline .timeline-item {
+    margin-bottom: 1.5rem;
+}
+
+.profile-timeline .timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-title {
+    font-weight: 700;
+    color: #FF6F00;
+}
+
+.timeline-period {
+    font-size: 0.95rem;
+    color: #bdbdbd;
+}
+
+.profile-certificates .badge {
+    background: #fff;
+    color: #00294B;
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid #FF6F00;
+}
+
+.profile-rating {
+    color: #FFD700;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-feedback {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 0.8rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    font-size: 0.98rem;
+}
+
+.profile-flags {
+    margin-top: 0.5rem;
+}
+
+.profile-flags-box {
+    min-width: 70px;
+}
+
+.flag-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #ff4d4f;
+    color: #ff4d4f;
+    font-size: 0.95rem;
+    background: transparent;
+    transition: background 0.2s;
+}
+
+.flag-circle:not(:last-child) {
+    margin-right: 0.2rem;
+}
+
+.flag-circle.filled {
+    background: #ff4d4f;
+    color: #fff;
+    border-color: #ff4d4f;
+}
+
+.flag-circle.filled i {
+    color: #fff;
+}
+
+.flag-circle i {
+    color: #ff4d4f;
+    font-size: 0.85em;
+}
+
+.flags-text {
+    font-size: 0.97rem;
+    color: #fff;
+    margin-left: 2px;
+}
+
+.profile-section {
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    padding: 2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-section h4 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.profile-section ul {
+    padding-left: 1.2rem;
+}
+
+.invite-card {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 1.2rem;
+    padding: 2rem 2rem 1.5rem 2rem;
+    color: #fff;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.invite-card h5 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.invite-card select {
+    background: #22243a;
+    color: #fff;
+    border: 1px solid #44495a;
+    border-radius: 0.5rem;
+}
+
+.invite-card select:focus {
+    background: #22243a;
+    color: #fff;
+    border-color: #FF6F00;
+}
+
+.invite-btn {
+    background: #FF6F00;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2.5rem;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+.invite-btn:hover {
+    background: #ff8c33;
+    color: #fff;
+}
+
+.profile-contact i {
+    color: #FF6F00;
+    margin-right: 0.5rem;
+}
+
+.profile-contact span {
+    color: #fff;
+}
+
+.profile-social a {
+    color: #fff;
+    margin-right: 1rem;
+    font-size: 1.4rem;
+    transition: color 0.2s;
+}
+
+.profile-social a:hover {
+    color: #FF6F00;
+}
+
+.profile-timeline {
+    border-left: 3px solid #FF6F00;
+    padding-left: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.profile-timeline .timeline-item {
+    margin-bottom: 1.5rem;
+}
+
+.profile-timeline .timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-title {
+    font-weight: 700;
+    color: #FF6F00;
+}
+
+.timeline-period {
+    font-size: 0.95rem;
+    color: #bdbdbd;
+}
+
+.profile-certificates .badge {
+    background: #fff;
+    color: #00294B;
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid #FF6F00;
+}
+
+.profile-rating {
+    color: #FFD700;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-feedback {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 0.8rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    font-size: 0.98rem;
+}
+
+.profile-flags {
+    margin-top: 0.5rem;
+}
+
+.profile-flags-box {
+    min-width: 70px;
+}
+
+.flag-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #ff4d4f;
+    color: #ff4d4f;
+    font-size: 0.95rem;
+    background: transparent;
+    transition: background 0.2s;
+}
+
+.flag-circle:not(:last-child) {
+    margin-right: 0.2rem;
+}
+
+.flag-circle.filled {
+    background: #ff4d4f;
+    color: #fff;
+    border-color: #ff4d4f;
+}
+
+.flag-circle.filled i {
+    color: #fff;
+}
+
+.flag-circle i {
+    color: #ff4d4f;
+    font-size: 0.85em;
+}
+
+.flags-text {
+    font-size: 0.97rem;
+    color: #fff;
+    margin-left: 2px;
+}
+
+/* Estilos PaginaDeProfile1 */
+
+.profile-header {
+    background: rgba(0, 0, 0, 0.18);
+    color: #fff;
+    border-radius: 1.5rem;
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: space-between;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #FF6F00;
+    background: #fff;
+}
+
+.profile-info h2 {
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+}
+
+.profile-info .role {
+    color: #FF6F00;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.profile-info .location {
+    color: #bdbdbd;
+    font-size: 1rem;
+}
+
+.profile-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.5rem;
+    /* Espaço entre badges na horizontal e vertical */
+}
+
+.profile-badges .badge {
+    background: #FF6F00;
+    color: #fff;
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+
+
+.profile-section h4 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.profile-section ul {
+    padding-left: 1.2rem;
+}
+
+
+
+.invite-card h5 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.invite-card select {
+    background: #22243a;
+    color: #fff;
+    border: 1px solid #44495a;
+    border-radius: 0.5rem;
+}
+
+.invite-card select:focus {
+    background: #22243a;
+    color: #fff;
+    border-color: #FF6F00;
+}
+
+
+
+.invite-btn:hover {
+    background: #ff8c33;
+    color: #fff;
+}
+
+.profile-contact i {
+    color: #FF6F00;
+    margin-right: 0.5rem;
+}
+
+.profile-contact span {
+    color: #fff;
+}
+
+.profile-social a {
+    color: #fff;
+    margin-right: 1rem;
+    font-size: 1.4rem;
+    transition: color 0.2s;
+}
+
+.profile-social a:hover {
+    color: #FF6F00;
+}
+
+.profile-timeline {
+    border-left: 3px solid #FF6F00;
+    padding-left: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.profile-timeline .timeline-item {
+    margin-bottom: 1.5rem;
+}
+
+.profile-timeline .timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-title {
+    font-weight: 700;
+    color: #FF6F00;
+}
+
+.timeline-period {
+    font-size: 0.95rem;
+    color: #bdbdbd;
+}
+
+.profile-certificates .badge {
+    background: #fff;
+    color: #00294B;
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid #FF6F00;
+}
+
+.profile-rating {
+    color: #FFD700;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-feedback {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 0.8rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    font-size: 0.98rem;
+}
+
+.profile-flags {
+    margin-top: 0.5rem;
+}
+
+.profile-flags-box {
+    min-width: 70px;
+}
+
+.flag-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #ff4d4f;
+    color: #ff4d4f;
+    font-size: 0.95rem;
+    background: transparent;
+    transition: background 0.2s;
+}
+
+.flag-circle:not(:last-child) {
+    margin-right: 0.2rem;
+}
+
+.flag-circle.filled {
+    background: #ff4d4f;
+    color: #fff;
+    border-color: #ff4d4f;
+}
+
+.flag-circle.filled i {
+    color: #fff;
+}
+
+.flag-circle i {
+    color: #ff4d4f;
+    font-size: 0.85em;
+}
+
+.flags-text {
+    font-size: 0.97rem;
+    color: #fff;
+    margin-left: 2px;
+}
+
+.project-header {
+    background: rgba(0, 0, 0, 0.18);
+    color: #fff;
+    border-radius: 1rem;
+    padding: 2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.form-control {
+    background: #22243a;
+    color: #fff;
+    border: 1px solid #44495a;
+}
+
+.form-control:focus {
+    background: #22243a;
+    color: #fff;
+    border-color: #FF6F00;
+}
+
+.form-label {
+    color: #fff;
+    font-weight: 700;
+}
+
+.profile-section {
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    padding: 2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.invite-card {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 1.2rem;
+    padding: 2rem 2rem 1.5rem 2rem;
+    color: #fff;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.invite-btn {
+    background: #FF6F00;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2.5rem;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+/* Estilo PaginaDeProfile2 */
+
+main,
+section.bg-dark {
+    /*background: #00294B !important;*/
+    min-height: 100vh;
+}
+
+.profile-header {
+    background: rgba(0, 0, 0, 0.18);
+    color: #fff;
+    border-radius: 1.5rem;
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: space-between;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #FF6F00;
+    background: #fff;
+}
+
+.profile-info h2 {
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+}
+
+.profile-info .role {
+    color: #FF6F00;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.profile-info .location {
+    color: #bdbdbd;
+    font-size: 1rem;
+}
+
+.profile-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.5rem;
+    /* Espaço entre badges na horizontal e vertical */
+}
+
+.profile-badges .badge {
+    background: #FF6F00;
+    color: #fff;
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.profile-section {
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    padding: 2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-section h4 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.profile-section ul {
+    padding-left: 1.2rem;
+}
+
+.invite-card {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 1.2rem;
+    padding: 2rem 2rem 1.5rem 2rem;
+    color: #fff;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.invite-card h5 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.invite-card select {
+    background: #22243a;
+    color: #fff;
+    border: 1px solid #44495a;
+    border-radius: 0.5rem;
+}
+
+.invite-card select:focus {
+    background: #22243a;
+    color: #fff;
+    border-color: #FF6F00;
+}
+
+.invite-btn {
+    background: #FF6F00;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2.5rem;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+.invite-btn:hover {
+    background: #ff8c33;
+    color: #fff;
+}
+
+.profile-contact i {
+    color: #FF6F00;
+    margin-right: 0.5rem;
+}
+
+.profile-contact span {
+    color: #fff;
+}
+
+.profile-social a {
+    color: #fff;
+    margin-right: 1rem;
+    font-size: 1.4rem;
+    transition: color 0.2s;
+}
+
+.profile-social a:hover {
+    color: #FF6F00;
+}
+
+.profile-timeline {
+    border-left: 3px solid #FF6F00;
+    padding-left: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.profile-timeline .timeline-item {
+    margin-bottom: 1.5rem;
+}
+
+.profile-timeline .timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-title {
+    font-weight: 700;
+    color: #FF6F00;
+}
+
+.timeline-period {
+    font-size: 0.95rem;
+    color: #bdbdbd;
+}
+
+.profile-certificates .badge {
+    background: #fff;
+    color: #00294B;
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid #FF6F00;
+}
+
+.profile-rating {
+    color: #FFD700;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-feedback {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 0.8rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    font-size: 0.98rem;
+}
+
+.profile-flags {
+    margin-top: 0.5rem;
+}
+
+.profile-flags-box {
+    min-width: 70px;
+}
+
+.flag-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #ff4d4f;
+    color: #ff4d4f;
+    font-size: 0.95rem;
+    background: transparent;
+    transition: background 0.2s;
+}
+
+.flag-circle:not(:last-child) {
+    margin-right: 0.2rem;
+}
+
+.flag-circle.filled {
+    background: #ff4d4f;
+    color: #fff;
+    border-color: #ff4d4f;
+}
+
+.flag-circle.filled i {
+    color: #fff;
+}
+
+.flag-circle i {
+    color: #ff4d4f;
+    font-size: 0.85em;
+}
+
+.flags-text {
+    font-size: 0.97rem;
+    color: #fff;
+    margin-left: 2px;
+}
+
+/* Estilo PaginaDeProfileEditar */
+
+main,
+section.bg-dark {
+    /*background: #00294B !important;*/
+    min-height: 100vh;
+}
+
+.profile-header {
+    background: rgba(0, 0, 0, 0.18);
+    color: #fff;
+    border-radius: 1.5rem;
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: space-between;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #FF6F00;
+    background: #fff;
+}
+
+.profile-info h2 {
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+}
+
+.profile-info .role {
+    color: #FF6F00;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.profile-info .location {
+    color: #bdbdbd;
+    font-size: 1rem;
+}
+
+.profile-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.5rem;
+    /* Espaço entre badges na horizontal e vertical */
+}
+
+.profile-badges .badge {
+    background: #FF6F00;
+    color: #fff;
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.profile-section {
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    padding: 2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-section h4 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.profile-section ul {
+    padding-left: 1.2rem;
+}
+
+.invite-card {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 1.2rem;
+    padding: 2rem 2rem 1.5rem 2rem;
+    color: #fff;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.invite-card h5 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.invite-card select {
+    background: #22243a;
+    color: #fff;
+    border: 1px solid #44495a;
+    border-radius: 0.5rem;
+}
+
+.invite-card select:focus {
+    background: #22243a;
+    color: #fff;
+    border-color: #FF6F00;
+}
+
+.invite-btn {
+    background: #FF6F00;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2.5rem;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+.invite-btn:hover {
+    background: #ff8c33;
+    color: #fff;
+}
+
+.profile-contact i {
+    color: #FF6F00;
+    margin-right: 0.5rem;
+}
+
+.profile-contact span {
+    color: #fff;
+}
+
+.profile-social a {
+    color: #fff;
+    margin-right: 1rem;
+    font-size: 1.4rem;
+    transition: color 0.2s;
+}
+
+.profile-social a:hover {
+    color: #FF6F00;
+}
+
+.profile-timeline {
+    border-left: 3px solid #FF6F00;
+    padding-left: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.profile-timeline .timeline-item {
+    margin-bottom: 1.5rem;
+}
+
+.profile-timeline .timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-title {
+    font-weight: 700;
+    color: #FF6F00;
+}
+
+.timeline-period {
+    font-size: 0.95rem;
+    color: #bdbdbd;
+}
+
+.profile-certificates .badge {
+    background: #fff;
+    color: #00294B;
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid #FF6F00;
+}
+
+.feedback-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(20, 23, 34, 0.82);
+    transition: opacity 0.2s;
+}
+
+.feedback-overlay.active {
+    display: block;
+}
+
+.feedback-form-card {
+    background: #22243a;
+    color: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.20);
+    padding: 2.5rem 2rem 2rem 2rem;
+    width: 600px;
+    max-width: 95vw;
+    max-height: 90vh;
+    /* Limita a altura máxima do popup */
+    overflow-y: auto;
+    /* Adiciona rolagem interna se necessário */
+    margin: 0 auto;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 1100;
+    transform: translate(-50%, -50%);
+    display: none;
+    animation: fadeInScale 0.2s;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.form-label {
+    color: #fff;
+    font-weight: 700;
+}
+
+.form-control,
+.form-select {
+    background: #22243a;
+    color: #fff;
+    border: 1.5px solid #44495a;
+    border-radius: 0.7rem;
+    font-size: 1.08rem;
+    padding: 0.9rem 1.1rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: #22243a;
+    color: #fff;
+    border-color: #FF6F00;
+    box-shadow: 0 0 0 0.15rem rgba(255, 111, 0, 0.15);
+}
+
+.btn-close-feedback {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    z-index: 10;
+}
+
+.tags-input-wrapper {
+    background: #22243a;
+    border: 1.5px solid #44495a;
+    border-radius: 0.7rem;
+    min-height: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0.5rem 0.7rem;
+    gap: 0.4rem;
+    position: relative;
+}
+
+.tags-input-wrapper input {
+    background: transparent;
+    min-width: 120px;
+    flex: 1 0 120px;
+    border: none;
+    color: #fff;
+    outline: none;
+    font-size: 1rem;
+    padding: 0.3rem 0;
+}
+
+.tag {
+    display: flex;
+    align-items: center;
+    background: #FF6F00;
+    color: #fff;
+    border-radius: 1.2rem;
+    padding: 0.35em 0.9em 0.35em 1em;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0.15em 0.15em 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    transition: background 0.2s;
+}
+
+.tag .remove-tag {
+    margin-left: 0.7em;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #fff;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    box-shadow: none;
+    /* Remove qualquer sombra */
+}
+
+.tag .remove-tag:hover {
+    opacity: 1;
+    color: #22243a;
+}
+
+.btn-close-feedback:hover {
+    opacity: 1;
+    color: #919191;
+}
+
+.bg-dark.border.rounded.shadow-sm.position-absolute {
+    background: #181a2a !important;
+    border: 1.5px solid #44495a !important;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.bg-dark.border.rounded.shadow-sm.position-absolute div:hover {
+    background: #FF6F00 !important;
+    color: #fff;
+}
+
+.btn-edit-icon {
+    background: none;
+    border: none;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.5rem;
+    color: #FF6F00;
+    font-size: 1.3rem;
+    transition: background 0.18s, color 0.18s;
+    box-shadow: none;
+}
+
+.btn-edit-icon:hover,
+.btn-edit-icon:focus {
+    background: rgba(255, 111, 0, 0.08);
+    color: #ff8c33;
+}
+
+.btn-edit-icon i {
+    color: inherit;
+    font-size: 1.3rem;
+    vertical-align: middle;
+}
+
+/* Removidos: .profile-rating, .profile-feedback, .profile-flags, .profile-flags-box, .flag-circle, .flags-text */
+
+/* Estilo PaginaDeProfileEmpresa1 */
+
+main,
+section.bg-dark {
+    /*background: #00294B !important;*/
+    min-height: 100vh;
+}
+
+.profile-header {
+    background: rgba(0, 0, 0, 0.18);
+    color: #fff;
+    border-radius: 1.5rem;
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+    /* <-- Adicione esta linha */
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #FF6F00;
+    background: #fff;
+    object-fit: contain;
+}
+
+.profile-info h2 {
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+}
+
+.profile-info .role {
+    color: #FF6F00;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.profile-info .location {
+    color: #bdbdbd;
+    font-size: 1rem;
+}
+
+.profile-section {
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    padding: 2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-section h4 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.profile-section ul {
+    padding-left: 1.2rem;
+}
+
+.invite-card {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 1.2rem;
+    padding: 2rem 2rem 1.5rem 2rem;
+    color: #fff;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.invite-card h5 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.invite-card select {
+    background: #22243a;
+    color: #fff;
+    border: 1px solid #44495a;
+    border-radius: 0.5rem;
+}
+
+.invite-card select:focus {
+    background: #22243a;
+    color: #fff;
+    border-color: #FF6F00;
+}
+
+.invite-btn {
+    background: #FF6F00;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2.5rem;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+.invite-btn:hover {
+    background: #ff8c33;
+    color: #fff;
+}
+
+.profile-contact i {
+    color: #FF6F00;
+    margin-right: 0.5rem;
+}
+
+.profile-contact span {
+    color: #fff;
+}
+
+.profile-social a {
+    color: #fff;
+    margin-right: 1rem;
+    font-size: 1.4rem;
+    transition: color 0.2s;
+}
+
+.profile-social a:hover {
+    color: #FF6F00;
+}
+
+.profile-timeline {
+    border-left: 3px solid #FF6F00;
+    padding-left: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.profile-timeline .timeline-item {
+    margin-bottom: 1.5rem;
+}
+
+.profile-timeline .timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-title {
+    font-weight: 700;
+    color: #FF6F00;
+}
+
+.timeline-period {
+    font-size: 0.95rem;
+    color: #bdbdbd;
+}
+
+.profile-certificates .badge {
+    background: #fff;
+    color: #00294B;
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid #FF6F00;
+}
+
+.profile-rating {
+    color: #FFD700;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-feedback {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 0.8rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    font-size: 0.98rem;
+}
+
+.profile-flags {
+    margin-top: 0.5rem;
+}
+
+.profile-flags-box {
+    min-width: 70px;
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flag-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #ff4d4f;
+    color: #ff4d4f;
+    font-size: 0.95rem;
+    background: transparent;
+    transition: background 0.2s;
+}
+
+.flag-circle:not(:last-child) {
+    margin-right: 0.2rem;
+}
+
+.flag-circle.filled {
+    background: #ff4d4f;
+    color: #fff;
+    border-color: #ff4d4f;
+}
+
+.flag-circle.filled i {
+    color: #fff;
+}
+
+.flag-circle i {
+    color: #ff4d4f;
+    font-size: 0.85em;
+}
+
+.flags-text {
+    font-size: 0.97rem;
+    color: #fff;
+    margin-left: 2px;
+}
+
+/* Estilo PaginaDeProfileEmpresa2 */
+
+main,
+section.bg-dark {
+    /*background: #00294B !important;*/
+    min-height: 100vh;
+}
+
+.profile-header {
+    background: rgba(0, 0, 0, 0.18);
+    color: #fff;
+    border-radius: 1.5rem;
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #FF6F00;
+    background: #fff;
+    object-fit: contain;
+}
+
+.profile-info h2 {
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+}
+
+.profile-info .role {
+    color: #FF6F00;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.profile-info .location {
+    color: #bdbdbd;
+    font-size: 1rem;
+}
+
+.profile-section {
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    padding: 2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-section h4 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.profile-section ul {
+    padding-left: 1.2rem;
+}
+
+.invite-card {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 1.2rem;
+    padding: 2rem 2rem 1.5rem 2rem;
+    color: #fff;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.invite-card h5 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.invite-card select {
+    background: #22243a;
+    color: #fff;
+    border: 1px solid #44495a;
+    border-radius: 0.5rem;
+}
+
+.invite-card select:focus {
+    background: #22243a;
+    color: #fff;
+    border-color: #FF6F00;
+}
+
+.invite-btn {
+    background: #FF6F00;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2.5rem;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+.invite-btn:hover {
+    background: #ff8c33;
+    color: #fff;
+}
+
+.profile-contact i {
+    color: #FF6F00;
+    margin-right: 0.5rem;
+}
+
+.profile-contact span {
+    color: #fff;
+}
+
+.profile-social a {
+    color: #fff;
+    margin-right: 1rem;
+    font-size: 1.4rem;
+    transition: color 0.2s;
+}
+
+.profile-social a:hover {
+    color: #FF6F00;
+}
+
+.profile-timeline {
+    border-left: 3px solid #FF6F00;
+    padding-left: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.profile-timeline .timeline-item {
+    margin-bottom: 1.5rem;
+}
+
+.profile-timeline .timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-title {
+    font-weight: 700;
+    color: #FF6F00;
+}
+
+.timeline-period {
+    font-size: 0.95rem;
+    color: #bdbdbd;
+}
+
+.profile-certificates .badge {
+    background: #fff;
+    color: #00294B;
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid #FF6F00;
+}
+
+.profile-rating {
+    color: #FFD700;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-feedback {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 0.8rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    font-size: 0.98rem;
+}
+
+/* Estilo PaginaDeProfileEmpresaEditar */
+
+main,
+section.bg-dark {
+    min-height: 100vh;
+}
+
+.profile-header {
+    background: rgba(0, 0, 0, 0.18);
+    color: #fff;
+    border-radius: 1.5rem;
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: contain;
+    border: 4px solid #FF6F00;
+    background: #fff;
+}
+
+.profile-info h2 {
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+}
+
+.profile-info .role {
+    color: #FF6F00;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.profile-section {
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    padding: 2rem 2rem 1.5rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-section h4 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.invite-card {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 1.2rem;
+    padding: 2rem 2rem 1.5rem 2rem;
+    color: #fff;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.invite-card h5 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.invite-btn {
+    background: #FF6F00;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2.5rem;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+.invite-btn:hover {
+    background: #ff8c33;
+    color: #fff;
+}
+
+.profile-contact i {
+    color: #FF6F00;
+    margin-right: 0.5rem;
+}
+
+.profile-contact span {
+    color: #fff;
+}
+
+.profile-social a {
+    color: #fff;
+    margin-right: 1rem;
+    font-size: 1.4rem;
+    transition: color 0.2s;
+}
+
+.profile-social a:hover {
+    color: #FF6F00;
+}
+
+.profile-timeline {
+    border-left: 3px solid #FF6F00;
+    padding-left: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.profile-timeline .timeline-item {
+    margin-bottom: 1.5rem;
+}
+
+.profile-timeline .timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-title {
+    font-weight: 700;
+    color: #FF6F00;
+}
+
+.timeline-period {
+    font-size: 0.95rem;
+    color: #bdbdbd;
+}
+
+.btn-edit-icon {
+    background: none;
+    border: none;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.5rem;
+    color: #FF6F00;
+    font-size: 1.3rem;
+    transition: background 0.18s, color 0.18s;
+    box-shadow: none;
+}
+
+.btn-edit-icon:hover,
+.btn-edit-icon:focus {
+    background: rgba(255, 111, 0, 0.08);
+    color: #ff8c33;
+}
+
+.btn-edit-icon i {
+    color: inherit;
+    font-size: 1.3rem;
+    vertical-align: middle;
+}
+
+/* Popup */
+.feedback-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(20, 23, 34, 0.82);
+    transition: opacity 0.2s;
+}
+
+.feedback-overlay.active {
+    display: block;
+}
+
+.feedback-form-card {
+    background: #22243a;
+    color: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.20);
+    padding: 2.5rem 2rem 2rem 2rem;
+    width: 600px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 0 auto;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 1100;
+    transform: translate(-50%, -50%);
+    display: none;
+    animation: fadeInScale 0.2s;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.form-label {
+    color: #fff;
+    font-weight: 700;
+}
+
+.form-control,
+.form-select {
+    background: #22243a;
+    color: #fff;
+    border: 1.5px solid #44495a;
+    border-radius: 0.7rem;
+    font-size: 1.08rem;
+    padding: 0.9rem 1.1rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: #22243a;
+    color: #fff;
+    border-color: #FF6F00;
+    box-shadow: 0 0 0 0.15rem rgba(255, 111, 0, 0.15);
+}
+
+.btn-close-feedback {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    z-index: 10;
+}
+
+/* Estilo publicarVaga */
+
+main,
+section.bg-dark {
+    min-height: 100vh;
+}
+
+.vaga-form-container {
+    max-width: 1350px !important;
+    margin: 0 auto;
+}
+
+.vaga-form-section {
+    background: rgba(255, 255, 255, 0.09);
+    color: #fff;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.10);
+    padding: 3.5rem 3rem 2.5rem 3rem;
+    margin-bottom: 2.5rem;
+}
+
+.vaga-form-section h2 {
+    color: #fff;
+    font-weight: 900;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.5px;
+}
+
+.form-label {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.2px;
+}
+
+.automatic {
+    background: transparent !important;
+    border: transparent !important;
+}
+
+.form-control,
+.form-select {
+    background: #22243a;
+    color: #fff;
+    border: 1.5px solid #44495a;
+    border-radius: 0.7rem;
+    font-size: 1.08rem;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: #22243a;
+    color: #fff;
+    border-color: #FF6F00;
+    box-shadow: 0 0 0 0.15rem rgba(255, 111, 0, 0.15);
+}
+
+.btn-secondary {
+    background: #FF6F00;
+    color: #fff;
+    font-weight: 800;
+    border: none;
+    border-radius: 0.7rem;
+    padding: 1rem 2.5rem;
+    margin-top: 2rem;
+    font-size: 1.15rem;
+    letter-spacing: 0.5px;
+    transition: background 0.2s;
+    box-shadow: 0 2px 12px rgba(255, 111, 0, 0.08);
+}
+
+.btn-primary:hover {
+    background: #ff8c33;
+    color: #fff;
+}
+
+.required {
+    color: #FF6F00;
+    margin-left: 2px;
+}
+
+.vaga-form-section small {
+    color: #bdbdbd;
+}
+
+.tags-input-wrapper {
+    background: #22243a;
+    border: 1.5px solid #44495a;
+    border-radius: 0.7rem;
+    min-height: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0.5rem 0.7rem;
+    margin-bottom: 0.5rem;
+}
+
+.tags-input-wrapper input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    outline: none;
+    min-width: 120px;
+    font-size: 1.08rem;
+    margin-left: 0.3rem;
+}
+
+.tag {
+    background: #FF6F00;
+    color: #fff;
+    border-radius: 0.5rem;
+    padding: 0.3rem 0.9rem 0.3rem 0.7rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.01rem;
+}
+
+.tag .remove-tag {
+    margin-left: 0.5rem;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.tag .remove-tag:hover {
+    opacity: 1;
+    color: #22243a;
+}
+
+@media (max-width: 991px) {
+    .vaga-form-section {
+        padding: 2rem 1rem 1.5rem 1rem;
+    }
+
+    .vaga-form-container {
+        max-width: 98vw !important;
+    }
+}
+
+/* Estilo resetPassword1 */
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-secondary:hover,
+.btn-secondary:focus {
+    transform: scale(1.04);
+}
+
+.btn-primary,
+.btn-secondary {
+    transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+}
+
+/* Estilo resetPassword2 */
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-secondary:hover,
+.btn-secondary:focus {
+    transform: scale(1.04);
+}
+
+.btn-primary,
+.btn-secondary {
+    transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
 }
