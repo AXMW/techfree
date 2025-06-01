@@ -1,0 +1,40 @@
+.fade-input {
+    opacity: 0;
+    animation: fadeInInput 0.5s forwards;
+}
+
+@keyframes fadeInInput {
+    to {
+        opacity: 1;
+    }
+}
+
+.btn-primary,
+.icon-selector {
+    transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    transform: scale(1.04);
+}
+
+.icon-selector:hover {
+    transform: scale(1.10) rotate(-2deg);
+    box-shadow: 0 2px 16px #ff6f0033;
+}
+
+/* Aumenta a largura do card/container de cadastro */
+.mw-signUp {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#formPessoa,
+#formEmpresa {
+    width: 80%;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
