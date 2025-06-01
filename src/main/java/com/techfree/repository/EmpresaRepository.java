@@ -9,10 +9,7 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
     Optional<Empresa> findByNomeFantasia(String nomeFantasia);
     Optional<Empresa> findByEmail(String email);
     List<Empresa> findByAtivo(boolean ativo);
-    List<Empresa> findByAtivoAndTipo(boolean ativo, String tipo);
-    List<Empresa> findByTipo(String tipo);
-    List<Empresa> findByTipoAndAtivo(String tipo, boolean ativo);
-    List<Empresa> findByTipoAndAtivoAndNomeFantasia(String tipo, boolean ativo, String nomeFantasia);
-    List<Empresa> findByTipoAndAtivoAndCnpj(String tipo, boolean ativo, String cnpj);
+    List<Empresa> findByAtivoAndNomeFantasia(boolean ativo, String nomeFantasia);
+    List<Empresa> findByAtivoAndCnpj(boolean ativo, String cnpj);
     
 }

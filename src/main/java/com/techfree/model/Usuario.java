@@ -1,7 +1,5 @@
 package com.techfree.model;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -54,6 +52,7 @@ public class Usuario implements UserDetails {
     @Column(name = "data_cadastro")
     private LocalDateTime dataCadastro;
 
+    @Builder.Default
     @Column(nullable = false)
     private boolean enabled = true;
 

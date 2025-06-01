@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.lang.NonNull;
 
 public interface CertificadoRepository extends JpaRepository<Certificado, Long> {
-    Optional<Certificado> findById(Long id);
+    @NonNull Optional<Certificado> findById(@NonNull Long id);
     List<Certificado> findByFreelancer(Certificado freelancer);
     List<Certificado> findByFreelancer(Freelancer freelancer);
     List<Certificado> findByFreelancerId(Long freelancerId);

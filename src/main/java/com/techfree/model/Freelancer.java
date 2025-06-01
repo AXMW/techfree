@@ -25,8 +25,6 @@ public class Freelancer {
 
     private String nome;
 
-    private String username;
-
     private String telefone;
 
     private String areaAtuacao;
@@ -57,6 +55,7 @@ public class Freelancer {
     @Column(name = "data_cadastro")
     private LocalDateTime dataCadastro;
 
+    @Builder.Default
     @Column(nullable = false)
     private boolean enabled = true;
 
