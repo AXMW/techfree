@@ -39,7 +39,6 @@ public class ProjetoService {
     @Autowired
     private EmailService emailService;
 
-    @Autowired
     public ProjetoService(ProjetoRepository projetoRepository) {
         this.projetoRepository = projetoRepository;
     }
