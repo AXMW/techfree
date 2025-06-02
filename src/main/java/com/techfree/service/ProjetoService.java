@@ -82,10 +82,13 @@ public class ProjetoService {
             throw new RuntimeException("Acesso negado");
         }
 
-        projeto.setTitulo(dto.getTitulo());
-        projeto.setDescricao(dto.getDescricao());
-        projeto.setRequisitos(dto.getRequisitos());
-        projeto.setOrcamento(dto.getOrcamento());
+        if(dto.getTitulo() != null) projeto.setTitulo(dto.getTitulo());
+        if(dto.getDescricao() != null) projeto.setDescricao(dto.getDescricao());
+        if(dto.getRequisitos() != null) projeto.setRequisitos(dto.getRequisitos());
+        if(dto.getOrcamento() != null) projeto.setOrcamento(dto.getOrcamento());
+        if(dto.getPrazoEntrega() != null) projeto.setPrazoEntrega(dto.getPrazoEntrega());
+        if(dto.getEmailPraContato() != null) projeto.setEmailPraContato(dto.getEmailPraContato());
+        if(dto.getArea() != null) projeto.setArea(dto.getArea());
 
         return projetoRepository.save(projeto);
     }
@@ -105,35 +108,35 @@ public class ProjetoService {
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
-    if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
-        throw new RuntimeException("Você não tem permissão para selecionar freelancer nesse projeto.");
-    }
+        if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
+            throw new RuntimeException("Você não tem permissão para selecionar freelancer nesse projeto.");
+        }
 
-    Freelancer freelancer = freelancerRepository.findById(dto.getFreelancerId())
-            .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+        Freelancer freelancer = freelancerRepository.findById(dto.getFreelancerId())
+                .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
 
-    // 1️⃣ Verifica se esse freelancer se candidatou ao projeto
-    Candidatura candidatura = candidaturaRepository.findByProjetoAndFreelancer(projeto, freelancer)
-            .orElseThrow(() -> new RuntimeException("Esse freelancer não se candidatou ao projeto."));
+        // 1️⃣ Verifica se esse freelancer se candidatou ao projeto
+        Candidatura candidatura = candidaturaRepository.findByProjetoAndFreelancer(projeto, freelancer)
+                .orElseThrow(() -> new RuntimeException("Esse freelancer não se candidatou ao projeto."));
 
-    // 2️⃣ Atualiza status da candidatura para "Selecionado"
-    candidatura.setStatus(StatusCandidatura.ACEITA);
-    candidaturaRepository.save(candidatura);
+        // 2️⃣ Atualiza status da candidatura para "Selecionado"
+        candidatura.setStatus(StatusCandidatura.ACEITA);
+        candidaturaRepository.save(candidatura);
 
-    // 3️⃣ Atualiza o projeto
-    projeto.setFreelancerSelecionado(freelancer);
-    projetoRepository.save(projeto);
+        // 3️⃣ Atualiza o projeto
+        projeto.setFreelancerSelecionado(freelancer);
+        projetoRepository.save(projeto);
 
-    // 4️⃣ Cria uma notificação persistente
-    notificacaoService.criarNotificacao(freelancer.getUsuario(), 
-        "Você foi selecionado para o projeto: " + projeto.getTitulo());
+        // 4️⃣ Cria uma notificação persistente
+        notificacaoService.criarNotificacao(freelancer.getUsuario(), 
+            "Você foi selecionado para o projeto: " + projeto.getTitulo());
 
-    // 5️⃣ Envia um e-mail
-    emailService.enviar(
-        freelancer.getUsuario().getEmail(),
-        "Você foi selecionado para o projeto " + projeto.getTitulo(),
-        EmailTemplateService.templateSelecionadoProjeto(freelancer.getNome(), projeto.getTitulo())
-    );
+        // 5️⃣ Envia um e-mail
+        emailService.enviar(
+            freelancer.getUsuario().getEmail(),
+            "Você foi selecionado para o projeto " + projeto.getTitulo(),
+            EmailTemplateService.templateSelecionadoProjeto(freelancer.getNome(), projeto.getTitulo())
+        );
     }
 
     public List<Projeto> filtrarProjetos(ProjetoFiltroDTO filtro) {

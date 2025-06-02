@@ -15,6 +15,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Async
     public void enviar(String para, String assunto, String texto) {
         SimpleMailMessage mensagem = new SimpleMailMessage();
         mensagem.setTo(para);
