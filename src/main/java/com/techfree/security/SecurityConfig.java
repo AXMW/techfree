@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .requestMatchers("/empresa/**").hasRole("EMPRESA")
                 .requestMatchers("/freelancer/**").hasRole("FREELANCER")
                 .requestMatchers("/certificados/**").hasRole("FREELANCER")
-                .requestMatchers("/projetos/**").hasRole("FREELANCER")
+                .requestMatchers("/projetos/**").hasRole("EMPRESA")
                 .requestMatchers("/avaliacoes/freelancer/**").hasRole("EMPRESA")
                 .requestMatchers("/avaliacoes/empresa/**").hasRole("FREELANCER")
                 .requestMatchers("/projetos/selecionar-freelancer").hasRole("EMPRESA")

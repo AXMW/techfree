@@ -29,5 +29,8 @@ public class ProjetoResponseDTO {
         this.descricao = projeto.getDescricao();
         this.requisitos = projeto.getRequisitos();
         this.orcamento = projeto.getOrcamento();
+        this.prazoEntrega = projeto.getPrazoEntrega();
+        this.emailPraContato = projeto.getEmailPraContato();
+        this.area = projeto.getArea();
     }
 }

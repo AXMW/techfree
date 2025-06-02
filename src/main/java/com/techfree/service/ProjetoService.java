@@ -10,7 +10,7 @@ import com.techfree.service.email.EmailTemplateService;
 import com.techfree.specifications.ProjetoSpecification;
 import com.techfree.repository.CandidaturaRepository;
 import com.techfree.enums.StatusCandidatura;
-
+import com.techfree.enums.StatusProjeto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +59,10 @@ public class ProjetoService {
         projeto.setDescricao(dto.getDescricao());
         projeto.setRequisitos(dto.getRequisitos());
         projeto.setOrcamento(dto.getOrcamento());
+        projeto.setPrazoEntrega(dto.getPrazoEntrega());
+        projeto.setEmailPraContato(dto.getEmailPraContato());
+        projeto.setArea(dto.getArea());
+        projeto.setStatus(StatusProjeto.ABERTO);
         projeto.setEmpresa(empresa);
 
         return projetoRepository.save(projeto);
