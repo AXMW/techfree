@@ -26,7 +26,9 @@ public class Notificacao {
     @ManyToOne
     private Usuario usuario;
 
-    public Notificacao() {}
+    public Notificacao() {
+        this.data = LocalDateTime.now();
+    }
 
     public Notificacao(String mensagem, Usuario usuario) {
         this.mensagem = mensagem;

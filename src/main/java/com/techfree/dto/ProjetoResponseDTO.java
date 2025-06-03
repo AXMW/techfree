@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import lombok.Getter;
 import com.techfree.model.Projeto;
 import java.time.LocalDate;
+import com.techfree.enums.StatusProjeto;
 
 @Getter
 public class ProjetoResponseDTO {
@@ -23,6 +24,8 @@ public class ProjetoResponseDTO {
 
     private String area;
 
+    private StatusProjeto status;
+
     public ProjetoResponseDTO(Projeto projeto) {
         this.id = projeto.getId();
         this.titulo = projeto.getTitulo();
@@ -32,5 +35,6 @@ public class ProjetoResponseDTO {
         this.prazoEntrega = projeto.getPrazoEntrega();
         this.emailPraContato = projeto.getEmailPraContato();
         this.area = projeto.getArea();
+        this.status = projeto.getStatus();
     }
 }
