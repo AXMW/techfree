@@ -38,3 +38,299 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+/* Estilo nav Bar */
+
+/* Efeitos suaves para navbar */
+.navbar-nav .nav-link {
+    position: relative;
+    transition: color 0.2s, background 0.2s;
+    padding: 0.5rem 1rem;
+    border-radius: 0.3rem;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.05);
+    transition: background 0.2s, color 0.2s;
+}
+
+.navbar-nav .nav-link.active {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.07);
+}
+
+.navbar-toggler {
+    transition: background 0.2s, box-shadow 0.2s;
+    border-radius: 0.3rem;
+}
+
+.navbar-toggler:active,
+.navbar-toggler:focus {
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 0.2rem rgba(0, 41, 75, 0.15);
+}
+
+.dropdown-menu {
+    transition: box-shadow 0.2s;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+}
+
+.dropdown-item {
+    transition: background 0.2s, color 0.2s;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: #00294B;
+    color: #fff;
+}
+
+
+
+.bi-person-circle,
+.bi-bell {
+    transition: color 0.2s, transform 0.15s;
+}
+
+.btn-link.text-white:hover .bi-person-circle,
+.btn-link.text-white:hover .bi-bell {
+    color: #fff;
+    transform: scale(1.08);
+}
+
+/* Badge de notificação com leve animação ao aparecer */
+.bi-bell .badge {
+    animation: bell-badge-pop 0.4s cubic-bezier(.68, -0.55, .27, 1.55);
+}
+
+@keyframes bell-badge-pop {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    80% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Dropdown do perfil estilo Gupy */
+#dropdownPerfil+.dropdown-menu {
+    min-width: 240px;
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    border: none;
+    padding: 0.7rem 0.5rem 0.5rem 0.5rem;
+    margin-top: 0.7rem;
+    background: #fff;
+    animation: fadeInDropdown 0.18s cubic-bezier(.4, 0, .2, 1);
+}
+
+@keyframes fadeInDropdown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.5rem 0.5rem 0.3rem 0.5rem;
+    border-bottom: 1px solid #e6eef6;
+    margin-bottom: 0.5rem;
+}
+
+.dropdown-profile-header .bi-person-circle {
+    font-size: 2.2rem;
+    color: #00294B;
+}
+
+.dropdown-profile-header .profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-profile-header .profile-name {
+    font-weight: 700;
+    color: #00294B;
+    font-size: 1rem;
+    line-height: 1.1;
+}
+
+.dropdown-profile-header .profile-edit {
+    font-size: 0.92rem;
+    color: #1976d2;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    text-align: left;
+    transition: text-decoration 0.15s;
+}
+
+.dropdown-profile-header .profile-edit:hover {
+    text-decoration: underline;
+}
+
+#dropdownPerfil+.dropdown-menu .dropdown-item {
+    color: #00294B;
+    font-weight: 500;
+    padding: 0.7rem 1.2rem;
+    border-radius: 0.7rem;
+    margin: 0 0.2rem;
+    transition: background 0.18s, color 0.18s;
+}
+
+#dropdownPerfil+.dropdown-menu .dropdown-item:hover,
+#dropdownPerfil+.dropdown-menu .dropdown-item:focus {
+    background: #f2f6fa;
+    color: #00294B;
+}
+
+#dropdownPerfil+.dropdown-menu .dropdown-item:active {
+    background: #e6eef6;
+    color: #00294B;
+}
+
+#dropdownPerfil+.dropdown-menu .dropdown-divider {
+    margin: 0.2rem 0;
+    border-top: 1px solid #e6eef6;
+}
+
+/* Dropdown de notificações aprimorado */
+#dropdownNotificacoes+.dropdown-menu {
+    min-width: 340px;
+    max-width: 400px;
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    border: none;
+    padding: 0.7rem 0 0.7rem 0;
+    margin-top: 0.7rem;
+    background: #fff;
+    animation: fadeInDropdown 0.18s cubic-bezier(.4, 0, .2, 1);
+}
+
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.7rem;
+    color: #00294B;
+    font-size: 0.97rem;
+    font-weight: 500;
+    padding: 1rem 1.2rem 1rem 1.2rem;
+    border-radius: 0.7rem;
+    margin: 0.5rem 0.7rem;
+    background: #f7fafc;
+    position: relative;
+    transition: background 0.18s, color 0.18s;
+    white-space: normal;
+    line-height: 1.3;
+    border-left: 4px solid transparent;
+}
+
+.notification-item.unread {
+    background: #eaf3fb;
+    border-left: 4px solid #1976d2;
+}
+
+.notification-content {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.notification-title {
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+    font-size: 1.01rem;
+    color: #00294B;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.notification-details {
+    font-size: 0.93rem;
+    color: #4a5a6a;
+    margin-bottom: 0.1rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.notification-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.2rem;
+    min-width: 80px;
+}
+
+.notification-time {
+    font-size: 0.88rem;
+    color: #8a99a8;
+    white-space: nowrap;
+}
+
+.notification-remove {
+    background: none;
+    border: none;
+    color: #b0b8c1;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.15s;
+    padding: 0 0.2rem;
+    border-radius: 50%;
+    line-height: 1;
+}
+
+.notification-remove:hover {
+    color: #d32f2f;
+    background: #f2dede;
+}
+
+#dropdownNotificacoes+.dropdown-menu .dropdown-divider {
+    margin: 0.4rem 0;
+    border-top: 1px solid #e6eef6;
+}
+
+#dropdownNotificacoes+.dropdown-menu .dropdown-item.text-center {
+    justify-content: center;
+    color: #1976d2;
+    font-weight: 600;
+    font-size: 0.98rem;
+    background: none;
+    margin: 0.5rem 0.5rem;
+}
+
+#dropdownNotificacoes+.dropdown-menu .dropdown-item.text-center:hover {
+    background: #e6eef6;
+    color: #1976d2;
+}
+
+/* Adicione este bloco para limitar altura e mostrar scroll após 6 notificações */
+#notificacoesDropdown.max-scroll {
+    max-height: 632px;
+    /* Aproximadamente 6 notificações + botão */
+    overflow-y: auto;
+
+}

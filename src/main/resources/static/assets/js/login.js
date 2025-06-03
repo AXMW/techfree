@@ -27,6 +27,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             // Salve o token ou dados do usuário
             if (data.token) {
                 localStorage.setItem('token', data.token);
+                localStorage.setItem('tipoUsuario', data.tipoUsuario);
             }
             // Redirecione para a dashboard ou página inicial
             window.location.href = 'Dashboard.html';
