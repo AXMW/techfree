@@ -37,7 +37,8 @@ public class SecurityConfig {
                     "/js/**",
                     "/images/**",
                     "/assets/**",
-                    "/favicon.ico"
+                    "/favicon.ico",
+                    "/GerenciarProjetos.html"
                 ).permitAll()
                 .requestMatchers("/empresa/**").hasRole("EMPRESA")
                 .requestMatchers("/freelancer/**").hasRole("FREELANCER")

@@ -1,54 +1,30 @@
 // Exemplo de projetos simulados
-const projects = [
-    {
-        title: "Plataforma de Gestão de Projetos Integrados",
-        status: "aberto",
-        tech: ["React", "Node.js"],
-        date: "10/05/2025",
-        desc: "Sistema web para conectar empresas, estudantes e instituições.",
-        id: 1
-    },
-    {
-        title: "Sistema de Controle de Estoque",
-        status: "andamento",
-        tech: ["Angular", "Firebase"],
-        date: "15/04/2025",
-        desc: "Dashboard de estoque com relatórios e integração mobile.",
-        id: 2
-    },
-    {
-        title: "App de Saúde Mental",
-        status: "fechado",
-        tech: ["Flutter", "Firebase"],
-        date: "20/02/2025",
-        desc: "Aplicativo mobile para acompanhamento de saúde mental.",
-        id: 3
-    },
-    {
-        title: "Portal de Notícias Universitárias",
-        status: "aberto",
-        tech: ["WordPress", "PHP"],
-        date: "01/06/2025",
-        desc: "Portal para publicação de notícias e eventos acadêmicos.",
-        id: 4
-    },
-    {
-        title: "E-commerce de Produtos Artesanais",
-        status: "andamento",
-        tech: ["Shopify", "UX/UI"],
-        date: "28/03/2025",
-        desc: "Loja virtual para artesãos com integração de pagamentos.",
-        id: 5
-    },
-    {
-        title: "Sistema de Reservas de Salas",
-        status: "fechado",
-        tech: ["Vue.js", "Laravel"],
-        date: "12/01/2025",
-        desc: "Sistema web para reservas de salas em empresas.",
-        id: 6
+let projects = [];
+
+async function carregarProjects() {
+    try {
+        const response = await fetch('/projetos', {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXByZXNhQGxlZ2FsLmNvbSIsImlhdCI6MTc0ODkwOTczMiwiZXhwIjoxNzQ4OTk2MTMyfQ.-MA5MZ9OCDjgxOUcs0H1wFeTf3SG74DzMABW_kiRJ5I'
+            }
+        });
+        if (!response.ok) throw new Error('Erro ao buscar projetos');
+        const data = await response.json();
+        // Adapte conforme o formato retornado pela API
+        projects = data.map(p => ({
+            title: p.titulo,
+            status: 'aberto', // ajuste conforme o campo correto
+            tech: p.requisitos ? p.requisitos.split(',') : [],
+            date: p.prazoEntrega.substring(8,10) + "/" + p.prazoEntrega.substring(5,7) + "/" + p.prazoEntrega.substring(0,4), // <-- aqui faz a conversão
+            desc: p.descricao,
+            id: p.id
+        }));
+        renderProjects();
+    } catch (e) {
+        console.error(e);
     }
-];
+}
 
 function renderProjects() {
     const search = document.getElementById('searchInput').value.toLowerCase();
@@ -122,4 +98,4 @@ document.getElementById('clearFilters').addEventListener('click', function () {
     document.getElementById('searchInput').value = '';
     renderProjects();
 });
-renderProjects();
+carregarProjects();
