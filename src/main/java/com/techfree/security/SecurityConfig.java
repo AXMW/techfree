@@ -39,7 +39,10 @@ public class SecurityConfig {
                     "/signup",
                     "/dashboard",
                     "/resetPassword1.html",
-                    "/resetPassword2.html"
+                    "/resetPassword2.html",
+                    "/inicio",
+                    "/faq",
+                    "/"
                     // "/**"
                 ).permitAll()
                 .requestMatchers("/empresa/**").hasRole("EMPRESA")

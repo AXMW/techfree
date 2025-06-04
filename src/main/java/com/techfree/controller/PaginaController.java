@@ -6,7 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PaginaController {
 
-    
+    @GetMapping("/")
+    public String index() {
+        return "Inicio";
+    }
+
     @GetMapping("/inicio")
     public String inicio() {
         return "Inicio";
