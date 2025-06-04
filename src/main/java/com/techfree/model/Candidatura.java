@@ -2,7 +2,6 @@ package com.techfree.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.time.LocalDate;
 import com.techfree.enums.StatusCandidatura;
 
 @Entity
@@ -20,8 +19,6 @@ public class Candidatura {
     @Column(columnDefinition = "TEXT")
     private String mensagem;
 
-    @Builder.Default
-    private LocalDate data = LocalDate.now();
 
     @Column(name = "data_candidatura")
     private LocalDateTime dataCandidatura;
