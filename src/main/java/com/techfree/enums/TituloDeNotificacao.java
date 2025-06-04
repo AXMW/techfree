@@ -1,0 +1,12 @@
+package com.techfree.enums;
+
+public enum TituloDeNotificacao {
+    FLAG,
+    ALTERACAO_DE_PROJETO,
+    APROVACAO_DE_CANDIDATURA,
+    REJEICAO_DE_CANDIDATURA,
+    CONVITE_DE_EMPRESA,
+    CERTIFICADO_DE_CONCLUSAO,
+    PROJETO_ENTREGUE,
+    CANDIDATURA_ENVIADA
+}

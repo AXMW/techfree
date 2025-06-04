@@ -11,6 +11,7 @@ import com.techfree.specifications.ProjetoSpecification;
 import com.techfree.repository.CandidaturaRepository;
 import com.techfree.enums.StatusCandidatura;
 import com.techfree.enums.StatusProjeto;
+import com.techfree.enums.TituloDeNotificacao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -128,7 +129,7 @@ public class ProjetoService {
         projetoRepository.save(projeto);
 
         // 4️⃣ Cria uma notificação persistente
-        notificacaoService.criarNotificacao("Seleção de projeto", freelancer.getUsuario(), 
+        notificacaoService.criarNotificacao(TituloDeNotificacao.APROVACAO_DE_CANDIDATURA, freelancer.getUsuario(), 
             "Você foi selecionado para o projeto: " + projeto.getTitulo(), projeto.getEmpresa().getUsuario());
 
         // 5️⃣ Envia um e-mail

@@ -10,6 +10,7 @@ import com.techfree.repository.CandidaturaRepository;
 import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.ProjetoRepository;
 import com.techfree.enums.StatusCandidatura;
+import com.techfree.enums.TituloDeNotificacao;
 import com.techfree.service.email.EmailTemplateService;
 
 @Service
@@ -95,7 +96,7 @@ public class CandidaturaService {
             emailTemplateService.gerarTemplate(nome, titulo, status)
         );
 
-        notificacaoService.notificar("Candidatura",
+        notificacaoService.notificar(TituloDeNotificacao.CANDIDATURA_ENVIADA,
             "Sua candidatura para o projeto '" + titulo + "' foi " + status.name().toLowerCase(),
             candidatura.getFreelancer().getUsuario(), projeto.getEmpresa().getUsuario()
         );

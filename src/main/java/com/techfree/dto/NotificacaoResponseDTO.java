@@ -2,13 +2,14 @@ package com.techfree.dto;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import com.techfree.model.Usuario;
+import com.techfree.enums.TituloDeNotificacao;
 import com.techfree.model.Notificacao;
 
 @Getter
 public class NotificacaoResponseDTO {
     private Long id;
 
-    private String titulo;
+    private TituloDeNotificacao titulo;
 
     private String mensagem;
 

@@ -10,6 +10,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import com.techfree.enums.TituloDeNotificacao;
+
 @Getter
 @Setter
 @Entity
@@ -17,7 +19,7 @@ public class Notificacao {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String titulo;
+    private TituloDeNotificacao titulo;
 
     private String mensagem;
 
@@ -35,7 +37,7 @@ public class Notificacao {
         this.data = LocalDateTime.now();
     }
 
-    public Notificacao(String titulo, String mensagem, Usuario usuario, Usuario remetente) {
+    public Notificacao(TituloDeNotificacao titulo, String mensagem, Usuario usuario, Usuario remetente) {
         this.titulo = titulo;
         this.mensagem = mensagem;
         this.usuario = usuario;
