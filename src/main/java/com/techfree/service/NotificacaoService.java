@@ -12,8 +12,8 @@ public class NotificacaoService {
     @Autowired
     private NotificacaoRepository notificacaoRepository;
 
-    public void notificar(String mensagem, Usuario usuario) {
-        Notificacao n = new Notificacao(mensagem, usuario);
+    public void notificar(String titulo, String mensagem, Usuario usuario, Usuario remetente) {
+        Notificacao n = new Notificacao(titulo, mensagem, usuario, remetente);
         notificacaoRepository.save(n);
     }
 
@@ -33,10 +33,12 @@ public class NotificacaoService {
         notificacaoRepository.save(n);
     }
 
-    public void criarNotificacao(Usuario usuario, String mensagem) {
+    public void criarNotificacao(String titulo, Usuario usuario, String mensagem, Usuario remetente) {
         Notificacao notificacao = new Notificacao();
+        notificacao.setTitulo(titulo);
         notificacao.setUsuario(usuario);
         notificacao.setMensagem(mensagem);
+        notificacao.setRemetente(remetente);
         notificacaoRepository.save(notificacao);
     }
 }

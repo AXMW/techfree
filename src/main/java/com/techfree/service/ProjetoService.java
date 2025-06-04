@@ -128,8 +128,8 @@ public class ProjetoService {
         projetoRepository.save(projeto);
 
         // 4️⃣ Cria uma notificação persistente
-        notificacaoService.criarNotificacao(freelancer.getUsuario(), 
-            "Você foi selecionado para o projeto: " + projeto.getTitulo());
+        notificacaoService.criarNotificacao("Seleção de projeto", freelancer.getUsuario(), 
+            "Você foi selecionado para o projeto: " + projeto.getTitulo(), projeto.getEmpresa().getUsuario());
 
         // 5️⃣ Envia um e-mail
         emailService.enviar(

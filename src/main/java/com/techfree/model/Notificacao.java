@@ -17,11 +17,16 @@ public class Notificacao {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String titulo;
+
     private String mensagem;
 
     private boolean lida = false;
 
     private LocalDateTime data;
+
+    @ManyToOne
+    private Usuario remetente;
 
     @ManyToOne
     private Usuario usuario;
@@ -30,9 +35,11 @@ public class Notificacao {
         this.data = LocalDateTime.now();
     }
 
-    public Notificacao(String mensagem, Usuario usuario) {
+    public Notificacao(String titulo, String mensagem, Usuario usuario, Usuario remetente) {
+        this.titulo = titulo;
         this.mensagem = mensagem;
         this.usuario = usuario;
+        this.remetente = remetente;
         this.data = LocalDateTime.now();
     }
 }

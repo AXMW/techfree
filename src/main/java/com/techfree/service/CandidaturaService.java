@@ -95,9 +95,9 @@ public class CandidaturaService {
             emailTemplateService.gerarTemplate(nome, titulo, status)
         );
 
-        notificacaoService.notificar(
+        notificacaoService.notificar("Candidatura",
             "Sua candidatura para o projeto '" + titulo + "' foi " + status.name().toLowerCase(),
-            candidatura.getFreelancer().getUsuario()
+            candidatura.getFreelancer().getUsuario(), projeto.getEmpresa().getUsuario()
         );
     }
 }
