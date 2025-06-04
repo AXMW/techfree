@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" lang="pt-BR">
+<html data-bs-theme="light" lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Meu Perfil - TechFree</title>
+    <title>Editar Perfil - TechFree</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/bs-theme-overrides.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,600,700,800&display=swap">
@@ -12,72 +12,65 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700,900&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="assets/css/genericstyles.css">
+    <!-- Navbar fragment -->
+    <link rel="stylesheet" href="assets/css/genericstyles3.css">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md sticky-top py-3 navbar-dark" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/">
-                <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 60px;height: 60px;background: #00294B;">
-                    <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="54" height="33" style="margin-left: 3px;">
-                </span>
-            </a>
-            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
-                <span class="visually-hidden">Toggle navigation</span>
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navcol-1">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="/Inicio.html">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contacts.html">FAQ</a></li>
-                </ul>
-                <a class="btn btn-primary shadow" role="button" href="signup.html">Entrar</a>
-            </div>
-        </div>
-    </nav>
+    <!-- Navbar fragment -->
+    <div th:replace="fragments/navbar :: navbar"></div>
+
     <main>
         <section class="bg-dark py-5">
             <div class="container">
                 <!-- Profile Header -->
-                <div class="profile-header mb-4 position-relative"></div>
-                <!-- Sobre, Experiência, Certificados, Feedback -->
+                <div class="profile-header mb-4 position-relative">
+                    <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="header" title="Editar"><i class="bi bi-pencil-square"></i></button>
+                </div>
+                <!-- SOBRE, EXPERIÊNCIA, CERTIFICADOS -->
                 <div class="row">
                     <div class="col-lg-8">
-                        <div class="profile-section mb-4">
+                        <!-- SOBRE -->
+                        <div class="profile-section mb-4 position-relative">
+                            <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="sobre" title="Editar"><i class="bi bi-pencil-square"></i></button>
                             <h4>Sobre</h4>
                             <p id="profileSobre"></p>
                         </div>
-                        <div class="profile-section mb-4">
+                        <!-- HABILIDADES -->
+                        <div class="profile-section mb-4 position-relative">
+                            <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="habilidades" title="Editar"><i class="bi bi-pencil-square"></i></button>
                             <h4>Habilidades</h4>
                             <div class="profile-badges mb-2" id="profileSkills"></div>
                         </div>
-                        <div class="profile-section mb-4">
+                        <!-- EXPERIÊNCIA -->
+                        <div class="profile-section mb-4 position-relative">
+                            <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="experiencia" title="Editar"><i class="bi bi-pencil-square"></i></button>
                             <h4>Experiência Profissional</h4>
                             <div class="profile-timeline" id="profileExperiencia"></div>
                         </div>
-                        <div class="profile-section mb-4">
+                        <!-- EXPERIÊNCIA ACADÊMICA -->
+                        <div class="profile-section mb-4 position-relative">
+                            <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="experienciaAcademica" title="Editar"><i class="bi bi-pencil-square"></i></button>
                             <h4>Experiência Acadêmica</h4>
                             <div class="profile-timeline" id="profileExperienciaAcademica"></div>
                         </div>
-                        <div class="profile-section mb-4 profile-certificates">
+                        <!-- CERTIFICADOS -->
+                        <div class="profile-section mb-4 profile-certificates position-relative">
+                            <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="certificados" title="Editar"><i class="bi bi-pencil-square"></i></button>
                             <h4>Certificados</h4>
                             <div id="profileCertificados"></div>
                         </div>
-                        <div class="profile-section mb-4">
-                            <h4>Feedbacks Recentes</h4>
-                            <div id="profileFeedbacks"></div>
-                        </div>
                     </div>
-                    <!-- Card de convite -->
                     <div class="col-lg-4">
-                        <div class="invite-card">
-                            <h5>Atualize o seu perfil</h5>
-                            <button type="button" class="invite-btn w-100 mt-2">
-                                <i class="bi bi-pencil-square"></i> Alterar Perfil
+                        <!-- Card de salvar modificações -->
+                        <div class="invite-card mb-4">
+                            <h5>Salvar Modificações Realizadas</h5>
+                            <button id="btnAplicarAlteracoes" class="btn invite-btn w-100 mt-2">
+                                <i class="bi bi-check-circle"></i> Aplicar Alterações
                             </button>
                         </div>
                         <!-- Card de conclusão do perfil -->
-                        <div class="invite-card mt-4">
+                        <div class="invite-card mb-4">
                             <h5>Conclusão do perfil</h5>
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <span style="color:#fff;font-weight:600;">Progresso</span>
@@ -135,7 +128,20 @@
             </div>
         </div>
     </footer>
+    <!-- POPUP DE EDIÇÃO (reutilizável para todos os cards) -->
+    <div class="feedback-overlay" id="editOverlay"></div>
+    <div id="editPopup" class="feedback-form-card" style="display:none; position:fixed;">
+        <button class="btn-close-feedback" id="closeEditPopup" type="button" title="Fechar">&times;</button>
+        <h4 class="mb-4" id="editPopupTitle">Editar</h4>
+        <form id="editForm" autocomplete="off">
+            <div id="editFormFields"></div>
+            <button type="submit" class="btn btn-secondary w-50 d-block mx-auto" style="font-weight:700; font-size:1.1rem; padding:0.7rem 0; border-radius:0.7rem; margin-top:0.5rem;">Salvar</button>
+        </form>
+    </div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/paginaprofile1.js"></script>
+    <script src="assets/js/paginaprofileeditar.js"></script>
+
+    <!-- Navbar fragment -->
+    <script src="assets/js/navbar.js"></script>
 </body>
 </html>

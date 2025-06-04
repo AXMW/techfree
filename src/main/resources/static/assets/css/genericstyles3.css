@@ -42,15 +42,15 @@
 /* Estilo nav Bar */
 
 /* Efeitos suaves para navbar */
-.navbar-nav .nav-link {
+#mainNav .navbar-nav .nav-link {
     position: relative;
     transition: color 0.2s, background 0.2s;
     padding: 0.5rem 1rem;
     border-radius: 0.3rem;
 }
 
-.navbar-nav .nav-link:hover,
-.navbar-nav .nav-link:focus {
+#mainNav .navbar-nav .nav-link:hover,
+#mainNav .navbar-nav .nav-link:focus {
     background: rgba(255, 255, 255, 0.08);
     color: #fff;
     text-decoration: none;
@@ -58,54 +58,51 @@
     transition: background 0.2s, color 0.2s;
 }
 
-.navbar-nav .nav-link.active {
+#mainNav .navbar-nav .nav-link.active {
     background: rgba(255, 255, 255, 0.15);
     color: #fff;
     font-weight: 600;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.07);
 }
 
-.navbar-toggler {
+#mainNav .navbar-toggler {
     transition: background 0.2s, box-shadow 0.2s;
     border-radius: 0.3rem;
 }
 
-.navbar-toggler:active,
-.navbar-toggler:focus {
+#mainNav .navbar-toggler:active,
+#mainNav .navbar-toggler:focus {
     background: rgba(255, 255, 255, 0.12);
     box-shadow: 0 0 0 0.2rem rgba(0, 41, 75, 0.15);
 }
 
-.dropdown-menu {
+#mainNav .dropdown-menu {
     transition: box-shadow 0.2s;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
 }
 
-.dropdown-item {
+#mainNav .dropdown-item {
     transition: background 0.2s, color 0.2s;
 }
 
-.dropdown-item:hover,
-.dropdown-item:focus {
+#mainNav .dropdown-item:hover,
+#mainNav .dropdown-item:focus {
     background: #00294B;
     color: #fff;
 }
 
-
-
-.bi-person-circle,
-.bi-bell {
+#mainNav .bi-person-circle,
+#mainNav .bi-bell {
     transition: color 0.2s, transform 0.15s;
 }
 
-.btn-link.text-white:hover .bi-person-circle,
-.btn-link.text-white:hover .bi-bell {
+#mainNav .btn-link.text-white:hover .bi-person-circle,
+#mainNav .btn-link.text-white:hover .bi-bell {
     color: #fff;
     transform: scale(1.08);
 }
 
-/* Badge de notificação com leve animação ao aparecer */
-.bi-bell .badge {
+#mainNav .bi-bell .badge {
     animation: bell-badge-pop 0.4s cubic-bezier(.68, -0.55, .27, 1.55);
 }
 
@@ -126,7 +123,7 @@
 }
 
 /* Dropdown do perfil estilo Gupy */
-#dropdownPerfil+.dropdown-menu {
+#mainNav #dropdownPerfil+.dropdown-menu {
     min-width: 240px;
     border-radius: 1rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
@@ -149,7 +146,7 @@
     }
 }
 
-.dropdown-profile-header {
+#mainNav .dropdown-profile-header {
     display: flex;
     align-items: center;
     gap: 0.7rem;
@@ -158,24 +155,24 @@
     margin-bottom: 0.5rem;
 }
 
-.dropdown-profile-header .bi-person-circle {
+#mainNav .dropdown-profile-header .bi-person-circle {
     font-size: 2.2rem;
     color: #00294B;
 }
 
-.dropdown-profile-header .profile-info {
+#mainNav .dropdown-profile-header .profile-info {
     display: flex;
     flex-direction: column;
 }
 
-.dropdown-profile-header .profile-name {
+#mainNav .dropdown-profile-header .profile-name {
     font-weight: 700;
     color: #00294B;
     font-size: 1rem;
     line-height: 1.1;
 }
 
-.dropdown-profile-header .profile-edit {
+#mainNav .dropdown-profile-header .profile-edit {
     font-size: 0.92rem;
     color: #1976d2;
     background: none;
@@ -187,11 +184,11 @@
     transition: text-decoration 0.15s;
 }
 
-.dropdown-profile-header .profile-edit:hover {
+#mainNav .dropdown-profile-header .profile-edit:hover {
     text-decoration: underline;
 }
 
-#dropdownPerfil+.dropdown-menu .dropdown-item {
+#mainNav #dropdownPerfil+.dropdown-menu .dropdown-item {
     color: #00294B;
     font-weight: 500;
     padding: 0.7rem 1.2rem;
@@ -200,24 +197,23 @@
     transition: background 0.18s, color 0.18s;
 }
 
-#dropdownPerfil+.dropdown-menu .dropdown-item:hover,
-#dropdownPerfil+.dropdown-menu .dropdown-item:focus {
+#mainNav #dropdownPerfil+.dropdown-menu .dropdown-item:hover,
+#mainNav #dropdownPerfil+.dropdown-menu .dropdown-item:focus {
     background: #f2f6fa;
     color: #00294B;
 }
 
-#dropdownPerfil+.dropdown-menu .dropdown-item:active {
+#mainNav #dropdownPerfil+.dropdown-menu .dropdown-item:active {
     background: #e6eef6;
     color: #00294B;
 }
 
-#dropdownPerfil+.dropdown-menu .dropdown-divider {
+#mainNav #dropdownPerfil+.dropdown-menu .dropdown-divider {
     margin: 0.2rem 0;
     border-top: 1px solid #e6eef6;
 }
 
-/* Dropdown de notificações aprimorado */
-#dropdownNotificacoes+.dropdown-menu {
+#mainNav #dropdownNotificacoes+.dropdown-menu {
     min-width: 340px;
     max-width: 400px;
     border-radius: 1rem;
@@ -229,7 +225,7 @@
     animation: fadeInDropdown 0.18s cubic-bezier(.4, 0, .2, 1);
 }
 
-.notification-item {
+#mainNav .notification-item {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -248,17 +244,17 @@
     border-left: 4px solid transparent;
 }
 
-.notification-item.unread {
+#mainNav .notification-item.unread {
     background: #eaf3fb;
     border-left: 4px solid #1976d2;
 }
 
-.notification-content {
+#mainNav .notification-content {
     flex: 1 1 auto;
     min-width: 0;
 }
 
-.notification-title {
+#mainNav .notification-title {
     font-weight: 600;
     margin-bottom: 0.15rem;
     font-size: 1.01rem;
@@ -268,7 +264,7 @@
     white-space: nowrap;
 }
 
-.notification-details {
+#mainNav .notification-details {
     font-size: 0.93rem;
     color: #4a5a6a;
     margin-bottom: 0.1rem;
@@ -277,7 +273,7 @@
     white-space: nowrap;
 }
 
-.notification-meta {
+#mainNav .notification-meta {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -285,13 +281,13 @@
     min-width: 80px;
 }
 
-.notification-time {
+#mainNav .notification-time {
     font-size: 0.88rem;
     color: #8a99a8;
     white-space: nowrap;
 }
 
-.notification-remove {
+#mainNav .notification-remove {
     background: none;
     border: none;
     color: #b0b8c1;
@@ -303,17 +299,17 @@
     line-height: 1;
 }
 
-.notification-remove:hover {
+#mainNav .notification-remove:hover {
     color: #d32f2f;
     background: #f2dede;
 }
 
-#dropdownNotificacoes+.dropdown-menu .dropdown-divider {
+#mainNav #dropdownNotificacoes+.dropdown-menu .dropdown-divider {
     margin: 0.4rem 0;
     border-top: 1px solid #e6eef6;
 }
 
-#dropdownNotificacoes+.dropdown-menu .dropdown-item.text-center {
+#mainNav #dropdownNotificacoes+.dropdown-menu .dropdown-item.text-center {
     justify-content: center;
     color: #1976d2;
     font-weight: 600;
@@ -322,15 +318,73 @@
     margin: 0.5rem 0.5rem;
 }
 
-#dropdownNotificacoes+.dropdown-menu .dropdown-item.text-center:hover {
+#mainNav #dropdownNotificacoes+.dropdown-menu .dropdown-item.text-center:hover {
     background: #e6eef6;
     color: #1976d2;
 }
 
 /* Adicione este bloco para limitar altura e mostrar scroll após 6 notificações */
-#notificacoesDropdown.max-scroll {
+#mainNav #notificacoesDropdown.max-scroll {
     max-height: 632px;
     /* Aproximadamente 6 notificações + botão */
     overflow-y: auto;
 
+}
+
+/* Correções para garantir que o estilo da navbar prevaleça sobre o genericstyles.css */
+
+#mainNav .navbar-nav.mx-auto {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    gap: 2rem !important;
+}
+
+#mainNav .navbar-nav.ms-auto {
+    gap: 0.7rem !important;
+}
+
+#mainNav .nav-item .bi-bell {
+    position: relative !important;
+}
+
+#mainNav .nav-item .notification-badge {
+    position: absolute !important;
+    right: -12px !important;
+    top: 2px !important;
+    font-size: 0.65rem !important;
+    padding: 2px 6px !important;
+    background: #dc3545 !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    min-width: 18px !important;
+    text-align: center !important;
+    z-index: 2 !important;
+}
+
+#mainNav .dropdown-menu .dropdown-item:hover,
+#mainNav .dropdown-menu .dropdown-item:focus {
+    background: #00294B !important;
+    color: #fff !important;
+    transition: background 0.15s !important;
+}
+
+#mainNav .dropdown-menu-notification .dropdown-item,
+#mainNav .dropdown-menu-notification .dropdown-item i {
+    white-space: normal !important;
+    font-size: 1.05rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    line-height: 1.4 !important;
+    font-size: 1.3rem !important;
+    margin-right: 0.7rem !important;
+    vertical-align: middle !important;
+}
+
+#mainNav .dropdown-menu-notification .dropdown-item:hover,
+#mainNav .dropdown-menu-notification .dropdown-item:focus {
+    background: #00294B !important;
+    color: #fff !important;
+    transition: background 0.15s !important;
 }

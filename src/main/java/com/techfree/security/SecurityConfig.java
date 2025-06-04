@@ -30,14 +30,17 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/auth/**",
-                    "/login.html",
-                    "/signUp.html",
-                    "/Dashboard.html",
                     "/css/**",
                     "/js/**",
+                    "/favicon.ico",
                     "/images/**",
                     "/assets/**",
-                    "/favicon.ico"
+                    "/login",
+                    "/signup",
+                    "/dashboard",
+                    "/resetPassword1.html",
+                    "/resetPassword2.html"
+                    // "/**"
                 ).permitAll()
                 .requestMatchers("/empresa/**").hasRole("EMPRESA")
                 .requestMatchers("/freelancer/**").hasRole("FREELANCER")

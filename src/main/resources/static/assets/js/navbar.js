@@ -242,13 +242,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         const minhaConta = document.querySelector('.dropdown-menu .dropdown-item[href="/minha-conta.html"]');
         if (btnEditar) {
             if (tipoUsuario === 'EMPRESA') {
-                btnEditar.onclick = () => window.location.href = 'PaginaDeProfileEmpresaEditar.html';
-                btnEditar.textContent = 'Editar empresa';
-                if (minhaConta) minhaConta.href = 'PaginaDeProfileEmpresa1.html';
+                btnEditar.onclick = () => window.location.href = 'pagina-profile-empresa-editar';
+                btnEditar.textContent = 'Editar perfil empresa';
+                if (minhaConta) minhaConta.href = 'pagina-profile-empresa1';
             } else {
-                btnEditar.onclick = () => window.location.href = 'PaginaDeProfileEditar.html';
+                btnEditar.onclick = () => window.location.href = 'pagina-profile-editar';
                 btnEditar.textContent = 'Editar perfil';
-                if (minhaConta) minhaConta.href = 'PaginaDeProfile1.html';
+                if (minhaConta) minhaConta.href = 'pagina-profile1';
             }
         }
     } catch (e) {
