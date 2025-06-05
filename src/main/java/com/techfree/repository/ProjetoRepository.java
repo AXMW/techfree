@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface ProjetoRepository extends JpaRepository<Projeto, Long>, JpaSpecificationExecutor<Projeto> {
     Optional<Projeto> findByTitulo(String titulo);
     List<Projeto> findByEmpresaId(Long id);
+    List<Projeto> findByEmpresaEmail(String email);
     List<Projeto> findByAtivo(boolean ativo);
     List<Projeto> findByAtivoAndTitulo(boolean ativo, String titulo);
     
