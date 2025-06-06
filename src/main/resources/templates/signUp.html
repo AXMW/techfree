@@ -64,23 +64,24 @@
                             <input class="shadow form-control" type="text" name="name" placeholder="Nome">
                         </div>
                         <div class="row mb-4 fade-input">
-        <div class="col-md-6 mb-2 mb-md-0">
-            <input class="form-control" type="text" id="cpf" name="cpf" maxlength="14" placeholder="CPF">
-        </div>
-        <div class="col-md-6">
-            <input class="form-control" type="date" name="dataNascimento" placeholder="Data de Nascimento">
-            <small class="text-muted">Data de nascimento</small>
-        </div>
-    </div>
+                            <div class="col-md-6 mb-2 mb-md-0">
+                                <input class="form-control" type="text" id="cpf" name="cpf" maxlength="14" placeholder="CPF">
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" type="date" name="dataNascimento" placeholder="Data de Nascimento">
+                                <small class="text-muted">Data de nascimento</small>
+                            </div>
+                        </div>
                         <div class="mb-4 fade-input">
                             <input class="form-control" type="email" name="email" placeholder="Email">
                         </div>
-                        <div class="mb-3 fade-input">
+                        <div class="mb-4 fade-input">
                             <input class="shadow form-control" type="password" name="password" placeholder="Senha">
-                            <p class="d-xxl-flex justify-content-xxl-start font-small input-description">Requisitos da senha</p>
+                            <div class="erro-senha" id="senhaErrorPessoa"></div> <!-- Pessoa -->
                         </div>
                         <div class="mb-4 fade-input">
                             <input class="shadow form-control" type="password" name="passwordConfirm" placeholder="Confirmar senha">
+                            <div class="erro-senha" id="confirmaSenhaErrorPessoa" style="margin-left: 10px;"></div> <!-- Pessoa -->
                         </div>
                         <div class="mb-1 fade-input"><button class="btn btn-primary shadow d-block w-100" type="submit">Criar Perfil</button></div>
                         <div class="mb-4 fade-input">
@@ -92,37 +93,38 @@
                     </form>
                     <!-- Formulário Empresa -->
                     <form id="formEmpresa" method="post" style="display:none;">
-    <div class="mb-4 fade-input">
-        <input class="shadow form-control" type="text" name="razaoSocial" placeholder="Razão Social">
-    </div>
-    <div class="row mb-4 fade-input">
-        <div class="col-md-6 mb-2 mb-md-0">
-            <input class="shadow form-control" type="text" name="name" placeholder="Nome fantasia">
-        </div>
-        <div class="col-md-6">
-            <input class="form-control" type="text" id="cnpj" name="cnpj" maxlength="18" placeholder="CNPJ">
-        </div>
-    </div>
-    <div class="mb-4 fade-input">
-        <input class="form-control" type="email" name="email" placeholder="Email">
-    </div>
-    <div class="mb-3 fade-input">
-        <input class="shadow form-control" type="password" name="passwordEmpresa" placeholder="Senha">
-        <p class="d-xxl-flex justify-content-xxl-start font-small input-description">Requisitos da senha</p>
-    </div>
-    <div class="mb-4 fade-input">
-        <input class="shadow form-control" type="password" name="passwordEmpresaConfirm" placeholder="Confirmar senha">
-    </div>
-    <div class="mb-1 fade-input">
-        <button class="btn btn-primary shadow d-block w-100" type="submit">Criar Perfil</button>
-    </div>
-    <div class="mb-4 fade-input">
-        <p class="font-small">Ao criar um perfil você estará aceitando nossos&nbsp;<a href="#">Termos de Uso</a>.</p>
-    </div>
-    <div class="mb-3 fade-input">
-        <p class="text-muted">Já possui uma conta?&nbsp;<a href="login.html">Entrar</a></p>
-    </div>
-</form>
+                        <div class="mb-4 fade-input">
+                            <input class="shadow form-control" type="text" name="razaoSocial" placeholder="Razão Social">
+                        </div>
+                        <div class="row mb-4 fade-input">
+                            <div class="col-md-6 mb-2 mb-md-0">
+                                <input class="shadow form-control" type="text" name="name" placeholder="Nome fantasia">
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" type="text" id="cnpj" name="cnpj" maxlength="18" placeholder="CNPJ">
+                            </div>
+                        </div>
+                        <div class="mb-4 fade-input">
+                            <input class="form-control" type="email" name="email" placeholder="Email">
+                        </div>
+                        <div class="mb-4 fade-input">
+                            <input class="shadow form-control" type="password" name="passwordEmpresa" placeholder="Senha">
+                            <div class="erro-senha" id="senhaErrorEmpresa"></div> <!-- Empresa -->
+                        </div>
+                        <div class="mb-4 fade-input">
+                            <input class="shadow form-control" type="password" name="passwordEmpresaConfirm" placeholder="Confirmar senha">
+                            <div class="erro-senha" id="confirmaSenhaErrorEmpresa" style="margin-left: 10px;"></div> <!-- Empresa -->
+                        </div>
+                        <div class="mb-1 fade-input">
+                            <button class="btn btn-primary shadow d-block w-100" type="submit">Criar Perfil</button>
+                        </div>
+                        <div class="mb-4 fade-input">
+                            <p class="font-small">Ao criar um perfil você estará aceitando nossos&nbsp;<a href="#">Termos de Uso</a>.</p>
+                        </div>
+                        <div class="mb-3 fade-input">
+                            <p class="text-muted">Já possui uma conta?&nbsp;<a href="login.html">Entrar</a></p>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -26,11 +26,39 @@ document.getElementById('iconPessoa').addEventListener('click', function () {
     formPessoa.style.display = '';
     formEmpresa.style.display = 'none';
     fadeInputs(formPessoa);
+    // Esconde requisitos da senha ao trocar para pessoa
+    const reqPessoa = document.getElementById('requisitosSenhaPessoa');
+    if (reqPessoa) reqPessoa.classList.add('d-none');
+    const reqEmpresa = document.getElementById('requisitosSenhaEmpresa');
+    if (reqEmpresa) reqEmpresa.classList.add('d-none');
+    // Limpa mensagens de erro
+    document.getElementById('senhaErrorPessoa').textContent = '';
+    document.getElementById('senhaErrorPessoa').classList.add('d-none');
+    document.getElementById('confirmaSenhaErrorPessoa').textContent = '';
+    document.getElementById('confirmaSenhaErrorPessoa').classList.add('d-none');
+    document.getElementById('senhaErrorEmpresa').textContent = '';
+    document.getElementById('senhaErrorEmpresa').classList.add('d-none');
+    document.getElementById('confirmaSenhaErrorEmpresa').textContent = '';
+    document.getElementById('confirmaSenhaErrorEmpresa').classList.add('d-none');
 });
 document.getElementById('iconEmpresa').addEventListener('click', function () {
     formPessoa.style.display = 'none';
     formEmpresa.style.display = '';
     fadeInputs(formEmpresa);
+    // Esconde requisitos da senha ao trocar para empresa
+    const reqPessoa = document.getElementById('requisitosSenhaPessoa');
+    if (reqPessoa) reqPessoa.classList.add('d-none');
+    const reqEmpresa = document.getElementById('requisitosSenhaEmpresa');
+    if (reqEmpresa) reqEmpresa.classList.add('d-none');
+    // Limpa mensagens de erro
+    document.getElementById('senhaErrorPessoa').textContent = '';
+    document.getElementById('senhaErrorPessoa').classList.add('d-none');
+    document.getElementById('confirmaSenhaErrorPessoa').textContent = '';
+    document.getElementById('confirmaSenhaErrorPessoa').classList.add('d-none');
+    document.getElementById('senhaErrorEmpresa').textContent = '';
+    document.getElementById('senhaErrorEmpresa').classList.add('d-none');
+    document.getElementById('confirmaSenhaErrorEmpresa').textContent = '';
+    document.getElementById('confirmaSenhaErrorEmpresa').classList.add('d-none');
 });
 // Inicialização: só o de pessoa ativo e fade nos inputs
 formPessoa.style.display = '';
@@ -124,6 +152,42 @@ if (cnpjInput) {
     });
 }
 
+function validarSenhaForte(senha) {
+    const requisitos = [
+        { regex: /.{8,}/, texto: "Mínimo 8 caracteres" },
+        { regex: /[A-Z]/, texto: "1 letra maiúscula" },
+        { regex: /[a-z]/, texto: "1 letra minúscula" },
+        { regex: /[0-9]/, texto: "1 número" },
+        { regex: /[^A-Za-z0-9]/, texto: "1 caractere especial" }
+    ];
+    const faltando = requisitos.filter(r => !r.regex.test(senha)).map(r => r.texto);
+    return faltando;
+}
+
+function mostrarErrosSenha(idDiv, faltando) {
+    const div = document.getElementById(idDiv);
+    if (faltando.length === 0) {
+        div.textContent = "";
+        div.classList.add('d-none');
+    } else {
+        div.innerHTML = "<p style='margin-left: 10px; margin-bottom: 0'>A senha deve conter:</p><ul style='margin-bottom: 0'>" +
+            faltando.map(f => `<li>${f}</li>`).join('') + "</ul>";
+        div.classList.remove('d-none');
+    }
+}
+
+function mostrarErroConfirmacao(idDiv, msg) {
+    const div = document.getElementById(idDiv);
+    if (!msg) {
+        div.textContent = "";
+        div.classList.add('d-none');
+    } else {
+        div.textContent = msg;
+        div.classList.remove('d-none');
+    }
+}
+
+// --- FREELANCER ---
 document.getElementById('formPessoa').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -134,14 +198,19 @@ document.getElementById('formPessoa').addEventListener('submit', async function 
     const senha = this.password.value;
     const senhaConfirm = this.passwordConfirm.value;
 
-    if (!senha || !senhaConfirm) {
-        alert('As senhas não podem ser vazias.');
-        return;
+    // Validação senha forte
+    const faltando = validarSenhaForte(senha);
+    mostrarErrosSenha('senhaErrorPessoa', faltando);
+
+    // Validação confirmação
+    if (senha !== senhaConfirm) {
+        mostrarErroConfirmacao('confirmaSenhaErrorPessoa', 'As senhas não coincidem.');
+    } else {
+        mostrarErroConfirmacao('confirmaSenhaErrorPessoa', '');
     }
 
-    if (senha !== senhaConfirm) {
-        alert('As senhas não coincidem.');
-        return;
+    if (faltando.length > 0 || senha !== senhaConfirm) {
+        return; // Não envia o formulário
     }
 
 
@@ -172,12 +241,12 @@ document.getElementById('formPessoa').addEventListener('submit', async function 
 
             if (response2.ok) {
                 const data = await response2.json();
-                // Salve o token ou dados do usuário
+                // Salve o token e tipoUsuario igual ao login
                 if (data.token) {
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('tipoUsuario', data.tipoUsuario); // Adicione esta linha
                 }
-                // Redirecione para a dashboard ou página inicial
-                window.location.href = 'Dashboard.html';
+                window.location.href = '/';
             } else {
                 alert('E-mail ou senha inválidos.');
             }
@@ -191,6 +260,7 @@ document.getElementById('formPessoa').addEventListener('submit', async function 
     }
 });
 
+// --- EMPRESA ---
 document.getElementById('formEmpresa').addEventListener('submit', async function (e) {
     e.preventDefault();
     // Pegue os valores dos campos
@@ -200,16 +270,21 @@ document.getElementById('formEmpresa').addEventListener('submit', async function
     const email = this.email.value;
     const senha = this.elements.passwordEmpresa.value;
     const senhaConfirm = this.elements.passwordEmpresaConfirm.value;
-    if (!senha || !senhaConfirm) {
-        alert('As senhas não podem ser vazias.');
-        return;
-    }
 
+    // Validação senha forte
+    const faltando = validarSenhaForte(senha);
+    mostrarErrosSenha('senhaErrorEmpresa', faltando);
+
+    // Validação confirmação
     if (senha !== senhaConfirm) {
-        alert('As senhas não coincidem.');
-        return;
+        mostrarErroConfirmacao('confirmaSenhaErrorEmpresa', 'As senhas não coincidem.');
+    } else {
+        mostrarErroConfirmacao('confirmaSenhaErrorEmpresa', '');
     }
 
+    if (faltando.length > 0 || senha !== senhaConfirm) {
+        return; // Não envia o formulário
+    }
 
     // Monte o objeto conforme seu DTO de registro
     const payload = {
@@ -238,12 +313,12 @@ document.getElementById('formEmpresa').addEventListener('submit', async function
 
             if (responseEmpresa.ok) {
                 const data = await responseEmpresa.json();
-                // Salve o token ou dados do usuário
+                // Salve o token e tipoUsuario igual ao login
                 if (data.token) {
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('tipoUsuario', data.tipoUsuario); // Adicione esta linha
                 }
-                // Redirecione para a dashboard ou página inicial
-                window.location.href = 'Dashboard.html';
+                window.location.href = '/';
             } else {
                 alert('E-mail ou senha inválidos.');
             }
@@ -255,4 +330,20 @@ document.getElementById('formEmpresa').addEventListener('submit', async function
         alert('Erro ao conectar ao servidor.');
         console.log(err);
     }
+});
+
+// Opcional: validação ao digitar (feedback instantâneo)
+document.querySelector('input[name="password"]').addEventListener('input', function() {
+    mostrarErrosSenha('senhaErrorPessoa', validarSenhaForte(this.value));
+});
+document.querySelector('input[name="passwordEmpresa"]').addEventListener('input', function() {
+    mostrarErrosSenha('senhaErrorEmpresa', validarSenhaForte(this.value));
+});
+document.querySelector('input[name="passwordConfirm"]').addEventListener('input', function() {
+    const senha = document.querySelector('input[name="password"]').value;
+    mostrarErroConfirmacao('confirmaSenhaErrorPessoa', this.value !== senha ? 'As senhas não coincidem.' : '');
+});
+document.querySelector('input[name="passwordEmpresaConfirm"]').addEventListener('input', function() {
+    const senha = document.querySelector('input[name="passwordEmpresa"]').value;
+    mostrarErroConfirmacao('confirmaSenhaErrorEmpresa', this.value !== senha ? 'As senhas não coincidem.' : '');
 });

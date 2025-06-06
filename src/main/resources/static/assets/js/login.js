@@ -30,7 +30,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
                 localStorage.setItem('tipoUsuario', data.tipoUsuario);
             }
             // Redirecione para a dashboard ou página inicial
-            window.location.href = '/dashboard';
+            window.location.href = '/';
         } else {
             alert('E-mail ou senha inválidos.');
         }

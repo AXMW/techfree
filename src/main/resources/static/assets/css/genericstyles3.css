@@ -388,3 +388,11 @@
     color: #fff !important;
     transition: background 0.15s !important;
 }
+
+.erro-senha {
+    font-size: 0.95em;
+    color: #dc3545 !important;
+    margin-top: 0.2rem;
+    text-align: left;
+    font-size: small;
+}

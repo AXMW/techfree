@@ -42,8 +42,8 @@ public class SecurityConfig {
                     "/resetPassword2.html",
                     "/inicio",
                     "/faq",
-                    "/"
-                    // "/**"
+                    "/",
+                    "/**"
                 ).permitAll()
                 .requestMatchers("/empresa/**").hasRole("EMPRESA")
                 .requestMatchers("/freelancer/**").hasRole("FREELANCER")
