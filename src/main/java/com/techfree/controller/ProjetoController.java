@@ -48,6 +48,16 @@ public class ProjetoController {
         return ResponseEntity.ok(dtos);
     }
 
+    @GetMapping("/listar")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<List<ProjetoResponseDTO>> listarProjetosParaFreelancer(Authentication auth) {
+        List<Projeto> projetos = projetoService.listarTodosAbertos();
+        List<ProjetoResponseDTO> dtos = projetos.stream()
+            .map(ProjetoResponseDTO::new)
+            .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<ProjetoResponseDTO> atualizar(

@@ -51,6 +51,10 @@ public class ProjetoService {
         return projetoRepository.findAll();
     }
 
+    public List<Projeto> listarTodosAbertos() {
+        return projetoRepository.findByStatus(StatusProjeto.ABERTO);
+    }
+
     public Projeto criarProjeto(ProjetoRequestDTO dto, String emailEmpresa) {
         Empresa empresa = empresaRepository.findByEmail(emailEmpresa)
             .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
