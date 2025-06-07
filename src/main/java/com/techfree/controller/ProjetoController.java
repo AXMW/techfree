@@ -69,6 +69,17 @@ public class ProjetoController {
         return ResponseEntity.ok(new ProjetoResponseDTO(projeto));
     }
 
+    @PutMapping("/{id}/status/concluir")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<ProjetoResponseDTO> atualizarStatus(
+        @PathVariable Long id,
+        @RequestBody String status,
+        Authentication auth) {
+
+        Projeto projeto = projetoService.atualizarStatusProjeto(id, auth.getName());
+        return ResponseEntity.ok(new ProjetoResponseDTO(projeto));
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<Void> deletar(

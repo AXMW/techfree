@@ -1,5 +1,6 @@
 package com.techfree.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -16,6 +17,7 @@ public class PaginaController {
         return "Inicio";
     }
 
+    @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
     @GetMapping("/dashboard")
     public String dashboard() {
         return "Dashboard";

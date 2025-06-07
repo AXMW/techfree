@@ -98,6 +98,23 @@ public class ProjetoService {
         return projetoRepository.save(projeto);
     }
 
+    public Projeto atualizarStatusProjeto(Long id, String emailEmpresa) {
+        Projeto projeto = projetoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+
+        if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
+            throw new RuntimeException("Acesso negado");
+        }
+
+        try {
+            projeto.setStatus(StatusProjeto.CONCLUIDO);
+            projetoRepository.save(projeto);
+            return projeto;
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Status inválido");
+        }
+    }
+
     public void deletarProjeto(Long id, String emailEmpresa) {
         Projeto projeto = projetoRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
@@ -129,6 +146,7 @@ public class ProjetoService {
         candidaturaRepository.save(candidatura);
 
         // 3️⃣ Atualiza o projeto
+        projeto.setStatus(StatusProjeto.EM_ANDAMENTO);
         projeto.setFreelancerSelecionado(freelancer);
         projetoRepository.save(projeto);
 
