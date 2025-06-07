@@ -23,16 +23,25 @@
     <main>
         <section class="bg-dark py-5">
             <div class="vaga-form-container">
-                <form class="vaga-form-section" id="vagaForm" autocomplete="off">
+                <form class="vaga-form-section" id="vagaForm" autocomplete="off" method="post">
                     <h2>Publicar Nova Vaga</h2>
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <label for="titulo" class="form-label">Título da Vaga <span class="required">*</span></label>
-                            <input type="text" class="form-control" id="titulo" name="titulo" required placeholder="Ex: Desenvolvedor Front-end">
+                            <label for="titulo" class="form-label">Título da Vaga <span
+                                    class="required">*</span></label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" required
+                                placeholder="Ex: Desenvolvedor Front-end">
                         </div>
                         <div class="col-md-6">
-                            <label for="grau" class="form-label">Grau de Experiência <span class="required">*</span></label>
-                            <select class="form-select" id="grau" name="grau" required>
+                            <label for="titulo" class="form-label">Sub-Título da Vaga <span
+                                    class="required">*</span></label>
+                            <input type="text" class="form-control" id="subtitulo" name="subtitulo" required
+                                placeholder="Ex: Front-end para projeto de e-commerce">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="grau" class="form-label">Grau de Experiência <span
+                                    class="required">*</span></label>
+                            <select class="form-select" id="grauexperiencia" name="grauexperiencia" required>
                                 <option value="">Selecione...</option>
                                 <option>Júnior</option>
                                 <option>Pleno</option>
@@ -42,43 +51,44 @@
                         </div>
                         <div class="col-md-6">
                             <label for="pagamento" class="form-label">Pagamento <span class="required">*</span></label>
-                            <input type="text" class="form-control" id="pagamento" name="pagamento" required placeholder="Ex: R$ 2.000,00">
+                            <input type="text" class="form-control" id="pagamento" name="pagamento" required
+                                placeholder="Ex: R$ 2.000,00">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Requisitos <span class="required">*</span></label>
-                            <div class="tags-input-wrapper mt-2 flex-wrap" id="tagsInputWrapper" style="position: relative;">
-                                <input type="text" id="techSearch" class="form-control border-0 shadow-none p-0 m-0" style="background: transparent; min-width: 120px; flex: 1 0 120px;" placeholder="Pesquise ou digite e pressione Enter...">
-                                <div id="techDropdown" class="bg-dark border rounded shadow-sm position-absolute w-100 mt-1" style="z-index: 10; display: none; max-height: 220px; overflow-y: auto; left: 0; top: 100%;">
+                            <div class="tags-input-wrapper mt-2 flex-wrap" id="tagsInputWrapper"
+                                style="position: relative;">
+                                <input type="text" id="techSearch" class="form-control border-0 shadow-none p-0 m-0"
+                                    style="background: transparent; min-width: 120px; flex: 1 0 120px;"
+                                    placeholder="Pesquise ou digite e pressione Enter...">
+                                <div id="techDropdown"
+                                    class="bg-dark border rounded shadow-sm position-absolute w-100 mt-1"
+                                    style="z-index: 10; display: none; max-height: 220px; overflow-y: auto; left: 0; top: 100%;">
                                     <!-- Opções serão inseridas via JS -->
                                 </div>
                             </div>
-                            <small class="text-muted">Sugestões: JavaScript, Python, Java, C#, PHP, SQL, React, Node.js, etc.</small>
+                            <small class="text-muted">Sugestões: JavaScript, Python, Java, C#, PHP, SQL, React, Node.js,
+                                etc.</small>
                         </div>
-                        <div class="col-md-6">
-                            <label for="dataInicio" class="form-label">Data de Início <span class="required">*</span></label>
-                            <input type="date" class="form-control" id="dataInicio" name="dataInicio" required>
+                        <div class="col-md-4">
+                            <label for="contato" class="form-label">Email para Contato <span
+                                    class="required">*</span></label>
+                            <input type="email" class="form-control" id="contato" name="contato" required
+                                placeholder="empresa@email.com">
                         </div>
-                        <div class="col-md-3">
-                            <label for="duracao" class="form-label">Duração do Projeto <span class="required">*</span></label>
-                            <input type="number" class="form-control" id="duracao" name="duracao" required placeholder="Em meses" min="1">
-                        </div>
-                        <div id="limite" class="col-md-3 invisible">
-                            <label for="dataLimite" class="form-label">Data Limite <span class="required">*</span></label>
-                            <input type="date" class="form-control automatic" id="dataLimite" name="dataLimite" required readonly>
+                        <div class="col-md-2">
+                            <label for="duracao" class="form-label">Duração do Projeto <span
+                                    class="required">*</span></label>
+                            <input type="number" class="form-control" id="duracao" name="duracao" required
+                                placeholder="Em meses" min="1">
                         </div>
                         <div class="col-12">
-                            <label for="descricao" class="form-label">Descrição da Vaga <span class="required">*</span></label>
-                            <textarea class="form-control" id="descricao" name="descricao" rows="3" required placeholder="Descreva o projeto, desafios e responsabilidades..."></textarea>
+                            <label for="descricao" class="form-label">Descrição da Vaga <span
+                                    class="required">*</span></label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="3" required
+                                placeholder="Descreva o projeto, desafios e responsabilidades..."></textarea>
                         </div>
-                        <div class="col-md-6">
-                            <label for="contato" class="form-label">Email para Contato <span class="required">*</span></label>
-                            <input type="email" class="form-control" id="contato" name="contato" required placeholder="empresa@email.com">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="anexo" class="form-label">Anexar Arquivo (opcional)</label>
-                            <input type="file" class="form-control" id="anexo" name="anexo" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
-                            <small>Adicione um briefing, imagem ou documento complementar.</small>
-                        </div>
+
                     </div>
                     <button type="submit" class="btn btn-secondary w-100">Publicar Vaga</button>
                 </form>
@@ -105,10 +115,14 @@
                         <li><a href="#">Lista de freelancers</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
+                <div
+                    class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
                     <div class="fw-bold d-flex align-items-center mb-2">
-                        <span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon" style="width: 40px;height: 40px;background: #00294B;">
-                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30" height="23" style="height: 18px;">
+                        <span
+                            class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon"
+                            style="width: 40px;height: 40px;background: #00294B;">
+                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30"
+                                height="23" style="height: 18px;">
                         </span>
                         <span>TechFree</span>
                     </div>
@@ -128,8 +142,9 @@
     </footer>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/publicarvaga.js"></script>
-    
+
     <!-- Navbar fragment -->
     <script src="assets/js/navbar.js"></script>
 </body>
+
 </html>

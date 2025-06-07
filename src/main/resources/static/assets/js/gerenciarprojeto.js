@@ -6,7 +6,7 @@ async function carregarProjects() {
         const response = await fetch('/projetos', {
             headers: {
                 'Accept': 'application/json',
-                'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXByZXNhQGxlZ2FsLmNvbSIsImlhdCI6MTc0ODkwOTczMiwiZXhwIjoxNzQ4OTk2MTMyfQ.-MA5MZ9OCDjgxOUcs0H1wFeTf3SG74DzMABW_kiRJ5I'
+                'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcTdwbWlAZW1haWwuY29tIiwiaWF0IjoxNzQ5MjY4MTUzLCJleHAiOjE3NDkzNTQ1NTN9.07jg1M-Fe-eFi8XiSo8JEzlZp-rkhQ6wypINLYQyq70'
             }
         });
         if (!response.ok) throw new Error('Erro ao buscar projetos');
@@ -16,7 +16,7 @@ async function carregarProjects() {
             title: p.titulo,
             status: 'aberto', // ajuste conforme o campo correto
             tech: p.requisitos ? p.requisitos.split(',') : [],
-            date: p.prazoEntrega.substring(8,10) + "/" + p.prazoEntrega.substring(5,7) + "/" + p.prazoEntrega.substring(0,4), // <-- aqui faz a conversão
+            date: p.prazoEntrega != undefined ? convertDate(p.prazoEntrega) : "A definir",
             desc: p.descricao,
             id: p.id
         }));
@@ -24,6 +24,10 @@ async function carregarProjects() {
     } catch (e) {
         console.error(e);
     }
+}
+
+function convertDate(dateString) {
+    return dateString.substring(8,10) + "/" + dateString.substring(5,7) + "/" + dateString.substring(0,4);    
 }
 
 function renderProjects() {

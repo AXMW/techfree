@@ -78,6 +78,70 @@ document.addEventListener('click', function(e) {
     }
 });
 
+
+document.getElementById('vagaForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    // Pegue os valores dos campos
+    const titulo = this.elements.titulo.value;
+    const subtitulo = this.elements.subtitulo.value;
+    const grauexperiencia = this.elements.grauexperiencia.value;
+    const requisitos = tags.join(',');
+    const pagamento = this.elements.pagamento.value;
+    const email = this.elements.contato.value;
+    const duracao = this.elements.duracao.value;
+    const descricao = this.elements.descricao.value;
+
+    // Monte o objeto conforme seu DTO de registro
+    const vaga = {
+        titulo: titulo,
+        subtitulo: subtitulo,
+        grauexperiencia: grauexperiencia,
+        requisitos: requisitos,
+        pagamento: pagamento,
+        email: email,
+        duracao: duracao,
+        descricao: descricao
+        // Adicione outros campos se necessário
+    };
+
+    console.log(vaga);
+
+    try {
+        const response = await fetch('/projetos', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json', 
+                'Authorization': 'Bearer ' + token 
+            },
+            body: JSON.stringify(vaga)
+        });
+
+        if (response.ok) {
+            const response2 = await fetch('/detalhes-projeto', {
+                method: 'GET',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token 
+                },
+                body: JSON.stringify({ "id": response.id})
+            });
+
+            response2.ok ? window.location.href = '/detalhes-projeto' : alert('Erro ao redirecionar para os detalhes do projeto.');
+            
+        } else {
+            const data = await response.json();
+            alert(data.message || 'Erro ao publicar vaga. Verifique os dados e tente novamente.');
+        }
+    } catch (err) {
+        alert('Erro ao conectar ao servidor.');
+        console.log(err);
+    }
+});
+
+
+
+
 // Ao enviar o form, adiciona as tags como campos ocultos
 document.getElementById('vagaForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -100,32 +164,6 @@ document.getElementById('vagaForm').addEventListener('submit', function(e) {
     document.querySelectorAll('.tag').forEach(el => el.remove());
 });
 
-// DURAÇÃO DO PROJETO: define data limite automaticamente
-const duracaoSelect = document.getElementById('duracao');
-const dataInicioInput = document.getElementById('dataInicio');
-const dataLimiteInput = document.getElementById('dataLimite');
-
-function calcularDataLimite() {
-    const meses = parseInt(duracaoSelect.value, 10);
-    const dataInicio = dataInicioInput.value;
-    if (!meses || !dataInicio) {
-        dataLimiteInput.value = '';
-        document.getElementById('limite').classList.add('invisible');
-        return;
-    }
-    const data = new Date(dataInicio);
-    data.setMonth(data.getMonth() + meses);
-    // Ajusta para o último dia do mês se necessário
-    if (data.getDate() !== new Date(data.getFullYear(), data.getMonth(), 0).getDate()) {
-        data.setDate(data.getDate() - 1);
-    }
-    dataLimiteInput.value = data.toISOString().split('T')[0];
-    document.getElementById('limite').classList.remove('invisible');
-}
-
-duracaoSelect.addEventListener('change', calcularDataLimite);
-dataInicioInput.addEventListener('change', calcularDataLimite);
-
 // FORMATAÇÃO DO CAMPO DE PAGAMENTO
 const pagamentoInput = document.getElementById('pagamento');
 
@@ -140,3 +178,5 @@ pagamentoInput.addEventListener('input', function () {
     valor = (parseInt(valor, 10) / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     this.value = valor;
 });
+
+
