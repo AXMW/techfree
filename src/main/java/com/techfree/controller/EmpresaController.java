@@ -1,10 +1,7 @@
 package com.techfree.controller;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.techfree.model.Projeto;
 import com.techfree.model.Empresa;
-import com.techfree.model.AvaliacaoEmpresa;
 import com.techfree.repository.EmpresaRepository;
 import com.techfree.repository.ProjetoRepository;
 import com.techfree.repository.AvaliacaoEmpresaRepository;
@@ -29,10 +25,10 @@ public class EmpresaController {
     private final ProjetoService projetoService;
 
     public EmpresaController(
-            ProjetoService projetoService,
-            EmpresaRepository empresaRepository,
-            ProjetoRepository projetoRepository,
-            AvaliacaoEmpresaRepository avaliacaoEmpresaRepository) {
+        ProjetoService projetoService,
+        EmpresaRepository empresaRepository,
+        ProjetoRepository projetoRepository,
+        AvaliacaoEmpresaRepository avaliacaoEmpresaRepository) {
         this.projetoService = projetoService;
         this.empresaRepository = empresaRepository;
         this.projetoRepository = projetoRepository;

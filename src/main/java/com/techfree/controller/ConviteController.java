@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 import java.util.List;
+import java.util.Optional;
 
 import com.techfree.dto.ConviteRequestDTO;
+import com.techfree.dto.ConviteResponseDTO;
 import com.techfree.service.ConviteService;
+import com.techfree.repository.FreelancerRepository;
+import com.techfree.model.Freelancer;
 
 @RestController
 @RequestMapping("/convites")
@@ -24,29 +28,36 @@ public class ConviteController {
     @Autowired
     private ConviteService conviteService;
 
+    @Autowired
+    private FreelancerRepository freelancerRepository;
+
     @PostMapping
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<Void> criar(
         @RequestBody ConviteRequestDTO dto,
         Authentication auth) {
 
-        conviteService.criarConvite(dto, auth.getName());
+        Optional<Freelancer> optionalFreelancer = freelancerRepository.findById(dto.getFreelancerId());
+
+        Freelancer freelancer = optionalFreelancer.orElseThrow(() -> 
+            new RuntimeException("Freelancer não encontrado com ID: " + dto.getFreelancerId()));
+        conviteService.criarConvite(dto, freelancer.getUsuario().getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/freelancer")
     @PreAuthorize("hasRole('FREELANCER')")
-    public ResponseEntity<List<ConviteRequestDTO>> listarPorFreelancer(Authentication auth) {
+    public ResponseEntity<List<ConviteResponseDTO>> listarPorFreelancer(Authentication auth) {
         var convites = conviteService.listarPorFreelancer(auth.getName());
-        var dtos = convites.stream().map(ConviteRequestDTO::new).toList();
+        var dtos = convites.stream().map(ConviteResponseDTO::new).toList();
         return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/empresa")
     @PreAuthorize("hasRole('EMPRESA')")
-    public ResponseEntity<List<ConviteRequestDTO>> listarPorEmpresa(Authentication auth) {
+    public ResponseEntity<List<ConviteResponseDTO>> listarPorEmpresa(Authentication auth) {
         var convites = conviteService.listarPorEmpresa(auth.getName());
-        var dtos = convites.stream().map(ConviteRequestDTO::new).toList();
+        var dtos = convites.stream().map(ConviteResponseDTO::new).toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -73,12 +84,12 @@ public class ConviteController {
 
     @GetMapping("/projeto/{id}")
     @PreAuthorize("hasRole('EMPRESA')")
-    public ResponseEntity<List<ConviteRequestDTO>> listarPorProjeto(
+    public ResponseEntity<List<ConviteResponseDTO>> listarPorProjeto(
         @PathVariable Long id,
         Authentication auth) {
 
         var convites = conviteService.listarPorProjeto(id, auth.getName());
-        var dtos = convites.stream().map(ConviteRequestDTO::new).toList();
+        var dtos = convites.stream().map(ConviteResponseDTO::new).toList();
         return ResponseEntity.ok(dtos);
     }
 }

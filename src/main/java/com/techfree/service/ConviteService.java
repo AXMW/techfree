@@ -67,7 +67,7 @@ public class ConviteService {
         Convite convite = conviteRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Convite não encontrado"));
 
-        if (!convite.getFreelancer().getEmail().equals(email)) {
+        if (!convite.getProjeto().getEmpresa().getEmail().equals(email)) {
             throw new RuntimeException("Você não tem permissão para deletar este convite");
         }
 
