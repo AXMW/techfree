@@ -165,4 +165,16 @@ public class ProjetoService {
     public List<Projeto> filtrarProjetos(ProjetoFiltroDTO filtro) {
         return projetoRepository.findAll(ProjetoSpecification.comFiltros(filtro));
     }
+
+    public Projeto obterPorId(Long id, String email) {
+        Projeto projeto = projetoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+
+        if (!projeto.getEmpresa().getUsuario().getEmail().equals(email) && 
+            (projeto.getFreelancerSelecionado() == null || !projeto.getFreelancerSelecionado().getUsuario().getEmail().equals(email))) {
+            throw new RuntimeException("Acesso negado");
+        }
+
+        return projeto;
+    }
 }

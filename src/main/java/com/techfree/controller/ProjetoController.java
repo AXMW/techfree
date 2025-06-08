@@ -58,6 +58,16 @@ public class ProjetoController {
         return ResponseEntity.ok(dtos);
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('EMPRESA') or hasRole('FREELANCER')")
+    public ResponseEntity<ProjetoResponseDTO> obterPorId(
+        @PathVariable Long id,
+        Authentication auth) {
+
+        Projeto projeto = projetoService.obterPorId(id, auth.getName());
+        return ResponseEntity.ok(new ProjetoResponseDTO(projeto));
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<ProjetoResponseDTO> atualizar(
