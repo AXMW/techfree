@@ -32,6 +32,8 @@ public class ProjetoResponseDTO {
 
     private StatusProjeto status;
 
+    private String empresa;
+
     public ProjetoResponseDTO(Projeto projeto) {
         this.id = projeto.getId();
         this.titulo = projeto.getTitulo();
@@ -45,5 +47,6 @@ public class ProjetoResponseDTO {
         this.dataInicio = projeto.getDataInicio();
         this.emailPraContato = projeto.getEmailPraContato();
         this.status = projeto.getStatus();
+        this.empresa = projeto.getEmpresa().getNomeFantasia();
     }
 }
