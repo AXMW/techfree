@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import lombok.Getter;
 import com.techfree.model.Projeto;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import com.techfree.enums.StatusProjeto;
 
 @Getter
@@ -36,6 +37,8 @@ public class ProjetoResponseDTO {
 
     private String site;
 
+    private LocalDateTime dataCriacao;
+
     public ProjetoResponseDTO(Projeto projeto) {
         this.id = projeto.getId();
         this.titulo = projeto.getTitulo();
@@ -51,5 +54,6 @@ public class ProjetoResponseDTO {
         this.status = projeto.getStatus();
         this.empresa = projeto.getEmpresa().getNomeFantasia();
         this.site = projeto.getEmpresa().getSite();
+        this.dataCriacao = projeto.getDataCriacao();
     }
 }
