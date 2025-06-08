@@ -49,7 +49,7 @@ const projeto = {
 function preencherProjeto(projeto) {
     document.getElementById('projectHeader').innerHTML = `
         <div class="d-flex align-items-center mb-3">
-            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" class="company-logo me-3" alt="Logo da Empresa">
+            <img src="/assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" class="company-logo me-3" alt="Logo da Empresa">
             <div>
                 <h1 class="fw-bold mb-1">${projeto.titulo}</h1>
                 <span class="fs-5 fw-semibold">${projeto.empresa}</span>

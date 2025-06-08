@@ -2,7 +2,9 @@ package com.techfree.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class PaginaController {
@@ -45,8 +47,9 @@ public class PaginaController {
     }
 
     @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
-    @GetMapping("/detalhes-projeto")
-    public String detalhesProjeto() {
+    @GetMapping("/detalhes-projeto/{id}")
+    public String detalhesProjeto(@PathVariable Long id, Model model) {
+        model.addAttribute("projetoId", id);
         return "DetalhesDoProjeto";
     }
 
