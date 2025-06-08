@@ -43,6 +43,29 @@ public class JwtFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
+        } else {
+            // Busca o token no cookie "jwt" caso não exista no header
+            if (request.getCookies() != null) {
+                for (jakarta.servlet.http.Cookie cookie : request.getCookies()) {
+                    if ("jwt".equals(cookie.getName())) {
+                        String token = cookie.getValue();
+                        String email = jwtUtil.getEmailDoToken(token);
+
+                        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+                            if (jwtUtil.tokenValido(token)) {
+                                UsernamePasswordAuthenticationToken auth =
+                                    new UsernamePasswordAuthenticationToken(
+                                        userDetails, null, userDetails.getAuthorities());
+                                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                                SecurityContextHolder.getContext().setAuthentication(auth);
+                            }
+                        }
+                        break; // Para após encontrar o cookie
+                    }
+                }
+            }
         }
 
         filterChain.doFilter(request, response);
