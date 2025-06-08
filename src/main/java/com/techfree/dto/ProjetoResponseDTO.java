@@ -12,29 +12,38 @@ public class ProjetoResponseDTO {
 
     private String titulo;
 
+    private String subtitulo;
+
+    private String grauexperience;
+
     private String descricao;
 
     private String requisitos;
 
     private BigDecimal orcamento;
 
+    private int duracao;
+
     private LocalDate prazoEntrega;
 
-    private String emailPraContato;
+    private LocalDate dataInicio;
 
-    private String area;
+    private String emailPraContato;
 
     private StatusProjeto status;
 
     public ProjetoResponseDTO(Projeto projeto) {
         this.id = projeto.getId();
         this.titulo = projeto.getTitulo();
+        this.subtitulo = projeto.getSubtitulo();
+        this.grauexperience = projeto.getGrauexperience();
         this.descricao = projeto.getDescricao();
         this.requisitos = projeto.getRequisitos();
         this.orcamento = projeto.getOrcamento();
+        this.duracao = projeto.getDuracao();
         this.prazoEntrega = projeto.getPrazoEntrega();
+        this.dataInicio = projeto.getDataInicio();
         this.emailPraContato = projeto.getEmailPraContato();
-        this.area = projeto.getArea();
         this.status = projeto.getStatus();
     }
 }

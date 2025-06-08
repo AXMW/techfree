@@ -1,7 +1,6 @@
 package com.techfree.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,16 +10,18 @@ import lombok.Setter;
 public class ProjetoRequestDTO {
     private String titulo;
 
+    private String subtitulo;
+
+    private String grauexperience;
+
     private String descricao;
 
     private String requisitos;
 
     private BigDecimal orcamento;
 
-    private LocalDate prazoEntrega;
+    private int duracao;
 
     private String emailPraContato;
-
-    private String area;
 
 }

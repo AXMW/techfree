@@ -20,6 +20,7 @@ import com.techfree.dto.ProjetoFiltroDTO;
 import com.techfree.dto.ProjetoRequestDTO;
 import com.techfree.dto.SelecionarFreelancerRequestDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -61,12 +62,13 @@ public class ProjetoService {
 
         Projeto projeto = new Projeto();
         projeto.setTitulo(dto.getTitulo());
+        projeto.setSubtitulo(dto.getSubtitulo());
+        projeto.setGrauexperience(dto.getGrauexperience());
         projeto.setDescricao(dto.getDescricao());
         projeto.setRequisitos(dto.getRequisitos());
         projeto.setOrcamento(dto.getOrcamento());
-        projeto.setPrazoEntrega(dto.getPrazoEntrega());
+        projeto.setDuracao(dto.getDuracao());
         projeto.setEmailPraContato(dto.getEmailPraContato());
-        projeto.setArea(dto.getArea());
         projeto.setStatus(StatusProjeto.ABERTO);
         projeto.setEmpresa(empresa);
 
@@ -87,14 +89,19 @@ public class ProjetoService {
             throw new RuntimeException("Acesso negado");
         }
 
+        if(dto.getDuracao() != 0 && dto.getDuracao() != projeto.getDuracao() && projeto.getStatus() == StatusProjeto.EM_ANDAMENTO) {
+            projeto.setPrazoEntrega(projeto.getDataInicio().plusMonths(dto.getDuracao()));
+        }
+
         if(dto.getTitulo() != null) projeto.setTitulo(dto.getTitulo());
+        if(dto.getSubtitulo() != null) projeto.setSubtitulo(dto.getSubtitulo());
+        if(dto.getGrauexperience() != null) projeto.setGrauexperience(dto.getGrauexperience());
         if(dto.getDescricao() != null) projeto.setDescricao(dto.getDescricao());
         if(dto.getRequisitos() != null) projeto.setRequisitos(dto.getRequisitos());
         if(dto.getOrcamento() != null) projeto.setOrcamento(dto.getOrcamento());
-        if(dto.getPrazoEntrega() != null) projeto.setPrazoEntrega(dto.getPrazoEntrega());
+        if(dto.getDuracao() != 0) projeto.setDuracao(dto.getDuracao());
         if(dto.getEmailPraContato() != null) projeto.setEmailPraContato(dto.getEmailPraContato());
-        if(dto.getArea() != null) projeto.setArea(dto.getArea());
-
+        
         return projetoRepository.save(projeto);
     }
 
@@ -146,6 +153,8 @@ public class ProjetoService {
         candidaturaRepository.save(candidatura);
 
         // 3️⃣ Atualiza o projeto
+        projeto.setDataInicio(LocalDate.now());
+        projeto.setPrazoEntrega(LocalDate.now().plusMonths(projeto.getDuracao()));
         projeto.setStatus(StatusProjeto.EM_ANDAMENTO);
         projeto.setFreelancerSelecionado(freelancer);
         projetoRepository.save(projeto);

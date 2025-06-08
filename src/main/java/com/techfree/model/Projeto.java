@@ -22,6 +22,10 @@ public class Projeto {
 
     private String titulo;
 
+    private String subtitulo;
+
+    private String grauexperience;
+
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
@@ -29,11 +33,13 @@ public class Projeto {
 
     private BigDecimal orcamento;
 
+    private int duracao;
+
     private LocalDate prazoEntrega;
 
-    private String emailPraContato;
+    private LocalDate dataInicio;
 
-    private String area;
+    private String emailPraContato;
 
     private boolean ativo;
 
