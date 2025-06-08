@@ -48,10 +48,60 @@ public class ProjetoController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/listar")
+    @GetMapping("/listar-abertos-empresa")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<List<ProjetoResponseDTO>> listarProjetosAbertos(Authentication auth) {
+        List<Projeto> projetos = projetoService.listarTodosAbertosEmpresa(auth.getName());
+        List<ProjetoResponseDTO> dtos = projetos.stream()
+            .map(ProjetoResponseDTO::new)
+            .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/listar-em-andamento-empresa")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<List<ProjetoResponseDTO>> listarProjetosEmAndamento(Authentication auth) {
+        List<Projeto> projetos = projetoService.listarTodosEmAndamentoEmpresa(auth.getName());
+        List<ProjetoResponseDTO> dtos = projetos.stream()
+            .map(ProjetoResponseDTO::new)
+            .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/listar-concluido-empresa")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<List<ProjetoResponseDTO>> listarProjetosConcluidos(Authentication auth) {
+        List<Projeto> projetos = projetoService.listarTodosConcluidosEmpresa(auth.getName());
+        List<ProjetoResponseDTO> dtos = projetos.stream()
+            .map(ProjetoResponseDTO::new)
+            .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/listar-abertos-freelancer")
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<List<ProjetoResponseDTO>> listarProjetosParaFreelancer(Authentication auth) {
         List<Projeto> projetos = projetoService.listarTodosAbertos();
+        List<ProjetoResponseDTO> dtos = projetos.stream()
+            .map(ProjetoResponseDTO::new)
+            .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/listar-em-andamento-freelancer")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<List<ProjetoResponseDTO>> listarProjetosEmAndamentoParaFreelancer(Authentication auth) {
+        List<Projeto> projetos = projetoService.listarTodosEmAndamentoFreelancer(auth.getName());
+        List<ProjetoResponseDTO> dtos = projetos.stream()
+            .map(ProjetoResponseDTO::new)
+            .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/listar-concluido-freelancer")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<List<ProjetoResponseDTO>> listarProjetosConcluidoParaFreelancer(Authentication auth) {
+        List<Projeto> projetos = projetoService.listarTodosConcluidoFreelancer(auth.getName());
         List<ProjetoResponseDTO> dtos = projetos.stream()
             .map(ProjetoResponseDTO::new)
             .toList();

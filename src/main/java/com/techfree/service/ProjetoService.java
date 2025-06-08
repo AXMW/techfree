@@ -56,6 +56,26 @@ public class ProjetoService {
         return projetoRepository.findByStatus(StatusProjeto.ABERTO);
     }
 
+    public List<Projeto> listarTodosAbertosEmpresa(String emailEmpresa) {
+        return projetoRepository.findByStatusAndEmpresaEmail(StatusProjeto.ABERTO, emailEmpresa);
+    }
+
+    public List<Projeto> listarTodosEmAndamentoEmpresa(String emailEmpresa) {
+        return projetoRepository.findByStatusAndEmpresaEmail(StatusProjeto.EM_ANDAMENTO, emailEmpresa);
+    }
+
+    public List<Projeto> listarTodosConcluidosEmpresa(String emailEmpresa) {
+        return projetoRepository.findByStatusAndEmpresaEmail(StatusProjeto.CONCLUIDO, emailEmpresa);
+    }
+
+    public List<Projeto> listarTodosEmAndamentoFreelancer(String emailFreelancer) {
+        return projetoRepository.findByStatusAndFreelancerSelecionadoEmail(StatusProjeto.EM_ANDAMENTO, emailFreelancer);
+    }
+
+    public List<Projeto> listarTodosConcluidoFreelancer(String emailFreelancer) {
+        return projetoRepository.findByStatusAndFreelancerSelecionadoEmail(StatusProjeto.CONCLUIDO, emailFreelancer);
+    }
+
     public Projeto criarProjeto(ProjetoRequestDTO dto, String emailEmpresa) {
         Empresa empresa = empresaRepository.findByEmail(emailEmpresa)
             .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));

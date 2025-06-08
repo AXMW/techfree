@@ -13,5 +13,6 @@ public interface ProjetoRepository extends JpaRepository<Projeto, Long>, JpaSpec
     List<Projeto> findByAtivo(boolean ativo);
     List<Projeto> findByAtivoAndTitulo(boolean ativo, String titulo);
     List<Projeto> findByStatus(StatusProjeto status);
-    
+    List<Projeto> findByStatusAndEmpresaEmail(StatusProjeto status, String emailEmpresa);
+    List<Projeto> findByStatusAndFreelancerSelecionadoEmail(StatusProjeto status, String freelancerSelecionadoEmail);
 }
