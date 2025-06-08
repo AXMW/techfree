@@ -396,3 +396,46 @@
     text-align: left;
     font-size: small;
 }
+
+.ql-toolbar.ql-snow {
+    background: #22243A !important;
+    border: none;
+}
+.ql-toolbar.ql-snow .ql-picker,
+.ql-toolbar.ql-snow .ql-stroke,
+.ql-toolbar.ql-snow .ql-fill,
+.ql-toolbar.ql-snow .ql-picker-label,
+.ql-toolbar.ql-snow .ql-picker-options,
+.ql-toolbar.ql-snow button {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+}
+.ql-toolbar.ql-snow .ql-picker-options {
+    background: #22243A !important;
+}
+.ql-toolbar.ql-snow .ql-picker-label {
+    color: #FFFFFF !important;
+}
+.ql-toolbar.ql-snow .ql-picker-item {
+    color: #FFFFFF !important;
+}
+.ql-toolbar.ql-snow button:hover,
+.ql-toolbar.ql-snow button:focus,
+.ql-toolbar.ql-snow .ql-picker-label:hover,
+.ql-toolbar.ql-snow .ql-picker-label.ql-active {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+    background: #2a2c4a !important;
+}
+
+#descricaoEditor {
+    height: 300px;
+    max-height: 250px;
+    min-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1.5rem;
+    border-radius: 0.375rem;
+}
+

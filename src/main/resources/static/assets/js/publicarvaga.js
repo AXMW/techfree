@@ -88,18 +88,19 @@ document.getElementById('vagaForm').addEventListener('submit', async function (e
     const grauexperiencia = this.elements.grauexperiencia.value;
     const requisitos = tags.join(',');
     const pagamento = this.elements.pagamento.value;
+    const pagamentoFinal = pagamento.replace(/\./g, '').replace(',', '.').replace(/[^\d.]/g, '');
     const email = this.elements.contato.value;
     const duracao = this.elements.duracao.value;
-    const descricao = this.elements.descricao.value;
+    const descricao = quill.root.innerHTML; // Aqui vem o HTML formatado
 
     // Monte o objeto conforme seu DTO de registro
     const vaga = {
         titulo: titulo,
         subtitulo: subtitulo,
-        grauexperiencia: grauexperiencia,
+        grauexperience: grauexperiencia,
         requisitos: requisitos,
-        pagamento: pagamento,
-        email: email,
+        orcamento: pagamentoFinal,
+        emailPraContato: email,
         duracao: duracao,
         descricao: descricao
         // Adicione outros campos se necessário
@@ -118,16 +119,18 @@ document.getElementById('vagaForm').addEventListener('submit', async function (e
         });
 
         if (response.ok) {
-            const response2 = await fetch('/detalhes-projeto', {
+            const data = await response.json();
+            const IdProjeto = data.id; // Supondo que a resposta contenha o ID do projeto criado
+            const response2 = await fetch('/projetos/' + IdProjeto, {
                 method: 'GET',
                 headers: { 
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token 
-                },
-                body: JSON.stringify({ "id": response.id})
+                }
             });
 
-            response2.ok ? window.location.href = '/detalhes-projeto' : alert('Erro ao redirecionar para os detalhes do projeto.');
+            response2.ok ? window.location.href = '/detalhes-projeto/' +
+            IdProjeto : alert('Erro ao redirecionar para os detalhes do projeto.');
             
         } else {
             const data = await response.json();
@@ -177,6 +180,38 @@ pagamentoInput.addEventListener('input', function () {
     // Formata para moeda brasileira
     valor = (parseInt(valor, 10) / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     this.value = valor;
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    window.quill = new Quill('#descricaoEditor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'font': [] }, { 'size': [] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'align': [] }],
+                ['link'],
+                ['clean']
+            ]
+        }
+    });
+
+    // Sempre que o conteúdo mudar, ajusta os links
+    quill.on('text-change', function() {
+        const links = document.querySelectorAll('#descricaoEditor .ql-editor a');
+        links.forEach(link => {
+            // Se não começa com http:// ou https://, adiciona https://
+            if (!/^https?:\/\//i.test(link.getAttribute('href'))) {
+                link.setAttribute('href', 'https://' + link.getAttribute('href'));
+            }
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+        });
+    });
 });
 
 

@@ -2,11 +2,12 @@
 let projects = [];
 
 async function carregarProjects() {
+    const token = localStorage.getItem('token');
     try {
         const response = await fetch('/projetos', {
             headers: {
                 'Accept': 'application/json',
-                'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcTdwbWlAZW1haWwuY29tIiwiaWF0IjoxNzQ5MjY4MTUzLCJleHAiOjE3NDkzNTQ1NTN9.07jg1M-Fe-eFi8XiSo8JEzlZp-rkhQ6wypINLYQyq70'
+                'Authorization': 'Bearer ' + token
             }
         });
         if (!response.ok) throw new Error('Erro ao buscar projetos');
