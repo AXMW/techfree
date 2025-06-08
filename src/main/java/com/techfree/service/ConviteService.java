@@ -12,6 +12,7 @@ import com.techfree.repository.ConviteRepository;
 import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.ProjetoRepository;
 import com.techfree.enums.StatusConvite;
+import com.techfree.enums.StatusProjeto;
 import com.techfree.enums.TituloDeNotificacao;
 
 
@@ -36,6 +37,10 @@ public class ConviteService {
 
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+
+        if(projeto.getFreelancerSelecionado() != null) {
+            throw new RuntimeException("Este projeto já tem um freelancer selecionado");
+        }
 
         Convite convite = new Convite();
         convite.setFreelancer(freelancer);
@@ -82,6 +87,18 @@ public class ConviteService {
             throw new RuntimeException("Você não tem permissão para aceitar este convite");
         }
 
+        if(convite.getProjeto().getFreelancerSelecionado() != null) {
+            throw new RuntimeException("Este projeto já tem um freelancer selecionado");
+        }
+
+        if(convite.getStatus() == StatusConvite.RECUSADO) {
+            throw new RuntimeException("Você não pode aceitar um convite já recusado");
+        }
+
+        convite.getProjeto().setFreelancerSelecionado(convite.getFreelancer());
+        convite.getProjeto().setStatus(StatusProjeto.EM_ANDAMENTO);
+        projetoRepository.save(convite.getProjeto());
+
         convite.setStatus(StatusConvite.ACEITO);
         conviteRepository.save(convite);
 
@@ -103,6 +120,10 @@ public class ConviteService {
 
         if (!convite.getFreelancer().getEmail().equals(email)) {
             throw new RuntimeException("Você não tem permissão para recusar este convite");
+        }
+
+        if(convite.getStatus() == StatusConvite.ACEITO) {
+            throw new RuntimeException("Você não pode recusar um convite já aceito");
         }
 
         convite.setStatus(StatusConvite.RECUSADO);
