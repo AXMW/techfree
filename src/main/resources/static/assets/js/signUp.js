@@ -317,7 +317,7 @@ document.getElementById('formEmpresa').addEventListener('submit', async function
                 if (data.token) {
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('tipoUsuario', data.tipoUsuario); // Adicione esta linha
-                    document.cookie = `jwt=${data.token}; path=/; max-age=3600;`;
+                    document.cookie = `jwt=${data.token}; path=/; max-age=86400;`;
                 }
                 window.location.href = '/dashboard';
             } else {

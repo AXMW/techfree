@@ -28,7 +28,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             if (data.token) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('tipoUsuario', data.tipoUsuario);
-                document.cookie = `jwt=${data.token}; path=/; max-age=3600;`;
+                document.cookie = `jwt=${data.token}; path=/; max-age=86400;`;
             }
             // Redirecione para a dashboard ou página inicial
             window.location.href = '/dashboard';
