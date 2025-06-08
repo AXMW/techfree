@@ -239,19 +239,94 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Ajusta botões conforme tipo de usuário
         const btnEditar = document.querySelector('.dropdown-profile-header .profile-edit');
-        const minhaConta = document.querySelector('.dropdown-menu .dropdown-item[href="/minha-conta.html"]');
+        const minhaConta = document.getElementById('minhaContaLink');
         if (btnEditar) {
             if (tipoUsuario === 'EMPRESA') {
                 btnEditar.onclick = () => window.location.href = 'pagina-profile-empresa-editar';
                 btnEditar.textContent = 'Editar perfil empresa';
-                if (minhaConta) minhaConta.href = 'pagina-profile-empresa1';
+                if (minhaConta) {
+                    minhaConta.onclick = (e) => {
+                        e.preventDefault();
+                        window.location.href = 'pagina-profile-empresa1';
+                    };
+                }
             } else {
                 btnEditar.onclick = () => window.location.href = 'pagina-profile-editar';
                 btnEditar.textContent = 'Editar perfil';
-                if (minhaConta) minhaConta.href = 'pagina-profile1';
+                if (minhaConta) {
+                    minhaConta.onclick = (e) => {
+                        e.preventDefault();
+                        window.location.href = 'pagina-profile1';
+                    };
+                }
             }
         }
     } catch (e) {
         // Se der erro, mantém padrão
     }
 });
+
+// Seleciona o botão correto na navbar conforme a URL
+document.addEventListener('DOMContentLoaded', function () {
+    const path = window.location.pathname;
+    const navLinks = document.querySelectorAll('#mainNav .navbar-nav .nav-link');
+    let algumAtivo = false;
+
+    navLinks.forEach(link => {
+        // Remove qualquer active antigo
+        link.classList.remove('active');
+        // Marca como ativo se o href bate com o path
+        if (link.getAttribute('href') === path) {
+            link.classList.add('active');
+            algumAtivo = true;
+        }
+    });
+
+    // Se nenhum link bateu, nenhum fica ativo
+    if (!algumAtivo) {
+        navLinks.forEach(link => link.classList.remove('active'));
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const logoutLink = document.querySelector('.dropdown-item[href="/login"], .dropdown-item[href="login"], .dropdown-item[href="login.html"]');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            localStorage.clear();
+            window.location.href = '/login';
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const tipoUsuario = localStorage.getItem('tipoUsuario');
+    const projetoDropdownMenu = document.getElementById('projetoDropdownMenu');
+    if (!projetoDropdownMenu) return;
+
+    projetoDropdownMenu.innerHTML = ''; // Limpa antes
+
+    if (tipoUsuario === 'EMPRESA') {
+        // Empresa: Criar Vaga e Gerenciar Projetos
+        projetoDropdownMenu.innerHTML = `
+            <li><a class="dropdown-item" href="/publicar-vaga">Criar Vaga</a></li>
+            <li><a class="dropdown-item" href="/gerenciar-projetos">Gerenciar Projetos</a></li>
+        `;
+    } else {
+        // Freelancer ou visitante: Procurar Vaga e Gerenciar Projetos
+        projetoDropdownMenu.innerHTML = `
+            <li><a class="dropdown-item" href="/listagem-projetos-vagas">Procurar Vaga</a></li>
+            <li><a class="dropdown-item" href="/gerenciar-projetos">Gerenciar Projetos</a></li>
+        `;
+    }
+});
+
+const projetoDropdown = document.getElementById('projetoDropdown');
+if (projetoDropdown) {
+    projetoDropdown.addEventListener('show.bs.dropdown', function () {
+        projetoDropdown.classList.add('active');
+    });
+    projetoDropdown.addEventListener('hide.bs.dropdown', function () {
+        projetoDropdown.classList.remove('active');
+    });
+}

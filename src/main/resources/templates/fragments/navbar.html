@@ -35,7 +35,14 @@
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link" href="/inicio">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/listagem-projetos-vagas">Projeto</a></li>
+                    <li class="nav-item dropdown" id="navProjetoDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="projetoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Projeto
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="projetoDropdown" id="projetoDropdownMenu">
+                            <!-- Itens serão inseridos via JS -->
+                        </ul>
+                    </li>
                     <li class="nav-item"><a class="nav-link active" href="/faq">FAQ</a></li>
                 </ul>
                 <!-- Perfil -->
@@ -55,12 +62,12 @@
                                 </div>
                             </div>
                         </li>
-                        <li><a class="dropdown-item" href="/minha-conta.html">Minha conta</a></li>
+                        <li><a class="dropdown-item" id="minhaContaLink">Minha Conta</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
                         <li><a class="dropdown-item" href="/configuracoes-de-perfil">Configurações</a></li>
-                        <li><a class="dropdown-item" href="/">Deslogar</a></li>
+                        <li><a class="dropdown-item" href="/login">Deslogar</a></li>
                     </ul>
                     <!-- Notificações -->
                     <div class="dropdown ms-2">
