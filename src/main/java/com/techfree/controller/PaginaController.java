@@ -38,76 +38,91 @@ public class PaginaController {
         return "FAQ";
     }
 
+    @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
     @GetMapping("/andamento-projeto")
     public String andamentoProjeto() {
         return "AndamentoProjeto";
     }
 
+    @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
     @GetMapping("/detalhes-projeto")
     public String detalhesProjeto() {
         return "DetalhesDoProjeto";
     }
 
+    @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
     @GetMapping("/gerenciar-projetos")
     public String gerenciarProjetos() {
         return "GerenciarProjetos";
     }
 
+    @PreAuthorize("hasRole('FREELANCER')")
     @GetMapping("/listagem-projetos-vagas")
     public String listagemProjetosVagas() {
         return "ListagemDeProjetosVagas";
     }
 
+    @PreAuthorize("hasRole('FREELANCER')")
     @GetMapping("/pagina-profile1")
     public String paginaProfile1() {
         return "PaginaDeProfile1";
     }
 
+    @PreAuthorize("hasRole('EMPRESA')")
     @GetMapping("/pagina-profile2")
     public String paginaProfile2() {
         return "PaginaDeProfile2";
     }
 
+    @PreAuthorize("hasRole('FREELANCER')")
     @GetMapping("/pagina-profile-editar")
     public String paginaProfileEditar() {
         return "PaginaDeProfileEditar";
     }
 
+    @PreAuthorize("hasRole('EMPRESA')")
     @GetMapping("/pagina-profile-empresa1")
     public String paginaProfileEmpresa1() {
         return "PaginaDeProfileEmpresa1";
     }
 
+    @PreAuthorize("hasRole('FREELANCER')")
     @GetMapping("/pagina-profile-empresa2")
     public String paginaProfileEmpresa2() {
         return "PaginaDeProfileEmpresa2";
     }
 
+    @PreAuthorize("hasRole('EMPRESA')")
     @GetMapping("/pagina-profile-empresa-editar")
     public String paginaProfileEmpresaEditar() {
         return "PaginaDeProfileEmpresaEditar";
     }
 
+    @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
     @GetMapping("/configuracoes-de-perfil")
     public String configuracoesDePerfil() {
         return "ConfiguracoesDePerfil";
     }
 
+    @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
     @GetMapping("/feedback")
     public String feedback() {
         return "feedback";
     }
 
+    @PreAuthorize("hasRole('EMPRESA')")
     @GetMapping("/editar-vaga")
     public String editarVaga() {
         return "EditarVaga";
     }
 
+    @PreAuthorize("hasRole('EMPRESA')")
     @GetMapping("/lista-candidatos")
     public String listaCandidatos() {
         return "ListaDeCandidatos";
     }
 
+    @PreAuthorize("hasRole('EMPRESA')")
     @GetMapping("/publicar-vaga")
     public String publicarVaga() {
         return "publicarVaga";

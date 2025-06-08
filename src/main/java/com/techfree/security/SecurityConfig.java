@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .requestMatchers("/avaliacoes/empresa/**").hasRole("FREELANCER")
                 .requestMatchers("/projetos/selecionar-freelancer").hasRole("EMPRESA")
                 .requestMatchers("/roles/**").permitAll()
-                .requestMatchers("/dashboard").hasRole("FREELANCER")
+                
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
