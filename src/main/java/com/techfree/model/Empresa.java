@@ -27,7 +27,13 @@ public class Empresa {
 
     private String site;
 
+    private String linkedin;
+
     private boolean ativo;
+
+    private String avatar;
+
+    private int flags;
 
     @Column(unique = true, nullable = false)
     private String cnpj;

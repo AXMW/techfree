@@ -1,4 +1,5 @@
 package com.techfree.repository;
+import com.techfree.model.Empresa;
 import com.techfree.model.Projeto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -15,4 +16,5 @@ public interface ProjetoRepository extends JpaRepository<Projeto, Long>, JpaSpec
     List<Projeto> findByStatus(StatusProjeto status);
     List<Projeto> findByStatusAndEmpresaEmail(StatusProjeto status, String emailEmpresa);
     List<Projeto> findByStatusAndFreelancerSelecionadoEmail(StatusProjeto status, String freelancerSelecionadoEmail);
+    List<Projeto> findByEmpresa(Empresa empresa);
 }
