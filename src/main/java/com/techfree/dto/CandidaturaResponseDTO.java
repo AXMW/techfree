@@ -2,6 +2,7 @@ package com.techfree.dto;
 import com.techfree.enums.StatusCandidatura;
 import com.techfree.model.Candidatura;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 
 @Getter
@@ -15,6 +16,7 @@ public class CandidaturaResponseDTO {
     private String freelancerNome;
     private String frelancerTelefone;
     private String freelancerAreaDeAtuacao;
+    private List<String> feelancerHabilidades;
     private String freelancerEmail;
 
     public CandidaturaResponseDTO(Candidatura c) {
@@ -27,6 +29,7 @@ public class CandidaturaResponseDTO {
         this.freelancerNome = c.getFreelancer().getNome();
         this.frelancerTelefone = c.getFreelancer().getTelefone();
         this.freelancerAreaDeAtuacao = c.getFreelancer().getAreaAtuacao();
+        this.feelancerHabilidades = c.getFreelancer().getHabilidades();
         this.freelancerEmail = c.getFreelancer().getEmail();
     }
 }
