@@ -74,11 +74,11 @@ public class ProjetoService {
     }
 
     public List<Projeto> listarTodosEmAndamentoFreelancer(String emailFreelancer) {
-        return projetoRepository.findByStatusAndFreelancerSelecionadoEmail(StatusProjeto.EM_ANDAMENTO, emailFreelancer);
+        return projetoRepository.findByStatusAndFreelancerSelecionadoUsuarioEmail(StatusProjeto.EM_ANDAMENTO, emailFreelancer);
     }
 
     public List<Projeto> listarTodosConcluidoFreelancer(String emailFreelancer) {
-        return projetoRepository.findByStatusAndFreelancerSelecionadoEmail(StatusProjeto.CONCLUIDO, emailFreelancer);
+        return projetoRepository.findByStatusAndFreelancerSelecionadoUsuarioEmail(StatusProjeto.CONCLUIDO, emailFreelancer);
     }
 
     public Projeto criarProjeto(ProjetoRequestDTO dto, String emailEmpresa) {

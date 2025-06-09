@@ -12,6 +12,6 @@ public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
     List<Freelancer> findByEnabledAndRoles(boolean enabled, String role);
     List<Freelancer> findByRoles(String role);
     List<Freelancer> findByRolesAndEnabled(String role, boolean enabled);
-    List<Freelancer> findByRolesAndEnabledAndEmail(String role, boolean enabled, String email);
+    List<Freelancer> findByRolesAndEnabledAndUsuario(String role, boolean enabled, Usuario usuario);
 
 }
