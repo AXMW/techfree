@@ -12,12 +12,49 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,700,900&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/assets/css/genericstyles.css">
-    <!-- Navbar fragment -->
     <link rel="stylesheet" href="/assets/css/genericstyles3.css">
+    <style>
+        .candidate-card {
+            background: #23243a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .candidate-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #00bcd4;
+        }
+        .candidate-info {
+            flex: 1 1 auto;
+        }
+        .candidate-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 140px;
+        }
+        @media (max-width: 768px) {
+            .candidate-card {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .candidate-actions {
+                flex-direction: row;
+                min-width: unset;
+                justify-content: flex-start;
+            }
+        }
+    </style>
 </head>
 
-<body>
-    <!-- Navbar fragment -->
+<body th:attr="data-projeto-id=${projetoId}">
     <div th:replace="fragments/navbar :: navbar"></div>
 
     <main>
@@ -28,67 +65,18 @@
                     <div class="fs-5 mb-1">Veja e gerencie os candidatos aplicados para este projeto</div>
                 </div>
                 <div class="search-bar mb-4">
-                    <form class="row g-2 align-items-center">
+                    <form class="row g-2 align-items-center" id="searchForm">
                         <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Buscar candidato por nome, habilidade, etc.">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Buscar candidato por nome, habilidade, etc.">
                         </div>
                         <div class="col-md-3 text-end">
                             <button type="submit" class="btn btn-info"><i class="bi bi-search"></i> Buscar</button>
                         </div>
                     </form>
                 </div>
-                <!-- Lista de candidatos -->
-                <div id="candidates-list">
-                    <div class="candidate-card">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="candidate-avatar" alt="Avatar">
-                        <div class="candidate-info">
-                            <h5>Lucas Silva</h5>
-                            <span class="badge bg-info">React</span>
-                            <span class="badge bg-info">Node.js</span>
-                            <span class="badge bg-info">TypeScript</span>
-                            <div class="small mt-1"><i class="bi bi-envelope"></i> lucas@email.com</div>
-                            <div class="small"><i class="bi bi-telephone"></i> (11) 91234-5678</div>
-                        </div>
-                        <div class="candidate-actions">
-                            <button class="btn btn-success btn-sm"><i class="bi bi-check-circle"></i> Aprovar</button>
-                            <button class="btn btn-danger btn-sm"><i class="bi bi-x-circle"></i> Rejeitar</button>
-                            <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Ver Perfil</a>
-                        </div>
-                    </div>
-                    <div class="candidate-card">
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="candidate-avatar" alt="Avatar">
-                        <div class="candidate-info">
-                            <h5>Maria Oliveira</h5>
-                            <span class="badge bg-info">Python</span>
-                            <span class="badge bg-info">Django</span>
-                            <span class="badge bg-info">SQL</span>
-                            <div class="small mt-1"><i class="bi bi-envelope"></i> maria@email.com</div>
-                            <div class="small"><i class="bi bi-telephone"></i> (11) 99876-5432</div>
-                        </div>
-                        <div class="candidate-actions">
-                            <button class="btn btn-success btn-sm"><i class="bi bi-check-circle"></i> Aprovar</button>
-                            <button class="btn btn-danger btn-sm"><i class="bi bi-x-circle"></i> Rejeitar</button>
-                            <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Ver Perfil</a>
-                        </div>
-                    </div>
-                    <div class="candidate-card">
-                        <img src="https://randomuser.me/api/portraits/men/65.jpg" class="candidate-avatar" alt="Avatar">
-                        <div class="candidate-info">
-                            <h5>João Souza</h5>
-                            <span class="badge bg-info">Java</span>
-                            <span class="badge bg-info">Spring</span>
-                            <span class="badge bg-info">AWS</span>
-                            <div class="small mt-1"><i class="bi bi-envelope"></i> joao@email.com</div>
-                            <div class="small"><i class="bi bi-telephone"></i> (11) 93456-7890</div>
-                        </div>
-                        <div class="candidate-actions">
-                            <button class="btn btn-success btn-sm"><i class="bi bi-check-circle"></i> Aprovar</button>
-                            <button class="btn btn-danger btn-sm"><i class="bi bi-x-circle"></i> Rejeitar</button>
-                            <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Ver Perfil</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Paginação moderna -->
+                <!-- Lista de candidatos preenchida via JS -->
+                <div id="candidates-list"></div>
+                <!-- Paginação moderna (opcional, pode ser implementada via JS) -->
                 <nav aria-label="Paginação de candidatos" class="mt-4">
                     <ul class="pagination">
                         <li class="page-item disabled">
@@ -146,8 +134,7 @@
         </div>
     </footer>
     <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-    
-    <!-- Navbar fragment -->
-     <script src="/assets/js/navbar.js"></script>
+    <script src="/assets/js/navbar.js"></script>
+    <script src="/assets/js/listadecandidatos.js"></script>
 </body>
 </html>

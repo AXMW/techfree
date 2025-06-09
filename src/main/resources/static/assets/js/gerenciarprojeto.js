@@ -13,14 +13,33 @@ async function carregarProjects() {
         if (!response.ok) throw new Error('Erro ao buscar projetos');
         const data = await response.json();
         // Adapte conforme o formato retornado pela API
-        projects = data.map(p => ({
-            title: p.titulo,
-            status: 'aberto', // ajuste conforme o campo correto
-            tech: p.requisitos ? p.requisitos.split(',') : [],
-            date: p.prazoEntrega != undefined ? convertDate(p.prazoEntrega) : "A definir",
-            desc: p.descricao,
-            id: p.id
-        }));
+        projects = data.map(p => {
+            // Normaliza o status vindo da API
+            let status;
+            switch ((p.status || '').toUpperCase()) {
+                case 'ABERTO':
+                    status = 'aberto';
+                    break;
+                case 'EM_ANDAMENTO':
+                case 'REVISAO':
+                    status = 'andamento';
+                    break;
+                case 'CONCLUIDO':
+                case 'CANCELADO':
+                    status = 'fechado';
+                    break;
+                default:
+                    status = (p.status || '').toLowerCase();
+            }
+            return {
+                title: p.titulo,
+                status: status,
+                tech: p.requisitos ? p.requisitos.split(',') : [],
+                date: p.prazoEntrega != undefined ? convertDate(p.prazoEntrega) : "A definir",
+                desc: p.descricao,
+                id: p.id
+            };
+        });
         renderProjects();
     } catch (e) {
         console.error(e);
@@ -52,7 +71,7 @@ function renderProjects() {
         const card = document.createElement('div');
         card.className = 'project-card';
 
-        // Botões padrão (adiciona data-id no botão Visualizar)
+        // Botões padrão (adiciona data-id no botão Visualizar e Ver candidatos)
         let actions = `
             <button class="btn btn-outline-light btn-sm visualizar-btn" data-id="${p.id}">
                 <i class="bi bi-eye"></i> Visualizar
@@ -72,9 +91,9 @@ function renderProjects() {
             actions += `<button class="btn btn-success btn-sm"><i class="bi bi-download"></i> Baixar certificado</button>`;
         }
 
-        // Se for oportunidade, mostra ver candidatos
+        // Se for oportunidade, mostra ver candidatos (adiciona data-id)
         if (p.status === 'aberto') {
-            actions += `<button class="btn btn-outline-warning btn-sm"><i class="bi bi-people"></i> Ver candidatos</button>`;
+            actions += `<button class="btn btn-outline-warning btn-sm ver-candidatos-btn" data-id="${p.id}"><i class="bi bi-people"></i> Ver candidatos</button>`;
         }
 
         card.innerHTML = `
@@ -104,6 +123,14 @@ function renderProjects() {
         btn.onclick = function () {
             const id = this.getAttribute('data-id');
             window.location.href = `/detalhes-projeto/${id}`;
+        };
+    });
+
+    // Adiciona o evento de clique para todos os botões "Ver candidatos"
+    document.querySelectorAll('.ver-candidatos-btn').forEach(btn => {
+        btn.onclick = function () {
+            const id = this.getAttribute('data-id');
+            window.location.href = `/lista-candidatos/${id}`;
         };
     });
 }
