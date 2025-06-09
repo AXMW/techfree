@@ -5,9 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+
 import com.techfree.repository.ProjetoRepository;
 import com.techfree.model.Projeto;
 
@@ -69,7 +72,10 @@ public class PaginaController {
             projeto.getEmpresa().getUsuario().getEmail().equals(emailUsuario);
 
         if (!isFreelancerDoProjeto && !isEmpresaDoProjeto) {
-            return "redirect:/acesso-negado"; // ou página de acesso negado
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN,
+                "Acesso negado: você não tem permissão para acessar este projeto."
+            );
         }
 
         model.addAttribute("projetoId", id);
