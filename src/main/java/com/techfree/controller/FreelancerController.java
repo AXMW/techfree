@@ -3,6 +3,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 
 import com.techfree.dto.FreelancerUpdateDTO;
+import com.techfree.dto.FreelancerVisualizacaoResponseDTO;
 import com.techfree.model.Freelancer;
 import com.techfree.repository.FreelancerRepository;
 
@@ -90,9 +92,12 @@ public class FreelancerController {
     // EMPRESA: ver o perfil do freelancer por ID
     @GetMapping("/perfil/{id}")
     @PreAuthorize("hasRole('EMPRESA')")
-    public ResponseEntity<Freelancer> verPerfilPorId(Long id) {
+    public ResponseEntity<FreelancerVisualizacaoResponseDTO> verPerfilPorId(@PathVariable Long id) {
         Optional<Freelancer> freelancer = freelancerRepository.findById(id);
-        return freelancer.map(ResponseEntity::ok)
-                         .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+        if (freelancer.isEmpty()) {
+            throw new RuntimeException("Freelancer não encontrado com ID: " + id);
+        }
+        FreelancerVisualizacaoResponseDTO response = new FreelancerVisualizacaoResponseDTO(freelancer.get());
+        return ResponseEntity.ok(response);
     }
 }

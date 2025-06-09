@@ -11,6 +11,12 @@ public class CandidaturaResponseDTO {
     private String mensagem;
     private LocalDateTime data;
     private StatusCandidatura status;
+    private Long freelancerId;
+    private String freelancerNome;
+    private String frelancerTelefone;
+    private String freelancerAreaDeAtuacao;
+    private String freelancerTecnologias;
+    private String freelancerEmail;
 
     public CandidaturaResponseDTO(Candidatura c) {
         this.id = c.getId();
@@ -18,5 +24,11 @@ public class CandidaturaResponseDTO {
         this.mensagem = c.getMensagem();
         this.data = c.getDataCandidatura();
         this.status = c.getStatus();
+        this.freelancerId = c.getFreelancer().getId();
+        this.freelancerNome = c.getFreelancer().getNome();
+        this.frelancerTelefone = c.getFreelancer().getTelefone();
+        this.freelancerAreaDeAtuacao = c.getFreelancer().getAreaAtuacao();
+        this.freelancerTecnologias = c.getFreelancer().getTecnologias();
+        this.freelancerEmail = c.getFreelancer().getEmail();
     }
 }

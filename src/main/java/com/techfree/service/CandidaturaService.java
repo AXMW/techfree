@@ -39,6 +39,10 @@ public class CandidaturaService {
 
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+        
+        if(candidaturaRepository.existsByFreelancerIdAndProjetoId(freelancer.getId(), projeto.getId())) {
+            throw new RuntimeException("Você já se candidatou a este projeto");
+        }
 
         Candidatura candidatura = new Candidatura();
         candidatura.setFreelancer(freelancer);
