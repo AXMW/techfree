@@ -14,7 +14,9 @@ import com.techfree.enums.StatusProjeto;
 import com.techfree.enums.TituloDeNotificacao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.techfree.dto.ProjetoFiltroDTO;
 import com.techfree.dto.ProjetoRequestDTO;
@@ -78,7 +80,10 @@ public class ProjetoService {
 
     public Projeto criarProjeto(ProjetoRequestDTO dto, String emailEmpresa) {
         Empresa empresa = empresaRepository.findByEmail(emailEmpresa)
-            .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Empresa não encontrada"
+                ));
 
         Projeto projeto = new Projeto();
         projeto.setTitulo(dto.getTitulo());
@@ -97,16 +102,25 @@ public class ProjetoService {
 
     public List<Projeto> listarPorEmpresa(String emailEmpresa) {
         Empresa empresa = empresaRepository.findByEmail(emailEmpresa)
-            .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Empresa não encontrada"
+                ));
         return projetoRepository.findByEmpresaId(empresa.getId());
     }
 
     public Projeto atualizarProjeto(Long id, ProjetoRequestDTO dto, String emailEmpresa) {
         Projeto projeto = projetoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
 
         if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
-            throw new RuntimeException("Acesso negado");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Acesso negado"
+                );
         }
 
         if(dto.getDuracao() != 0 && dto.getDuracao() != projeto.getDuracao() && projeto.getStatus() == StatusProjeto.EM_ANDAMENTO) {
@@ -127,10 +141,16 @@ public class ProjetoService {
 
     public Projeto atualizarStatusProjeto(Long id, String emailEmpresa) {
         Projeto projeto = projetoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
 
         if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
-            throw new RuntimeException("Acesso negado");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Acesso negado"
+                );
         }
 
         try {
@@ -138,16 +158,25 @@ public class ProjetoService {
             projetoRepository.save(projeto);
             return projeto;
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Status inválido");
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "Status inválido"
+                );
         }
     }
 
     public void deletarProjeto(Long id, String emailEmpresa) {
         Projeto projeto = projetoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
 
         if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
-            throw new RuntimeException("Acesso negado");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403 
+                "Acesso negado"
+                );
         }
 
         projetoRepository.delete(projeto);
@@ -155,18 +184,30 @@ public class ProjetoService {
 
     public void selecionarFreelancer(String emailEmpresa, SelecionarFreelancerRequestDTO dto) {
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
-            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
 
         if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
-            throw new RuntimeException("Você não tem permissão para selecionar freelancer nesse projeto.");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Você não tem permissão para selecionar freelancer nesse projeto."
+                );
         }
 
         Freelancer freelancer = freelancerRepository.findById(dto.getFreelancerId())
-                .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, // 404
+                    "Freelancer não encontrado"
+                    ));
 
         // 1️⃣ Verifica se esse freelancer se candidatou ao projeto
         Candidatura candidatura = candidaturaRepository.findByProjetoAndFreelancer(projeto, freelancer)
-                .orElseThrow(() -> new RuntimeException("Esse freelancer não se candidatou ao projeto."));
+                .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, // 400
+                    "Esse freelancer não se candidatou ao projeto."
+                    ));
 
         // 2️⃣ Atualiza status da candidatura para "Selecionado"
         candidatura.setStatus(StatusCandidatura.ACEITA);
@@ -197,7 +238,10 @@ public class ProjetoService {
 
     public Projeto obterPorId(Long id, String email) {
         Projeto projeto = projetoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
 
         //VALIDAÇÃO BURRA
         //if (!projeto.getEmpresa().getUsuario().getEmail().equals(email) && 

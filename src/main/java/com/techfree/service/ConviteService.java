@@ -14,6 +14,8 @@ import com.techfree.repository.ProjetoRepository;
 import com.techfree.enums.StatusConvite;
 import com.techfree.enums.StatusProjeto;
 import com.techfree.enums.TituloDeNotificacao;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 
 @Service
@@ -33,13 +35,22 @@ public class ConviteService {
 
     public Convite criarConvite(ConviteRequestDTO dto, String emailFreelancer) {
         Freelancer freelancer = freelancerRepository.findByEmail(emailFreelancer)
-            .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Freelancer não encontrado"
+                ));
 
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
-            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
 
         if(projeto.getFreelancerSelecionado() != null) {
-            throw new RuntimeException("Este projeto já tem um freelancer selecionado");
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT, // 409
+                "Este projeto já tem um freelancer selecionado"
+                );
         }
 
         Convite convite = new Convite();
@@ -54,14 +65,20 @@ public class ConviteService {
 
     public List<Convite> listarPorFreelancer(String email) {
         Freelancer freelancer = freelancerRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Freelancer não encontrado"
+                ));
         return conviteRepository.findByFreelancerId(freelancer.getId());
     }
 
     public List<Convite> listarPorEmpresa(String emailEmpresa) {
         List<Projeto> projetos = projetoRepository.findByEmpresaEmail(emailEmpresa);
         if (projetos == null || projetos.isEmpty()) {
-            throw new RuntimeException("Empresa não encontrada");
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Empresa não encontrada"
+                );
         }
         return projetos.stream()
              .flatMap(projeto -> conviteRepository.findByProjetoId(projeto.getId()).stream())
@@ -70,10 +87,16 @@ public class ConviteService {
 
     public void deletar(Long id, String email) {
         Convite convite = conviteRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Convite não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Convite não encontrado"
+                ));
 
         if (!convite.getProjeto().getEmpresa().getEmail().equals(email)) {
-            throw new RuntimeException("Você não tem permissão para deletar este convite");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Você não tem permissão para deletar este convite"
+                );
         }
 
         conviteRepository.delete(convite);
@@ -81,18 +104,30 @@ public class ConviteService {
 
     public Convite aceitarConvite(Long id, String email) {
         Convite convite = conviteRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Convite não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Convite não encontrado"
+                ));
 
         if (!convite.getFreelancer().getEmail().equals(email)) {
-            throw new RuntimeException("Você não tem permissão para aceitar este convite");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Você não tem permissão para aceitar este convite"
+                );
         }
 
         if(convite.getProjeto().getFreelancerSelecionado() != null) {
-            throw new RuntimeException("Este projeto já tem um freelancer selecionado");
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT, // 409
+                "Este projeto já tem um freelancer selecionado"
+                );
         }
 
         if(convite.getStatus() == StatusConvite.RECUSADO) {
-            throw new RuntimeException("Você não pode aceitar um convite já recusado");
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "Você não pode aceitar um convite já recusado"
+                );
         }
 
         convite.getProjeto().setFreelancerSelecionado(convite.getFreelancer());
@@ -116,14 +151,23 @@ public class ConviteService {
 
     public Convite recusarConvite(Long id, String email) {
         Convite convite = conviteRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Convite não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Convite não encontrado"
+                ));
 
         if (!convite.getFreelancer().getEmail().equals(email)) {
-            throw new RuntimeException("Você não tem permissão para recusar este convite");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Você não tem permissão para recusar este convite"
+                );
         }
 
         if(convite.getStatus() == StatusConvite.ACEITO) {
-            throw new RuntimeException("Você não pode recusar um convite já aceito");
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "Você não pode recusar um convite já aceito"
+                );
         }
 
         convite.setStatus(StatusConvite.RECUSADO);
@@ -142,10 +186,16 @@ public class ConviteService {
 
     public List<Convite> listarPorProjeto(Long projetoId, String emailEmpresa) {
         Projeto projeto = projetoRepository.findById(projetoId)
-            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
 
         if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
-            throw new RuntimeException("Você não é dono deste projeto");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Você não é dono deste projeto"
+                );
         }
 
         return conviteRepository.findByProjetoId(projetoId);

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 import java.util.List;
 
-import com.techfree.dto.AtualizarStatusCandidaturaDTO;
 import com.techfree.dto.CandidaturaRequestDTO;
 import com.techfree.dto.CandidaturaResponseDTO;
 import com.techfree.service.CandidaturaService;
@@ -68,14 +67,13 @@ public class CandidaturaController {
     }
 
     // EMPRESA: aceitar ou recusar candidatura
-    @PutMapping("/{id}/status")
+    @PutMapping("/{id}/recusar")
     @PreAuthorize("hasRole('EMPRESA')")
-    public ResponseEntity<Void> atualizarStatus(
+    public ResponseEntity<Void> recusarCandidatura(
         @PathVariable Long id,
-        @RequestBody AtualizarStatusCandidaturaDTO dto,
         Authentication auth) {
 
-        candidaturaService.atualizarStatus(id, dto.getStatus(), auth.getName());
+        candidaturaService.recusarCandidatura(id, auth.getName());
         return ResponseEntity.noContent().build();
     }
 
