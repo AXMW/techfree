@@ -52,9 +52,11 @@ function renderProjects() {
         const card = document.createElement('div');
         card.className = 'project-card';
 
-        // Botões padrão
+        // Botões padrão (adiciona data-id no botão Visualizar)
         let actions = `
-            <button class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Visualizar</button>
+            <button class="btn btn-outline-light btn-sm visualizar-btn" data-id="${p.id}">
+                <i class="bi bi-eye"></i> Visualizar
+            </button>
         `;
 
         // Se não for fechado, mostra editar e desativar
@@ -95,6 +97,14 @@ function renderProjects() {
         if (p.status === 'aberto') document.getElementById('list-oportunidades').appendChild(card.cloneNode(true));
         if (p.status === 'andamento') document.getElementById('list-andamento').appendChild(card.cloneNode(true));
         if (p.status === 'fechado') document.getElementById('list-fechados').appendChild(card.cloneNode(true));
+    });
+
+    // Adiciona o evento de clique para todos os botões "Visualizar"
+    document.querySelectorAll('.visualizar-btn').forEach(btn => {
+        btn.onclick = function () {
+            const id = this.getAttribute('data-id');
+            window.location.href = `/detalhes-projeto/${id}`;
+        };
     });
 }
 
