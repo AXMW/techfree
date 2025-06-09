@@ -10,11 +10,11 @@ import com.techfree.enums.StatusProjeto;
 public interface ProjetoRepository extends JpaRepository<Projeto, Long>, JpaSpecificationExecutor<Projeto> {
     Optional<Projeto> findByTitulo(String titulo);
     List<Projeto> findByEmpresaId(Long id);
-    List<Projeto> findByEmpresaEmail(String email);
+    List<Projeto> findByEmpresaUsuarioEmail(String empresaUsuarioEmail);
     List<Projeto> findByAtivo(boolean ativo);
     List<Projeto> findByAtivoAndTitulo(boolean ativo, String titulo);
     List<Projeto> findByStatus(StatusProjeto status);
-    List<Projeto> findByStatusAndEmpresaEmail(StatusProjeto status, String emailEmpresa);
+    List<Projeto> findByStatusAndEmpresaUsuarioEmail(StatusProjeto status, String EmpresaUsuarioEmail);
     List<Projeto> findByStatusAndFreelancerSelecionadoUsuarioEmail(StatusProjeto status, String freelancerSelecionadoUsuarioEmail);
     List<Projeto> findByEmpresa(Empresa empresa);
 }

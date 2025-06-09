@@ -21,6 +21,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.techfree.dto.ProjetoFiltroDTO;
 import com.techfree.dto.ProjetoRequestDTO;
 import com.techfree.dto.SelecionarFreelancerRequestDTO;
+import com.techfree.model.Usuario;
+import com.techfree.repository.UsuarioRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,6 +48,9 @@ public class ProjetoService {
     @Autowired
     private CandidaturaService candidaturaService;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     public ProjetoService(ProjetoRepository projetoRepository) {
         this.projetoRepository = projetoRepository;
     }
@@ -62,15 +67,15 @@ public class ProjetoService {
     }
 
     public List<Projeto> listarTodosAbertosEmpresa(String emailEmpresa) {
-        return projetoRepository.findByStatusAndEmpresaEmail(StatusProjeto.ABERTO, emailEmpresa);
+        return projetoRepository.findByStatusAndEmpresaUsuarioEmail(StatusProjeto.ABERTO, emailEmpresa);
     }
 
     public List<Projeto> listarTodosEmAndamentoEmpresa(String emailEmpresa) {
-        return projetoRepository.findByStatusAndEmpresaEmail(StatusProjeto.EM_ANDAMENTO, emailEmpresa);
+        return projetoRepository.findByStatusAndEmpresaUsuarioEmail(StatusProjeto.EM_ANDAMENTO, emailEmpresa);
     }
 
     public List<Projeto> listarTodosConcluidosEmpresa(String emailEmpresa) {
-        return projetoRepository.findByStatusAndEmpresaEmail(StatusProjeto.CONCLUIDO, emailEmpresa);
+        return projetoRepository.findByStatusAndEmpresaUsuarioEmail(StatusProjeto.CONCLUIDO, emailEmpresa);
     }
 
     public List<Projeto> listarTodosEmAndamentoFreelancer(String emailFreelancer) {
@@ -82,7 +87,14 @@ public class ProjetoService {
     }
 
     public Projeto criarProjeto(ProjetoRequestDTO dto, String emailEmpresa) {
-        Empresa empresa = empresaRepository.findByEmail(emailEmpresa)
+
+        Usuario usuario = usuarioRepository.findByEmail(emailEmpresa)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Usuário não encontrado"
+                ));
+
+        Empresa empresa = empresaRepository.findByUsuario(usuario)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
                 "Empresa não encontrada"
@@ -104,7 +116,14 @@ public class ProjetoService {
     }
 
     public List<Projeto> listarPorEmpresa(String emailEmpresa) {
-        Empresa empresa = empresaRepository.findByEmail(emailEmpresa)
+
+        Usuario usuario = usuarioRepository.findByEmail(emailEmpresa)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Usuário não encontrado"
+                ));
+
+        Empresa empresa = empresaRepository.findByUsuario(usuario)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
                 "Empresa não encontrada"

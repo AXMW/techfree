@@ -9,12 +9,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.techfree.model.Projeto;
+import com.techfree.model.Usuario;
 import com.techfree.dto.EmpresaVisualizacaoResponseDTO;
 import com.techfree.model.Empresa;
 import com.techfree.repository.EmpresaRepository;
 import com.techfree.repository.ProjetoRepository;
 import com.techfree.repository.AvaliacaoEmpresaRepository;
 import com.techfree.service.ProjetoService;
+import com.techfree.repository.UsuarioRepository;
 
 @RestController
 @RequestMapping("/empresa")
@@ -24,16 +26,19 @@ public class EmpresaController {
     private final ProjetoRepository projetoRepository;
     private final AvaliacaoEmpresaRepository avaliacaoEmpresaRepository;
     private final ProjetoService projetoService;
+    private final UsuarioRepository usuarioRepository;
 
     public EmpresaController(
         ProjetoService projetoService,
         EmpresaRepository empresaRepository,
         ProjetoRepository projetoRepository,
-        AvaliacaoEmpresaRepository avaliacaoEmpresaRepository) {
+        AvaliacaoEmpresaRepository avaliacaoEmpresaRepository,
+        UsuarioRepository usuarioRepository) {
         this.projetoService = projetoService;
         this.empresaRepository = empresaRepository;
         this.projetoRepository = projetoRepository;
         this.avaliacaoEmpresaRepository = avaliacaoEmpresaRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     // EMPRESA: ver o perfil da empresa logada
@@ -41,7 +46,9 @@ public class EmpresaController {
     @PreAuthorize("hasRole('EMPRESA')")
     public Empresa verPerfil(Authentication authentication) {
         String email = authentication.getName();
-        return empresaRepository.findByEmail(email)
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        return empresaRepository.findByUsuario(usuario)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
     }
 
@@ -53,7 +60,11 @@ public class EmpresaController {
             @RequestBody Empresa dadosAtualizados) {
 
         String email = authentication.getName();
-        Empresa empresa = empresaRepository.findByEmail(email)
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Empresa empresa = empresaRepository.findByUsuario(usuario)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
         // atualiza os campos (exemplo)
@@ -76,7 +87,11 @@ public class EmpresaController {
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<Void> deletarPerfil(Authentication authentication) {
         String email = authentication.getName();
-        Empresa empresa = empresaRepository.findByEmail(email)
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Empresa empresa = empresaRepository.findByUsuario(usuario)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
         // Deletar a empresa
@@ -90,7 +105,11 @@ public class EmpresaController {
     @GetMapping("/projetos")
     public ResponseEntity<List<Projeto>> listarProjetos(Authentication authentication) {
         String email = authentication.getName();
-        Empresa empresa = empresaRepository.findByEmail(email)
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Empresa empresa = empresaRepository.findByUsuario(usuario)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
         List<Projeto> projetos = projetoRepository.findByEmpresa(empresa);
         return ResponseEntity.ok(projetos);
@@ -119,7 +138,7 @@ public class EmpresaController {
                 empresa.getId(),
                 empresa.getNomeFantasia(),
                 empresa.getRazaoSocial(),
-                empresa.getEmail(),
+                empresa.getUsuario().getEmail(),
                 empresa.getSite(),
                 empresa.getLinkedin(),
                 empresa.getTelefone(),

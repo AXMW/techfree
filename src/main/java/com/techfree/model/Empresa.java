@@ -17,8 +17,6 @@ public class Empresa {
 
     private String razaoSocial;
 
-    private String email;
-
     private String nomeFantasia;
 
     private String telefone;

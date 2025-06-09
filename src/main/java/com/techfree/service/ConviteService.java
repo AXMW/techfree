@@ -88,7 +88,7 @@ public class ConviteService {
     }
 
     public List<Convite> listarPorEmpresa(String emailEmpresa) {
-        List<Projeto> projetos = projetoRepository.findByEmpresaEmail(emailEmpresa);
+        List<Projeto> projetos = projetoRepository.findByEmpresaUsuarioEmail(emailEmpresa);
         if (projetos == null || projetos.isEmpty()) {
             throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
@@ -107,7 +107,7 @@ public class ConviteService {
                 "Convite não encontrado"
                 ));
 
-        if (!convite.getProjeto().getEmpresa().getEmail().equals(email)) {
+        if (!convite.getProjeto().getEmpresa().getUsuario().getEmail().equals(email)) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Você não tem permissão para deletar este convite"

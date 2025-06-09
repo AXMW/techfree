@@ -132,7 +132,6 @@ public class AuthenticationService {
         empresa.setUsuario(usuario);
         empresa.setCnpj(dto.getCnpj());
         empresa.setTelefone(dto.getTelefone());
-        empresa.setEmail(dto.getEmail());
 
         empresaRepository.save(empresa);
 
