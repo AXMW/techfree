@@ -199,10 +199,11 @@ public class ProjetoService {
         Projeto projeto = projetoRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
-        if (!projeto.getEmpresa().getUsuario().getEmail().equals(email) && 
-            (projeto.getFreelancerSelecionado() == null || !projeto.getFreelancerSelecionado().getUsuario().getEmail().equals(email))) {
-            throw new RuntimeException("Acesso negado");
-        }
+        //VALIDAÇÃO BURRA
+        //if (!projeto.getEmpresa().getUsuario().getEmail().equals(email) && 
+        //    (projeto.getFreelancerSelecionado() == null || !projeto.getFreelancerSelecionado().getUsuario().getEmail().equals(email))) {
+        //    throw new RuntimeException("Acesso negado");
+        //}
 
         return projeto;
     }

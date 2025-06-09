@@ -26,6 +26,7 @@ public class CandidaturaController {
     @Autowired
     private CandidaturaService candidaturaService;
 
+    // FREELANCER: criar candidatura
     @PostMapping
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<CandidaturaResponseDTO> criar(
@@ -36,6 +37,7 @@ public class CandidaturaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new CandidaturaResponseDTO(candidatura));
     }
 
+    // FREELANCER: ver as candidaturas do freelancer
     @GetMapping
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<List<CandidaturaResponseDTO>> listar(Authentication auth) {
@@ -44,6 +46,7 @@ public class CandidaturaController {
         return ResponseEntity.ok(dtos);
     }
 
+    // FREELANCER: deletar uma candidatura
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<Void> deletar(@PathVariable Long id, Authentication auth) {

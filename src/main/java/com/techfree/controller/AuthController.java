@@ -23,27 +23,32 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
     private final AuthenticationService authenticationService;
 
+    // Endpoint pro usuario fazer o login
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginDTO) {
         return ResponseEntity.ok(authenticationService.login(loginDTO));
     }
 
+    // Endpoint pro freelancer fazer o registro
     @PostMapping("/register/freelancer")
     public ResponseEntity<SignupResponseDTO> registerFreelancer(@Valid @RequestBody RegistroFreelancerDTO dto) {
         return ResponseEntity.ok(authenticationService.registerFreelancer(dto));
     }
 
+    // Endpoint pra empresa fazer o registro
     @PostMapping("/register/empresa")
     public ResponseEntity<SignupResponseDTO> registerEmpresa(@Valid @RequestBody RegistroEmpresaDTO dto) {
         return ResponseEntity.ok(authenticationService.registerEmpresa(dto));
     }
 
+    // Endpoint pra solicitar a recuperacao de senha
     @PostMapping("/recuperar-senha")
     public ResponseEntity<Void> recuperarSenha(@RequestBody RecuperarSenhaRequestDTO dto) {
         authenticationService.solicitarRecuperacaoSenha(dto);
         return ResponseEntity.ok().build();
     }
 
+    // Endpoint pra redefinir a senha
     @PostMapping("/resetar-senha")
     public ResponseEntity<Void> resetarSenha(@RequestBody ResetarSenhaDTO dto) {
         authenticationService.redefinirSenha(dto);

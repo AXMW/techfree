@@ -25,6 +25,7 @@ public class FreelancerController {
         this.freelancerRepository = freelancerRepository;
     }
 
+    // FREELANCER: ver o perfil do freelancer logado
     @GetMapping("/perfil/verPerfil")
     @PreAuthorize("hasRole('FREELANCER')")
     public Freelancer verPerfil(Authentication authentication) {
@@ -34,6 +35,7 @@ public class FreelancerController {
         return freelancer.orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
     }
 
+    // FREELANCER: atualizar o perfil do freelancer logado
     @PutMapping("/perfil")
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<Freelancer> atualizarPerfil(
@@ -60,6 +62,7 @@ public class FreelancerController {
         return ResponseEntity.ok(freelancer);
     }
 
+    // FREELANCER: deletar o perfil do freelancer logado
     @DeleteMapping("/perfil")
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<Void> deletarPerfil(Authentication authentication) {
@@ -82,5 +85,14 @@ public class FreelancerController {
         var roles = authentication.getAuthorities();
 
         return "Email: " + email + ", Roles: " + roles.toString();
+    }
+
+    // EMPRESA: ver o perfil do freelancer por ID
+    @GetMapping("/perfil/{id}")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<Freelancer> verPerfilPorId(Long id) {
+        Optional<Freelancer> freelancer = freelancerRepository.findById(id);
+        return freelancer.map(ResponseEntity::ok)
+                         .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
     }
 }
