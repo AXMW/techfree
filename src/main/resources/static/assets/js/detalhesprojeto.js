@@ -16,6 +16,17 @@ async function carregarDetalhesDoProjeto() {
         if (!response.ok) throw new Error('Erro ao buscar projeto');
         const data = await response.json();
         console.log('Dados do projeto:', data);
+
+        // Verifica o status do projeto
+        if ((data.status || '').toUpperCase() !== 'ABERTO') {
+            document.body.innerHTML = `
+                <div class="d-flex flex-column justify-content-center align-items-center vh-100 bg-dark text-white">
+                    <h2>Esta vaga não está mais disponível.</h2>
+                </div>
+            `;
+            return;
+        }
+
         // Adapte conforme o formato retornado pela API
         projeto = {
             titulo: data.titulo,
