@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Setter
 @Getter
-public class AtualizarStatusCandidaturaDTO {
+public class RecusarCandidaturaDTO {
     private StatusCandidatura status;
 
     public StatusCandidatura getStatus() {

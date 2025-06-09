@@ -96,6 +96,13 @@ function preencherProjeto(projeto) {
 
 // Preenche o resumo lateral
 function preencherSidebar(projeto) {
+    // Verifica o tipo de usuário no localStorage
+    const tipoUsuario = localStorage.getItem('tipoUsuario');
+    let candidaturaBtn = '';
+    if (tipoUsuario === 'FREELANCER') {
+        candidaturaBtn = `<a href="#" class="btn btn-info w-100 apply-btn shadow mt-4">Candidatar-se</a>`;
+    }
+
     document.getElementById('sidebarResumo').innerHTML = `
         <h5 class="fw-bold mb-3">Resumo do Projeto</h5>
         <ul class="list-unstyled mb-3">
@@ -112,9 +119,49 @@ function preencherSidebar(projeto) {
             <i class="bi bi-paperclip"></i>
             <strong>Anexo:</strong> <a href="${projeto.anexo.url}" target="_blank">${projeto.anexo.nome}</a>
         </div>
-        <a href="#" class="btn btn-info w-100 apply-btn shadow mt-4">Candidatar-se</a>
+        ${candidaturaBtn}
     `;
 }
+
+document.addEventListener('click', async function (e) {
+    // Verifica se clicou no botão "Candidatar-se"
+    if (e.target.classList.contains('apply-btn')) {
+        e.preventDefault();
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Você precisa estar logado para se candidatar.');
+            return;
+        }
+
+        const projetoId = document.body.getAttribute('data-projeto-id');
+        const body = {
+            projetoId: Number(projetoId),
+            mensagem: "Tenho interesse nesta oportunidade!"
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/candidaturas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (response.ok) {
+                alert('Candidatura enviada com sucesso!');
+            } else {
+                const data = await response.json();
+                alert(data.message || 'Erro ao enviar candidatura.');
+            }
+        } catch (err) {
+            alert('Erro ao conectar ao servidor.');
+            console.error(err);
+        }
+    }
+});
 
 // Inicialização
 async function inicializar() {

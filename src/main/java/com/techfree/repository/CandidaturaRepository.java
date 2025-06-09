@@ -17,5 +17,6 @@ public interface CandidaturaRepository extends JpaRepository<Candidatura, Long> 
     List<Candidatura> findByStatusAndFreelancerId(String status, Long freelancerId);
     List<Candidatura> findByStatusAndProjetoId(String status, Long projetoId);
     List<Candidatura> findByStatusAndFreelancerIdAndProjetoId(String status, Long freelancerId, Long projetoId);
+    boolean existsByFreelancerIdAndProjetoId(Long freelancerId, Long projetoId);
     
 }

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.techfree.model.Projeto;
+import com.techfree.dto.EmpresaVisualizacaoResponseDTO;
 import com.techfree.model.Empresa;
 import com.techfree.repository.EmpresaRepository;
 import com.techfree.repository.ProjetoRepository;
@@ -35,6 +36,7 @@ public class EmpresaController {
         this.avaliacaoEmpresaRepository = avaliacaoEmpresaRepository;
     }
 
+    // EMPRESA: ver o perfil da empresa logada
     @GetMapping("/perfil/verPerfil")
     @PreAuthorize("hasRole('EMPRESA')")
     public Empresa verPerfil(Authentication authentication) {
@@ -43,6 +45,7 @@ public class EmpresaController {
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
     }
 
+    // EMPRESA: atualizar o perfil da empresa logada
     @PutMapping("/perfil")
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<Empresa> atualizarPerfil(
@@ -68,6 +71,7 @@ public class EmpresaController {
         return ResponseEntity.ok(empresa);
     }
 
+    // EMPRESA: deletar o perfil da empresa logada
     @DeleteMapping("/perfil")
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<Void> deletarPerfil(Authentication authentication) {
@@ -81,6 +85,7 @@ public class EmpresaController {
     }
 
 
+    // EMPRESA: listar projetos da empresa logada
     @PreAuthorize("hasRole('EMPRESA')")
     @GetMapping("/projetos")
     public ResponseEntity<List<Projeto>> listarProjetos(Authentication authentication) {
@@ -102,5 +107,26 @@ public class EmpresaController {
         var roles = authentication.getAuthorities();
 
         return "Email: " + email + ", Roles: " + roles.toString();
+    }
+
+    // FREELANCER: ver a empresa
+    @GetMapping("/verEmpresa/{id}")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<EmpresaVisualizacaoResponseDTO> verEmpresa(@PathVariable Long id) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+        EmpresaVisualizacaoResponseDTO empresaDto = new EmpresaVisualizacaoResponseDTO(
+                empresa.getId(),
+                empresa.getNomeFantasia(),
+                empresa.getRazaoSocial(),
+                empresa.getEmail(),
+                empresa.getSite(),
+                empresa.getLinkedin(),
+                empresa.getTelefone(),
+                empresa.getDescricao(),
+                empresa.getAvatar()
+        );
+        
+        return ResponseEntity.ok(empresaDto);
     }
 }

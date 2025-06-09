@@ -3,6 +3,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 
 import com.techfree.dto.FreelancerUpdateDTO;
+import com.techfree.dto.FreelancerVisualizacaoResponseDTO;
 import com.techfree.model.Freelancer;
 import com.techfree.model.ExperienciaAcademica;
 import com.techfree.model.ExperienciaProfissional;
@@ -29,6 +31,7 @@ public class FreelancerController {
         this.freelancerRepository = freelancerRepository;
     }
 
+    // FREELANCER: ver o perfil do freelancer logado
     @GetMapping("/perfil/verPerfil")
     @PreAuthorize("hasRole('FREELANCER')")
     public Freelancer verPerfil(Authentication authentication) {
@@ -38,6 +41,7 @@ public class FreelancerController {
         return freelancer.orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
     }
 
+    // FREELANCER: atualizar o perfil do freelancer logado
     @PutMapping("/perfil")
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<Freelancer> atualizarPerfil(
@@ -91,6 +95,7 @@ public class FreelancerController {
         return ResponseEntity.ok(freelancer);
     }
 
+    // FREELANCER: deletar o perfil do freelancer logado
     @DeleteMapping("/perfil")
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<Void> deletarPerfil(Authentication authentication) {
@@ -113,5 +118,17 @@ public class FreelancerController {
         var roles = authentication.getAuthorities();
 
         return "Email: " + email + ", Roles: " + roles.toString();
+    }
+
+    // EMPRESA: ver o perfil do freelancer por ID
+    @GetMapping("/perfil/{id}")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<FreelancerVisualizacaoResponseDTO> verPerfilPorId(@PathVariable Long id) {
+        Optional<Freelancer> freelancer = freelancerRepository.findById(id);
+        if (freelancer.isEmpty()) {
+            throw new RuntimeException("Freelancer não encontrado com ID: " + id);
+        }
+        FreelancerVisualizacaoResponseDTO response = new FreelancerVisualizacaoResponseDTO(freelancer.get());
+        return ResponseEntity.ok(response);
     }
 }

@@ -31,6 +31,7 @@ public class ConviteController {
     @Autowired
     private FreelancerRepository freelancerRepository;
 
+    // EMPRESA: criar um convite pra um freelancer
     @PostMapping
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<Void> criar(
@@ -45,6 +46,7 @@ public class ConviteController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    // FREELANCER: ver os convites recebidos
     @GetMapping("/freelancer")
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<List<ConviteResponseDTO>> listarPorFreelancer(Authentication auth) {
@@ -53,6 +55,7 @@ public class ConviteController {
         return ResponseEntity.ok(dtos);
     }
 
+    // EMPRESA: ver os convites enviados
     @GetMapping("/empresa")
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<List<ConviteResponseDTO>> listarPorEmpresa(Authentication auth) {
@@ -61,6 +64,7 @@ public class ConviteController {
         return ResponseEntity.ok(dtos);
     }
 
+    // FREELANCER: aceitar o convite
     @PutMapping("/{id}/aceitar")
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<Void> aceitarConvite(@PathVariable Long id, Authentication auth) {
@@ -68,6 +72,7 @@ public class ConviteController {
         return ResponseEntity.noContent().build();
     }
 
+    // FREELANCER: recusar o convite
     @PutMapping("/{id}/recusar")
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<Void> recusarConvite(@PathVariable Long id, Authentication auth) {
@@ -75,6 +80,7 @@ public class ConviteController {
         return ResponseEntity.noContent().build();
     }
 
+    // EMPRESA: deletar um convite
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<Void> deletar(@PathVariable Long id, Authentication auth) {
@@ -82,6 +88,7 @@ public class ConviteController {
         return ResponseEntity.noContent().build();
     }
 
+    // EMPRESA: listar convites de um projeto específico
     @GetMapping("/projeto/{id}")
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<List<ConviteResponseDTO>> listarPorProjeto(

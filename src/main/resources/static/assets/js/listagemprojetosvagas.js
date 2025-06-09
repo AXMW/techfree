@@ -1,37 +1,21 @@
-// Simulação de carregamento de mais projetos/vagas
-const projects = [
-    {
-        title: "Sistema de Reservas de Salas",
-        company: "BookEasy",
-        desc: "Implemente um sistema web para reservas de salas em empresas, com calendário e notificações.",
-        info: '<i class="bi bi-geo-alt"></i> Presencial &nbsp; | &nbsp; <i class="bi bi-calendar-event"></i> Início: 20/07/2025 &nbsp; | &nbsp; <i class="bi bi-clock"></i> Duração: 2 meses',
-        tags: ["Vue.js", "Laravel", "MySQL"],
-        lang: "PHP",
-        dataTags: "Vue.js,Laravel,MySQL",
-        dataDesc: "reservas salas calendário notificações"
-    },
-    {
-        title: "Portal de Notícias Universitárias",
-        company: "UniNews",
-        desc: "Desenvolva um portal para publicação de notícias, eventos e comunicados acadêmicos.",
-        info: '<i class="bi bi-geo-alt"></i> Remoto &nbsp; | &nbsp; <i class="bi bi-calendar-event"></i> Início: 05/08/2025 &nbsp; | &nbsp; <i class="bi bi-clock"></i> Duração: 5 meses',
-        tags: ["WordPress", "SEO", "Jornalismo"],
-        lang: "PHP",
-        dataTags: "WordPress,SEO,Jornalismo",
-        dataDesc: "portal notícias eventos comunicados"
-    },
-    {
-        title: "E-commerce de Produtos Artesanais",
-        company: "ArtesanatoBR",
-        desc: "Participe da criação de uma loja virtual para artesãos, com integração de pagamentos e área do vendedor.",
-        info: '<i class="bi bi-geo-alt"></i> Remoto &nbsp; | &nbsp; <i class="bi bi-calendar-event"></i> Início: 12/08/2025 &nbsp; | &nbsp; <i class="bi bi-clock"></i> Duração: 4 meses',
-        tags: ["Shopify", "UX/UI", "Pagamentos"],
-        lang: "JavaScript",
-        dataTags: "Shopify,UX/UI,Pagamentos",
-        dataDesc: "ecommerce loja virtual artesanato pagamentos"
-    }
-];
+// Carregamento dinâmico de projetos/vagas via API
 let loaded = 0;
+let projects = [];
+
+// Busca projetos do backend
+async function fetchProjects() {
+    try {
+        const response = await fetch('http://localhost:8080/projetos/listar-abertos-freelancer');
+        if (!response.ok) throw new Error('Erro ao buscar projetos');
+        projects = await response.json();
+        loaded = 0;
+        document.getElementById('projects-list').innerHTML = '';
+        loadMoreProjects();
+    } catch (e) {
+        alert('Erro ao carregar projetos!');
+        console.error(e);
+    }
+}
 
 // Filtro de busca e seleção
 document.getElementById('filterForm').addEventListener('submit', function (e) {
@@ -63,34 +47,54 @@ function filterProjects() {
 }
 
 // Carregar mais projetos
-document.getElementById('loadMoreBtn').addEventListener('click', function () {
+function loadMoreProjects() {
     const list = document.getElementById('projects-list');
-    for (let i = loaded; i < loaded + 2 && projects.length; i++) {
-        if (projects.length === 0) break;
-        const p = projects.shift();
+    for (let i = loaded; i < loaded + 2 && i < projects.length; i++) {
+        const p = projects[i];
         const card = document.createElement('div');
         card.className = 'project-card';
-        card.setAttribute('data-tags', p.dataTags);
-        card.setAttribute('data-company', p.company);
-        card.setAttribute('data-desc', p.dataDesc);
-        card.setAttribute('data-lang', p.lang);
+        card.setAttribute('data-tags', p.requisitos || '');
+        card.setAttribute('data-company', p.empresa || '');
+        card.setAttribute('data-desc', p.descricao || '');
         card.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
-                <span class="project-title">${p.title}</span>
-                <span class="project-company">${p.company}</span>
+                <span class="project-title">${p.titulo}</span>
+                <span class="project-company">${p.empresa}</span>
             </div>
-            <div class="project-desc">${p.desc}</div>
-            <div class="project-info">${p.info}</div>
+            <div class="project-desc">${p.subtitulo || ''}</div>
+            <div class="project-info">
+                <i class="bi bi-clock"></i> Duração: ${p.duracao || '-'} meses
+                &nbsp; | &nbsp;
+                <i class="bi bi-cash-coin"></i> Orçamento: R$ ${Number(p.orcamento).toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+            </div>
             <div class="project-tags mb-2">
-                ${p.tags.map(tag => `<span class="badge">${tag}</span>`).join('')}
+                ${(p.requisitos || '').split(',').map(tag => `<span class="badge">${tag.trim()}</span>`).join('')}
             </div>
-            <a href="#" class="btn btn-outline-light btn-sm mt-2"><i class="bi bi-eye"></i> Ver Detalhes</a>
+            <a href="#" class="btn btn-outline-light btn-sm mt-2 ver-detalhes-btn" data-id="${p.id}">
+                <i class="bi bi-eye"></i> Ver Detalhes
+            </a>
         `;
         list.appendChild(card);
     }
     loaded += 2;
-    if (projects.length === 0) {
-        this.style.display = 'none';
+    if (loaded >= projects.length) {
+        document.getElementById('loadMoreBtn').style.display = 'none';
+    } else {
+        document.getElementById('loadMoreBtn').style.display = '';
     }
     filterProjects();
-});
+
+    // Adiciona o evento de clique para todos os botões "Ver Detalhes"
+    document.querySelectorAll('.ver-detalhes-btn').forEach(btn => {
+        btn.onclick = function(e) {
+            e.preventDefault();
+            const id = this.getAttribute('data-id');
+            window.location.href = `/detalhes-projeto/${id}`;
+        };
+    });
+}
+
+document.getElementById('loadMoreBtn').addEventListener('click', loadMoreProjects);
+
+// Inicialização
+fetchProjects();

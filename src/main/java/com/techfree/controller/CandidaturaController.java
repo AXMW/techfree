@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 import java.util.List;
 
-import com.techfree.dto.AtualizarStatusCandidaturaDTO;
 import com.techfree.dto.CandidaturaRequestDTO;
 import com.techfree.dto.CandidaturaResponseDTO;
 import com.techfree.service.CandidaturaService;
@@ -26,6 +25,7 @@ public class CandidaturaController {
     @Autowired
     private CandidaturaService candidaturaService;
 
+    // FREELANCER: criar candidatura
     @PostMapping
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<CandidaturaResponseDTO> criar(
@@ -36,6 +36,7 @@ public class CandidaturaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new CandidaturaResponseDTO(candidatura));
     }
 
+    // FREELANCER: ver as candidaturas do freelancer
     @GetMapping
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<List<CandidaturaResponseDTO>> listar(Authentication auth) {
@@ -44,6 +45,7 @@ public class CandidaturaController {
         return ResponseEntity.ok(dtos);
     }
 
+    // FREELANCER: deletar uma candidatura
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<Void> deletar(@PathVariable Long id, Authentication auth) {
@@ -65,14 +67,13 @@ public class CandidaturaController {
     }
 
     // EMPRESA: aceitar ou recusar candidatura
-    @PutMapping("/{id}/status")
+    @PutMapping("/{id}/recusar")
     @PreAuthorize("hasRole('EMPRESA')")
-    public ResponseEntity<Void> atualizarStatus(
+    public ResponseEntity<Void> recusarCandidatura(
         @PathVariable Long id,
-        @RequestBody AtualizarStatusCandidaturaDTO dto,
         Authentication auth) {
 
-        candidaturaService.atualizarStatus(id, dto.getStatus(), auth.getName());
+        candidaturaService.recusarCandidatura(id, auth.getName());
         return ResponseEntity.noContent().build();
     }
 

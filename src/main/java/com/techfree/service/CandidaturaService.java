@@ -1,6 +1,7 @@
 package com.techfree.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import com.techfree.dto.CandidaturaRequestDTO;
 import com.techfree.model.Candidatura;
@@ -12,6 +13,8 @@ import com.techfree.repository.ProjetoRepository;
 import com.techfree.enums.StatusCandidatura;
 import com.techfree.enums.TituloDeNotificacao;
 import com.techfree.service.email.EmailTemplateService;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 @Service
 public class CandidaturaService {
@@ -35,10 +38,23 @@ public class CandidaturaService {
 
     public Candidatura criarCandidatura(CandidaturaRequestDTO dto, String emailFreelancer) {
         Freelancer freelancer = freelancerRepository.findByEmail(emailFreelancer)
-            .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Freelancer não encontrado"
+                ));
 
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
-            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
+        
+        if (candidaturaRepository.existsByFreelancerIdAndProjetoId(freelancer.getId(), projeto.getId())) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT, // 409
+                "Você já se candidatou a este projeto"
+            );
+        }
 
         Candidatura candidatura = new Candidatura();
         candidatura.setFreelancer(freelancer);
@@ -50,16 +66,25 @@ public class CandidaturaService {
 
     public List<Candidatura> listarPorFreelancer(String email) {
         Freelancer freelancer = freelancerRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Freelancer não encontrado"
+                ));
         return candidaturaRepository.findByFreelancerId(freelancer.getId());
     }
 
     public void deletar(Long id, String email) {
         Candidatura c = candidaturaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Candidatura não encontrada"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Candidatura não encontrada"
+                ));
 
         if (!c.getFreelancer().getUsuario().getEmail().equals(email)) {
-            throw new RuntimeException("Acesso negado");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Acesso negado"
+                );
         }
 
         candidaturaRepository.delete(c);
@@ -67,28 +92,41 @@ public class CandidaturaService {
 
     public List<Candidatura> listarPorProjeto(Long projetoId, String emailEmpresa) {
         Projeto projeto = projetoRepository.findById(projetoId)
-            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
 
         if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
-            throw new RuntimeException("Você não é dono deste projeto");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Você não é dono deste projeto"
+                );
         }
 
         return candidaturaRepository.findByProjetoId(projetoId);
     }
 
-    public void atualizarStatus(Long candidaturaId, StatusCandidatura novoStatus, String emailEmpresa) {
+    public void recusarCandidatura(Long candidaturaId, String emailEmpresa) {
         Candidatura candidatura = candidaturaRepository.findById(candidaturaId)
-            .orElseThrow(() -> new RuntimeException("Candidatura não encontrada"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Candidatura não encontrada"
+                ));
 
         Projeto projeto = candidatura.getProjeto();
 
         if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
-            throw new RuntimeException("Você não tem permissão para alterar esta candidatura");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Você não tem permissão para alterar esta candidatura"
+                );
         }
 
         String nome = candidatura.getFreelancer().getNome();
         String titulo = projeto.getTitulo();
-        StatusCandidatura status = novoStatus;
+        StatusCandidatura status = StatusCandidatura.RECUSADA;
+        candidatura.setStatus(status);
 
         emailService.enviarHtml(
             candidatura.getFreelancer().getUsuario().getEmail(),

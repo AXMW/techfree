@@ -24,6 +24,7 @@ public class EmailService {
         mailSender.send(mensagem);
     }
 
+    @Async
     public void enviarHtml(String para, String assunto, String html) {
         MimeMessage message = mailSender.createMimeMessage();
 

@@ -120,8 +120,9 @@ public class PaginaController {
     }
 
     @PreAuthorize("hasRole('EMPRESA')")
-    @GetMapping("/lista-candidatos")
-    public String listaCandidatos() {
+    @GetMapping("/lista-candidatos/{id}")
+    public String listaCandidatos(@PathVariable Long id, Model model) {
+        model.addAttribute("projetoId", id);
         return "ListaDeCandidatos";
     }
 
