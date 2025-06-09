@@ -43,6 +43,9 @@ public class ProjetoService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private CandidaturaService candidaturaService;
+
     public ProjetoService(ProjetoRepository projetoRepository) {
         this.projetoRepository = projetoRepository;
     }
@@ -230,6 +233,14 @@ public class ProjetoService {
             "Você foi selecionado para o projeto " + projeto.getTitulo(),
             EmailTemplateService.templateSelecionadoProjeto(freelancer.getNome(), projeto.getTitulo())
         );
+
+        // 6️⃣ Recusa todas as outras candidaturas dos outros freelancer para esse projeto
+        List<Candidatura> candidaturas = candidaturaRepository.findByProjetoAndStatus(projeto, StatusCandidatura.ENVIADA);
+        for (Candidatura c : candidaturas) {
+            if (!c.getFreelancer().getId().equals(freelancer.getId())) {
+                candidaturaService.recusarCandidatura(c.getId(), emailEmpresa);
+            }
+        }
     }
 
     public List<Projeto> filtrarProjetos(ProjetoFiltroDTO filtro) {

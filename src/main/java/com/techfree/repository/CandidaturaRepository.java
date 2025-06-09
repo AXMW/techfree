@@ -2,6 +2,7 @@ package com.techfree.repository;
 import com.techfree.model.Candidatura;
 import com.techfree.model.Freelancer;
 import com.techfree.model.Projeto;
+import com.techfree.enums.StatusCandidatura;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
@@ -18,5 +19,6 @@ public interface CandidaturaRepository extends JpaRepository<Candidatura, Long> 
     List<Candidatura> findByStatusAndProjetoId(String status, Long projetoId);
     List<Candidatura> findByStatusAndFreelancerIdAndProjetoId(String status, Long freelancerId, Long projetoId);
     boolean existsByFreelancerIdAndProjetoId(Long freelancerId, Long projetoId);
+    List<Candidatura> findByProjetoAndStatus(Projeto projeto, StatusCandidatura status);
     
 }

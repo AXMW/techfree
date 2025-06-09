@@ -5,9 +5,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.techfree.repository.ProjetoRepository;
+import com.techfree.model.Projeto;
 
 @Controller
 public class PaginaController {
+
+    @Autowired
+    private ProjetoRepository projetoRepository;
 
     @GetMapping("/")
     public String index() {
@@ -41,8 +49,30 @@ public class PaginaController {
     }
 
     @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
-    @GetMapping("/andamento-projeto")
-    public String andamentoProjeto() {
+    @GetMapping("/andamento-projeto/{id}")
+    public String andamentoProjeto(
+        @PathVariable Long id,
+        Model model,
+        @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        Projeto projeto = projetoRepository.findById(id).orElse(null);
+        if (projeto == null) {
+            return "redirect:/erro"; // ou página de erro customizada
+        }
+
+        String emailUsuario = userDetails.getUsername();
+
+        boolean isFreelancerDoProjeto = projeto.getFreelancerSelecionado() != null &&
+            projeto.getFreelancerSelecionado().getUsuario().getEmail().equals(emailUsuario);
+
+        boolean isEmpresaDoProjeto = projeto.getEmpresa() != null &&
+            projeto.getEmpresa().getUsuario().getEmail().equals(emailUsuario);
+
+        if (!isFreelancerDoProjeto && !isEmpresaDoProjeto) {
+            return "redirect:/acesso-negado"; // ou página de acesso negado
+        }
+
+        model.addAttribute("projetoId", id);
         return "AndamentoProjeto";
     }
 
