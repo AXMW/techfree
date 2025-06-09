@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "freelancers")
 @Getter
@@ -29,8 +31,6 @@ public class Freelancer {
 
     private String areaAtuacao;
 
-    private String tecnologias; 
-
     private String github;
 
     private String linkedin;
@@ -41,9 +41,23 @@ public class Freelancer {
 
     private String roles;
 
+    @ElementCollection
     private List<String> habilidades;
 
+    @ElementCollection
+    private List<String> certificados;
+
     private LocalDate dataNascimento;
+
+    private String avatar;
+
+    @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ExperienciaProfissional> experiencia;
+
+    @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ExperienciaAcademica> experienciaAcademica;
 
     @Column(unique = true, nullable = false)
     private String cpf;

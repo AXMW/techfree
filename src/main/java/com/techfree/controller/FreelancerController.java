@@ -11,10 +11,14 @@ import org.springframework.security.core.Authentication;
 
 import com.techfree.dto.FreelancerUpdateDTO;
 import com.techfree.model.Freelancer;
+import com.techfree.model.ExperienciaAcademica;
+import com.techfree.model.ExperienciaProfissional;
 import com.techfree.repository.FreelancerRepository;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/freelancer")
@@ -47,14 +51,41 @@ public class FreelancerController {
         // Atualiza só os campos recebidos
         if (dados.getNome() != null) freelancer.setNome(dados.getNome());
         if (dados.getBio() != null) freelancer.setBio(dados.getBio());
-        if (dados.getHabilidades() != null) freelancer.setHabilidades(dados.getHabilidades());
-        if (dados.getTecnologias() != null) freelancer.setTecnologias(dados.getTecnologias());
+        if (dados.getHabilidades() != null) freelancer.setHabilidades(new ArrayList<>(dados.getHabilidades()));
         if (dados.getTelefone() != null) freelancer.setTelefone(dados.getTelefone());
         if (dados.getAreaAtuacao() != null) freelancer.setAreaAtuacao(dados.getAreaAtuacao());
         if (dados.getGithub() != null) freelancer.setGithub(dados.getGithub());
         if (dados.getLinkedin() != null) freelancer.setLinkedin(dados.getLinkedin());
         if (dados.getPortfolio() != null) freelancer.setPortfolio(dados.getPortfolio());
-        if(dados.getHabilidades() != null) freelancer.setHabilidades(dados.getHabilidades());
+        if (dados.getCertificados() != null) freelancer.setCertificados(new ArrayList<>(dados.getCertificados()));
+        if (dados.getAvatar() != null) freelancer.setAvatar(dados.getAvatar());
+        if (dados.getExperiencia() != null) {
+            // Limpa a lista original e adiciona os novos elementos
+            freelancer.getExperiencia().clear();
+            for (var dto : dados.getExperiencia()) {
+                var exp = new ExperienciaProfissional();
+                exp.setId(dto.getId());
+                exp.setEmpresa(dto.getEmpresa());
+                exp.setCargo(dto.getCargo());
+                exp.setTempo(dto.getTempo());
+                exp.setDescricao(dto.getDescricao());
+                exp.setFreelancer(freelancer);
+                freelancer.getExperiencia().add(exp);
+            }
+        }
+        if (dados.getExperienciaAcademica() != null) {
+            freelancer.getExperienciaAcademica().clear();
+            for (var dto : dados.getExperienciaAcademica()) {
+                var exp = new ExperienciaAcademica();
+                exp.setId(dto.getId());
+                exp.setInstituicao(dto.getInstituicao());
+                exp.setCurso(dto.getCurso());
+                exp.setPeriodo(dto.getPeriodo());
+                exp.setDescricao(dto.getDescricao());
+                exp.setFreelancer(freelancer);
+                freelancer.getExperienciaAcademica().add(exp);
+            }
+        }
 
         freelancerRepository.save(freelancer);
         return ResponseEntity.ok(freelancer);
