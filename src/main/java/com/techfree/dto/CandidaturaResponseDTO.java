@@ -15,7 +15,6 @@ public class CandidaturaResponseDTO {
     private String freelancerNome;
     private String frelancerTelefone;
     private String freelancerAreaDeAtuacao;
-    private String freelancerTecnologias;
     private String freelancerEmail;
 
     public CandidaturaResponseDTO(Candidatura c) {
