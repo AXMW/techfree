@@ -15,6 +15,8 @@ import com.techfree.enums.TituloDeNotificacao;
 import com.techfree.service.email.EmailTemplateService;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import com.techfree.model.Usuario;
+import com.techfree.repository.UsuarioRepository;
 
 @Service
 public class CandidaturaService {
@@ -34,10 +36,18 @@ public class CandidaturaService {
 
     @Autowired
     private NotificacaoService notificacaoService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
     
 
     public Candidatura criarCandidatura(CandidaturaRequestDTO dto, String emailFreelancer) {
-        Freelancer freelancer = freelancerRepository.findByEmail(emailFreelancer)
+        Usuario usuario = usuarioRepository.findByEmail(emailFreelancer)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Usuário não encontrado"
+                ));
+        Freelancer freelancer = freelancerRepository.findByUsuario(usuario)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
                 "Freelancer não encontrado"
@@ -65,7 +75,12 @@ public class CandidaturaService {
     }
 
     public List<Candidatura> listarPorFreelancer(String email) {
-        Freelancer freelancer = freelancerRepository.findByEmail(email)
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Usuário não encontrado"
+                ));
+        Freelancer freelancer = freelancerRepository.findByUsuario(usuario)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
                 "Freelancer não encontrado"

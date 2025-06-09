@@ -3,9 +3,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 import com.techfree.model.Freelancer;
+import com.techfree.model.Usuario;
 
 public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
-    Optional<Freelancer> findByEmail(String email);
+    Optional<Freelancer> findByUsuario(Usuario usuario);
     List<Freelancer> findByCpf(String cpf);
     List<Freelancer> findByEnabled(boolean enabled);
     List<Freelancer> findByEnabledAndRoles(boolean enabled, String role);

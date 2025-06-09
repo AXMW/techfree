@@ -8,6 +8,7 @@ import com.techfree.dto.ConviteRequestDTO;
 import com.techfree.model.Convite;
 import com.techfree.model.Freelancer;
 import com.techfree.model.Projeto;
+import com.techfree.model.Usuario;
 import com.techfree.repository.ConviteRepository;
 import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.ProjetoRepository;
@@ -16,6 +17,7 @@ import com.techfree.enums.StatusProjeto;
 import com.techfree.enums.TituloDeNotificacao;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import com.techfree.repository.UsuarioRepository;
 
 
 @Service
@@ -33,8 +35,16 @@ public class ConviteService {
     @Autowired
     private NotificacaoService notificacaoService;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     public Convite criarConvite(ConviteRequestDTO dto, String emailFreelancer) {
-        Freelancer freelancer = freelancerRepository.findByEmail(emailFreelancer)
+        Usuario usuario = usuarioRepository.findByEmail(emailFreelancer)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Usuário não encontrado"
+                ));
+        Freelancer freelancer = freelancerRepository.findByUsuario(usuario)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
                 "Freelancer não encontrado"
@@ -64,7 +74,12 @@ public class ConviteService {
 
 
     public List<Convite> listarPorFreelancer(String email) {
-        Freelancer freelancer = freelancerRepository.findByEmail(email)
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Usuário não encontrado"
+                ));
+        Freelancer freelancer = freelancerRepository.findByUsuario(usuario)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
                 "Freelancer não encontrado"
@@ -109,7 +124,7 @@ public class ConviteService {
                 "Convite não encontrado"
                 ));
 
-        if (!convite.getFreelancer().getEmail().equals(email)) {
+        if (!convite.getFreelancer().getUsuario().getEmail().equals(email)) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Você não tem permissão para aceitar este convite"
@@ -156,7 +171,7 @@ public class ConviteService {
                 "Convite não encontrado"
                 ));
 
-        if (!convite.getFreelancer().getEmail().equals(email)) {
+        if (!convite.getFreelancer().getUsuario().getEmail().equals(email)) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Você não tem permissão para recusar este convite"

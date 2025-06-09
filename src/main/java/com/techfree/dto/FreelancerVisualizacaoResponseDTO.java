@@ -24,7 +24,7 @@ public class FreelancerVisualizacaoResponseDTO {
         this.github = freelancer.getGithub();
         this.linkedin = freelancer.getLinkedin();
         this.portfolio = freelancer.getPortfolio();
-        this.email = freelancer.getEmail();
+        this.email = freelancer.getUsuario().getEmail();
         this.habilidades = freelancer.getHabilidades();
         this.bio = freelancer.getBio();
     }

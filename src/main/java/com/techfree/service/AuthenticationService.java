@@ -96,7 +96,6 @@ public class AuthenticationService {
         
         Freelancer freelancer = new Freelancer();
         freelancer.setNome(dto.getNome());
-        freelancer.setEmail(dto.getEmail());
         freelancer.setUsuario(usuario);
         freelancer.setTelefone(dto.getTelefone());
         freelancer.setCpf(dto.getCpf());

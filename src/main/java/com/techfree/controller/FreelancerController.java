@@ -16,18 +16,22 @@ import com.techfree.model.Freelancer;
 import com.techfree.model.ExperienciaAcademica;
 import com.techfree.model.ExperienciaProfissional;
 import com.techfree.repository.FreelancerRepository;
+import com.techfree.model.Usuario;
+import com.techfree.repository.UsuarioRepository;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/freelancer")
 public class FreelancerController {
     private final FreelancerRepository freelancerRepository;
 
-    public FreelancerController(FreelancerRepository freelancerRepository) {
+    private final UsuarioRepository usuarioRepository;
+
+    public FreelancerController(FreelancerRepository freelancerRepository, UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
         this.freelancerRepository = freelancerRepository;
     }
 
@@ -36,8 +40,10 @@ public class FreelancerController {
     @PreAuthorize("hasRole('FREELANCER')")
     public Freelancer verPerfil(Authentication authentication) {
         String email = authentication.getName(); // vem do JWT
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        Optional<Freelancer> freelancer = freelancerRepository.findByEmail(email);
+        Optional<Freelancer> freelancer = freelancerRepository.findByUsuario(usuario);
         return freelancer.orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
     }
 
@@ -49,7 +55,11 @@ public class FreelancerController {
             @RequestBody FreelancerUpdateDTO dados) {
 
         String email = authentication.getName();
-        Freelancer freelancer = freelancerRepository.findByEmail(email)
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Freelancer freelancer = freelancerRepository.findByUsuario(usuario)
             .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
 
         // Atualiza só os campos recebidos
@@ -100,7 +110,11 @@ public class FreelancerController {
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<Void> deletarPerfil(Authentication authentication) {
         String email = authentication.getName();
-        Freelancer freelancer = freelancerRepository.findByEmail(email)
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Freelancer freelancer = freelancerRepository.findByUsuario(usuario)
             .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
 
         freelancerRepository.delete(freelancer);

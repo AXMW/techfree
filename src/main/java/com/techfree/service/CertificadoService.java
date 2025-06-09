@@ -9,6 +9,8 @@ import com.techfree.model.Certificado;
 import com.techfree.repository.CertificadoRepository;
 import com.techfree.repository.FreelancerRepository;
 import java.util.List;
+import com.techfree.model.Usuario;
+import com.techfree.repository.UsuarioRepository;
 
 @Service
 public class CertificadoService {
@@ -18,8 +20,13 @@ public class CertificadoService {
     @Autowired
     private FreelancerRepository freelancerRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     public List<CertificadoResponseDTO> listarPorFreelancer(String email) {
-        var freelancer = freelancerRepository.findByEmail(email)
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        var freelancer = freelancerRepository.findByUsuario(usuario)
             .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
 
         return certificadoRepository.findByFreelancer(freelancer)
@@ -27,7 +34,9 @@ public class CertificadoService {
     }
 
     public CertificadoResponseDTO cadastrar(String email, CertificadoRequestDTO dto) {
-        var freelancer = freelancerRepository.findByEmail(email)
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        var freelancer = freelancerRepository.findByUsuario(usuario)
             .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
 
         var c = new Certificado();

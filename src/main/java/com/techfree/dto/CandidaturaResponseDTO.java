@@ -30,6 +30,6 @@ public class CandidaturaResponseDTO {
         this.frelancerTelefone = c.getFreelancer().getTelefone();
         this.freelancerAreaDeAtuacao = c.getFreelancer().getAreaAtuacao();
         this.feelancerHabilidades = c.getFreelancer().getHabilidades();
-        this.freelancerEmail = c.getFreelancer().getEmail();
+        this.freelancerEmail = c.getFreelancer().getUsuario().getEmail();
     }
 }

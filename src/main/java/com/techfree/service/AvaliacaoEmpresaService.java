@@ -13,6 +13,8 @@ import com.techfree.model.Projeto;
 import com.techfree.repository.AvaliacaoEmpresaRepository;
 import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.ProjetoRepository;
+import com.techfree.repository.UsuarioRepository;
+import com.techfree.model.Usuario;
 
 @Service
 public class AvaliacaoEmpresaService {
@@ -25,11 +27,16 @@ public class AvaliacaoEmpresaService {
     @Autowired
     private FreelancerRepository freelancerRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     public AvaliacaoEmpresaResponseDTO criar(String emailFreelancer, AvaliacaoEmpresaRequestDTO dto) {
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
-        Freelancer freelancer = freelancerRepository.findByEmail(emailFreelancer)
+        Usuario usuario = usuarioRepository.findByEmail(emailFreelancer)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Freelancer freelancer = freelancerRepository.findByUsuario(usuario)
             .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
 
         AvaliacaoEmpresa avaliacao = new AvaliacaoEmpresa();
