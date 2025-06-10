@@ -51,6 +51,9 @@ public class ProjetoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private FlagService flagService;
+
     public ProjetoService(ProjetoRepository projetoRepository) {
         this.projetoRepository = projetoRepository;
     }
@@ -298,6 +301,24 @@ public class ProjetoService {
                 "O projeto já está concluído"
                 );
         }
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Usuário não encontrado"
+                ));
+
+        flagService.criarFlag(usuario.getId(), id);
+
+        usuario.setQuantidadeDeFlags(usuario.getQuantidadeDeFlags() + 1);
+        if (usuario.getQuantidadeDeFlags() >= 3) {
+            usuario.setEnabled(false); // Desabilita o usuário se atingir 3 flags
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
+                );
+        }
+        usuarioRepository.save(usuario);
 
         projeto.setStatus(StatusProjeto.CANCELADO);
         projetoRepository.save(projeto);

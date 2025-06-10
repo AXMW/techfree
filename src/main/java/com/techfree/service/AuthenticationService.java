@@ -91,6 +91,7 @@ public class AuthenticationService {
             Set<Role> sla = new HashSet<Role>();
             sla.add(roleFreelancer);
         usuario.setRoles(sla);
+        usuario.setQuantidadeDeFlags(0);
         usuarioRepository.save(usuario);
 
         
@@ -124,6 +125,7 @@ public class AuthenticationService {
             Set<Role> sla = new HashSet<Role>();
             sla.add(roleEmpresa);
         usuario.setRoles(sla);
+        usuario.setQuantidadeDeFlags(0);
         usuarioRepository.save(usuario);
 
         Empresa empresa = new Empresa();

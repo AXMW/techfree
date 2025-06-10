@@ -34,6 +34,9 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private String senha;
 
+    @Column(nullable = false)
+    private int quantidadeDeFlags;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
