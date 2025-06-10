@@ -3,7 +3,7 @@ import lombok.Getter;
 import com.techfree.model.Empresa;
 
 @Getter
-public class EmpresaVisualizacaoResponseDTO {
+public class EmpresaAutoVisualizacaoResponseDTO {
     private Long id;
     private String nomeFantasia;
     private String razaoSocial;
@@ -13,8 +13,9 @@ public class EmpresaVisualizacaoResponseDTO {
     private String telefone;
     private String bio;
     private String logoUrl;
+    private int quantidadeDeFlags;
 
-    public EmpresaVisualizacaoResponseDTO(Empresa empresa) {
+    public EmpresaAutoVisualizacaoResponseDTO(Empresa empresa) {
         this.id = empresa.getId();
         this.nomeFantasia = empresa.getNomeFantasia();
         this.razaoSocial = empresa.getRazaoSocial();
@@ -24,5 +25,6 @@ public class EmpresaVisualizacaoResponseDTO {
         this.telefone = empresa.getTelefone();
         this.bio = empresa.getBio();
         this.logoUrl = empresa.getAvatar();
+        this.quantidadeDeFlags = empresa.getUsuario().getQuantidadeDeFlags();
     }
 }

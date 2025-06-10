@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.techfree.model.Projeto;
 import com.techfree.model.Usuario;
+import com.techfree.dto.EmpresaAutoVisualizacaoResponseDTO;
 import com.techfree.dto.EmpresaVisualizacaoResponseDTO;
 import com.techfree.model.Empresa;
 import com.techfree.repository.EmpresaRepository;
@@ -44,23 +45,15 @@ public class EmpresaController {
     // EMPRESA: ver o perfil da empresa logada
     @GetMapping("/perfil/verPerfil")
     @PreAuthorize("hasRole('EMPRESA')")
-    public EmpresaVisualizacaoResponseDTO verPerfil(Authentication authentication) {
+    public EmpresaAutoVisualizacaoResponseDTO verPerfil(Authentication authentication) {
         String email = authentication.getName();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
         Empresa empresa = empresaRepository.findByUsuario(usuario)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
-        EmpresaVisualizacaoResponseDTO empresaDto = new EmpresaVisualizacaoResponseDTO(
-                empresa.getId(),
-                empresa.getNomeFantasia(),
-                empresa.getRazaoSocial(),
-                usuario.getEmail(),
-                empresa.getSite(),
-                empresa.getLinkedin(),
-                empresa.getTelefone(),
-                empresa.getBio(),
-                empresa.getAvatar()
-        );
+
+        EmpresaAutoVisualizacaoResponseDTO empresaDto = new EmpresaAutoVisualizacaoResponseDTO(empresa);
         return empresaDto;
     }
 
@@ -146,17 +139,7 @@ public class EmpresaController {
     public ResponseEntity<EmpresaVisualizacaoResponseDTO> verEmpresa(@PathVariable Long id) {
         Empresa empresa = empresaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
-        EmpresaVisualizacaoResponseDTO empresaDto = new EmpresaVisualizacaoResponseDTO(
-                empresa.getId(),
-                empresa.getNomeFantasia(),
-                empresa.getRazaoSocial(),
-                empresa.getUsuario().getEmail(),
-                empresa.getSite(),
-                empresa.getLinkedin(),
-                empresa.getTelefone(),
-                empresa.getDescricao(),
-                empresa.getAvatar()
-        );
+        EmpresaVisualizacaoResponseDTO empresaDto = new EmpresaVisualizacaoResponseDTO(empresa);
         
         return ResponseEntity.ok(empresaDto);
     }

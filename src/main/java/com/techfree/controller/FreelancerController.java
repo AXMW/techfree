@@ -18,6 +18,7 @@ import com.techfree.model.ExperienciaProfissional;
 import com.techfree.repository.FreelancerRepository;
 import com.techfree.model.Usuario;
 import com.techfree.repository.UsuarioRepository;
+import com.techfree.dto.FreelancerAutoVisualizacaoResponseDTO;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -38,14 +39,14 @@ public class FreelancerController {
     // FREELANCER: ver o perfil do freelancer logado
     @GetMapping("/perfil/verPerfil")
     @PreAuthorize("hasRole('FREELANCER')")
-    public FreelancerVisualizacaoResponseDTO verPerfil(Authentication authentication) {
+    public FreelancerAutoVisualizacaoResponseDTO verPerfil(Authentication authentication) {
         String email = authentication.getName(); // vem do JWT
         Usuario usuario = usuarioRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         Freelancer freelancer = freelancerRepository.findByUsuario(usuario).orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
 
-        FreelancerVisualizacaoResponseDTO response = new FreelancerVisualizacaoResponseDTO(freelancer);
+        FreelancerAutoVisualizacaoResponseDTO response = new FreelancerAutoVisualizacaoResponseDTO(freelancer);
         return response;
     }
 

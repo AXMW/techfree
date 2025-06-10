@@ -31,8 +31,6 @@ public class Empresa {
 
     private String avatar;
 
-    private int flags;
-
     @Column(unique = true, nullable = false)
     private String cnpj;
 
