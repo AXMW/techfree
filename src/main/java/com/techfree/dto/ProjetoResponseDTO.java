@@ -39,6 +39,8 @@ public class ProjetoResponseDTO {
 
     private LocalDateTime dataCriacao;
 
+    private String telefoneEmpresa;
+
     public ProjetoResponseDTO(Projeto projeto) {
         this.id = projeto.getId();
         this.titulo = projeto.getTitulo();
@@ -55,5 +57,6 @@ public class ProjetoResponseDTO {
         this.empresa = projeto.getEmpresa().getNomeFantasia();
         this.site = projeto.getEmpresa().getSite();
         this.dataCriacao = projeto.getDataCriacao();
+        this.telefoneEmpresa = projeto.getEmpresa().getTelefone();
     }
 }
