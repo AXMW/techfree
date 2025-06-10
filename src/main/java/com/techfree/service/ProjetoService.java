@@ -241,6 +241,13 @@ public class ProjetoService {
                 );
         }
 
+        if(projeto.getStatus() == StatusProjeto.CANCELADO || projeto.getStatus() == StatusProjeto.CONCLUIDO) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "O projeto não pode ser colocado em andamento"
+                );
+        }
+
         try {
             projeto.setStatus(StatusProjeto.EM_ANDAMENTO);
             projeto.setDataInicio(LocalDate.now());
