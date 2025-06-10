@@ -1,59 +1,6 @@
 const profileData = {
-    nome: "Lucas Silva",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    cargo: "Desenvolvedor Full Stack",
-    contato: {
-        email: "lucas@email.com",
-        whatsapp: "(11) 99999-9999"
-    },
-    redes: [
-        { icon: "bi-github", link: "#" },
-        { icon: "bi-linkedin", link: "#" },
-        { icon: "bi-globe", link: "#" }
-    ],
     avaliacao: 4.7,
-    habilidades: ["React", "Node.js", "MongoDB", "JavaScript", "TypeScript", "Express", "Docker", "Figma", "Scrum", "Inglês Avançado"],
     flags: 3,
-    certificados: [
-        "AWS Certified Developer",
-        "Scrum Foundation",
-        "Inglês Avançado"
-    ],
-    sobre: "Sou um desenvolvedor apaixonado por tecnologia, com experiência em projetos web e mobile. Gosto de trabalhar em equipe, aprender novas ferramentas e entregar soluções inovadoras. Busco sempre evoluir e contribuir para o sucesso dos projetos em que participo.",
-    experiencia: [
-        {
-            empresa: "TechFree",
-            cargo: "Desenvolvedor Full Stack",
-            tempo: "2024-2025",
-            descricao: "Desenvolvimento full stack, integração de APIs e liderança técnica."
-        },
-        {
-            empresa: "MindCare",
-            cargo: "Desenvolvedor Mobile",
-            tempo: "2023-2024",
-            descricao: "Desenvolvimento mobile com Flutter, gamificação e notificações."
-        },
-        {
-            empresa: "LogiTech",
-            cargo: "Desenvolvedor Frontend",
-            tempo: "2022-2023",
-            descricao: "Criação de dashboards, relatórios e integração mobile."
-        }
-    ],
-    experienciaAcademica: [
-        {
-            instituicao: "FATEC Carapicuíba",
-            curso: "Análise e Desenvolvimento de Sistemas",
-            periodo: "2022-2025",
-            descricao: "Graduação focada em desenvolvimento de software, banco de dados e projetos práticos."
-        },
-        {
-            instituicao: "ETEC São Paulo",
-            curso: "Técnico em Informática",
-            periodo: "2020-2021",
-            descricao: "Curso técnico com ênfase em lógica de programação, redes e suporte."
-        }
-    ],
     feedbacks: [
         {
             empresa: "MindCare",
@@ -74,6 +21,35 @@ const profileData = {
     ]
 };
 
+async function buscarPerfilFreelancer() {
+    const token = localStorage.getItem('token');
+    try {
+        const resp = await fetch('/freelancer/perfil/verPerfil', {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        });
+        if (!resp.ok) throw new Error('Erro ao buscar perfil');
+        const data = await resp.json();
+
+        renderProfile({
+            ...data,
+            avaliacao: profileData.avaliacao,
+            flags: profileData.flags,
+            feedbacks: profileData.feedbacks
+        });
+        atualizarBarraProgresso({
+            ...data,
+            avaliacao: profileData.avaliacao,
+            flags: profileData.flags,
+            feedbacks: profileData.feedbacks
+        });
+    } catch (e) {
+        console.error(e);
+    }
+}
+
 function renderProfile(profile) {
     // Flags
     let flagsHtml = '';
@@ -86,19 +62,28 @@ function renderProfile(profile) {
     }
 
     // Certificados
-    let certificadosHtml = profile.certificados.map(cert => `<span class="badge">${cert}</span>`).join('');
+    let certificadosHtml = (profile.certificados || []).map(cert => `<span class="badge">${cert}</span>`).join('');
 
-    // Habilidades (mostra só as principais no header, o resto na seção)
-    let headerSkills = profile.habilidades.slice(0, 3).map(h => `<span class="badge">${h}</span>`).join('');
-    let allSkills = profile.habilidades.map(h => `<span class="badge">${h}</span>`).join('');
+    // Habilidades
+    let headerSkills = (profile.habilidades || []).slice(0, 3).map(h => `<span class="badge">${h}</span>`).join('');
+    let allSkills = (profile.habilidades || []).map(h => `<span class="badge">${h}</span>`).join('');
 
-    // Redes sociais
-    let redesHtml = profile.redes.map(r => `<a href="${r.link}" target="_blank" rel="noopener noreferrer"><i class="bi ${r.icon}"></i></a>`).join('');
+    // Redes sociais (usando os campos individuais)
+    let redesHtml = '';
+    if (profile.github) {
+        redesHtml += `<a href="${profile.github}" target="_blank" rel="noopener noreferrer"><i class="bi bi-github"></i></a>`;
+    }
+    if (profile.linkedin) {
+        redesHtml += `<a href="${profile.linkedin}" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>`;
+    }
+    if (profile.portfolio) {
+        redesHtml += `<a href="${profile.portfolio}" target="_blank" rel="noopener noreferrer"><i class="bi bi-globe"></i></a>`;
+    }
 
     // Contato
     let contatoHtml = `
-        <div><i class="bi bi-envelope"></i><span>${profile.contato.email}</span></div>
-        <div><i class="bi bi-whatsapp"></i><span>${profile.contato.whatsapp}</span></div>
+        <div><i class="bi bi-envelope"></i><span>${profile.email}</span></div>
+        <div><i class="bi bi-whatsapp"></i><span>${profile.telefone || ""}</span></div>
     `;
 
     // Avaliação
@@ -110,7 +95,7 @@ function renderProfile(profile) {
     while (stars.match(/star/g)?.length < 5) stars += '<i class="bi bi-star"></i>';
 
     // Experiência Profissional
-    let experienciaHtml = profile.experiencia.map(exp => `
+    let experienciaHtml = (profile.experiencia || []).map(exp => `
         <div class="timeline-item">
             <div class="timeline-title">${exp.empresa}</div>
             <div class="timeline-period">${exp.cargo} (${exp.tempo})</div>
@@ -119,7 +104,7 @@ function renderProfile(profile) {
     `).join('');
 
     // Experiência Acadêmica
-    let experienciaAcademicaHtml = profile.experienciaAcademica.map(exp => `
+    let experienciaAcademicaHtml = (profile.experienciaAcademica || []).map(exp => `
         <div class="timeline-item">
             <div class="timeline-title">${exp.instituicao}</div>
             <div class="timeline-period">${exp.curso} (${exp.periodo})</div>
@@ -128,7 +113,7 @@ function renderProfile(profile) {
     `).join('');
 
     // Feedbacks (apenas os 3 primeiros)
-    let feedbacksHtml = profile.feedbacks.slice(0, 3).map(fb => `
+    let feedbacksHtml = (profile.feedbacks || []).slice(0, 3).map(fb => `
         <div class="profile-feedback">
             <strong>Empresa: ${fb.empresa}</strong><br>
             "${fb.texto}"
@@ -137,10 +122,10 @@ function renderProfile(profile) {
 
     // Monta o HTML
     document.querySelector('.profile-header').innerHTML = `
-        <img src="${profile.avatar}" class="profile-avatar" alt="Avatar do Usuário">
+        <img src="${profile.avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Avatar do Usuário">
         <div class="profile-info flex-grow-1">
             <h2>${profile.nome}</h2>
-            <div class="role mb-1">${profile.cargo}</div>
+            <div class="role mb-1">${profile.areaAtuacao || ""}</div>
             <div class="profile-badges mb-2">${headerSkills}</div>
             <div class="profile-contact mt-2">${contatoHtml}</div>
             <div class="profile-social mt-3">${redesHtml}</div>
@@ -160,7 +145,7 @@ function renderProfile(profile) {
     `;
 
     // Sobre
-    document.getElementById('profileSobre').innerHTML = profile.sobre;
+    document.getElementById('profileSobre').innerHTML = profile.bio || "";
 
     // Habilidades
     document.getElementById('profileSkills').innerHTML = allSkills;
@@ -182,10 +167,10 @@ function calcularProgressoPerfil(profile) {
     const campos = [
         { nome: "Foto", valor: profile.avatar },
         { nome: "Nome", valor: profile.nome },
-        { nome: "Cargo", valor: profile.cargo },
-        { nome: "E-mail", valor: profile.contato.email },
-        { nome: "Telefone/WhatsApp", valor: profile.contato.whatsapp },
-        { nome: "Sobre", valor: profile.sobre },
+        { nome: "Cargo", valor: profile.areaAtuacao },
+        { nome: "E-mail", valor: profile.email },
+        { nome: "Telefone/WhatsApp", valor: profile.telefone },
+        { nome: "Sobre", valor: profile.bio },
         { nome: "Habilidades", valor: (profile.habilidades && profile.habilidades.length > 0) ? "ok" : "" },
         { nome: "Certificados", valor: (profile.certificados && profile.certificados.length > 0) ? "ok" : "" },
         { nome: "Experiência Profissional", valor: (profile.experiencia && profile.experiencia.length > 0) ? "ok" : "" },
@@ -212,7 +197,6 @@ function atualizarBarraProgresso(profile) {
         if (faltando.length === 0) {
             missing.innerHTML = `<li style="color:#28a745;">Tudo preenchido! 🎉</li>`;
         } else {
-            // Adiciona anúncio antes da lista
             missing.innerHTML = `<div class="mb-2" style="color:#fff;font-weight:600;margin-left:-2rem;">Itens ainda não preenchidos:</div>` +
                 faltando.map(f => `<li>${f}</li>`).join('');
         }
@@ -221,6 +205,5 @@ function atualizarBarraProgresso(profile) {
 
 // Chame ao carregar o perfil:
 document.addEventListener('DOMContentLoaded', function () {
-    renderProfile(profileData);
-    atualizarBarraProgresso(profileData);
+    buscarPerfilFreelancer();
 });

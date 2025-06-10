@@ -1,47 +1,45 @@
 const empresaProfileData = {
-    nome: "TechFree",
-    avatar: "assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png",
-    cargo: "Plataforma de Gestão de Projetos",
-    contato: {
-        email: "contato@techfree.com",
-        telefone: "(11) 12345-6789"
-    },
-    redes: [
-        { icon: "bi-linkedin", link: "#" },
-        { icon: "bi-globe", link: "#" }
-    ],
-    flags: 1,
-    sobre: "A TechFree conecta empresas, estudantes e instituições para realização de projetos reais, promovendo inovação e desenvolvimento de talentos.",
-    projetos: [
-        {
-            titulo: "Plataforma de Gestão de Projetos Integrados",
-            periodo: "2024-2025",
-            descricao: "Projeto para conectar empresas e estudantes em desafios reais."
-        },
-        {
-            titulo: "App de Saúde Mental",
-            periodo: "2023-2024",
-            descricao: "Aplicativo focado em bem-estar e acompanhamento psicológico."
-        }
-    ],
+    avaliacao: 4.8, // valor fixo ou 0 se preferir
+    flags: 1,       // valor fixo ou 0 se preferir
     feedbacks: [
-        {
-            texto: "Ótima empresa para projetos colaborativos, comunicação clara e pagamentos em dia."
-        },
-        {
-            texto: "Equipe aberta a novas ideias e muito profissionalismo no acompanhamento dos projetos."
-        },
-        {
-            texto: "Ambiente inovador e respeito com os freelancers. Recomendo!"
-        },
-        {
-            texto: "Processos bem definidos e feedbacks constantes durante o projeto."
-        },
-        {
-            texto: "Pagamento sempre em dia e abertura para sugestões técnicas."
-        }
+        { texto: "Ótima empresa para projetos colaborativos, comunicação clara e pagamentos em dia." },
+        { texto: "Equipe aberta a novas ideias e muito profissionalismo no acompanhamento dos projetos." },
+        { texto: "Ambiente inovador e respeito com os freelancers. Recomendo!" }
     ]
 };
+
+async function buscarPerfilEmpresa() {
+    const token = localStorage.getItem('token');
+    try {
+        const resp = await fetch('/empresa/perfil/verPerfil', {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        });
+        if (!resp.ok) throw new Error('Erro ao buscar perfil da empresa');
+        const data = await resp.json();
+
+        renderEmpresaProfile({
+            ...data,
+            avaliacao: empresaProfileData.avaliacao,
+            flags: empresaProfileData.flags,
+            feedbacks: empresaProfileData.feedbacks
+        });
+        atualizarBarraProgressoEmpresa({
+            ...data,
+            avaliacao: empresaProfileData.avaliacao,
+            flags: empresaProfileData.flags,
+            feedbacks: empresaProfileData.feedbacks
+        });
+        renderEmpresaFeedbacks({
+            ...data,
+            feedbacks: empresaProfileData.feedbacks
+        });
+    } catch (e) {
+        console.error(e);
+    }
+}
 
 function renderEmpresaProfile(profile) {
     // Flags
@@ -54,18 +52,40 @@ function renderEmpresaProfile(profile) {
         `;
     }
 
+    // Avaliação (estrelas)
+    let stars = '';
+    let fullStars = Math.floor(profile.avaliacao || 0);
+    let halfStar = (profile.avaliacao || 0) % 1 >= 0.5;
+    for (let i = 0; i < fullStars; i++) stars += '<i class="bi bi-star-fill"></i>';
+    if (halfStar) stars += '<i class="bi bi-star-half"></i>';
+    while (stars.match(/star/g)?.length < 5) stars += '<i class="bi bi-star"></i>';
+
+    // Redes sociais (LinkedIn e Site)
+    let redesHtml = '';
+    if (profile.linkedin) {
+        redesHtml += `<a href="${profile.linkedin}" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>`;
+    }
+    if (profile.site) {
+        redesHtml += `<a href="${profile.site}" target="_blank" rel="noopener noreferrer"><i class="bi bi-globe"></i></a>`;
+    }
+
+    // Contato
+    let contatoHtml = `
+        <div><i class="bi bi-envelope"></i><span>${profile.email}</span></div>
+        <div><i class="bi bi-telephone"></i><span>${profile.telefone || ""}</span></div>
+    `;
+
     // Header
     document.querySelector('.profile-header').innerHTML = `
-        <img src="${profile.avatar}" class="profile-avatar" alt="Logo da Empresa">
+        <img src="${profile.logoUrl || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa">
         <div class="profile-info flex-grow-1">
-            <h2>${profile.nome}</h2>
-            <div class="role mb-1">${profile.cargo}</div>
-            <div class="profile-contact mt-2">
-                <div><i class="bi bi-envelope"></i><span>${profile.contato.email}</span></div>
-                <div><i class="bi bi-telephone"></i><span>${profile.contato.telefone}</span></div>
-            </div>
-            <div class="profile-social mt-3">
-                ${profile.redes.map(r => `<a href="${r.link}" target="_blank" rel="noopener noreferrer"><i class="bi ${r.icon}"></i></a>`).join('')}
+            <h2>${profile.nomeFantasia}</h2>
+            <div class="role mb-1">${profile.bio || ""}</div>
+            <div class="profile-contact mt-2">${contatoHtml}</div>
+            <div class="profile-social mt-3">${redesHtml}</div>
+            <div class="profile-rating mt-3">
+                ${stars}
+                <span class="ms-2" style="color:#fff;font-size:1rem;">${(profile.avaliacao || 0).toFixed(1)}/5.0</span>
             </div>
         </div>
         <div class="profile-flags-box d-flex flex-column align-items-center">
@@ -91,14 +111,14 @@ function renderEmpresaFeedbacks(profile) {
 
 function calcularProgressoEmpresa(profile) {
     const campos = [
-        { nome: "Logo", valor: profile.avatar },
-        { nome: "Nome", valor: profile.nome },
-        { nome: "Descrição", valor: profile.sobre },
-        { nome: "E-mail", valor: profile.contato.email },
-        { nome: "Telefone", valor: profile.contato.telefone },
-        { nome: "LinkedIn", valor: (profile.redes && profile.redes[0]?.link) ? profile.redes[0].link : "" },
-        { nome: "Site", valor: (profile.redes && profile.redes[1]?.link) ? profile.redes[1].link : "" },
-        { nome: "Projetos Publicados", valor: (profile.projetos && profile.projetos.length > 0) ? "ok" : "" }
+        { nome: "Logo", valor: profile.logoUrl },
+        { nome: "Nome Fantasia", valor: profile.nomeFantasia },
+        { nome: "Razão Social", valor: profile.razaoSocial },
+        { nome: "E-mail", valor: profile.email },
+        { nome: "Telefone", valor: profile.telefone },
+        { nome: "LinkedIn", valor: profile.linkedin },
+        { nome: "Site", valor: profile.site },
+        { nome: "Bio", valor: profile.bio }
     ];
     const total = campos.length;
     const preenchidos = campos.filter(c => c.valor && String(c.valor).trim() !== "").length;
@@ -128,7 +148,5 @@ function atualizarBarraProgressoEmpresa(profile) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    renderEmpresaProfile(empresaProfileData);
-    atualizarBarraProgressoEmpresa(empresaProfileData);
-    renderEmpresaFeedbacks(empresaProfileData);
+    buscarPerfilEmpresa();
 });
