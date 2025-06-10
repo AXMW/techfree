@@ -14,13 +14,27 @@ document.addEventListener('DOMContentLoaded', async function () {
             const response = await fetch(`http://localhost:8080/candidaturas/projeto/${projetoId}`);
             if (!response.ok) throw new Error('Erro ao buscar candidatos');
             candidatos = await response.json();
+
+            // Verifica se algum candidato já foi aprovado
+            if (candidatos.some(c => (c.status || '').toUpperCase() === 'ACEITA')) {
+                document.body.innerHTML = `
+                    <div class="d-flex flex-column justify-content-center align-items-center vh-100 bg-dark text-white">
+                        <h2>Um candidato já foi aprovado para este projeto.</h2>
+                    </div>
+                `;
+                return;
+            }
+
             candidatosFiltrados = candidatos;
             currentPage = 1;
             renderCandidatos();
             renderPagination();
         } catch (e) {
-            candidatesList.innerHTML = `<div class="text-center text-danger py-5">Erro ao carregar candidatos.</div>`;
-            if (pagination) pagination.innerHTML = '';
+            document.body.innerHTML = `
+                <div class="d-flex flex-column justify-content-center align-items-center vh-100 bg-dark text-white">
+                    <h2>Erro ao carregar candidatos.</h2>
+                </div>
+            `;
             console.error(e);
         }
     }
@@ -121,10 +135,43 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Eventos para Aprovar e Recusar (apenas para pendentes)
         document.querySelectorAll('.aprovar-btn').forEach(btn => {
-            btn.onclick = async function () {
-                if (confirm('Deseja realmente aprovar este freelancer?')) {
-                    const projetoId = this.getAttribute('data-projeto-id');
-                    const freelancerId = this.getAttribute('data-freelancer-id');
+            btn.onclick = function () {
+                // Cria modal de confirmação customizada se não existir
+                let modalConfirm = document.getElementById('modalConfirmarAprovar');
+                if (!modalConfirm) {
+                    modalConfirm = document.createElement('div');
+                    modalConfirm.className = 'modal fade';
+                    modalConfirm.id = 'modalConfirmarAprovar';
+                    modalConfirm.tabIndex = -1;
+                    modalConfirm.innerHTML = `
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Confirmar aprovação</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                            </div>
+                            <div class="modal-body">
+                              <p>Tem certeza que deseja <strong>aprovar este freelancer</strong> para o projeto?</p>
+                            </div>
+                            <div class="modal-footer d-flex justify-content-center gap-2">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-secondary" id="confirmarAprovarBtn">Confirmar</button>
+                            </div>
+                          </div>
+                        </div>
+                    `;
+                    document.body.appendChild(modalConfirm);
+                }
+                const modal = new bootstrap.Modal(modalConfirm);
+                modal.show();
+
+                // Remove event listeners antigos
+                const btnConfirmar = document.getElementById('confirmarAprovarBtn');
+                btnConfirmar.replaceWith(btnConfirmar.cloneNode(true));
+                const btnConfirmarNovo = document.getElementById('confirmarAprovarBtn');
+                btnConfirmarNovo.onclick = async () => {
+                    const projetoId = btn.getAttribute('data-projeto-id');
+                    const freelancerId = btn.getAttribute('data-freelancer-id');
                     const token = localStorage.getItem('token');
                     try {
                         const response = await fetch('/projetos/selecionar-freelancer', {
@@ -139,8 +186,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                             })
                         });
                         if (response.ok) {
-                            alert('Freelancer aprovado com sucesso!');
-                            carregarCandidatos();
+                            window.location.href = `/andamento-projeto/${projetoId}`;
                         } else {
                             const data = await response.json();
                             alert(data.message || 'Erro ao aprovar freelancer.');
@@ -149,14 +195,47 @@ document.addEventListener('DOMContentLoaded', async function () {
                         alert('Erro ao conectar ao servidor.');
                         console.error(err);
                     }
-                }
+                };
             };
         });
 
         document.querySelectorAll('.recusar-btn').forEach(btn => {
-            btn.onclick = async function () {
-                if (confirm('Deseja realmente recusar este freelancer?')) {
-                    const candidaturaId = this.getAttribute('data-candidatura-id');
+            btn.onclick = function () {
+                // Cria modal de confirmação customizada se não existir
+                let modalConfirm = document.getElementById('modalConfirmarRecusar');
+                if (!modalConfirm) {
+                    modalConfirm = document.createElement('div');
+                    modalConfirm.className = 'modal fade';
+                    modalConfirm.id = 'modalConfirmarRecusar';
+                    modalConfirm.tabIndex = -1;
+                    modalConfirm.innerHTML = `
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Confirmar recusa</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                            </div>
+                            <div class="modal-body">
+                              <p>Tem certeza que deseja <strong>recusar este freelancer</strong> para o projeto?</p>
+                            </div>
+                            <div class="modal-footer d-flex justify-content-center gap-2">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-secondary" id="confirmarRecusarBtn">Confirmar</button>
+                            </div>
+                          </div>
+                        </div>
+                    `;
+                    document.body.appendChild(modalConfirm);
+                }
+                const modal = new bootstrap.Modal(modalConfirm);
+                modal.show();
+
+                // Remove event listeners antigos
+                const btnConfirmar = document.getElementById('confirmarRecusarBtn');
+                btnConfirmar.replaceWith(btnConfirmar.cloneNode(true));
+                const btnConfirmarNovo = document.getElementById('confirmarRecusarBtn');
+                btnConfirmarNovo.onclick = async () => {
+                    const candidaturaId = btn.getAttribute('data-candidatura-id');
                     const token = localStorage.getItem('token');
                     try {
                         const response = await fetch(`/candidaturas/${candidaturaId}/recusar`, {
@@ -167,6 +246,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         });
                         if (response.ok) {
                             alert('Freelancer recusado com sucesso!');
+                            modal.hide();
                             carregarCandidatos();
                         } else {
                             const data = await response.json();
@@ -176,7 +256,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         alert('Erro ao conectar ao servidor.');
                         console.error(err);
                     }
-                }
+                };
             };
         });
     }

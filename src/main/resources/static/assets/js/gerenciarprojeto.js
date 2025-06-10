@@ -256,7 +256,17 @@ function renderProjects() {
     document.querySelectorAll('.visualizar-btn').forEach(btn => {
         btn.onclick = function () {
             const id = this.getAttribute('data-id');
-            window.location.href = `/detalhes-projeto/${id}`;
+            // Busca o projeto correspondente
+            const projeto = projects.find(p => String(p.id) === String(id));
+            // Se não for Oportunidade ou Candidatura em Aberto, redireciona para andamento-projeto
+            if (
+                projeto &&
+                projeto.status !== 'aberto'
+            ) {
+                window.location.href = `/andamento-projeto/${id}`;
+            } else {
+                window.location.href = `/detalhes-projeto/${id}`;
+            }
         };
     });
     if (tipoUsuario !== 'freelancer') {
