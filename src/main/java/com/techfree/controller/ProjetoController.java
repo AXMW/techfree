@@ -159,6 +159,16 @@ public class ProjetoController {
         return ResponseEntity.ok(new ProjetoResponseDTO(projeto));
     }
 
+    @PutMapping("/{id}/status/cancelar")
+    @PreAuthorize("hasRole('EMPRESA') or hasRole('FREELANCER')")
+    public ResponseEntity<ProjetoResponseDTO> cancelarProjeto(
+        @PathVariable Long id,
+        Authentication auth) {
+
+        Projeto projeto = projetoService.cancelarProjeto(id, auth.getName());
+        return ResponseEntity.ok(new ProjetoResponseDTO(projeto));
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<Void> deletar(

@@ -255,6 +255,27 @@ public class ProjetoService {
         }
     }
 
+    public Projeto cancelarProjeto(Long id, String email) {
+        Projeto projeto = projetoRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
+
+        if (!projeto.getEmpresa().getUsuario().getEmail().equals(email) && 
+            (projeto.getFreelancerSelecionado() == null || !projeto.getFreelancerSelecionado().getUsuario().getEmail().equals(email))) {
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Acesso negado"
+                );
+        }
+
+        projeto.setStatus(StatusProjeto.CANCELADO);
+        projetoRepository.save(projeto);
+
+        return projeto;
+    }
+
     public void deletarProjeto(Long id, String emailEmpresa) {
         Projeto projeto = projetoRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(
