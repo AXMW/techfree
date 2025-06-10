@@ -133,10 +133,29 @@ public class ProjetoController {
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<ProjetoResponseDTO> atualizarStatus(
         @PathVariable Long id,
-        @RequestBody String status,
         Authentication auth) {
 
         Projeto projeto = projetoService.atualizarStatusProjeto(id, auth.getName());
+        return ResponseEntity.ok(new ProjetoResponseDTO(projeto));
+    }
+
+    @PutMapping("/{id}/status/revisao")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<ProjetoResponseDTO> atualizarStatusRevisao(
+        @PathVariable Long id,
+        Authentication auth) {
+
+        Projeto projeto = projetoService.atualizarStatusProjetoRevisao(id, auth.getName());
+        return ResponseEntity.ok(new ProjetoResponseDTO(projeto));
+    }
+
+    @PutMapping("/{id}/status/em-andamento")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<ProjetoResponseDTO> atualizarStatusEmAndamento(
+        @PathVariable Long id,
+        Authentication auth) {
+
+        Projeto projeto = projetoService.atualizarStatusProjetoEmAndamento(id, auth.getName());
         return ResponseEntity.ok(new ProjetoResponseDTO(projeto));
     }
 

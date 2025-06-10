@@ -175,8 +175,76 @@ public class ProjetoService {
                 );
         }
 
+        if(projeto.getStatus() != StatusProjeto.REVISAO) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "O projeto não está em revisão"
+                );
+        }
+
         try {
             projeto.setStatus(StatusProjeto.CONCLUIDO);
+            projetoRepository.save(projeto);
+            return projeto;
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "Status inválido"
+                );
+        }
+    }
+
+    public Projeto atualizarStatusProjetoRevisao(Long id, String emailFreelancer) {
+        Projeto projeto = projetoRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
+
+        if (!projeto.getFreelancerSelecionado().getUsuario().getEmail().equals(emailFreelancer)) {
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Acesso negado"
+                );
+        }
+
+        if(projeto.getStatus() != StatusProjeto.EM_ANDAMENTO) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "O projeto não está em andamento"
+                );
+        }
+
+        try {
+            projeto.setStatus(StatusProjeto.REVISAO);
+            projetoRepository.save(projeto);
+            return projeto;
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "Status inválido"
+                );
+        }
+    }
+
+    public Projeto atualizarStatusProjetoEmAndamento(Long id, String emailEmpresa) {
+        Projeto projeto = projetoRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
+
+        if (!projeto.getEmpresa().getUsuario().getEmail().equals(emailEmpresa)) {
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Acesso negado"
+                );
+        }
+
+        try {
+            projeto.setStatus(StatusProjeto.EM_ANDAMENTO);
+            projeto.setDataInicio(LocalDate.now());
+            projeto.setPrazoEntrega(LocalDate.now().plusMonths(projeto.getDuracao()));
             projetoRepository.save(projeto);
             return projeto;
         } catch (IllegalArgumentException e) {
