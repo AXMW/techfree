@@ -3479,3 +3479,15 @@ section.bg-dark {
 .btn-secondary {
     transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
 }
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.status-cancelado {
+    background: #b30000;
+    color: #ffdddd;
+    padding: 0.25em 0.7em;
+    border-radius: 0.5em;
+    font-weight: bold;
+}
