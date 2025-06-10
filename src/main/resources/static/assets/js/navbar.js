@@ -226,14 +226,21 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Troca ícone pelo avatar, se houver
         const icon = document.querySelector('.dropdown-profile-header .bi-person-circle');
-        if (perfil.avatarUrl && icon) {
+        let avatarUrl = null;
+        if (tipoUsuario === 'EMPRESA') {
+            avatarUrl = perfil.logoUrl || '/assets/img/default-avatar.png';
+        } else {
+            avatarUrl = perfil.avatar || '/assets/img/default-avatar.png';
+        }
+        if (icon) {
             const img = document.createElement('img');
-            img.src = perfil.avatarUrl;
+            img.src = avatarUrl;
             img.alt = 'Avatar';
             img.style.width = '2.2rem';
             img.style.height = '2.2rem';
             img.style.objectFit = 'cover';
             img.style.borderRadius = '50%';
+            img.style.border = '3px solid #00294B';
             icon.replaceWith(img);
         }
 
@@ -242,21 +249,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         const minhaConta = document.getElementById('minhaContaLink');
         if (btnEditar) {
             if (tipoUsuario === 'EMPRESA') {
-                btnEditar.onclick = () => window.location.href = 'pagina-profile-empresa-editar';
+                btnEditar.onclick = () => window.location.href = '/pagina-profile-empresa-editar';
                 btnEditar.textContent = 'Editar perfil empresa';
                 if (minhaConta) {
                     minhaConta.onclick = (e) => {
                         e.preventDefault();
-                        window.location.href = 'pagina-profile-empresa1';
+                        window.location.href = '/pagina-profile-empresa';
                     };
                 }
             } else {
-                btnEditar.onclick = () => window.location.href = 'pagina-profile-editar';
+                btnEditar.onclick = () => window.location.href = '/pagina-profile-editar';
                 btnEditar.textContent = 'Editar perfil';
                 if (minhaConta) {
                     minhaConta.onclick = (e) => {
                         e.preventDefault();
-                        window.location.href = 'pagina-profile1';
+                        window.location.href = '/pagina-profile';
                     };
                 }
             }
@@ -293,7 +300,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (logoutLink) {
         logoutLink.addEventListener('click', function (e) {
             e.preventDefault();
+            // Limpa localStorage
             localStorage.clear();
+            // Limpa todos os cookies
+            document.cookie.split(";").forEach(function(c) {
+                document.cookie = c
+                    .replace(/^ +/, "")
+                    .replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
+            });
             window.location.href = '/login';
         });
     }

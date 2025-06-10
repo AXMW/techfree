@@ -2,6 +2,7 @@ package com.techfree.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -76,6 +77,7 @@ public class EmpresaController {
         if(dadosAtualizados.getRazaoSocial() != null) empresa.setRazaoSocial(dadosAtualizados.getRazaoSocial());
         
         if(dadosAtualizados.getNomeFantasia() != null) empresa.setNomeFantasia(dadosAtualizados.getNomeFantasia());
+        if(dadosAtualizados.getAreaAtuacao() != null) empresa.setAreaAtuacao(dadosAtualizados.getAreaAtuacao());
         if(dadosAtualizados.getTelefone() != null) empresa.setTelefone(dadosAtualizados.getTelefone());
         if(dadosAtualizados.getBio() != null) empresa.setBio(dadosAtualizados.getBio());
         if(dadosAtualizados.getSite() != null) empresa.setSite(dadosAtualizados.getSite());
@@ -134,13 +136,14 @@ public class EmpresaController {
     }
 
     // FREELANCER: ver a empresa
-    @GetMapping("/verEmpresa/{id}")
+    @GetMapping("/perfil/{id}")
     @PreAuthorize("hasRole('FREELANCER')")
-    public ResponseEntity<EmpresaVisualizacaoResponseDTO> verEmpresa(@PathVariable Long id) {
-        Empresa empresa = empresaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
-        EmpresaVisualizacaoResponseDTO empresaDto = new EmpresaVisualizacaoResponseDTO(empresa);
-        
-        return ResponseEntity.ok(empresaDto);
+    public ResponseEntity<EmpresaVisualizacaoResponseDTO> verPerfilPorId(@PathVariable Long id) {
+        Optional<Empresa> empresa = empresaRepository.findById(id);
+        if (empresa.isEmpty()) {
+                throw new RuntimeException("Empresa não encontrada com ID: " + id);
+        }
+        EmpresaVisualizacaoResponseDTO response = new EmpresaVisualizacaoResponseDTO(empresa.get());
+        return ResponseEntity.ok(response);
     }
 }

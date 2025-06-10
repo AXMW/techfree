@@ -1392,7 +1392,7 @@ section.bg-dark {
     }
 }
 
-/* Estilos PaginaDeProfile1 */
+/* Estilos PaginaDeProfile */
 
 .profile-header {
     background: rgba(0, 0, 0, 0.18);
@@ -1802,7 +1802,7 @@ section.bg-dark {
     margin-left: 2px;
 }
 
-/* Estilos PaginaDeProfile1 */
+/* Estilos PaginaDeProfile */
 
 .profile-header {
     background: rgba(0, 0, 0, 0.18);
@@ -2067,7 +2067,7 @@ section.bg-dark {
     transition: background 0.2s;
 }
 
-/* Estilo PaginaDeProfile2 */
+/* Estilo VerPerfilFreelancer */
 
 main,
 section.bg-dark {
@@ -2663,7 +2663,7 @@ section.bg-dark {
 
 /* Removidos: .profile-rating, .profile-feedback, .profile-flags, .profile-flags-box, .flag-circle, .flags-text */
 
-/* Estilo PaginaDeProfileEmpresa1 */
+/* Estilo PaginaDeProfileEmpresa */
 
 main,
 section.bg-dark {
@@ -2895,7 +2895,7 @@ section.bg-dark {
     margin-left: 2px;
 }
 
-/* Estilo PaginaDeProfileEmpresa2 */
+/* Estilo VerPerfilEmpresa */
 
 main,
 section.bg-dark {

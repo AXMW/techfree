@@ -67,6 +67,15 @@ public class FreelancerUpdateDTO {
         private String tempo;
         private String descricao;
 
+        // Construtor com argumentos
+        public ExperienciaProfissionalDTO(Long id, String empresa, String cargo, String tempo, String descricao) {
+            this.id = id;
+            this.empresa = empresa;
+            this.cargo = cargo;
+            this.tempo = tempo;
+            this.descricao = descricao;
+        }
+
         // Getters e Setters
         public Long getId() { return id; }
         public void setId(Long id) { this.id = id; }
@@ -86,6 +95,15 @@ public class FreelancerUpdateDTO {
         private String curso;
         private String periodo;
         private String descricao;
+
+        // Construtor com argumentos
+        public ExperienciaAcademicaDTO(Long id, String instituicao, String curso, String periodo, String descricao) {
+            this.id = id;
+            this.instituicao = instituicao;
+            this.curso = curso;
+            this.periodo = periodo;
+            this.descricao = descricao;
+        }
 
         // Getters e Setters
         public Long getId() { return id; }

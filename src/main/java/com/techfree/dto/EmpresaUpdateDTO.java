@@ -3,6 +3,7 @@ package com.techfree.dto;
 public class EmpresaUpdateDTO {
     private String razaoSocial;
     private String nomeFantasia;
+    private String areaAtuacao;
     private String telefone;
     private String bio;
     private String site;
@@ -24,6 +25,13 @@ public class EmpresaUpdateDTO {
 
     public void setNomeFantasia(String nomeFantasia) {
         this.nomeFantasia = nomeFantasia;
+    }
+    
+    public String getAreaAtuacao() {
+        return areaAtuacao;
+    }
+    public void setAreaAtuacao(String areaAtuacao) {
+        this.areaAtuacao = areaAtuacao;
     }
 
     public String getTelefone() {

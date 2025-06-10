@@ -102,15 +102,16 @@ public class PaginaController {
     }
 
     @PreAuthorize("hasRole('FREELANCER')")
-    @GetMapping("/pagina-profile1")
-    public String paginaProfile1() {
-        return "PaginaDeProfile1";
+    @GetMapping("/pagina-profile")
+    public String paginaprofile() {
+        return "PaginaDeProfile";
     }
 
     @PreAuthorize("hasRole('EMPRESA')")
-    @GetMapping("/pagina-profile2")
-    public String paginaProfile2() {
-        return "PaginaDeProfile2";
+    @GetMapping("/ver-perfil-freelancer/{id}")
+    public String verPerfilFreelancer(@PathVariable Long id, Model model) {
+        model.addAttribute("freelancerId", id);
+        return "VerPerfilFreelancer";
     }
 
     @PreAuthorize("hasRole('FREELANCER')")
@@ -120,15 +121,16 @@ public class PaginaController {
     }
 
     @PreAuthorize("hasRole('EMPRESA')")
-    @GetMapping("/pagina-profile-empresa1")
-    public String paginaProfileEmpresa1() {
-        return "PaginaDeProfileEmpresa1";
+    @GetMapping("/pagina-profile-empresa")
+    public String paginaprofileempresa() {
+        return "PaginaDeProfileEmpresa";
     }
 
     @PreAuthorize("hasRole('FREELANCER')")
-    @GetMapping("/pagina-profile-empresa2")
-    public String paginaProfileEmpresa2() {
-        return "PaginaDeProfileEmpresa2";
+    @GetMapping("/ver-perfil-empresa/{id}")
+    public String verPerfilEmpresa(@PathVariable Long id, Model model) {
+        model.addAttribute("empresaId", id);
+        return "VerPerfilEmpresa";
     }
 
     @PreAuthorize("hasRole('EMPRESA')")

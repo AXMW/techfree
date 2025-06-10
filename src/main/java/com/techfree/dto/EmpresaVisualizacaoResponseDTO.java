@@ -7,6 +7,7 @@ public class EmpresaVisualizacaoResponseDTO {
     private Long id;
     private String nomeFantasia;
     private String razaoSocial;
+    private String areaAtuacao;
     private String email;
     private String site;
     private String linkedin;
@@ -18,6 +19,7 @@ public class EmpresaVisualizacaoResponseDTO {
         this.id = empresa.getId();
         this.nomeFantasia = empresa.getNomeFantasia();
         this.razaoSocial = empresa.getRazaoSocial();
+        this.areaAtuacao = empresa.getAreaAtuacao();
         this.email = empresa.getUsuario().getEmail();
         this.site = empresa.getSite();
         this.linkedin = empresa.getLinkedin();

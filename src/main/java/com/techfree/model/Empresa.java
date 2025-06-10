@@ -19,8 +19,11 @@ public class Empresa {
 
     private String nomeFantasia;
 
+    private String areaAtuacao;
+
     private String telefone;
 
+    @Column(columnDefinition = "TEXT")
     private String bio;
 
     private String site;
