@@ -86,6 +86,14 @@ public class ProjetoService {
         return projetoRepository.findByStatusAndFreelancerSelecionadoUsuarioEmail(StatusProjeto.CONCLUIDO, emailFreelancer);
     }
 
+    public List<Projeto> listarTodosCanceladorFreelancer(String emailFreelancer) {
+        return projetoRepository.findByStatusAndFreelancerSelecionadoUsuarioEmail(StatusProjeto.CANCELADO, emailFreelancer);
+    }
+
+    public List<Projeto> listarTodosEmRevisaoFreelancer(String emailFreelancer) {
+        return projetoRepository.findByStatusAndFreelancerSelecionadoUsuarioEmail(StatusProjeto.REVISAO, emailFreelancer);
+    }
+
     public Projeto criarProjeto(ProjetoRequestDTO dto, String emailEmpresa) {
 
         Usuario usuario = usuarioRepository.findByEmail(emailEmpresa)
@@ -283,7 +291,7 @@ public class ProjetoService {
                 "O projeto já está cancelado"
                 );
         }
-        
+
         if(projeto.getStatus() == StatusProjeto.CONCLUIDO) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, // 400

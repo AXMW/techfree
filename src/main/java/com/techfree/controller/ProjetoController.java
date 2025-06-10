@@ -108,6 +108,26 @@ public class ProjetoController {
         return ResponseEntity.ok(dtos);
     }
 
+    @GetMapping("/listar-cancelados-freelancer")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<List<ProjetoResponseDTO>> listarProjetosCanceladosParaFreelancer(Authentication auth) {
+        List<Projeto> projetos = projetoService.listarTodosCanceladorFreelancer(auth.getName());
+        List<ProjetoResponseDTO> dtos = projetos.stream()
+            .map(ProjetoResponseDTO::new)
+            .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/listar-em-revisao-freelancer")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<List<ProjetoResponseDTO>> listarProjetosEmRevisaoParaFreelancer(Authentication auth) {
+        List<Projeto> projetos = projetoService.listarTodosEmRevisaoFreelancer(auth.getName());
+        List<ProjetoResponseDTO> dtos = projetos.stream()
+            .map(ProjetoResponseDTO::new)
+            .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('EMPRESA') or hasRole('FREELANCER')")
     public ResponseEntity<ProjetoResponseDTO> obterPorId(
