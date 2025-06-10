@@ -277,6 +277,20 @@ public class ProjetoService {
                 );
         }
 
+        if(projeto.getStatus() == StatusProjeto.CANCELADO) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "O projeto já está cancelado"
+                );
+        }
+        
+        if(projeto.getStatus() == StatusProjeto.CONCLUIDO) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "O projeto já está concluído"
+                );
+        }
+
         projeto.setStatus(StatusProjeto.CANCELADO);
         projetoRepository.save(projeto);
 
