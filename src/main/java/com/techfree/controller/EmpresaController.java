@@ -44,12 +44,24 @@ public class EmpresaController {
     // EMPRESA: ver o perfil da empresa logada
     @GetMapping("/perfil/verPerfil")
     @PreAuthorize("hasRole('EMPRESA')")
-    public Empresa verPerfil(Authentication authentication) {
+    public EmpresaVisualizacaoResponseDTO verPerfil(Authentication authentication) {
         String email = authentication.getName();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        return empresaRepository.findByUsuario(usuario)
+        Empresa empresa = empresaRepository.findByUsuario(usuario)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+        EmpresaVisualizacaoResponseDTO empresaDto = new EmpresaVisualizacaoResponseDTO(
+                empresa.getId(),
+                empresa.getNomeFantasia(),
+                empresa.getRazaoSocial(),
+                usuario.getEmail(),
+                empresa.getSite(),
+                empresa.getLinkedin(),
+                empresa.getTelefone(),
+                empresa.getBio(),
+                empresa.getAvatar()
+        );
+        return empresaDto;
     }
 
     // EMPRESA: atualizar o perfil da empresa logada

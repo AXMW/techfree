@@ -38,13 +38,15 @@ public class FreelancerController {
     // FREELANCER: ver o perfil do freelancer logado
     @GetMapping("/perfil/verPerfil")
     @PreAuthorize("hasRole('FREELANCER')")
-    public Freelancer verPerfil(Authentication authentication) {
+    public FreelancerVisualizacaoResponseDTO verPerfil(Authentication authentication) {
         String email = authentication.getName(); // vem do JWT
         Usuario usuario = usuarioRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        Optional<Freelancer> freelancer = freelancerRepository.findByUsuario(usuario);
-        return freelancer.orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+        Freelancer freelancer = freelancerRepository.findByUsuario(usuario).orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+
+        FreelancerVisualizacaoResponseDTO response = new FreelancerVisualizacaoResponseDTO(freelancer);
+        return response;
     }
 
     // FREELANCER: atualizar o perfil do freelancer logado
