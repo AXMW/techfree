@@ -1,6 +1,9 @@
 package com.techfree.dto;
 import lombok.Getter;
 import com.techfree.model.Empresa;
+import com.techfree.model.AvaliacaoEmpresa;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class EmpresaAutoVisualizacaoResponseDTO {
@@ -16,8 +19,10 @@ public class EmpresaAutoVisualizacaoResponseDTO {
     private String avatar;
     private int quantidadeDeFlags;
     private String emailContato;
+    private Double avaliacaoMedia;
+    private List<AvaliacaoEmpresaResponseDTO> feedbacks;
 
-    public EmpresaAutoVisualizacaoResponseDTO(Empresa empresa) {
+    public EmpresaAutoVisualizacaoResponseDTO(Empresa empresa, List<AvaliacaoEmpresa> avaliacoes) {
         this.id = empresa.getId();
         this.nomeFantasia = empresa.getNomeFantasia();
         this.razaoSocial = empresa.getRazaoSocial();
@@ -30,5 +35,18 @@ public class EmpresaAutoVisualizacaoResponseDTO {
         this.avatar = empresa.getAvatar();
         this.quantidadeDeFlags = empresa.getUsuario().getQuantidadeDeFlags();
         this.emailContato = empresa.getEmailContato();
+        if (avaliacoes != null && !avaliacoes.isEmpty()) {
+            this.avaliacaoMedia = avaliacoes.stream()
+                .mapToDouble(AvaliacaoEmpresa::getNota)
+                .average()
+                .orElse(0.0);
+            this.feedbacks = avaliacoes.stream()
+                .map(AvaliacaoEmpresaResponseDTO::new)
+                .collect(Collectors.toList());
+        } else {
+            this.avaliacaoMedia = null;
+            this.feedbacks = List.of();
+        }
     }
+
 }

@@ -1,6 +1,5 @@
 const empresaProfileData = {
-    avaliacao: 4.8, // valor fixo ou 0 se preferir
-    flags: 1,       // valor fixo ou 0 se preferir
+    avaliacao: 0.2, // valor fixo ou 0 se preferir
     feedbacks: [
         { texto: "Ótima empresa para projetos colaborativos, comunicação clara e pagamentos em dia." },
         { texto: "Equipe aberta a novas ideias e muito profissionalismo no acompanhamento dos projetos." },
@@ -30,15 +29,13 @@ async function buscarPerfilEmpresa() {
             linkedin: data.linkedin,
             descricao: data.bio,
             projetos: data.projetos,
-
-            avaliacao: empresaProfileData.avaliacao,
-            flags: empresaProfileData.flags,
-            feedbacks: empresaProfileData.feedbacks
+            flags: data.quantidadeDeFlags,
+            avaliacao: data.avaliacaoMedia || 0, // Use o valor fixo ou 0 se preferir
+            feedbacks: data.feedbacks
         };
 
         renderEmpresaProfile(profile);
         atualizarBarraProgressoEmpresa(profile);
-        renderEmpresaFeedbacks(profile);
     } catch (e) {
         console.error(e);
     }
@@ -78,6 +75,39 @@ function renderEmpresaProfile(profile) {
         <div><i class="bi bi-telephone"></i><span>${profile.telefone || ""}</span></div>
     `;
 
+    // Avaliação média
+    let avaliacaoHtml = '';
+    if (profile.avaliacaoMedia) {
+        let stars = '';
+        let fullStars = Math.floor(profile.avaliacaoMedia);
+        let halfStar = profile.avaliacaoMedia % 1 >= 0.5;
+        for (let i = 0; i < fullStars; i++) stars += '<i class="bi bi-star-fill"></i>';
+        if (halfStar) stars += '<i class="bi bi-star-half"></i>';
+        while (stars.match(/star/g)?.length < 5) stars += '<i class="bi bi-star"></i>';
+        avaliacaoHtml = `
+            <div class="mb-2">
+                <span class="fw-bold">Avaliação geral:</span>
+                <span class="text-warning">${profile.avaliacaoMedia.toFixed(1)} ${stars}</span>
+            </div>
+        `;
+    }
+
+    // Avaliação no header
+    const feedbackCount = (profile.feedbacks && profile.feedbacks.length) ? profile.feedbacks.length : 0;
+    let media = profile.avaliacaoMedia !== undefined ? profile.avaliacaoMedia : (profile.avaliacao || 0);
+    let starsHeader = '';
+    let fullStarsHeader = Math.floor(media);
+    let halfStarHeader = media % 1 >= 0.5;
+    for (let i = 0; i < 5; i++) {
+        if (i < fullStarsHeader) {
+            starsHeader += '<i class="bi bi-star-fill"></i>';
+        } else if (i === fullStarsHeader && halfStarHeader) {
+            starsHeader += '<i class="bi bi-star-half"></i>';
+        } else {
+            starsHeader += '<i class="bi bi-star"></i>';
+        }
+    }
+
     // Header
     document.querySelector('.profile-header').innerHTML = `
         <img src="${profile.avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa">
@@ -87,8 +117,11 @@ function renderEmpresaProfile(profile) {
             <div class="profile-contact mt-2">${contatoHtml|| ""}</div>
             <div class="profile-social mt-3">${redesHtml}</div>
             <div class="profile-rating mt-3">
-                ${stars}
-                <span class="ms-2" style="color:#fff;font-size:1rem;">${(profile.avaliacao || 0).toFixed(1)}/5.0</span>
+                ${starsHeader}
+                <span class="ms-2" style="color:#fff;font-size:1rem;">
+                    ${media.toFixed(1)}/5.0
+                    <span class="text-secondary ms-2">(${feedbackCount} feedback${feedbackCount === 1 ? '' : 's'})</span>
+                </span>
             </div>
         </div>
         <div class="profile-flags-box d-flex flex-column align-items-center">
@@ -103,16 +136,16 @@ function renderEmpresaProfile(profile) {
 
     const sobreEl = document.getElementById('empresaSobre');
     if (sobreEl) sobreEl.textContent = profile.descricao || '';
-}
 
-function renderEmpresaFeedbacks(profile) {
-    const feedbacksHtml = (profile.feedbacks || []).slice(0, 3).map(fb => `
+    // Atualiza a seção de feedbacks com a avaliação média
+    const feedbacks = (profile.feedbacks || []).slice().reverse().slice(0, 3); // Pega os 3 últimos
+    const feedbacksHtml = feedbacks.map(fb => `
         <div class="profile-feedback">
             "${fb.texto}"
         </div>
     `).join('');
     const container = document.getElementById('empresaProfileFeedbacks');
-    if (container) container.innerHTML = feedbacksHtml;
+    if (container) container.innerHTML = avaliacaoHtml + feedbacksHtml;
 }
 
 function calcularProgressoEmpresa(profile) {

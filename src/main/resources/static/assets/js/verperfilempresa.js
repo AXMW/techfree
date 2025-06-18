@@ -1,6 +1,6 @@
 const empresaId = document.body.getAttribute('data-empresa-id');
 
-// Avaliação e feedbacks ainda não existem no backend, então mantemos fixos:
+// Se o backend ainda não retorna avaliação e feedbacks, mantenha mocks:
 const avaliacaoFixa = 4.8;
 const feedbacksFixos = [
     { texto: "Ótima empresa para projetos colaborativos, comunicação clara e pagamentos em dia." },
@@ -25,11 +25,13 @@ async function carregarPerfilEmpresa() {
             telefone: data.telefone,
             sobre: data.bio,
             avatar: data.avatar,
-            avaliacao: avaliacaoFixa,
-            feedbacks: feedbacksFixos
+            projetos: data.projetos || [],
+            avaliacao: data.avaliacaoMedia || 0, // Use o valor fixo ou 0 se preferir
+            feedbacks: data.feedbacks,
         };
 
         renderEmpresaProfile(profile);
+        renderEmpresaProjetos(profile.projetos);
         renderEmpresaFeedbacks(profile);
     } catch (e) {
         alert('Erro ao carregar perfil da empresa');
@@ -38,13 +40,23 @@ async function carregarPerfilEmpresa() {
 }
 
 function renderEmpresaProfile(profile) {
-    // Avaliação (estrelas)
+    // Avaliação (sempre 5 estrelas)
     let stars = '';
-    let fullStars = Math.floor(profile.avaliacao);
-    let halfStar = profile.avaliacao % 1 >= 0.5;
-    for (let i = 0; i < fullStars; i++) stars += '<i class="bi bi-star-fill"></i>';
-    if (halfStar) stars += '<i class="bi bi-star-half"></i>';
-    while (stars.match(/star/g)?.length < 5) stars += '<i class="bi bi-star"></i>';
+    let media = profile.avaliacao || 0;
+    let fullStars = Math.floor(media);
+    let halfStar = media % 1 >= 0.5;
+    for (let i = 0; i < 5; i++) {
+        if (i < fullStars) {
+            stars += '<i class="bi bi-star-fill"></i>';
+        } else if (i === fullStars && halfStar) {
+            stars += '<i class="bi bi-star-half"></i>';
+        } else {
+            stars += '<i class="bi bi-star"></i>';
+        }
+    }
+
+    // Número de feedbacks
+    const feedbackCount = (profile.feedbacks && profile.feedbacks.length) ? profile.feedbacks.length : 0;
 
     // Redes sociais (LinkedIn e Site)
     let redesHtml = '';
@@ -55,14 +67,14 @@ function renderEmpresaProfile(profile) {
         redesHtml += `<a href="${profile.site}" target="_blank" rel="noopener noreferrer"><i class="bi bi-globe"></i></a>`;
     }
 
-    // Header
+    // Header dinâmico
     document.querySelector('.profile-header').innerHTML = `
         <img src="${profile.avatar || '/assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa" style="width: 120px; height: 120px; border-radius: 50%; object-fit: contain; border: 4px solid #FF6F00; background: #fff;">
         <div class="profile-info">
             <h2>${profile.nome}</h2>
             <div class="role mb-1">${profile.cargo || ""}</div>
             <div class="profile-contact mt-2">
-                <div><i class="bi bi-envelope"></i><span>${profile.emailContato}</span></div>
+                <div><i class="bi bi-envelope"></i><span>${profile.emailContato || ""}</span></div>
                 <div><i class="bi bi-telephone"></i><span>${profile.telefone || ""}</span></div>
             </div>
             <div class="profile-social mt-3">
@@ -70,21 +82,44 @@ function renderEmpresaProfile(profile) {
             </div>
             <div class="profile-rating mt-3">
                 ${stars}
-                <span class="ms-2" style="color:#fff;font-size:1rem;">${profile.avaliacao.toFixed(1)}/5.0</span>
+                <span class="ms-2" style="color:#fff;font-size:1rem;">
+                    ${media.toFixed(1)}/5.0
+                    <span class="text-secondary ms-2">(${feedbackCount} feedback${feedbackCount === 1 ? '' : 's'})</span>
+                </span>
             </div>
         </div>
     `;
 
     // Sobre
-    document.querySelector('.profile-section h4').nextElementSibling.innerHTML = profile.sobre || '';
+    document.getElementById('empresaSobre').textContent = profile.sobre || '';
+}
+
+function renderEmpresaProjetos(projetos) {
+    const container = document.getElementById('empresaProjetos');
+    if (!projetos || projetos.length === 0) {
+        container.innerHTML = '<p class="text-muted">Nenhum projeto publicado ainda.</p>';
+        return;
+    }
+    container.innerHTML = projetos.map(p => `
+        <div class="timeline-item mb-3">
+            <div class="timeline-title fw-bold">${p.nome || p.titulo || ''}</div>
+            <div class="timeline-period">${p.data || ''}</div>
+            <div class="timeline-item-desc">${p.descricao || ''}</div>
+        </div>
+    `).join('');
 }
 
 function renderEmpresaFeedbacks(profile) {
-    const feedbacksHtml = (profile.feedbacks || []).slice(0, 3).map(fb => `
-        <div class="profile-feedback">
-            "${fb.texto}"
-        </div>
-    `).join('');
+    // Pega os 3 últimos feedbacks enviados
+    const feedbacksHtml = (profile.feedbacks || [])
+        .slice() // cópia
+        .reverse() // mais recentes primeiro
+        .slice(0, 3) // pega os 3 últimos
+        .map(fb => `
+            <div class="profile-feedback">
+                "${fb.texto}"
+            </div>
+        `).join('');
     const container = document.getElementById('empresaProfileFeedbacks');
     if (container) container.innerHTML = feedbacksHtml;
 }

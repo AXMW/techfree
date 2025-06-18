@@ -19,6 +19,7 @@ import com.techfree.repository.ProjetoRepository;
 import com.techfree.repository.AvaliacaoEmpresaRepository;
 import com.techfree.service.ProjetoService;
 import com.techfree.repository.UsuarioRepository;
+import com.techfree.model.AvaliacaoEmpresa;
 
 @RestController
 @RequestMapping("/empresa")
@@ -54,7 +55,8 @@ public class EmpresaController {
         Empresa empresa = empresaRepository.findByUsuario(usuario)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
-        EmpresaAutoVisualizacaoResponseDTO empresaDto = new EmpresaAutoVisualizacaoResponseDTO(empresa);
+        List<AvaliacaoEmpresa> avaliacoes = avaliacaoEmpresaRepository.findByEmpresa(empresa);
+        EmpresaAutoVisualizacaoResponseDTO empresaDto = new EmpresaAutoVisualizacaoResponseDTO(empresa, avaliacoes);
         return empresaDto;
     }
 
@@ -141,11 +143,11 @@ public class EmpresaController {
     @GetMapping("/perfil/{id}")
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<EmpresaVisualizacaoResponseDTO> verPerfilPorId(@PathVariable Long id) {
-        Optional<Empresa> empresa = empresaRepository.findById(id);
-        if (empresa.isEmpty()) {
-                throw new RuntimeException("Empresa não encontrada com ID: " + id);
-        }
-        EmpresaVisualizacaoResponseDTO response = new EmpresaVisualizacaoResponseDTO(empresa.get());
+        Empresa empresa = empresaRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Empresa não encontrada com ID: " + id));
+        List<Projeto> projetos = projetoRepository.findByEmpresa(empresa);
+        List<AvaliacaoEmpresa> avaliacoes = avaliacaoEmpresaRepository.findByEmpresa(empresa);
+        EmpresaVisualizacaoResponseDTO response = new EmpresaVisualizacaoResponseDTO(empresa, projetos, avaliacoes);
         return ResponseEntity.ok(response);
     }
 }

@@ -33,18 +33,29 @@ async function buscarPerfilFreelancer() {
         if (!resp.ok) throw new Error('Erro ao buscar perfil');
         const data = await resp.json();
 
-        renderProfile({
-            ...data,
-            avaliacao: profileData.avaliacao,
-            flags: profileData.flags,
-            feedbacks: profileData.feedbacks
-        });
-        atualizarBarraProgresso({
-            ...data,
-            avaliacao: profileData.avaliacao,
-            flags: profileData.flags,
-            feedbacks: profileData.feedbacks
-        });
+        const profile = {
+            id: data.id,
+            nome: data.nome,
+            bio: data.bio,
+            avatar: data.avatar,
+            emailContato: data.emailContato,
+            telefone: data.telefone,
+            areaAtuacao: data.areaAtuacao,
+            github: data.github,
+            linkedin: data.linkedin,
+            portfolio: data.portfolio,
+            habilidades: data.habilidades,
+            certificados: data.certificados,
+            experiencia: data.experiencia,
+            experienciaAcademica: data.experienciaAcademica,
+            flags: data.quantidadeDeFlags,
+            
+            avaliacao: data.avaliacaoMedia || 0, // Use o valor fixo ou 0 se preferir
+            feedbacks: data.feedbacks || []
+        };
+
+        renderProfile(profile);
+        atualizarBarraProgresso(profile);
     } catch (e) {
         console.error(e);
     }
@@ -86,13 +97,23 @@ function renderProfile(profile) {
         <div><i class="bi bi-whatsapp"></i><span>${profile.telefone || ""}</span></div>
     `;
 
-    // Avaliação
+    // Avaliação (sempre 5 estrelas)
     let stars = '';
-    let fullStars = Math.floor(profile.avaliacao);
-    let halfStar = profile.avaliacao % 1 >= 0.5;
-    for (let i = 0; i < fullStars; i++) stars += '<i class="bi bi-star-fill"></i>';
-    if (halfStar) stars += '<i class="bi bi-star-half"></i>';
-    while (stars.match(/star/g)?.length < 5) stars += '<i class="bi bi-star"></i>';
+    let media = profile.avaliacao || 0;
+    let fullStars = Math.floor(media);
+    let halfStar = media % 1 >= 0.5;
+    for (let i = 0; i < 5; i++) {
+        if (i < fullStars) {
+            stars += '<i class="bi bi-star-fill"></i>';
+        } else if (i === fullStars && halfStar) {
+            stars += '<i class="bi bi-star-half"></i>';
+        } else {
+            stars += '<i class="bi bi-star"></i>';
+        }
+    }
+
+    // Número de feedbacks
+    const feedbackCount = (profile.feedbacks && profile.feedbacks.length) ? profile.feedbacks.length : 0;
 
     // Experiência Profissional
     let experienciaHtml = (profile.experiencia || []).map(exp => `
@@ -112,13 +133,17 @@ function renderProfile(profile) {
         </div>
     `).join('');
 
-    // Feedbacks (apenas os 3 primeiros)
-    let feedbacksHtml = (profile.feedbacks || []).slice(0, 3).map(fb => `
-        <div class="profile-feedback">
-            <strong>Empresa: ${fb.empresa}</strong><br>
-            "${fb.texto}"
-        </div>
-    `).join('');
+    // Feedbacks (apenas os 3 últimos enviados)
+    let feedbacksHtml = (profile.feedbacks || [])
+        .slice() // cria uma cópia para não alterar o original
+        .reverse() // inverte para pegar os mais recentes primeiro
+        .slice(0, 3) // pega os 3 últimos
+        .map(fb => `
+            <div class="profile-feedback">
+                <strong>Empresa: ${fb.empresa}</strong><br>
+                "${fb.texto}"
+            </div>
+        `).join('');
 
     // Monta o HTML
     document.querySelector('.profile-header').innerHTML = `
@@ -131,7 +156,10 @@ function renderProfile(profile) {
             <div class="profile-social mt-3">${redesHtml}</div>
             <div class="profile-rating mt-3">
                 ${stars}
-                <span class="ms-2" style="color:#fff;font-size:1rem;">${profile.avaliacao.toFixed(1)}/5.0</span>
+                <span class="ms-2" style="color:#fff;font-size:1rem;">
+                    ${media.toFixed(1)}/5.0
+                    <span class="text-secondary ms-2">(${feedbackCount} feedback${feedbackCount === 1 ? '' : 's'})</span>
+                </span>
             </div>
         </div>
         <div class="profile-flags-box d-flex flex-column align-items-center" style="position: absolute; top: 1.5rem; right: 2rem;">

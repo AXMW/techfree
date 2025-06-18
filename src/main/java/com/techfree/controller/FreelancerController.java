@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.techfree.dto.FreelancerUpdateDTO;
 import com.techfree.dto.FreelancerVisualizacaoResponseDTO;
@@ -19,9 +20,12 @@ import com.techfree.repository.FreelancerRepository;
 import com.techfree.model.Usuario;
 import com.techfree.repository.UsuarioRepository;
 import com.techfree.dto.FreelancerAutoVisualizacaoResponseDTO;
+import com.techfree.repository.AvaliacaoFreelancerRepository;
+import com.techfree.model.AvaliacaoFreelancer;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -30,6 +34,9 @@ public class FreelancerController {
     private final FreelancerRepository freelancerRepository;
 
     private final UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private AvaliacaoFreelancerRepository avaliacaoFreelancerRepository;
 
     public FreelancerController(FreelancerRepository freelancerRepository, UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
@@ -44,9 +51,12 @@ public class FreelancerController {
         Usuario usuario = usuarioRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        Freelancer freelancer = freelancerRepository.findByUsuario(usuario).orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+        Freelancer freelancer = freelancerRepository.findByUsuario(usuario)
+            .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
 
-        FreelancerAutoVisualizacaoResponseDTO response = new FreelancerAutoVisualizacaoResponseDTO(freelancer);
+        List<AvaliacaoFreelancer> avaliacoes = avaliacaoFreelancerRepository.findByFreelancer(freelancer);
+
+        FreelancerAutoVisualizacaoResponseDTO response = new FreelancerAutoVisualizacaoResponseDTO(freelancer, avaliacoes);
         return response;
     }
 
@@ -146,7 +156,8 @@ public class FreelancerController {
         if (freelancer.isEmpty()) {
             throw new RuntimeException("Freelancer não encontrado com ID: " + id);
         }
-        FreelancerVisualizacaoResponseDTO response = new FreelancerVisualizacaoResponseDTO(freelancer.get());
+        List<AvaliacaoFreelancer> avaliacoes = avaliacaoFreelancerRepository.findByFreelancer(freelancer.get());
+        FreelancerVisualizacaoResponseDTO response = new FreelancerVisualizacaoResponseDTO(freelancer.get(), avaliacoes);
         return ResponseEntity.ok(response);
     }
 }

@@ -1,6 +1,7 @@
 const freelancerId = document.body.getAttribute('data-freelancer-id');
 
-// Feedbacks e avaliação ainda não existem no backend, então mantemos fixos:
+// Mocks para avaliação e feedbacks, caso o backend ainda não retorne:
+const avaliacaoFixa = 4.7;
 const feedbacksFixos = [
     {
         empresa: "MindCare",
@@ -19,7 +20,6 @@ const feedbacksFixos = [
         texto: "Profissional dedicado e muito competente."
     }
 ];
-const avaliacaoFixa = 4.7;
 
 async function carregarPerfilFreelancer() {
     try {
@@ -34,8 +34,8 @@ async function carregarPerfilFreelancer() {
             sobre: data.bio,
             experiencia: data.experiencia || [],
             experienciaAcademica: data.experienciaAcademica || [],
-            feedbacks: feedbacksFixos,
-            avaliacao: avaliacaoFixa
+            feedbacks: data.feedbacks || [],
+            avaliacao: data.avaliacaoMedia || 0
         };
 
         renderProfile(profile);
@@ -65,13 +65,23 @@ function renderProfile(profile) {
         redesHtml += `<a href="${profile.portfolio}" target="_blank" rel="noopener noreferrer"><i class="bi bi-globe"></i></a>`;
     }
 
-    // Avaliação
+    // Avaliação (sempre 5 estrelas)
     let stars = '';
-    let fullStars = Math.floor(profile.avaliacao);
-    let halfStar = profile.avaliacao % 1 >= 0.5;
-    for (let i = 0; i < fullStars; i++) stars += '<i class="bi bi-star-fill"></i>';
-    if (halfStar) stars += '<i class="bi bi-star-half"></i>';
-    while (stars.match(/star/g)?.length < 5) stars += '<i class="bi bi-star"></i>';
+    let media = profile.avaliacao || 0;
+    let fullStars = Math.floor(media);
+    let halfStar = media % 1 >= 0.5;
+    for (let i = 0; i < 5; i++) {
+        if (i < fullStars) {
+            stars += '<i class="bi bi-star-fill"></i>';
+        } else if (i === fullStars && halfStar) {
+            stars += '<i class="bi bi-star-half"></i>';
+        } else {
+            stars += '<i class="bi bi-star"></i>';
+        }
+    }
+
+    // Número de feedbacks
+    const feedbackCount = (profile.feedbacks && profile.feedbacks.length) ? profile.feedbacks.length : 0;
 
     // Experiência Profissional
     let experienciaHtml = (profile.experiencia || []).map(exp => `
@@ -91,13 +101,17 @@ function renderProfile(profile) {
         </div>
     `).join('');
 
-    // Feedbacks (apenas os 3 primeiros)
-    let feedbacksHtml = (profile.feedbacks || []).slice(0, 3).map(fb => `
-        <div class="profile-feedback">
-            <strong>Empresa: ${fb.empresa}</strong><br>
-            "${fb.texto}"
-        </div>
-    `).join('');
+    // Feedbacks (apenas os 3 últimos enviados)
+    let feedbacksHtml = (profile.feedbacks || [])
+        .slice() // cópia
+        .reverse() // mais recentes primeiro
+        .slice(0, 3) // pega os 3 últimos
+        .map(fb => `
+            <div class="profile-feedback">
+                <strong>Empresa: ${fb.empresa}</strong><br>
+                "${fb.texto}"
+            </div>
+        `).join('');
 
     // Monta o HTML (sem email, telefone e sem flags)
     document.querySelector('.profile-header').innerHTML = `
@@ -109,7 +123,10 @@ function renderProfile(profile) {
             <div class="profile-social mt-3">${redesHtml}</div>
             <div class="profile-rating mt-3">
                 ${stars}
-                <span class="ms-2" style="color:#fff;font-size:1rem;">${profile.avaliacao.toFixed(1)}/5.0</span>
+                <span class="ms-2" style="color:#fff;font-size:1rem;">
+                    ${media.toFixed(1)}/5.0
+                    <span class="text-secondary ms-2">(${feedbackCount} feedback${feedbackCount === 1 ? '' : 's'})</span>
+                </span>
             </div>
         </div>
     `;
