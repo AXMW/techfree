@@ -219,9 +219,9 @@ document.getElementById('formPessoa').addEventListener('submit', async function 
         nome: nome,
         email: email,
         senha: senha,
-        telefone: '123456789',
+        telefone: '',
         cpf: cpf,
-        areaEspecialidade: 'Teste'
+        areaEspecialidade: ''
         // Adicione outros campos se necessário
     };
 
@@ -294,7 +294,7 @@ document.getElementById('formEmpresa').addEventListener('submit', async function
         email: email,
         senha: senha,
         cnpj: cnpj,
-        telefone: '123456789'
+        telefone: ''
         // Adicione outros campos se necessário
     };
 

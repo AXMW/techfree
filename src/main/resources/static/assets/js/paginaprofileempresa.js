@@ -20,22 +20,25 @@ async function buscarPerfilEmpresa() {
         if (!resp.ok) throw new Error('Erro ao buscar perfil da empresa');
         const data = await resp.json();
 
-        renderEmpresaProfile({
-            ...data,
+        const profile = {
+            nome: data.nomeFantasia,
+            areaAtuacao: data.areaAtuacao,
+            avatar: data.avatar,
+            emailContato: data.emailContato,
+            telefone: data.telefone,
+            site: data.site,
+            linkedin: data.linkedin,
+            descricao: data.bio,
+            projetos: data.projetos,
+
             avaliacao: empresaProfileData.avaliacao,
             flags: empresaProfileData.flags,
             feedbacks: empresaProfileData.feedbacks
-        });
-        atualizarBarraProgressoEmpresa({
-            ...data,
-            avaliacao: empresaProfileData.avaliacao,
-            flags: empresaProfileData.flags,
-            feedbacks: empresaProfileData.feedbacks
-        });
-        renderEmpresaFeedbacks({
-            ...data,
-            feedbacks: empresaProfileData.feedbacks
-        });
+        };
+
+        renderEmpresaProfile(profile);
+        atualizarBarraProgressoEmpresa(profile);
+        renderEmpresaFeedbacks(profile);
     } catch (e) {
         console.error(e);
     }
@@ -71,17 +74,17 @@ function renderEmpresaProfile(profile) {
 
     // Contato
     let contatoHtml = `
-        <div><i class="bi bi-envelope"></i><span>${profile.email}</span></div>
+        <div><i class="bi bi-envelope"></i><span>${profile.emailContato|| ""}</span></div>
         <div><i class="bi bi-telephone"></i><span>${profile.telefone || ""}</span></div>
     `;
 
     // Header
     document.querySelector('.profile-header').innerHTML = `
-        <img src="${profile.logoUrl || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa">
+        <img src="${profile.avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa">
         <div class="profile-info flex-grow-1">
-            <h2>${profile.nomeFantasia}</h2>
-            <div class="role mb-1">${profile.bio || ""}</div>
-            <div class="profile-contact mt-2">${contatoHtml}</div>
+            <h2>${profile.nome|| ""}</h2>
+            <div class="role mb-1">${profile.areaAtuacao || ""}</div>
+            <div class="profile-contact mt-2">${contatoHtml|| ""}</div>
             <div class="profile-social mt-3">${redesHtml}</div>
             <div class="profile-rating mt-3">
                 ${stars}
@@ -97,6 +100,9 @@ function renderEmpresaProfile(profile) {
             </span>
         </div>
     `;
+
+    const sobreEl = document.getElementById('empresaSobre');
+    if (sobreEl) sobreEl.textContent = profile.descricao || '';
 }
 
 function renderEmpresaFeedbacks(profile) {
@@ -111,14 +117,14 @@ function renderEmpresaFeedbacks(profile) {
 
 function calcularProgressoEmpresa(profile) {
     const campos = [
-        { nome: "Logo", valor: profile.logoUrl },
-        { nome: "Nome Fantasia", valor: profile.nomeFantasia },
-        { nome: "Razão Social", valor: profile.razaoSocial },
-        { nome: "E-mail", valor: profile.email },
+        { nome: "Logo", valor: profile.avatar },
+        { nome: "Nome Fantasia", valor: profile.nome },
+        { nome: 'Atuação', valor: profile.areaAtuacao },
+        { nome: "E-mail de contato", valor: profile.emailContato },
         { nome: "Telefone", valor: profile.telefone },
         { nome: "LinkedIn", valor: profile.linkedin },
         { nome: "Site", valor: profile.site },
-        { nome: "Bio", valor: profile.bio }
+        { nome: "Sobre", valor: profile.descricao },
     ];
     const total = campos.length;
     const preenchidos = campos.filter(c => c.valor && String(c.valor).trim() !== "").length;

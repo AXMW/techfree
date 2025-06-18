@@ -34,6 +34,8 @@ public class Empresa {
 
     private String avatar;
 
+    private String emailContato;
+
     @Column(unique = true, nullable = false)
     private String cnpj;
 

@@ -84,6 +84,8 @@ public class EmpresaController {
         if(dadosAtualizados.getDescricao() != null) empresa.setDescricao(dadosAtualizados.getDescricao());
         if(dadosAtualizados.getLinkedin() != null) empresa.setLinkedin(dadosAtualizados.getLinkedin());
         if(dadosAtualizados.getAvatar() != null) empresa.setAvatar(dadosAtualizados.getAvatar());
+        if(dadosAtualizados.getEmailContato() != null) empresa.setEmailContato(dadosAtualizados.getEmailContato());
+        
 
         empresaRepository.save(empresa);
         return ResponseEntity.ok(empresa);

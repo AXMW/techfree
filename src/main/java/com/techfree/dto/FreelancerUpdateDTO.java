@@ -16,6 +16,7 @@ public class FreelancerUpdateDTO {
     private String avatar;
     private List<ExperienciaProfissionalDTO> experiencia;
     private List<ExperienciaAcademicaDTO> experienciaAcademica;
+    private String emailContato;
 
     // Getters e Setters
 
@@ -59,62 +60,6 @@ public class FreelancerUpdateDTO {
     public List<ExperienciaAcademicaDTO> getExperienciaAcademica() { return experienciaAcademica; }
     public void setExperienciaAcademica(List<ExperienciaAcademicaDTO> experienciaAcademica) { this.experienciaAcademica = experienciaAcademica; }
 
-    // DTOs internos para experiência profissional e acadêmica
-    public static class ExperienciaProfissionalDTO {
-        private Long id;
-        private String empresa;
-        private String cargo;
-        private String tempo;
-        private String descricao;
-
-        // Construtor com argumentos
-        public ExperienciaProfissionalDTO(Long id, String empresa, String cargo, String tempo, String descricao) {
-            this.id = id;
-            this.empresa = empresa;
-            this.cargo = cargo;
-            this.tempo = tempo;
-            this.descricao = descricao;
-        }
-
-        // Getters e Setters
-        public Long getId() { return id; }
-        public void setId(Long id) { this.id = id; }
-        public String getEmpresa() { return empresa; }
-        public void setEmpresa(String empresa) { this.empresa = empresa; }
-        public String getCargo() { return cargo; }
-        public void setCargo(String cargo) { this.cargo = cargo; }
-        public String getTempo() { return tempo; }
-        public void setTempo(String tempo) { this.tempo = tempo; }
-        public String getDescricao() { return descricao; }
-        public void setDescricao(String descricao) { this.descricao = descricao; }
-    }
-
-    public static class ExperienciaAcademicaDTO {
-        private Long id;
-        private String instituicao;
-        private String curso;
-        private String periodo;
-        private String descricao;
-
-        // Construtor com argumentos
-        public ExperienciaAcademicaDTO(Long id, String instituicao, String curso, String periodo, String descricao) {
-            this.id = id;
-            this.instituicao = instituicao;
-            this.curso = curso;
-            this.periodo = periodo;
-            this.descricao = descricao;
-        }
-
-        // Getters e Setters
-        public Long getId() { return id; }
-        public void setId(Long id) { this.id = id; }
-        public String getInstituicao() { return instituicao; }
-        public void setInstituicao(String instituicao) { this.instituicao = instituicao; }
-        public String getCurso() { return curso; }
-        public void setCurso(String curso) { this.curso = curso; }
-        public String getPeriodo() { return periodo; }
-        public void setPeriodo(String periodo) { this.periodo = periodo; }
-        public String getDescricao() { return descricao; }
-        public void setDescricao(String descricao) { this.descricao = descricao; }
-    }
+    public String getEmailContato() { return emailContato; }
+    public void setEmailContato(String emailContato) { this.emailContato = emailContato; }
 }

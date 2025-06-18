@@ -1,3 +1,4 @@
+let currentPopupType = '';
 // Sugestões para habilidades e certificados (adicione mais se quiser)
 const sugestoesHabilidades = [
     "JavaScript", "Python", "Java", "C#", "PHP", "SQL", "React", "Node.js", "TypeScript", "Vue.js", "Angular", "Docker", "Figma", "Scrum", "Inglês Avançado"
@@ -105,7 +106,7 @@ function renderProfile(profile) {
         ${profile.portfolio ? `<a href="${profile.portfolio}" target="_blank" rel="noopener noreferrer"><i class="bi bi-globe"></i></a>` : ''}
     `;
     let contatoHtml = `
-        <div><i class="bi bi-envelope"></i><span>${profile.email || ''}</span></div>
+        <div><i class="bi bi-envelope"></i><span>${profile.emailContato || ''}</span></div>
         <div><i class="bi bi-whatsapp"></i><span>${profile.telefone || ''}</span></div>
     `;
     let experienciaHtml = (profile.experiencia || []).map((exp, idx) => `
@@ -157,7 +158,17 @@ function getPopupElements() {
     };
 }
 
-function fillPopup(type) {
+function fillPopup(type, isFirstOpen = false) {
+    // Inicializar arrays temporários ANTES de montar o HTML!
+    if(isFirstOpen) {
+        if(type === 'experiencia') {
+            tempExperiencia = JSON.parse(JSON.stringify(profileData.experiencia || []));
+        }
+        if(type === 'experienciaAcademica') {
+            tempExperienciaAcademica = JSON.parse(JSON.stringify(profileData.experienciaAcademica || []));
+        }
+    }
+
     const { title, fields } = getPopupElements();
     let html = '';
     switch(type) {
@@ -165,11 +176,11 @@ function fillPopup(type) {
             title.textContent = 'Editar Resumo';
             html = `
                 <div class="mb-3 text-center">
-                    <img src="${profileData.avatar}" id="avatarPreview" class="rounded-circle mb-2" style="width:90px;height:90px;object-fit:cover;border:3px solid #FF6F00;background:#fff;">
+                    <img src="${avatarPreviewDataUrl || profileData.avatar}" id="avatarPreview" class="rounded-circle mb-2" style="width:90px;height:90px;object-fit:cover;border:3px solid #FF6F00;background:#fff;">
                     <div>
                         <label class="form-label d-block">Avatar</label>
-                        <input type="file" class="form-control mb-2" id="avatarInput" accept="image/*">
-                        <input type="hidden" id="avatarUrlInput" value="${profileData.avatar}">
+                        <input type="file" class="form-control mb-2" id="avatarInput" style="padding: 0 1.1rem !important; height: 50px; align-content: center;"  accept="image/*">
+                        <input type="hidden" id="avatarUrlInput" value="${avatarPreviewDataUrl || profileData.avatar || ''}">
                     </div>
                 </div>
                 <div class="mb-3">
@@ -181,18 +192,18 @@ function fillPopup(type) {
                     <input type="text" class="form-control" id="editCargo" value="${profileData.areaAtuacao || ''}">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">E-mail</label>
+                    <label class="form-label">E-mail de contato</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                        <input type="text" class="form-control" id="editEmail" placeholder="E-mail de contato" value="${profileData.email || ''}">
+                        <input type="text" class="form-control no-margin" id="editEmail" placeholder="E-mail" value="${profileData.emailContato || ''}">
                     </div>
                     <div id="editEmailError" class="text-danger mt-1" style="font-size:0.98rem;"></div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Telefone/WhatsApp</label>
+                    <label class="form-label">Telefone</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
-                        <input type="text" class="form-control" id="editWhatsapp" placeholder="Telefone/WhatsApp" value="${profileData.telefone || ''}">
+                        <input type="text" class="form-control no-margin" id="editWhatsapp" placeholder="Telefone/WhatsApp" value="${profileData.telefone || ''}">
                     </div>
                     <div id="editWhatsappError" class="text-danger mt-1" style="font-size:0.98rem;"></div>
                 </div>
@@ -200,7 +211,7 @@ function fillPopup(type) {
                     <label class="form-label">GitHub</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-github"></i></span>
-                        <input type="text" class="form-control" id="editGithub" placeholder="GitHub URL" value="${profileData.github || ''}">
+                        <input type="text" class="form-control no-margin" id="editGithub" placeholder="GitHub URL" value="${profileData.github || ''}">
                     </div>
                     <div id="editGithubError" class="text-danger mt-1" style="font-size:0.98rem;"></div>
                 </div>
@@ -208,7 +219,7 @@ function fillPopup(type) {
                     <label class="form-label">LinkedIn</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-linkedin"></i></span>
-                        <input type="text" class="form-control" id="editLinkedin" placeholder="LinkedIn URL" value="${profileData.linkedin || ''}">
+                        <input type="text" class="form-control no-margin" id="editLinkedin" placeholder="LinkedIn URL" value="${profileData.linkedin || ''}">
                     </div>
                     <div id="editLinkedinError" class="text-danger mt-1" style="font-size:0.98rem;"></div>
                 </div>
@@ -216,7 +227,7 @@ function fillPopup(type) {
                     <label class="form-label">Site/Portfólio</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-globe"></i></span>
-                        <input type="text" class="form-control" id="editSite" placeholder="Site URL" value="${profileData.portfolio || ''}">
+                        <input type="text" class="form-control no-margin" id="editSite" placeholder="Site URL" value="${profileData.portfolio || ''}">
                     </div>
                     <div id="editSiteError" class="text-danger mt-1" style="font-size:0.98rem;"></div>
                 </div>
@@ -227,7 +238,7 @@ function fillPopup(type) {
             html = `
                 <div class="mb-3">
                     <label class="form-label">Sobre</label>
-                    <textarea class="form-control" id="editSobre" rows="5">${profileData.sobre || ''}</textarea>
+                    <textarea class="form-control" id="editSobre" rows="5">${profileData.bio || ''}</textarea>
                 </div>
             `;
             break;
@@ -251,7 +262,7 @@ function fillPopup(type) {
             break;
         case 'experiencia':
             title.textContent = 'Editar Experiência';
-            html = (profileData.experiencia || []).map((exp, idx) => {
+            html = (tempExperiencia || []).map((exp, idx) => {
                 let [anoInicio, anoFim] = (exp.tempo || '').split('-');
                 const anoAtual = new Date().getFullYear();
                 return `
@@ -280,7 +291,7 @@ function fillPopup(type) {
                         </div>
                         <label class="form-label">Descrição</label>
                         <textarea class="form-control" rows="2">${exp.descricao}</textarea>
-                        <button type="button" class="btn btn-success mt-2 btn-exp-save" data-idx="${idx}" style="min-width:120px;"><i class="bi bi-check"></i> Salvar</button>
+                        <button type="button" class="btn btn-success mt-2 btn-exp-save" data-idx="${idx}">Salvar</button>
                     </div>
                 </div>
                 `;
@@ -303,7 +314,7 @@ function fillPopup(type) {
                     <label class="form-label">Descrição</label>
                     <textarea class="form-control" rows="2" id="expAddDescricao"></textarea>
                     <div class="d-flex gap-2 mt-3">
-                        <button type="button" class="btn btn-primary flex-fill" id="btnAddExp"><i class="bi bi-check-lg"></i> Adicionar</button>
+                        <button type="button" class="btn btn-primary flex-fill" id="btnAddExp">Adicionar</button>
                         <button type="button" class="btn btn-outline-secondary flex-fill" id="btnCancelAddExp">Cancelar</button>
                     </div>
                     <div id="expAddError" class="text-danger mt-2" style="display:none;font-size:0.98rem;"></div>
@@ -318,7 +329,7 @@ function fillPopup(type) {
             break;
         case 'experienciaAcademica':
             title.textContent = 'Editar Experiência Acadêmica';
-            html = (profileData.experienciaAcademica || []).map((exp, idx) => {
+            html = (tempExperienciaAcademica || []).map((exp, idx) => {
                 let [anoInicio, anoFim] = (exp.periodo || '').split('-');
                 const anoAtual = new Date().getFullYear();
                 return `
@@ -347,7 +358,7 @@ function fillPopup(type) {
                         </div>
                         <label class="form-label">Descrição</label>
                         <textarea class="form-control" rows="2">${exp.descricao}</textarea>
-                        <button type="button" class="btn btn-success mt-2 btn-expacad-save" data-idx="${idx}" style="min-width:120px;"><i class="bi bi-check"></i> Salvar</button>
+                        <button type="button" class="btn btn-success mt-2 btn-expacad-save" data-idx="${idx}">Salvar</button>
                     </div>
                 </div>
                 `;
@@ -404,6 +415,9 @@ function fillPopup(type) {
                 avatarInput._selectedFile = file;
             }
         });
+        // APLICAR MÁSCARA DE TELEFONE
+        const telInput = document.getElementById('editWhatsapp');
+        if (telInput) aplicarMascaraTelefone(telInput);
     }
     if(type === 'habilidades') {
         window.getHabilidadesTags = setupTagsInput('tagsHabilidades', profileData.habilidades || [], sugestoesHabilidades);
@@ -423,7 +437,7 @@ function fillPopup(type) {
         document.querySelectorAll('.btn-exp-remove').forEach(btn => {
             btn.onclick = function() {
                 const idx = btn.getAttribute('data-idx');
-                profileData.experiencia.splice(idx, 1);
+                tempExperiencia.splice(idx, 1);
                 fillPopup('experiencia');
             };
         });
@@ -463,7 +477,7 @@ function fillPopup(type) {
                     return;
                 }
                 errorDiv.style.display = "none";
-                profileData.experiencia[idx] = { empresa, cargo, tempo, descricao };
+                tempExperiencia[idx] = { empresa, cargo, tempo, descricao };
                 fillPopup('experiencia');
             };
         });
@@ -508,7 +522,7 @@ function fillPopup(type) {
                     return;
                 }
                 errorDiv.style.display = "none";
-                profileData.experiencia.push({
+                tempExperiencia.push({
                     empresa,
                     cargo,
                     tempo: `${anoInicio}-${anoFim}`,
@@ -530,7 +544,7 @@ function fillPopup(type) {
         document.querySelectorAll('.btn-expacad-remove').forEach(btn => {
             btn.onclick = function() {
                 const idx = btn.getAttribute('data-idx');
-                profileData.experienciaAcademica.splice(idx, 1);
+                tempExperienciaAcademica.splice(idx, 1);
                 fillPopup('experienciaAcademica');
             };
         });
@@ -570,7 +584,7 @@ function fillPopup(type) {
                     return;
                 }
                 errorDiv.style.display = "none";
-                profileData.experienciaAcademica[idx] = { instituicao, curso, periodo, descricao };
+                tempExperienciaAcademica[idx] = { instituicao, curso, periodo, descricao };
                 fillPopup('experienciaAcademica');
             };
         });
@@ -616,11 +630,21 @@ function fillPopup(type) {
                     return;
                 }
                 errorDiv.style.display = "none";
-                profileData.experienciaAcademica.push({
+                tempExperienciaAcademica.push({
                     instituicao, curso, periodo, descricao
                 });
                 fillPopup('experienciaAcademica');
             };
+        }
+    }
+
+    // Inicializar arrays temporários APENAS na primeira abertura do popup
+    if(isFirstOpen) {
+        if(type === 'experiencia') {
+            tempExperiencia = JSON.parse(JSON.stringify(profileData.experiencia || []));
+        }
+        if(type === 'experienciaAcademica') {
+            tempExperienciaAcademica = JSON.parse(JSON.stringify(profileData.experienciaAcademica || []));
         }
     }
 }
@@ -630,7 +654,12 @@ document.body.addEventListener('click', function(e) {
     if (btn) {
         const { overlay, popup } = getPopupElements();
         const type = btn.getAttribute('data-edit');
-        fillPopup(type);
+        currentPopupType = type;
+        if (type === 'header') {
+            // Salva o preview atual antes de editar
+            avatarPreviewDataUrlBeforeEdit = avatarPreviewDataUrl;
+        }
+        fillPopup(type, true);
         overlay.classList.add('active');
         popup.classList.add('active');
         popup.style.display = 'block';
@@ -643,18 +672,47 @@ function closeOverlay() {
     popup.classList.remove('active');
     setTimeout(() => { popup.style.display = 'none'; }, 200);
 }
-getPopupElements().overlay.onclick = closeOverlay;
-getPopupElements().closeBtn.onclick = closeOverlay;
-
+getPopupElements().closeBtn.onclick = function() {
+    closeOverlay();
+    if (currentPopupType === 'experiencia') {
+        tempExperiencia = JSON.parse(JSON.stringify(profileData.experiencia || []));
+    }
+    if (currentPopupType === 'experienciaAcademica') {
+        tempExperienciaAcademica = JSON.parse(JSON.stringify(profileData.experienciaAcademica || []));
+    }
+    if (currentPopupType === 'header') {
+        avatarPreviewDataUrl = avatarPreviewDataUrlBeforeEdit;
+        // Limpa o arquivo selecionado ao fechar/cancelar
+        const avatarInput = document.getElementById('avatarInput');
+        if (avatarInput) avatarInput._selectedFile = null;
+    }
+};
+getPopupElements().overlay.onclick = function(e) {
+    if (e.target === getPopupElements().overlay) {
+        closeOverlay();
+        if (currentPopupType === 'experiencia') {
+            tempExperiencia = JSON.parse(JSON.stringify(profileData.experiencia || []));
+        }
+        if (currentPopupType === 'experienciaAcademica') {
+            tempExperienciaAcademica = JSON.parse(JSON.stringify(profileData.experienciaAcademica || []));
+        }
+        if (currentPopupType === 'header') {
+            avatarPreviewDataUrl = avatarPreviewDataUrlBeforeEdit;
+            // Limpa o arquivo selecionado ao fechar/cancelar
+            const avatarInput = document.getElementById('avatarInput');
+            if (avatarInput) avatarInput._selectedFile = null;
+        }
+    }
+};
 document.getElementById('editForm').onsubmit = function(e) {
     e.preventDefault();
-    const type = document.getElementById('editPopupTitle').textContent.replace('Editar ', '').toLowerCase();
+    const type = currentPopupType; // Use sempre o tipo do botão, não o texto do título!
 
-    if(type === 'resumo' || type === 'cabeçalho' || type === 'cabecalho' || type === 'header') {
+    if(type === 'header') {
         const nome = document.getElementById('editNome').value.trim();
         const areaAtuacao = document.getElementById('editCargo').value.trim();
         const avatar = document.getElementById('avatarUrlInput').value;
-        const email = document.getElementById('editEmail').value.trim();
+        const emailContato = document.getElementById('editEmail').value.trim();
         const telefone = document.getElementById('editWhatsapp').value.trim();
         const github = document.getElementById('editGithub').value.trim();
         const linkedin = document.getElementById('editLinkedin').value.trim();
@@ -683,7 +741,7 @@ document.getElementById('editForm').onsubmit = function(e) {
         setError('editSiteError', '');
 
         let hasError = false;
-        if(email && !emailRegex.test(email)) {
+        if(emailContato && !emailRegex.test(emailContato)) {
             setError('editEmailError', 'E-mail inválido.');
             hasError = true;
         }
@@ -708,7 +766,7 @@ document.getElementById('editForm').onsubmit = function(e) {
         profileData.nome = nome;
         profileData.areaAtuacao = areaAtuacao;
         profileData.avatar = avatar;
-        profileData.email = email;
+        profileData.emailContato = emailContato;
         profileData.telefone = telefone;
         profileData.github = github;
         profileData.linkedin = linkedin;
@@ -716,7 +774,6 @@ document.getElementById('editForm').onsubmit = function(e) {
     }
     if(type === 'sobre') {
         profileData.bio = document.getElementById('editSobre').value.trim();
-        delete profileData.sobre; // remove campo antigo se existir
     }
     if(type === 'habilidades') {
         if(window.getHabilidadesTags) {
@@ -728,7 +785,15 @@ document.getElementById('editForm').onsubmit = function(e) {
             profileData.certificados = window.getCertificadosTags();
         }
     }
-    if(document.getElementById('avatarInput')?._selectedFile) {
+    // ALTERAÇÃO: Use apenas os tipos camelCase, igual ao data-edit dos botões!
+    if(type === 'experiencia') {
+        profileData.experiencia = JSON.parse(JSON.stringify(tempExperiencia));
+    }
+    if(type === 'experienciaAcademica') {
+        profileData.experienciaAcademica = JSON.parse(JSON.stringify(tempExperienciaAcademica));
+    }
+
+    if(document.getElementById('avatarPreview')) {
         avatarPreviewDataUrl = document.getElementById('avatarPreview').src;
     }
     renderProfile(profileData);
@@ -754,7 +819,7 @@ function calcularProgressoPerfil(profile) {
         { nome: "Foto", valor: profile.avatar },
         { nome: "Nome", valor: profile.nome },
         { nome: "Área de Atuação", valor: profile.areaAtuacao },
-        { nome: "E-mail", valor: profile.email },
+        { nome: "E-mail de Contato", valor: profile.emailContato },
         { nome: "Telefone/WhatsApp", valor: profile.telefone },
         { nome: "GitHub", valor: profile.github },
         { nome: "LinkedIn", valor: profile.linkedin },
@@ -798,9 +863,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 let profileData = {};
 let avatarPreviewDataUrl = '';
+let avatarPreviewDataUrlBeforeEdit = '';
+let tempExperiencia = [];
+let tempExperienciaAcademica = [];
 
 async function carregarPerfil() {
-    const resp = await fetch('/freelancer/perfil/verPerfil');
+    const resp = await fetch('/freelancer/perfil/verPerfil', {
+        method: 'GET'
+    });
     if (!resp.ok) return alert('Erro ao carregar perfil');
     profileData = await resp.json();
     if (profileData.avatar === "null") profileData.avatar = null;
@@ -838,7 +908,7 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
         github: profileData.github,
         linkedin: profileData.linkedin,
         portfolio: profileData.portfolio,
-        email: profileData.email,
+        emailContato: profileData.emailContato,
         habilidades: profileData.habilidades || [],
         certificados: profileData.certificados || [],
         avatar: (profileData.avatar === "null" ? null : profileData.avatar),

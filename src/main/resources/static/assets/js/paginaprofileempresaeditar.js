@@ -2,14 +2,18 @@
 let nomeFantasia = '';
 let bio = '';
 let avatar = '';
-let email = '';
+let emailContato = '';
 let telefone = '';
 let linkedin = '';
 let site = '';
 let descricao = '';
+let currentPopupType = '';
 
 // Variável para armazenar o preview da imagem do avatar
 let avatarPreviewDataUrl = '';
+
+// Variável para armazenar o preview anterior da imagem do avatar, antes da edição
+let avatarPreviewDataUrlBeforeEdit = '';
 
 // Função de máscara para telefone
 function aplicarMascaraTelefone(input) {
@@ -31,13 +35,13 @@ async function carregarPerfilEmpresa() {
     if (!resp.ok) return alert('Erro ao carregar perfil');
     const data = await resp.json();
     nomeFantasia = data.nomeFantasia || '';
-    bio = data.bio || '';
+    areaatuacao = data.areaAtuacao || '';
     avatar = data.avatar || '';
-    email = data.email || '';
+    emailContato = data.emailContato || '';
     telefone = data.telefone || '';
     linkedin = data.linkedin || '';
     site = data.site || '';
-    descricao = data.descricao || '';
+    descricao = data.bio || '';
     renderEmpresaProfile();
 }
 
@@ -48,14 +52,14 @@ function renderEmpresaProfile() {
         <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa">
         <div class="profile-info">
             <h2>${nomeFantasia}</h2>
-            <div class="role mb-1">${bio}</div>
+            <div class="role mb-1">${areaatuacao}</div>
             <div class="profile-contact mt-2">
-                <div><i class="bi bi-envelope"></i><span>${email}</span></div>
-                <div><i class="bi bi-telephone"></i><span>${telefone}</span></div>
+                <div><i class="bi bi-envelope"></i><span>${emailContato}</span></div>
+                <div><i class="bi bi-whatsapp"></i><span>${telefone}</span></div>
             </div>
             <div class="profile-social mt-3">
-                <a href="${linkedin || '#'}" target="_blank"><i class="bi bi-linkedin"></i></a>
-                <a href="${site || '#'}" target="_blank"><i class="bi bi-globe"></i></a>
+                ${linkedin && linkedin.trim() ? `<a href="${linkedin}" target="_blank"><i class="bi bi-linkedin"></i></a>` : ''}
+                ${site && site.trim() ? `<a href="${site}" target="_blank"><i class="bi bi-globe"></i></a>` : ''}
             </div>
         </div>
     `;
@@ -86,8 +90,8 @@ function fillPopup(type) {
             <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" id="avatarPreview" class="rounded-circle mb-2" style="width:90px;height:90px;object-fit:contain;border:3px solid #FF6F00;background:#fff;">
             <div>
                 <label class="form-label d-block">Logo</label>
-                <input type="file" class="form-control mb-2" id="avatarInput" accept="image/*">
-                <input type="hidden" id="avatarUrlInput" value="${avatar}">
+                <input type="file" class="form-control mb-2" id="avatarInput" style="padding: 0 1.1rem !important; height: 50px; align-content: center;" accept="image/*">
+                <input type="hidden" id="avatarUrlInput" value="${avatarPreviewDataUrl || avatar || ''}">
             </div>
         </div>
                 <div class="mb-3">
@@ -95,24 +99,40 @@ function fillPopup(type) {
                     <input type="text" class="form-control" id="editNome" value="${nomeFantasia}">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Bio</label>
-                    <input type="text" class="form-control" id="editCargo" value="${bio}">
+                    <label class="form-label">Área de atuação</label>
+                    <input type="text" class="form-control" id="editCargo" value="${areaatuacao}">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">E-mail</label>
-                    <input type="text" class="form-control" id="editEmail" value="${email}">
+                    <label class="form-label">E-mail de contato</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="text" class="form-control" id="editEmail" placeholder="E-mail" value="${emailContato}">
+                    </div>
+                    <div id="editEmailError"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Telefone</label>
-                    <input type="text" class="form-control" id="editTelefone" value="${telefone}">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
+                        <input type="text" class="form-control" id="editTelefone" placeholder="Telefone/WhatsApp" value="${telefone}">
+                    </div>
+                    <div id="editTelefoneError"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">LinkedIn</label>
-                    <input type="text" class="form-control" id="editLinkedin" value="${linkedin}">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-linkedin"></i></span>
+                        <input type="text" class="form-control" id="editLinkedin" placeholder="LinkedIn URL" value="${linkedin}">
+                    </div>
+                    <div id="editLinkedinError"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Site</label>
-                    <input type="text" class="form-control" id="editSite" value="${site}">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-globe"></i></span>
+                        <input type="text" class="form-control" id="editSite" placeholder="Site URL" value="${site}">
+                    </div>
+                    <div id="editSiteError"></div>
                 </div>
             `;
             break;
@@ -143,6 +163,7 @@ function fillPopup(type) {
                 reader.onload = function (ev) {
                     avatarPreview.src = ev.target.result;
                     avatarPreviewDataUrl = ev.target.result; // Armazena o dado da URL para envio posterior
+                    avatarUrlInput.value = ev.target.result; // Atualiza o campo hidden
                 };
                 reader.readAsDataURL(file);
                 avatarInput._selectedFile = file; // Guarda o arquivo para upload posterior
@@ -160,6 +181,10 @@ document.body.addEventListener('click', function (e) {
     if (btn) {
         const { overlay, popup } = getPopupElements();
         const type = btn.getAttribute('data-edit');
+        currentPopupType = type;
+        if (type === 'header') {
+            avatarPreviewDataUrlBeforeEdit = avatarPreviewDataUrl;
+        }
         fillPopup(type);
         overlay.classList.add('active');
         popup.classList.add('active');
@@ -172,12 +197,27 @@ function closeOverlay() {
     overlay.classList.remove('active');
     popup.classList.remove('active');
     setTimeout(() => { popup.style.display = 'none'; }, 200);
-
-    // Limpa o preview local ao fechar o popup
-    avatarPreviewDataUrl = '';
 }
-getPopupElements().overlay.onclick = closeOverlay;
-getPopupElements().closeBtn.onclick = closeOverlay;
+getPopupElements().closeBtn.onclick = function() {
+    closeOverlay();
+    if (currentPopupType === 'header') {
+        avatarPreviewDataUrl = avatarPreviewDataUrlBeforeEdit;
+        // Limpa o arquivo selecionado ao fechar/cancelar
+        const avatarInput = document.getElementById('avatarInput');
+        if (avatarInput) avatarInput._selectedFile = null;
+    }
+};
+getPopupElements().overlay.onclick = function(e) {
+    if (e.target === getPopupElements().overlay) {
+        closeOverlay();
+        if (currentPopupType === 'header') {
+            avatarPreviewDataUrl = avatarPreviewDataUrlBeforeEdit;
+            // Limpa o arquivo selecionado ao fechar/cancelar
+            const avatarInput = document.getElementById('avatarInput');
+            if (avatarInput) avatarInput._selectedFile = null;
+        }
+    }
+};
 
 // Salvar alterações do popup apenas nas variáveis locais
 document.getElementById('editForm').onsubmit = async function (e) {
@@ -185,21 +225,67 @@ document.getElementById('editForm').onsubmit = async function (e) {
 
     const popupTitle = document.getElementById('editPopupTitle').textContent;
 
+    // Limpa mensagens de erro antigas
+    ['editEmailError', 'editTelefoneError', 'editLinkedinError', 'editSiteError'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '';
+    });
+
     if (popupTitle.includes('Sobre')) {
-        descricao = document.getElementById('editSobre')?.value || descricao;
+        descricao = document.getElementById('editSobre')?.value.trim() || '';
     } else {
-        // Se um novo arquivo foi selecionado, só salva o preview local
-        const avatarInput = document.getElementById('avatarInput');
-        if (avatarInput && avatarInput._selectedFile) {
-            // Pega o preview local já gerado
-            avatarPreviewDataUrl = document.getElementById('avatarPreview').src;
+        // Validação dos campos
+        let hasError = false;
+        const emailVal = document.getElementById('editEmail')?.value.trim() || '';
+        const telefoneVal = document.getElementById('editTelefone')?.value.trim() || '';
+        const linkedinVal = document.getElementById('editLinkedin')?.value.trim() || '';
+        const siteVal = document.getElementById('editSite')?.value.trim() || '';
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const telRegex = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
+        const urlRegex = /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/i;
+
+        function setError(id, msg) {
+            let el = document.getElementById(id);
+            if (!el) {
+                const input = document.getElementById(id.replace('Error',''));
+                el = document.createElement('div');
+                el.id = id;
+                el.className = 'text-danger mt-1';
+                input.parentNode.appendChild(el);
+            }
+            el.textContent = msg || '';
+        }
+
+        if (emailVal && !emailRegex.test(emailVal)) {
+            setError('editEmailError', 'E-mail inválido.');
+            hasError = true;
+        }
+        if (telefoneVal && !telRegex.test(telefoneVal.replace(/\s/g, ''))) {
+            setError('editTelefoneError', 'Telefone inválido.');
+            hasError = true;
+        }
+        if (linkedinVal && linkedinVal !== "#" && !urlRegex.test(linkedinVal)) {
+            setError('editLinkedinError', 'LinkedIn URL inválido.');
+            hasError = true;
+        }
+        if (siteVal && siteVal !== "#" && !urlRegex.test(siteVal)) {
+            setError('editSiteError', 'Site URL inválido.');
+            hasError = true;
+        }
+        if (hasError) return false;
+
+        // Salva normalmente se não houver erro
+        const avatarPreview = document.getElementById('avatarPreview');
+        if (avatarPreview) {
+            avatarPreviewDataUrl = avatarPreview.src;
         }
         nomeFantasia = document.getElementById('editNome')?.value || '';
-        bio = document.getElementById('editCargo')?.value || '';
-        email = document.getElementById('editEmail')?.value || '';
-        telefone = document.getElementById('editTelefone')?.value || '';
-        linkedin = document.getElementById('editLinkedin')?.value || '';
-        site = document.getElementById('editSite')?.value || '';
+        areaatuacao = document.getElementById('editCargo')?.value || '';
+        emailContato = emailVal;
+        telefone = telefoneVal;
+        linkedin = linkedinVal;
+        site = siteVal;
     }
 
     renderEmpresaProfile();
@@ -230,14 +316,14 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
     }
 
     const dto = {
-        nomeFantasia,
-        bio,
+       nomeFantasia,
+        areaAtuacao: areaatuacao,
         avatar,
-        email,
+        emailContato,
         telefone,
         linkedin,
         site,
-        descricao
+        bio: descricao
     };
     const resp = await fetch('/empresa/perfil', {
         method: 'PUT',
@@ -256,9 +342,9 @@ function calcularProgressoEmpresa() {
     // Campos obrigatórios para o perfil estar completo
     const campos = [
         { nome: 'Nome da Empresa', valor: nomeFantasia },
-        { nome: 'Bio', valor: bio },
+        { nome: 'Atuação', valor: areaatuacao },
         { nome: 'Avatar', valor: avatar },
-        { nome: 'E-mail', valor: email },
+        { nome: 'E-mail de contato', valor: emailContato },
         { nome: 'Telefone', valor: telefone },
         { nome: 'LinkedIn', valor: linkedin },
         { nome: 'Site', valor: site },

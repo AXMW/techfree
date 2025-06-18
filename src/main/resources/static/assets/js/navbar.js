@@ -226,12 +226,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Troca ícone pelo avatar, se houver
         const icon = document.querySelector('.dropdown-profile-header .bi-person-circle');
-        let avatarUrl = null;
-        if (tipoUsuario === 'EMPRESA') {
-            avatarUrl = perfil.logoUrl || '/assets/img/default-avatar.png';
-        } else {
-            avatarUrl = perfil.avatar || '/assets/img/default-avatar.png';
-        }
+        let avatarUrl = perfil.avatar || '/assets/img/default-avatar.png';
+
         if (icon) {
             const img = document.createElement('img');
             img.src = avatarUrl;

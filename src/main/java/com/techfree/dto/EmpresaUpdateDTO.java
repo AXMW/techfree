@@ -9,6 +9,7 @@ public class EmpresaUpdateDTO {
     private String site;
     private String cnpj;
     private String descricao;
+    private String emailContato;
 
     // Getters e Setters
     public String getRazaoSocial() {
@@ -72,5 +73,13 @@ public class EmpresaUpdateDTO {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getEmailContato() {
+        return emailContato;
+    }
+    
+    public void setEmailContato(String emailContato) {
+        this.emailContato = emailContato;
     }
 }

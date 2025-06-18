@@ -22,12 +22,12 @@ public class RegistroFreelancerDTO {
     )
     private String senha;
 
-    @NotBlank
+    
     private String telefone;
 
     @NotBlank
     private String cpf;
 
-    @NotBlank
+    
     private String areaEspecialidade;
 }

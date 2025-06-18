@@ -82,7 +82,7 @@ function renderProfile(profile) {
 
     // Contato
     let contatoHtml = `
-        <div><i class="bi bi-envelope"></i><span>${profile.email}</span></div>
+        <div><i class="bi bi-envelope"></i><span>${profile.emailContato || ""}</span></div>
         <div><i class="bi bi-whatsapp"></i><span>${profile.telefone || ""}</span></div>
     `;
 
@@ -168,7 +168,7 @@ function calcularProgressoPerfil(profile) {
         { nome: "Foto", valor: profile.avatar },
         { nome: "Nome", valor: profile.nome },
         { nome: "Cargo", valor: profile.areaAtuacao },
-        { nome: "E-mail", valor: profile.email },
+        { nome: "E-mail de contato", valor: profile.emailContato },
         { nome: "Telefone/WhatsApp", valor: profile.telefone },
         { nome: "Sobre", valor: profile.bio },
         { nome: "Habilidades", valor: (profile.habilidades && profile.habilidades.length > 0) ? "ok" : "" },

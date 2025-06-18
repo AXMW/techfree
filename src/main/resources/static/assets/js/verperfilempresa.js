@@ -19,12 +19,12 @@ async function carregarPerfilEmpresa() {
             id: data.id,
             nome: data.nomeFantasia,
             cargo: data.areaAtuacao,
-            email: data.email,
+            emailContato: data.emailContato,
             site: data.site,
             linkedin: data.linkedin,
             telefone: data.telefone,
             sobre: data.bio,
-            avatar: data.logoUrl,
+            avatar: data.avatar,
             avaliacao: avaliacaoFixa,
             feedbacks: feedbacksFixos
         };
@@ -62,7 +62,7 @@ function renderEmpresaProfile(profile) {
             <h2>${profile.nome}</h2>
             <div class="role mb-1">${profile.cargo || ""}</div>
             <div class="profile-contact mt-2">
-                <div><i class="bi bi-envelope"></i><span>${profile.email}</span></div>
+                <div><i class="bi bi-envelope"></i><span>${profile.emailContato}</span></div>
                 <div><i class="bi bi-telephone"></i><span>${profile.telefone || ""}</span></div>
             </div>
             <div class="profile-social mt-3">

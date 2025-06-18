@@ -21,6 +21,6 @@ public class RegistroEmpresaDTO {
     @NotBlank
     private String cnpj;
 
-    @NotBlank
+    
     private String telefone;
 }

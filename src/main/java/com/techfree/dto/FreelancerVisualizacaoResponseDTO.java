@@ -1,6 +1,4 @@
 package com.techfree.dto;
-import com.techfree.dto.FreelancerUpdateDTO.ExperienciaAcademicaDTO;
-import com.techfree.dto.FreelancerUpdateDTO.ExperienciaProfissionalDTO;
 import com.techfree.model.Freelancer;
 import lombok.Getter;
 import java.util.List;
@@ -21,6 +19,7 @@ public class FreelancerVisualizacaoResponseDTO {
     private List<String> certificados;
     private List<ExperienciaProfissionalDTO> experiencia;
     private List<ExperienciaAcademicaDTO> experienciaAcademica;
+    private String emailContato;
 
     public FreelancerVisualizacaoResponseDTO(Freelancer freelancer) {
         this.id = freelancer.getId();
@@ -41,5 +40,6 @@ public class FreelancerVisualizacaoResponseDTO {
         this.experienciaAcademica = freelancer.getExperienciaAcademica().stream()
                 .map(exp -> new ExperienciaAcademicaDTO(exp.getId(), exp.getInstituicao(), exp.getCurso(), exp.getPeriodo(), exp.getDescricao()))
                 .toList();
+        this.emailContato = freelancer.getEmailContato();
     }
 }
