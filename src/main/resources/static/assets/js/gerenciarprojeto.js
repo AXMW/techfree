@@ -127,11 +127,11 @@ function normalizarProjeto(p) {
     return {
         title: p.titulo,
         status: status,
-        rawStatus: (p.status || ''), // <-- Adicionado para exibir o texto correto
+        rawStatus: (p.status || ''),
         tech: p.requisitos ? p.requisitos.split(',') : [],
         date: p.prazoEntrega ? convertDate(p.prazoEntrega) : "A definir",
         desc: p.descricao,
-        id: p.id
+        id: p.id || p.projetoId // <-- ajuste aqui
     };
 }
 
