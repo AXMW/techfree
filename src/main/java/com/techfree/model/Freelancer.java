@@ -37,8 +37,6 @@ public class Freelancer {
 
     private String portfolio;
 
-    private String roles;
-
     @ElementCollection
     private List<String> habilidades;
 
