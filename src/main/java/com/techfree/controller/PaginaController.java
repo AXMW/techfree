@@ -180,6 +180,11 @@ public class PaginaController {
         return "resetPassword2";
     }
 
+    @GetMapping("/termos-de-uso-e-politica-de-privacidade")
+    public String termosDeUsoPoliticasDePrivacidade() {
+        return "termosDeUsoPoliticasDePrivacidade";
+    }
+
 
     // Adicione outros métodos conforme novas páginas forem criadas
 }

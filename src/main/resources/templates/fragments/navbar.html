@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html data-bs-theme="light" lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 
 <!-- (COLOCAR EM TODOS OS HTMLs QUE USAREM O FRAGMENTO DE NAVBAR):
@@ -17,7 +17,7 @@
 <body>
 
 <!-- (COLOCAR EM TODOS OS HTMLs QUE USAREM O FRAGMENTO DE NAVBAR):
-    <div th:replace="fragments/navbar :: navbar"></div> -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div> -->
 
     <nav th:fragment="navbar" class="navbar navbar-expand-md sticky-top py-3 navbar-dark" id="mainNav">
                 <div class="container">

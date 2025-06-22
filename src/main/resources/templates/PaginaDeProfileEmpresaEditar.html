@@ -15,11 +15,13 @@
 
     <!-- Navbar fragment -->
     <link rel="stylesheet" href="assets/css/genericstyles3.css">
+    <!-- Footer fragment -->
+    <link rel="stylesheet" href="assets/css/genericstyles.css">
 </head>
 
 <body>
     <!-- Navbar fragment -->
-    <div th:replace="fragments/navbar :: navbar"></div>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <main>
         <section class="bg-dark py-5">
@@ -68,50 +70,10 @@
             </div>
         </section>
     </main>
-    <footer class="bg-dark mt-5">
-        <div class="container py-4 py-lg-5">
-            <div class="row justify-content-center">
-                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
-                    <h3 class="fs-6 fw-bold">Dúvidas</h3>
-                    <ul class="list-unstyled">
-                        <li>FAQ</li>
-                        <li><a href="#">Central de ajuda</a></li>
-                        <li>Política de privacidade</li>
-                    </ul>
-                </div>
-                <div class="col-sm-4 col-md-3 text-center text-lg-start d-flex flex-column">
-                    <h3 class="fs-6 fw-bold">Sobre</h3>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Publique seu projeto</a></li>
-                        <li><a href="#">Cadastro</a></li>
-                        <li><a href="#">Lista de freelancers</a></li>
-                    </ul>
-                </div>
-                <div
-                    class="col-lg-3 text-center text-lg-start d-flex flex-column align-items-center order-first align-items-lg-start order-lg-last">
-                    <div class="fw-bold d-flex align-items-center mb-2">
-                        <span
-                            class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center me-2 bs-icon"
-                            style="width: 40px;height: 40px;background: #00294B;">
-                            <img src="assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" width="30"
-                                height="23" style="height: 18px;">
-                        </span>
-                        <span>TechFree</span>
-                    </div>
-                    <p class="text-muted">Feito com muito amor e dedicação por alunos da Fatec Carapicuíba!❤️</p>
-                </div>
-            </div>
-            <hr>
-            <div class="text-muted d-flex justify-content-between align-items-center pt-3">
-                <p class="mb-0">Copyright © 2025 TechFree</p>
-                <ul class="list-inline mb-0">
-                    <li class="list-inline-item"><i class="bi bi-github"></i></li>
-                    <li class="list-inline-item"><i class="bi bi-twitter"></i></li>
-                    <li class="list-inline-item"><i class="bi bi-instagram"></i></li>
-                </ul>
-            </div>
-        </div>
-    </footer>
+
+    <!-- Navbar fragment -->
+    <link rel="stylesheet" href="assets/css/genericstyles3.css">
+
     <!-- POPUP DE EDIÇÃO -->
     <div class="feedback-overlay" id="editOverlay"></div>
     <div id="editPopup" class="feedback-form-card" style="display:none; position:fixed;">
@@ -126,9 +88,10 @@
     
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/paginaprofileempresaeditar.js"></script>
-
     <!-- Navbar fragment -->
     <script src="assets/js/navbar.js"></script>
+    <!-- Navbar fragment -->
+    <script src="assets/js/footer.js"></script>
 </body>
 
 </html>
