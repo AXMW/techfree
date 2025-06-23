@@ -18,6 +18,7 @@ public class CandidaturaResponseDTO {
     private String freelancerAreaDeAtuacao;
     private List<String> feelancerHabilidades;
     private String freelancerEmail;
+    private Long projetoId;
 
     public CandidaturaResponseDTO(Candidatura c) {
         this.id = c.getId();
@@ -31,5 +32,6 @@ public class CandidaturaResponseDTO {
         this.freelancerAreaDeAtuacao = c.getFreelancer().getAreaAtuacao();
         this.feelancerHabilidades = c.getFreelancer().getHabilidades();
         this.freelancerEmail = c.getFreelancer().getEmailContato();
+        this.projetoId = c.getProjeto().getId();
     }
 }
