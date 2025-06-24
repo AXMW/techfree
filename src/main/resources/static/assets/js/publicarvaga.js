@@ -90,6 +90,7 @@ document.getElementById('vagaForm').addEventListener('submit', async function (e
     const pagamento = this.elements.pagamento.value;
     const pagamentoFinal = pagamento.replace(/\./g, '').replace(',', '.').replace(/[^\d.]/g, '');
     const email = this.elements.contato.value;
+    const telefoneContato = this.elements.telefone.value;
     const duracao = this.elements.duracao.value;
     const descricao = quill.root.innerHTML; // Aqui vem o HTML formatado
 
@@ -101,6 +102,7 @@ document.getElementById('vagaForm').addEventListener('submit', async function (e
         requisitos: requisitos,
         orcamento: pagamentoFinal,
         emailPraContato: email,
+        telefonePraContato: telefoneContato,
         duracao: duracao,
         descricao: descricao
         // Adicione outros campos se necessário

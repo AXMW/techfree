@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             if (whatsappP) {
                 // Usa o telefoneEmpresa do endpoint
-                whatsappP.innerHTML = `<i class="bi bi-whatsapp"></i> ${data.telefoneEmpresa || 'Não informado'}`;
+                whatsappP.innerHTML = `<i class="bi bi-whatsapp"></i> ${data.telefonePraContato || 'Não informado'}`;
             }
         }
 
@@ -417,6 +417,80 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
 
+        // ...após const data = await response.json(); e antes de preencher o header do projeto...
+        const linkProjetoInput = document.getElementById('linkProjeto');
+        if (linkProjetoInput) {
+            // Cria botão "Alterar Link"
+            let btnAlterar = document.createElement('button');
+            btnAlterar.type = 'button';
+            btnAlterar.className = 'btn btn-outline-secondary btn-sm ms-2';
+            btnAlterar.id = 'btnAlterarLinkProjeto';
+            btnAlterar.textContent = 'Alterar Link';
+
+            // Cria container para botões de confirmação/cancelamento
+            let btnsEdicao = document.createElement('div');
+            btnsEdicao.className = 'mt-2 d-flex gap-3';
+            btnsEdicao.style.display = 'none'; // <-- já está invisível inicialmente
+
+            let btnConfirmar = document.createElement('button');
+            btnConfirmar.type = 'button';
+            btnConfirmar.className = 'btn btn-outline-secondary btn-sm';
+            btnConfirmar.textContent = 'Confirmar Alteração';
+
+            let btnCancelar = document.createElement('button');
+            btnCancelar.type = 'button';
+            btnCancelar.className = 'btn btn-outline-secondary btn-sm';
+            btnCancelar.textContent = 'Cancelar';
+
+            btnsEdicao.appendChild(btnConfirmar);
+            btnsEdicao.appendChild(btnCancelar);
+
+            // Insere o botão "Alterar Link" e os botões de edição após o input
+            linkProjetoInput.parentNode.appendChild(btnAlterar);
+            linkProjetoInput.parentNode.appendChild(btnsEdicao);
+
+            // Valor original
+            let valorOriginal = data.linkProjetoHospedagem || '';
+
+            // Preenche o campo com o valor padrão e bloqueia se houver valor
+            linkProjetoInput.value = valorOriginal;
+            if (valorOriginal || valorOriginal === '') {
+                linkProjetoInput.readOnly = true;
+                btnAlterar.style.display = '';
+                btnsEdicao.style.display = 'none';
+                btnsEdicao.style.setProperty('display', 'none', 'important'); // Garante o !important
+            } else {
+                linkProjetoInput.readOnly = false;
+                btnAlterar.style.display = 'none';
+                btnsEdicao.style.display = 'none';
+                btnsEdicao.style.setProperty('display', 'none', 'important'); // Garante o !important
+            }
+
+            // Ao clicar em "Alterar Link"
+            btnAlterar.onclick = function () {
+                linkProjetoInput.readOnly = false;
+                linkProjetoInput.focus();
+                btnAlterar.style.display = 'none';
+                btnsEdicao.style.setProperty('display', 'flex', 'important'); // Mostra Confirmar/Cancelar com !important
+            };
+
+            // Ao clicar em "Cancelar"
+            btnCancelar.onclick = function () {
+                linkProjetoInput.value = valorOriginal;
+                linkProjetoInput.readOnly = true;
+                btnAlterar.style.display = '';
+                btnsEdicao.style.setProperty('display', 'none', 'important'); // Esconde Confirmar/Cancelar com !important
+            };
+
+            // Ao clicar em "Confirmar Alteração"
+            btnConfirmar.onclick = function () {
+                valorOriginal = linkProjetoInput.value;
+                linkProjetoInput.readOnly = true;
+                btnAlterar.style.display = '';
+                btnsEdicao.style.setProperty('display', 'none', 'important'); // Esconde Confirmar/Cancelar com !important
+                // Aqui você pode adicionar lógica para salvar a alteração no backend, se necessário
+            };
+        }
     } catch (e) {
         console.error(e);
         document.querySelector('.container').innerHTML = `
