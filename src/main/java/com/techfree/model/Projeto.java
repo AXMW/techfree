@@ -43,6 +43,7 @@ public class Projeto {
 
     private boolean ativo;
 
+    @Column(columnDefinition = "TEXT")
     private String mensagem;
 
     @Enumerated(EnumType.STRING)
