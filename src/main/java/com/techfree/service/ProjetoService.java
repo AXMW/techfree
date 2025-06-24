@@ -168,6 +168,7 @@ public class ProjetoService {
         if(dto.getOrcamento() != null) projeto.setOrcamento(dto.getOrcamento());
         if(dto.getDuracao() != 0) projeto.setDuracao(dto.getDuracao());
         if(dto.getEmailPraContato() != null) projeto.setEmailPraContato(dto.getEmailPraContato());
+        if(dto.getMensagem() != null) projeto.setMensagem(dto.getMensagem());
         
         return projetoRepository.save(projeto);
     }
