@@ -48,18 +48,22 @@
                     <form id="formPessoa" method="post">
                         <div class="mb-4 fade-input">
                             <input class="shadow form-control" type="text" name="name" placeholder="Nome">
+                            <div class="erro-senha" id="nomeErrorPessoa"></div>
                         </div>
                         <div class="row mb-4 fade-input">
                             <div class="col-md-6 mb-2 mb-md-0">
                                 <input class="form-control" type="text" id="cpf" name="cpf" maxlength="14" placeholder="CPF">
+                                <div class="erro-senha" id="cpfErrorPessoa"></div>
                             </div>
                             <div class="col-md-6">
                                 <input class="form-control" type="date" name="dataNascimento" placeholder="Data de Nascimento">
                                 <small class="text-muted">Data de nascimento</small>
+                                <div class="erro-senha" id="dataNascimentoErrorPessoa"></div>
                             </div>
                         </div>
                         <div class="mb-4 fade-input">
                             <input class="form-control" type="email" name="email" placeholder="Email">
+                            <div class="erro-senha" id="emailErrorPessoa"></div>
                         </div>
                         <div class="mb-4 fade-input">
                             <input class="shadow form-control" type="password" name="password" placeholder="Senha">
@@ -81,17 +85,21 @@
                     <form id="formEmpresa" method="post" style="display:none;">
                         <div class="mb-4 fade-input">
                             <input class="shadow form-control" type="text" name="razaoSocial" placeholder="Razão Social">
+                            <div class="erro-senha" id="razaoSocialErrorEmpresa"></div>
                         </div>
                         <div class="row mb-4 fade-input">
                             <div class="col-md-6 mb-2 mb-md-0">
                                 <input class="shadow form-control" type="text" name="name" placeholder="Nome fantasia">
+                                <div class="erro-senha" id="nomeFantasiaErrorEmpresa"></div>
                             </div>
                             <div class="col-md-6">
                                 <input class="form-control" type="text" id="cnpj" name="cnpj" maxlength="18" placeholder="CNPJ">
+                                <div class="erro-senha" id="cnpjErrorEmpresa"></div>
                             </div>
                         </div>
                         <div class="mb-4 fade-input">
                             <input class="form-control" type="email" name="email" placeholder="Email">
+                            <div class="erro-senha" id="emailErrorEmpresa"></div>
                         </div>
                         <div class="mb-4 fade-input">
                             <input class="shadow form-control" type="password" name="passwordEmpresa" placeholder="Senha">

@@ -10,6 +10,7 @@ public class FreelancerVisualizacaoResponseDTO {
     private Long id;
     private String nome;
     private String telefone;
+    private String telefoneContato;
     private String areaAtuacao;
     private String github;
     private String linkedin;
@@ -29,6 +30,7 @@ public class FreelancerVisualizacaoResponseDTO {
         this.id = freelancer.getId();
         this.nome = freelancer.getNome();
         this.telefone = freelancer.getTelefone();
+        this.telefoneContato = freelancer.getTelefoneContato();
         this.areaAtuacao = freelancer.getAreaAtuacao();
         this.github = freelancer.getGithub();
         this.linkedin = freelancer.getLinkedin();

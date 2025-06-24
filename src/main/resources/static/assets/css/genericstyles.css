@@ -283,15 +283,6 @@ section.bg-dark {
     border-color: #FF6F00;
 }
 
-.btn-primary {
-    background: #FF6F00;
-    border: none;
-}
-
-.btn-primary:hover {
-    background: #ff8c33;
-}
-
 @media (max-width: 991px) {
     .settings-container {
         flex-direction: column;

@@ -17,6 +17,7 @@ public class EmpresaVisualizacaoResponseDTO {
     private String site;
     private String linkedin;
     private String telefone;
+    private String telefoneContato;
     private String bio;
     private String avatar;
     private String emailContato;
@@ -34,6 +35,7 @@ public class EmpresaVisualizacaoResponseDTO {
         this.site = empresa.getSite();
         this.linkedin = empresa.getLinkedin();
         this.telefone = empresa.getTelefone();
+        this.telefoneContato = empresa.getTelefoneContato();
         this.bio = empresa.getBio();
         this.avatar = empresa.getAvatar();
         this.emailContato = empresa.getEmailContato();

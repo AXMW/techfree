@@ -49,6 +49,8 @@ public class Freelancer {
 
     private String emailContato;
 
+    private String telefoneContato;
+
     @OneToMany(mappedBy = "freelancer", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ExperienciaProfissional> experiencia;
