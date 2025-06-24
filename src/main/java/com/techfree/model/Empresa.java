@@ -36,6 +36,8 @@ public class Empresa {
 
     private String emailContato;
 
+    private String telefoneContato;
+
     @Column(unique = true, nullable = false)
     private String cnpj;
 

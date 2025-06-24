@@ -15,6 +15,7 @@ public class EmpresaAutoVisualizacaoResponseDTO {
     private String site;
     private String linkedin;
     private String telefone;
+    private String telefoneContato;
     private String bio;
     private String avatar;
     private int quantidadeDeFlags;
@@ -31,6 +32,7 @@ public class EmpresaAutoVisualizacaoResponseDTO {
         this.site = empresa.getSite();
         this.linkedin = empresa.getLinkedin();
         this.telefone = empresa.getTelefone();
+        this.telefoneContato = empresa.getTelefoneContato();
         this.bio = empresa.getBio();
         this.avatar = empresa.getAvatar();
         this.quantidadeDeFlags = empresa.getUsuario().getQuantidadeDeFlags();

@@ -28,120 +28,15 @@
                 <div class="settings-container">
                     <!-- Navegação lateral -->
                     <nav class="settings-nav nav flex-column me-3" id="settingsTabs" role="tablist">
-                        <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#profile-info" role="tab"><i class="bi bi-person"></i> Profile Information</a>
-                        <a class="nav-link" id="account-tab" data-bs-toggle="tab" href="#account-settings" role="tab"><i class="bi bi-gear"></i> Account Settings</a>
-                        <a class="nav-link" id="security-tab" data-bs-toggle="tab" href="#security" role="tab"><i class="bi bi-shield-lock"></i> Security</a>
-                        <a class="nav-link" id="notification-tab" data-bs-toggle="tab" href="#notification" role="tab"><i class="bi bi-bell"></i> Notification</a>
+                        <a class="nav-link active" id="account-tab" data-bs-toggle="tab" href="#account-settings" role="tab"><i class="bi bi-gear"></i> Configurações de Conta</a>
+                        <a class="nav-link" id="security-tab" data-bs-toggle="tab" href="#security" role="tab"><i class="bi bi-shield-lock"></i> Segurança</a>
+                        <a class="nav-link" id="notification-tab" data-bs-toggle="tab" href="#notification" role="tab"><i class="bi bi-bell"></i> Notificações</a>
                     </nav>
                     <!-- Conteúdo das configurações -->
                     <div class="settings-content tab-content">
-                        <!-- Profile Information -->
-                        <div class="tab-pane fade show active" id="profile-info" role="tabpanel">
-                            <h3>Informações do Perfil</h3>
-                            <form id="profileForm">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="name">Nome Completo</label>
-                                            <input class="form-control" type="text" id="name" placeholder="Seu nome completo">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="location">Localização</label>
-                                            <input class="form-control" type="text" id="location" placeholder="Cidade, Estado">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="skills">Habilidades</label>
-                                            <input class="form-control" type="text" id="skills" placeholder="Ex: React, Node.js, UX/UI">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="linkedin">LinkedIn</label>
-                                            <input class="form-control" type="url" id="linkedin" placeholder="URL do seu LinkedIn">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="github">GitHub</label>
-                                            <input class="form-control" type="url" id="github" placeholder="URL do seu GitHub">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="portfolio">Portfólio</label>
-                                            <input class="form-control" type="url" id="portfolio" placeholder="URL do seu portfólio">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="birthdate">Data de Nascimento</label>
-                                            <input class="form-control" type="date" id="birthdate">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="gender">Gênero</label>
-                                            <select class="form-select" id="gender">
-                                                <option value="">Selecione</option>
-                                                <option>Masculino</option>
-                                                <option>Feminino</option>
-                                                <option>Outro</option>
-                                                <option>Prefiro não informar</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="bio">Bio</label>
-                                            <textarea class="form-control" id="bio" rows="2" placeholder="Fale um pouco sobre você"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <button type="button" class="btn btn-outline-info w-100" data-bs-toggle="modal" data-bs-target="#expModal">
-                                                <i class="bi bi-briefcase"></i> Gerenciar Experiências Profissionais
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <button class="btn btn-primary mt-2" type="button">Salvar Alterações</button>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- Modal de Experiências Profissionais -->
-                        <div class="modal fade" id="expModal" tabindex="-1" aria-labelledby="expModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
-                                <div class="modal-content" style="background: #23243a; color: #fff;">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="expModalLabel"><i class="bi bi-briefcase"></i> Experiências Profissionais</h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!-- Lista de experiências já existentes -->
-                                        <div id="exp-list">
-                                            <!-- Exemplo de experiência -->
-                                            <div class="border rounded p-2 mb-2">
-                                                <div class="fw-bold">Fatec Carapicuíba</div>
-                                                <div class="text-info small">Desenvolvedor Front-end</div>
-                                                <div class="small mb-1">Desenvolvimento de aplicações web para projetos acadêmicos.</div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <form id="addExpForm">
-                                            <div class="mb-2">
-                                                <label class="form-label" for="expEmpresa">Empresa</label>
-                                                <input class="form-control form-control-sm" type="text" id="expEmpresa" placeholder="Nome da empresa">
-                                            </div>
-                                            <div class="mb-2">
-                                                <label class="form-label" for="expCargo">Cargo/Função</label>
-                                                <input class="form-control form-control-sm" type="text" id="expCargo" placeholder="Ex: Desenvolvedor Front-end">
-                                            </div>
-                                            <div class="mb-2">
-                                                <label class="form-label" for="expDesc">Descrição</label>
-                                                <textarea class="form-control form-control-sm" id="expDesc" rows="2" placeholder="Descreva suas atividades"></textarea>
-                                            </div>
-                                            <button type="submit" class="btn btn-info btn-sm w-100 mt-2"><i class="bi bi-plus-circle"></i> Adicionar Experiência</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Account Settings -->
-                        <div class="tab-pane fade" id="account-settings" role="tabpanel">
-                            <h3>Configurações da Conta</h3>
+                        <!-- Configurações de Conta -->
+                        <div class="tab-pane fade show active" id="account-settings" role="tabpanel">
+                            <h3>Configurações de Conta</h3>
                             <form>
                                 <div class="mb-3">
                                     <label class="form-label" for="email">Email</label>
@@ -161,7 +56,7 @@
                                 <button class="btn btn-primary mt-2" type="button">Salvar Alterações</button>
                             </form>
                         </div>
-                        <!-- Security -->
+                        <!-- Segurança -->
                         <div class="tab-pane fade" id="security" role="tabpanel">
                             <h3>Segurança</h3>
                             <form>
@@ -180,7 +75,7 @@
                                 <button class="btn btn-primary mt-2" type="button">Alterar Senha</button>
                             </form>
                         </div>
-                        <!-- Notification -->
+                        <!-- Notificações -->
                         <div class="tab-pane fade" id="notification" role="tabpanel">
                             <h3>Notificações</h3>
                             <form>

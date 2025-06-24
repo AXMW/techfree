@@ -187,16 +187,68 @@ function mostrarErroConfirmacao(idDiv, msg) {
     }
 }
 
+function mostrarErroCampo(idDiv, msg) {
+    const div = document.getElementById(idDiv);
+    if (!msg) {
+        div.textContent = "";
+        div.classList.add('d-none');
+    } else {
+        div.textContent = msg;
+        div.classList.remove('d-none');
+    }
+}
+
 // --- FREELANCER ---
 document.getElementById('formPessoa').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     // Pegue os valores dos campos
-    const nome = this.name.value;
-    const cpf = this.cpf.value;
-    const email = this.email.value;
+    const nome = this.name.value.trim();
+    const cpf = this.cpf.value.trim();
+    const dataNascimento = this.dataNascimento.value;
+    const email = this.email.value.trim();
     const senha = this.password.value;
     const senhaConfirm = this.passwordConfirm.value;
+
+    let erro = false;
+
+    // Validação de campos obrigatórios
+    if (!nome) {
+        mostrarErroCampo('nomeErrorPessoa', 'Nome obrigatório.');
+        erro = true;
+    } else {
+        mostrarErroCampo('nomeErrorPessoa', '');
+    }
+
+    if (!cpf) {
+        mostrarErroCampo('cpfErrorPessoa', 'CPF obrigatório.');
+        erro = true;
+    } else if (!validarCPFCompleto(cpf)) {
+        mostrarErroCampo('cpfErrorPessoa', 'CPF incompleto.');
+        erro = true;
+    } else {
+        mostrarErroCampo('cpfErrorPessoa', '');
+    }
+
+    if (!dataNascimento) {
+        mostrarErroCampo('dataNascimentoErrorPessoa', 'Data de nascimento obrigatória.');
+        erro = true;
+    } else if (!validarMaiorDeIdade(dataNascimento)) {
+        mostrarErroCampo('dataNascimentoErrorPessoa', 'Você deve ter pelo menos 18 anos.');
+        erro = true;
+    } else {
+        mostrarErroCampo('dataNascimentoErrorPessoa', '');
+    }
+
+    if (!email) {
+        mostrarErroCampo('emailErrorPessoa', 'Email obrigatório.');
+        erro = true;
+    } else if (!validarEmail(email)) {
+        mostrarErroCampo('emailErrorPessoa', 'Email inválido.');
+        erro = true;
+    } else {
+        mostrarErroCampo('emailErrorPessoa', '');
+    }
 
     // Validação senha forte
     const faltando = validarSenhaForte(senha);
@@ -205,14 +257,14 @@ document.getElementById('formPessoa').addEventListener('submit', async function 
     // Validação confirmação
     if (senha !== senhaConfirm) {
         mostrarErroConfirmacao('confirmaSenhaErrorPessoa', 'As senhas não coincidem.');
+        erro = true;
     } else {
         mostrarErroConfirmacao('confirmaSenhaErrorPessoa', '');
     }
 
-    if (faltando.length > 0 || senha !== senhaConfirm) {
+    if (faltando.length > 0 || erro) {
         return; // Não envia o formulário
     }
-
 
     // Monte o objeto conforme seu DTO de registro
     const payload = {
@@ -241,10 +293,9 @@ document.getElementById('formPessoa').addEventListener('submit', async function 
 
             if (response2.ok) {
                 const data = await response2.json();
-                // Salve o token e tipoUsuario igual ao login
                 if (data.token) {
                     localStorage.setItem('token', data.token);
-                    localStorage.setItem('tipoUsuario', data.tipoUsuario); // Adicione esta linha
+                    localStorage.setItem('tipoUsuario', data.tipoUsuario);
                     document.cookie = `jwt=${data.token}; path=/; max-age=86400;`;
                 }
                 window.location.href = '/dashboard';
@@ -264,13 +315,49 @@ document.getElementById('formPessoa').addEventListener('submit', async function 
 // --- EMPRESA ---
 document.getElementById('formEmpresa').addEventListener('submit', async function (e) {
     e.preventDefault();
-    // Pegue os valores dos campos
-    const razaoSocial = this.razaoSocial.value;
-    const nomeFantasia = this.name.value;
-    const cnpj = this.cnpj.value;
-    const email = this.email.value;
+
+    const razaoSocial = this.razaoSocial.value.trim();
+    const nomeFantasia = this.name.value.trim();
+    const cnpj = this.cnpj.value.trim();
+    const email = this.email.value.trim();
     const senha = this.elements.passwordEmpresa.value;
     const senhaConfirm = this.elements.passwordEmpresaConfirm.value;
+
+    let erro = false;
+
+    if (!razaoSocial) {
+        mostrarErroCampo('razaoSocialErrorEmpresa', 'Razão social obrigatória.');
+        erro = true;
+    } else {
+        mostrarErroCampo('razaoSocialErrorEmpresa', '');
+    }
+
+    if (!nomeFantasia) {
+        mostrarErroCampo('nomeFantasiaErrorEmpresa', 'Nome fantasia obrigatório.');
+        erro = true;
+    } else {
+        mostrarErroCampo('nomeFantasiaErrorEmpresa', '');
+    }
+
+    if (!cnpj) {
+        mostrarErroCampo('cnpjErrorEmpresa', 'CNPJ obrigatório.');
+        erro = true;
+    } else if (!validarCNPJCompleto(cnpj)) {
+        mostrarErroCampo('cnpjErrorEmpresa', 'CNPJ incompleto.');
+        erro = true;
+    } else {
+        mostrarErroCampo('cnpjErrorEmpresa', '');
+    }
+
+    if (!email) {
+        mostrarErroCampo('emailErrorEmpresa', 'Email obrigatório.');
+        erro = true;
+    } else if (!validarEmail(email)) {
+        mostrarErroCampo('emailErrorEmpresa', 'Email inválido.');
+        erro = true;
+    } else {
+        mostrarErroCampo('emailErrorEmpresa', '');
+    }
 
     // Validação senha forte
     const faltando = validarSenhaForte(senha);
@@ -279,11 +366,12 @@ document.getElementById('formEmpresa').addEventListener('submit', async function
     // Validação confirmação
     if (senha !== senhaConfirm) {
         mostrarErroConfirmacao('confirmaSenhaErrorEmpresa', 'As senhas não coincidem.');
+        erro = true;
     } else {
         mostrarErroConfirmacao('confirmaSenhaErrorEmpresa', '');
     }
 
-    if (faltando.length > 0 || senha !== senhaConfirm) {
+    if (faltando.length > 0 || erro) {
         return; // Não envia o formulário
     }
 
@@ -314,10 +402,9 @@ document.getElementById('formEmpresa').addEventListener('submit', async function
 
             if (responseEmpresa.ok) {
                 const data = await responseEmpresa.json();
-                // Salve o token e tipoUsuario igual ao login
                 if (data.token) {
                     localStorage.setItem('token', data.token);
-                    localStorage.setItem('tipoUsuario', data.tipoUsuario); // Adicione esta linha
+                    localStorage.setItem('tipoUsuario', data.tipoUsuario);
                     document.cookie = `jwt=${data.token}; path=/; max-age=86400;`;
                 }
                 window.location.href = '/dashboard';
@@ -349,3 +436,28 @@ document.querySelector('input[name="passwordEmpresaConfirm"]').addEventListener(
     const senha = document.querySelector('input[name="passwordEmpresa"]').value;
     mostrarErroConfirmacao('confirmaSenhaErrorEmpresa', this.value !== senha ? 'As senhas não coincidem.' : '');
 });
+
+function validarCPFCompleto(cpf) {
+    return /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf);
+}
+
+function validarCNPJCompleto(cnpj) {
+    return /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj);
+}
+
+function validarEmail(email) {
+    // Regex simples para email válido
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validarMaiorDeIdade(dataNascimento) {
+    if (!dataNascimento) return false;
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const m = hoje.getMonth() - nascimento.getMonth();
+    if (m < 0 || (m === 0 && hoje.getDate() <= nascimento.getDate())) {
+        idade--;
+    }
+    return idade >= 18;
+}

@@ -28,7 +28,7 @@ public class CandidaturaResponseDTO {
         this.status = c.getStatus();
         this.freelancerId = c.getFreelancer().getId();
         this.freelancerNome = c.getFreelancer().getNome();
-        this.frelancerTelefone = c.getFreelancer().getTelefone();
+        this.frelancerTelefone = c.getFreelancer().getTelefoneContato();
         this.freelancerAreaDeAtuacao = c.getFreelancer().getAreaAtuacao();
         this.feelancerHabilidades = c.getFreelancer().getHabilidades();
         this.freelancerEmail = c.getFreelancer().getEmailContato();

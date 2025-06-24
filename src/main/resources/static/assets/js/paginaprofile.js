@@ -39,7 +39,7 @@ async function buscarPerfilFreelancer() {
             bio: data.bio,
             avatar: data.avatar,
             emailContato: data.emailContato,
-            telefone: data.telefone,
+            telefoneContato: data.telefoneContato,
             areaAtuacao: data.areaAtuacao,
             github: data.github,
             linkedin: data.linkedin,
@@ -94,7 +94,7 @@ function renderProfile(profile) {
     // Contato
     let contatoHtml = `
         <div><i class="bi bi-envelope"></i><span>${profile.emailContato || ""}</span></div>
-        <div><i class="bi bi-whatsapp"></i><span>${profile.telefone || ""}</span></div>
+        <div><i class="bi bi-whatsapp"></i><span>${profile.telefoneContato || ""}</span></div>
     `;
 
     // Avaliação (sempre 5 estrelas)
@@ -197,7 +197,7 @@ function calcularProgressoPerfil(profile) {
         { nome: "Nome", valor: profile.nome },
         { nome: "Cargo", valor: profile.areaAtuacao },
         { nome: "E-mail de contato", valor: profile.emailContato },
-        { nome: "Telefone/WhatsApp", valor: profile.telefone },
+        { nome: "Telefone/WhatsApp", valor: profile.telefoneContato },
         { nome: "Sobre", valor: profile.bio },
         { nome: "Habilidades", valor: (profile.habilidades && profile.habilidades.length > 0) ? "ok" : "" },
         { nome: "Certificados", valor: (profile.certificados && profile.certificados.length > 0) ? "ok" : "" },
