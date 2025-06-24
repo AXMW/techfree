@@ -144,6 +144,36 @@ document.addEventListener('DOMContentLoaded', async function () {
                     btnConfirmarAcao.replaceWith(btnConfirmarAcao.cloneNode(true));
                     const btnConfirmarAcaoNovo = document.getElementById('confirmarEnviarRevisao');
                     btnConfirmarAcaoNovo.addEventListener('click', async function () {
+                        // Validação do campo linkProjeto
+                        const linkProjeto = document.getElementById('linkProjeto');
+                        let feedback = document.getElementById('linkProjetoFeedback');
+                        if (!linkProjeto || !linkProjeto.value.trim()) {
+                            // Fecha o modal de confirmação
+                            modal.hide();
+                            // Destaca o campo
+                            linkProjeto.classList.add('is-invalid');
+                            linkProjeto.focus();
+                            // Mostra mensagem de feedback
+                            if (!feedback) {
+                                feedback = document.createElement('div');
+                                feedback.id = 'linkProjetoFeedback';
+                                feedback.className = 'invalid-feedback d-block';
+                                feedback.innerText = 'O link do projeto é obrigatório para enviar para revisão.';
+                                linkProjeto.parentNode.appendChild(feedback);
+                            } else {
+                                feedback.style.display = 'block';
+                            }
+                            // Remove o destaque ao digitar
+                            linkProjeto.addEventListener('input', function limparInvalido() {
+                                linkProjeto.classList.remove('is-invalid');
+                                if (feedback) feedback.style.display = 'none';
+                                linkProjeto.removeEventListener('input', limparInvalido);
+                            });
+                            return;
+                        } else {
+                            linkProjeto.classList.remove('is-invalid');
+                            if (feedback) feedback.style.display = 'none';
+                        }
                         try {
                             const token = localStorage.getItem('token');
                             const resp = await fetch(`/projetos/${projetoId}/status/revisao`, {
@@ -156,6 +186,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                             modal.hide();
                             location.reload();
                         } catch (e) {
+                            modal.hide();
+                            linkProjeto.classList.add('is-invalid');
+                            linkProjeto.focus();
                             alert('Erro ao enviar para revisão.');
                         }
                     });
@@ -198,12 +231,43 @@ document.addEventListener('DOMContentLoaded', async function () {
                     btnConfirmar.replaceWith(btnConfirmar.cloneNode(true));
                     const btnConfirmarNovo = document.getElementById('confirmarDevolucao');
                     btnConfirmarNovo.addEventListener('click', async function () {
-                        const mensagem = quillDevolucao.root.innerHTML.trim();
-                        // Remove tags vazias e verifica se há conteúdo real
-                        if (!mensagem || mensagem === '<p><br></p>') {
+                        const mensagemDevolucao = quillDevolucao.root.innerHTML.trim();
+                        if (!mensagemDevolucao || mensagemDevolucao === '<p><br></p>') {
                             alert('Por favor, escreva o motivo da devolução.');
                             return;
                         }
+                        // Função para quebrar linhas HTML em até 85 caracteres por linha
+                        function quebraLinhasHtml(html, maxLen = 50) {
+                            // Converte HTML em texto plano, preservando <br>
+                            let tempDiv = document.createElement('div');
+                            tempDiv.innerHTML = html.replace(/<br\s*\/?>/gi, '\n');
+                            let text = tempDiv.textContent || tempDiv.innerText || '';
+                            let linhas = text.split('\n');
+                            let resultado = [];
+                            linhas.forEach(linha => {
+                                while (linha.length > maxLen) {
+                                    resultado.push(linha.slice(0, maxLen));
+                                    linha = linha.slice(maxLen);
+                                }
+                                resultado.push(linha);
+                            });
+                            // Junta novamente, convertendo \n para <br>
+                            return resultado.map(l => l).join('<br>');
+                        }
+
+                        // Formata a mensagem para envio
+                        const mensagemFormatada = quebraLinhasHtml(mensagemDevolucao, 77);
+
+                        // Use mensagemFormatada no corpo da requisição/fetch:
+                        const agora = new Date();
+                        const dataHora = agora.toLocaleString('pt-BR');
+                        const descricaoAnterior = data.mensagem || '';
+                        const novaDescricao =
+                            `<h4>Atualização - ${dataHora}</h4>` +
+                            `<div style="font-size:1.15rem;">${mensagemFormatada}</div>` +
+                            `<br><hr style="margin: 32px 0; border-top: 3px solid #ccc;"><br>` +
+                            descricaoAnterior;
+
                         try {
                             const token = localStorage.getItem('token');
                             const respStatus = await fetch(`/projetos/${projetoId}/status/em-andamento`, {
@@ -214,22 +278,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                             });
                             if (!respStatus.ok) throw new Error('Erro ao devolver projeto');
 
-                            const agora = new Date();
-                            const dataHora = agora.toLocaleString('pt-BR');
-                            const descricaoAnterior = data.descricao || '';
-                            const novaDescricao =
-                                `<h4>Atualização - ${dataHora}</h4>` +
-                                `<div style="font-size:1.15rem;">${mensagem}</div>` +
-                                `<br><hr style="margin: 32px 0; border-top: 3px solid #ccc;"><br>` +
-                                descricaoAnterior;
-
                             const respDescricao = await fetch(`/projetos/${projetoId}`, {
                                 method: 'PUT',
                                 headers: {
                                     'Authorization': 'Bearer ' + token,
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ descricao: novaDescricao })
+                                body: JSON.stringify({ mensagem: novaDescricao })
                             });
                             if (!respDescricao.ok) throw new Error('Erro ao atualizar descrição');
 
@@ -237,6 +292,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                             location.reload();
                         } catch (e) {
                             alert('Erro ao devolver projeto ou atualizar descrição.');
+                            console.log(e);
                         }
                     });
                 });
@@ -349,8 +405,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             } else {
                 cardInstrucoes.classList.remove('cancelado');
                 // Mostra a descrição bruta, trocando \n por <br>
-                if (data.descricao) {
-                    conteudoDiv.innerHTML = data.descricao.replace(/\n/g, '<br>');
+                if (data.mensagem) {
+                    conteudoDiv.innerHTML = data.mensagem.replace(/\n/g, '<br>');
                 } else {
                     conteudoDiv.innerHTML = 'Consulte a descrição do projeto para mais detalhes.';
                 }

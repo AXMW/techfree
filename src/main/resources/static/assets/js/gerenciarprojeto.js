@@ -85,7 +85,7 @@ async function carregarProjectsFreelancer(token) {
                 tech: c.feelancerHabilidades || [],
                 date: c.data ? convertDate(c.data) : "A definir",
                 desc: c.mensagem || '',
-                id: c.id // id da candidatura
+                id: c.projetoId // id da candidatura
             }))
         );
 

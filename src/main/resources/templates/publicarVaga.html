@@ -55,7 +55,7 @@
                             <input type="text" class="form-control" id="pagamento" name="pagamento" required
                                 placeholder="Ex: R$ 2.000,00">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label">Requisitos <span class="required">*</span></label>
                             <div class="tags-input-wrapper mt-2 flex-wrap" id="tagsInputWrapper"
                                 style="position: relative;">
@@ -68,14 +68,19 @@
                                     <!-- Opções serão inseridas via JS -->
                                 </div>
                             </div>
-                            <small class="text-muted">Sugestões: JavaScript, Python, Java, C#, PHP, SQL, React, Node.js,
-                                etc.</small>
+                            <small class="text-muted">Sugestões: JavaScript, Python, Java, SQL, React, etc.</small>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="contato" class="form-label">Email para Contato <span
                                     class="required">*</span></label>
                             <input type="email" class="form-control" id="contato" name="contato" required
                                 placeholder="empresa@email.com">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="telefone" class="form-label">Telefone para Contato <span
+                                    class="required">*</span></label>
+                            <input type="tel" class="form-control" id="telefone" name="telefone" required
+                                placeholder="(99) 99999-9999" pattern="\(?\d{2}\)?\s?\d{4,5}-?\d{4}">
                         </div>
                         <div class="col-md-2">
                             <label for="duracao" class="form-label">Duração do Projeto <span
