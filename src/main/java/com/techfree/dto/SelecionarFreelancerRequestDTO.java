@@ -8,4 +8,5 @@ import lombok.Setter;
 public class SelecionarFreelancerRequestDTO {
     private Long projetoId;
     private Long freelancerId;
+    private String mensagem;
 }

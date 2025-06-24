@@ -375,6 +375,7 @@ public class ProjetoService {
         candidaturaRepository.save(candidatura);
 
         // 3️⃣ Atualiza o projeto
+        projeto.setMensagem(dto.getMensagem());
         projeto.setDataInicio(LocalDate.now());
         projeto.setPrazoEntrega(LocalDate.now().plusMonths(projeto.getDuracao()));
         projeto.setStatus(StatusProjeto.EM_ANDAMENTO);
