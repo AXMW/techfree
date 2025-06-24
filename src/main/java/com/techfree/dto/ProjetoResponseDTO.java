@@ -30,6 +30,8 @@ public class ProjetoResponseDTO {
     private LocalDate dataInicio;
 
     private String emailPraContato;
+    
+    private String telefonePraContato;
 
     private StatusProjeto status;
 
@@ -55,11 +57,12 @@ public class ProjetoResponseDTO {
         this.prazoEntrega = projeto.getPrazoEntrega();
         this.dataInicio = projeto.getDataInicio();
         this.emailPraContato = projeto.getEmailPraContato();
+        this.telefonePraContato = projeto.getTelefonePraContato();
         this.status = projeto.getStatus();
         this.empresa = projeto.getEmpresa().getNomeFantasia();
         this.site = projeto.getEmpresa().getSite();
         this.dataCriacao = projeto.getDataCriacao();
-        this.telefoneEmpresa = projeto.getEmpresa().getTelefone();
+        this.telefoneEmpresa = projeto.getEmpresa().getTelefoneContato();
         this.mensagem = projeto.getMensagem();
     }
 }

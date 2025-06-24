@@ -120,6 +120,7 @@ public class ProjetoService {
         projeto.setOrcamento(dto.getOrcamento());
         projeto.setDuracao(dto.getDuracao());
         projeto.setEmailPraContato(dto.getEmailPraContato());
+        projeto.setTelefonePraContato(dto.getTelefonePraContato());
         projeto.setStatus(StatusProjeto.ABERTO);
         projeto.setEmpresa(empresa);
 

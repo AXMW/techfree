@@ -41,6 +41,8 @@ public class Projeto {
 
     private String emailPraContato;
 
+    private String telefonePraContato;
+
     private boolean ativo;
 
     @Column(columnDefinition = "TEXT")

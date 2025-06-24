@@ -24,6 +24,8 @@ public class ProjetoRequestDTO {
 
     private String emailPraContato;
 
+    private String telefonePraContato;
+
     private String mensagem;
 
 }
