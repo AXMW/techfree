@@ -51,6 +51,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     const urlGetPerfil = tipoUsuario === 'EMPRESA' ? '/empresa/perfil/verPerfil' : '/freelancer/perfil/verPerfil';
     const urlPutPerfil = tipoUsuario === 'EMPRESA' ? '/empresa/perfil' : '/freelancer/perfil';
 
+    // Declare emailOriginal no escopo superior
+    let emailOriginal = '';
+
     // Preenche os campos com os dados atuais
     try {
         const resp = await fetch(urlGetPerfil, {
@@ -60,11 +63,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (!resp.ok) throw new Error('Erro ao buscar perfil');
         const perfil = await resp.json();
 
-        // Preenche campos
+        // Salve o email original ao carregar o perfil para evitar PUT desnecessário
         if (emailInput) {
             emailInput.value = perfil.email || '';
-            // Salve o email original para uso posterior
-            localStorage.setItem('emailUsuario', perfil.email || '');
+            emailOriginal = perfil.email || '';
         }
         if (phoneInput) {
             phoneInput.value = perfil.telefone || '';
@@ -73,38 +75,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error('Erro ao carregar perfil:', e);
     }
 
-    // Adicione isso logo após a definição dos seletores, dentro do DOMContentLoaded
-    let modalSenha = document.getElementById('modalConfirmarSenha');
-    if (!modalSenha) {
-        modalSenha = document.createElement('div');
-        modalSenha.className = 'modal fade';
-        modalSenha.id = 'modalConfirmarSenha';
-        modalSenha.tabIndex = -1;
-        modalSenha.innerHTML = `
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Confirme sua senha</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                  <input type="password" class="form-control" id="senhaConfirmacaoInput" placeholder="Digite sua senha" autocomplete="current-password">
-                  <div id="senhaConfirmacaoFeedback" class="erro-senha mt-2 mb-0"></div>
-                </div>
-                <div class="modal-footer d-flex justify-content-center gap-2">
-                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="button" class="btn btn-primary" id="btnConfirmarSenha">Confirmar</button>
-                </div>
-              </div>
-            </div>
-        `;
-        document.body.appendChild(modalSenha);
-    }
-
-    // Salvar alterações
+    // Salvar alterações (apenas PUT simples)
     if (btnSalvar) {
         btnSalvar.addEventListener('click', async function () {
-            // Validação antes de pedir senha
             let erro = false;
             if (emailInput && !validarEmail(emailInput.value)) {
                 emailError.textContent = 'Email inválido.';
@@ -120,99 +93,62 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             if (erro) return;
 
-            // Mostra o modal de senha
-            const senhaInput = document.getElementById('senhaConfirmacaoInput');
-            const senhaFeedback = document.getElementById('senhaConfirmacaoFeedback');
-            senhaInput.value = '';
-            senhaFeedback.textContent = '';
-            const modal = new bootstrap.Modal(modalSenha);
-            modal.show();
+            // Atualiza telefone normalmente (NÃO envia email aqui!)
+            let body = {
+                telefone: phoneInput.value
+            };
 
-            // Remove event listeners antigos para evitar múltiplos envios
-            const btnConfirmarSenha = document.getElementById('btnConfirmarSenha');
-            btnConfirmarSenha.replaceWith(btnConfirmarSenha.cloneNode(true));
-            const btnConfirmarSenhaNovo = document.getElementById('btnConfirmarSenha');
+            try {
+                const resp = await fetch(urlPutPerfil, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                });
+                if (!resp.ok) throw new Error('Erro ao atualizar perfil');
+                alert('Telefone atualizado com sucesso!');
+            } catch (e) {
+                alert('Erro ao atualizar perfil');
+                console.error(e);
+                return;
+            }
 
-            btnConfirmarSenhaNovo.addEventListener('click', async function () {
-                const senha = senhaInput.value;
-                if (!senha) {
-                    senhaFeedback.textContent = 'Digite sua senha.';
-                    return;
-                }
-                // 1. Verifica a senha com o email antigo
-                const emailAntigo = localStorage.getItem('emailUsuario') || emailInput.value;
+            // Se o email foi alterado, chama o endpoint novo
+            const emailAtual = emailInput.value;
+            let urlMudarEmail = '';
+            if (tipoUsuario === 'EMPRESA') {
+                urlMudarEmail = '/empresa/perfil/mudarEmail';
+            } else {
+                urlMudarEmail = '/freelancer/perfil/mudarEmail';
+            }
+
+            // Só chama o endpoint se o email foi alterado
+            if (emailAtual !== emailOriginal) {
                 try {
-                    const loginResp = await fetch('/auth/login', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: emailAntigo, senha: senha })
+                    const respEmail = await fetch(urlMudarEmail, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Content-Type': 'text/plain'
+                        },
+                        body: emailAtual
                     });
-                    if (loginResp.ok) {
-                        senhaFeedback.textContent = '';
-                        modal.hide();
-
-                        // 2. Faz a alteração do perfil
-                        let body = {
-                            telefone: phoneInput.value,
-                            email: emailInput.value
-                        };
-
-                        try {
-                            const resp = await fetch(urlPutPerfil, {
-                                method: 'PUT',
-                                headers: {
-                                    'Authorization': 'Bearer ' + token,
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(body)
-                            });
-                            if (!resp.ok) throw new Error('Erro ao atualizar perfil');
-                            alert('Perfil atualizado com sucesso!');
-
-                            // 3. Se o email foi alterado, faz login com o novo email
-                            if (emailInput.value !== emailAntigo) {
-                                async function tentarLoginNovoEmail(email, senha, tentativas = 10, delayMs = 1000) {
-                                    for (let i = 0; i < tentativas; i++) {
-                                        // Aguarda o delay ANTES da tentativa, inclusive na primeira
-                                        if (delayMs > 0) await new Promise(r => setTimeout(r, delayMs));
-                                        const loginResp2 = await fetch('/auth/login', {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({ email, senha })
-                                        });
-                                        if (loginResp2.ok) {
-                                            const data = await loginResp2.json();
-                                            if (data.token) {
-                                                localStorage.setItem('token', data.token);
-                                                localStorage.setItem('tipoUsuario', data.tipoUsuario);
-                                                localStorage.setItem('emailUsuario', email);
-                                                document.cookie = `jwt=${data.token}; path=/; max-age=86400;`;
-                                                alert('Login atualizado com sucesso!');
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                    // Limpa localStorage e cookies e redireciona para login
-                                    localStorage.clear();
-                                    document.cookie = "jwt=; path=/; max-age=0;";
-                                    alert('Não foi possível autenticar com o novo email. Faça login novamente.');
-                                    window.location.href = '/login';
-                                    return false;
-                                }
-
-                                await tentarLoginNovoEmail(emailInput.value, senha, 2, 1200);
-                            }
-                        } catch (e) {
-                            alert('Erro ao atualizar perfil');
-                            console.error(e);
-                        }
+                    if (!respEmail.ok) throw new Error('Erro ao atualizar email');
+                    const data = await respEmail.json();
+                    if (data.token) {
+                        localStorage.setItem('token', data.token);
+                        document.cookie = `jwt=${data.token}; path=/; max-age=86400;`;
+                        alert('Email e token atualizados com sucesso!');
                     } else {
-                        senhaFeedback.textContent = 'Senha incorreta.';
+                        alert('Email alterado, mas não foi possível atualizar o token.');
                     }
                 } catch (e) {
-                    senhaFeedback.textContent = 'Erro ao validar senha.';
+                    alert('Erro ao atualizar email');
+                    console.error(e);
                 }
-            });
+            }
         });
     }
 });

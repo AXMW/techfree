@@ -42,10 +42,15 @@ public class FreelancerController {
     @Autowired
     private AvaliacaoFreelancerRepository avaliacaoFreelancerRepository;
 
-    public FreelancerController(FreelancerRepository freelancerRepository, UsuarioRepository usuarioRepository) {
+    @Autowired
+    public FreelancerController(
+        FreelancerRepository freelancerRepository,
+        UsuarioRepository usuarioRepository,
+        JwtUtil jwtUtil
+    ) {
         this.usuarioRepository = usuarioRepository;
         this.freelancerRepository = freelancerRepository;
-        this.jwtUtil = new JwtUtil();
+        this.jwtUtil = jwtUtil;
     }
 
     // FREELANCER: ver o perfil do freelancer logado

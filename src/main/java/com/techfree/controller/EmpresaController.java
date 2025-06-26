@@ -35,12 +35,13 @@ public class EmpresaController {
         EmpresaRepository empresaRepository,
         ProjetoRepository projetoRepository,
         AvaliacaoEmpresaRepository avaliacaoEmpresaRepository,
-        UsuarioRepository usuarioRepository) {
+        UsuarioRepository usuarioRepository,
+        JwtUtil jwtUtil) {
         this.empresaRepository = empresaRepository;
         this.projetoRepository = projetoRepository;
         this.avaliacaoEmpresaRepository = avaliacaoEmpresaRepository;
         this.usuarioRepository = usuarioRepository;
-        this.jwtUtil = new JwtUtil();
+        this.jwtUtil = jwtUtil;
     }
 
     // EMPRESA: ver o perfil da empresa logada
