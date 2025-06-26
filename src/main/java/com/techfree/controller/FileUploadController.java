@@ -35,8 +35,11 @@ public class FileUploadController {
                     System.out.println("Arquivo antigo não encontrado para deletar: " + ex.getMessage());
                 }
             }
-
+            
             String originalName = file.getOriginalFilename();
+            if(originalName == null || originalName.isBlank()) {
+                originalName = "placeholder";
+            }
             String sanitized = originalName.replaceAll("[^a-zA-Z0-9\\.\\-_]", "_");
             String fileName = UUID.randomUUID() + "_" + sanitized;
             Path filePath = uploadDir.resolve(fileName);
