@@ -22,6 +22,8 @@ import com.techfree.repository.UsuarioRepository;
 import com.techfree.dto.FreelancerAutoVisualizacaoResponseDTO;
 import com.techfree.repository.AvaliacaoFreelancerRepository;
 import com.techfree.model.AvaliacaoFreelancer;
+import com.techfree.dto.AlterarEmailDTO;
+import com.techfree.security.JwtUtil;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -35,12 +37,15 @@ public class FreelancerController {
 
     private final UsuarioRepository usuarioRepository;
 
+    private final JwtUtil jwtUtil;
+
     @Autowired
     private AvaliacaoFreelancerRepository avaliacaoFreelancerRepository;
 
     public FreelancerController(FreelancerRepository freelancerRepository, UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
         this.freelancerRepository = freelancerRepository;
+        this.jwtUtil = new JwtUtil();
     }
 
     // FREELANCER: ver o perfil do freelancer logado
@@ -87,7 +92,6 @@ public class FreelancerController {
         if (dados.getCertificados() != null) freelancer.setCertificados(new ArrayList<>(dados.getCertificados()));
         if (dados.getAvatar() != null) freelancer.setAvatar(dados.getAvatar());
         if (dados.getEmailContato() != null) freelancer.setEmailContato(dados.getEmailContato());
-        if (dados.getEmail() != null) freelancer.getUsuario().setEmail(dados.getEmail());
         if (dados.getTelefoneContato() != null) freelancer.setTelefoneContato(dados.getTelefoneContato());
         if (dados.getExperiencia() != null) {
             // Limpa a lista original e adiciona os novos elementos
@@ -119,6 +123,31 @@ public class FreelancerController {
 
         freelancerRepository.save(freelancer);
         return ResponseEntity.ok(freelancer);
+    }
+
+    @PutMapping("/perfil/mudarEmail")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<AlterarEmailDTO> mudarEmail(
+            Authentication authentication,
+            @RequestBody String novoEmail) {
+
+        String email = authentication.getName();
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Freelancer freelancer = freelancerRepository.findByUsuario(usuario)
+            .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+
+        if(!usuario.equals(freelancer.getUsuario())) {
+            throw new RuntimeException("");
+        }
+        
+        usuario.setEmail(novoEmail);
+        usuarioRepository.save(usuario);
+        String token = jwtUtil.gerarToken(usuario.getEmail());
+
+        return ResponseEntity.ok(new AlterarEmailDTO(novoEmail, token));
     }
 
     // FREELANCER: deletar o perfil do freelancer logado
