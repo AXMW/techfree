@@ -2,7 +2,6 @@ package com.techfree.controller;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,11 +14,9 @@ import com.techfree.dto.AlterarEmailDTO;
 import com.techfree.dto.EmpresaAutoVisualizacaoResponseDTO;
 import com.techfree.dto.EmpresaVisualizacaoResponseDTO;
 import com.techfree.model.Empresa;
-import com.techfree.model.Freelancer;
 import com.techfree.repository.EmpresaRepository;
 import com.techfree.repository.ProjetoRepository;
 import com.techfree.repository.AvaliacaoEmpresaRepository;
-import com.techfree.service.ProjetoService;
 import com.techfree.repository.UsuarioRepository;
 import com.techfree.model.AvaliacaoEmpresa;
 import com.techfree.security.JwtUtil;
@@ -31,17 +28,14 @@ public class EmpresaController {
     private final EmpresaRepository empresaRepository;
     private final ProjetoRepository projetoRepository;
     private final AvaliacaoEmpresaRepository avaliacaoEmpresaRepository;
-    private final ProjetoService projetoService;
     private final UsuarioRepository usuarioRepository;
     private final JwtUtil jwtUtil;
 
     public EmpresaController(
-        ProjetoService projetoService,
         EmpresaRepository empresaRepository,
         ProjetoRepository projetoRepository,
         AvaliacaoEmpresaRepository avaliacaoEmpresaRepository,
         UsuarioRepository usuarioRepository) {
-        this.projetoService = projetoService;
         this.empresaRepository = empresaRepository;
         this.projetoRepository = projetoRepository;
         this.avaliacaoEmpresaRepository = avaliacaoEmpresaRepository;
