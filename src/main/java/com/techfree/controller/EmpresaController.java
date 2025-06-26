@@ -11,15 +11,18 @@ import org.springframework.web.bind.annotation.*;
 
 import com.techfree.model.Projeto;
 import com.techfree.model.Usuario;
+import com.techfree.dto.AlterarEmailDTO;
 import com.techfree.dto.EmpresaAutoVisualizacaoResponseDTO;
 import com.techfree.dto.EmpresaVisualizacaoResponseDTO;
 import com.techfree.model.Empresa;
+import com.techfree.model.Freelancer;
 import com.techfree.repository.EmpresaRepository;
 import com.techfree.repository.ProjetoRepository;
 import com.techfree.repository.AvaliacaoEmpresaRepository;
 import com.techfree.service.ProjetoService;
 import com.techfree.repository.UsuarioRepository;
 import com.techfree.model.AvaliacaoEmpresa;
+import com.techfree.security.JwtUtil;
 
 @RestController
 @RequestMapping("/empresa")
@@ -30,6 +33,7 @@ public class EmpresaController {
     private final AvaliacaoEmpresaRepository avaliacaoEmpresaRepository;
     private final ProjetoService projetoService;
     private final UsuarioRepository usuarioRepository;
+    private final JwtUtil jwtUtil;
 
     public EmpresaController(
         ProjetoService projetoService,
@@ -42,6 +46,7 @@ public class EmpresaController {
         this.projetoRepository = projetoRepository;
         this.avaliacaoEmpresaRepository = avaliacaoEmpresaRepository;
         this.usuarioRepository = usuarioRepository;
+        this.jwtUtil = new JwtUtil();
     }
 
     // EMPRESA: ver o perfil da empresa logada
@@ -92,6 +97,31 @@ public class EmpresaController {
 
         empresaRepository.save(empresa);
         return ResponseEntity.ok(empresa);
+    }
+
+    @PutMapping("/perfil/mudarEmail")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<AlterarEmailDTO> mudarEmail(
+            Authentication authentication,
+            @RequestBody String novoEmail) {
+
+        String email = authentication.getName();
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Empresa empresa = empresaRepository.findByUsuario(usuario)
+            .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+
+        if(!usuario.equals(empresa.getUsuario())) {
+            throw new RuntimeException("");
+        }
+        
+        usuario.setEmail(novoEmail);
+        usuarioRepository.save(usuario);
+        String token = jwtUtil.gerarToken(usuario.getEmail());
+
+        return ResponseEntity.ok(new AlterarEmailDTO(novoEmail, token));
     }
 
     // EMPRESA: deletar o perfil da empresa logada
