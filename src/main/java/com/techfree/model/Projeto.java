@@ -62,6 +62,8 @@ public class Projeto {
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
 
+    private String linkProjetoHospedagem;
+
     @PrePersist
     public void prePersist() {
         this.dataCriacao = LocalDateTime.now();

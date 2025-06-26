@@ -45,6 +45,8 @@ public class ProjetoResponseDTO {
 
     private String mensagem;
 
+    private String linkProjetoHospedagem;
+
     public ProjetoResponseDTO(Projeto projeto) {
         this.id = projeto.getId();
         this.titulo = projeto.getTitulo();
@@ -64,5 +66,6 @@ public class ProjetoResponseDTO {
         this.dataCriacao = projeto.getDataCriacao();
         this.telefoneEmpresa = projeto.getEmpresa().getTelefoneContato();
         this.mensagem = projeto.getMensagem();
+        this.linkProjetoHospedagem = projeto.getLinkProjetoHospedagem();
     }
 }

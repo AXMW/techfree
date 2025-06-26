@@ -149,6 +149,18 @@ public class ProjetoController {
         return ResponseEntity.ok(new ProjetoResponseDTO(projeto));
     }
 
+    @PutMapping("/{id}/atualizar-link")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<ProjetoResponseDTO> atualizarlinkhospedagem(
+        @PathVariable Long id,
+        @RequestBody String linkProjetoHospedagem,
+        Authentication auth) {
+
+        Projeto projeto = projetoService.atualizarLinkHospedagem(id, linkProjetoHospedagem, auth.getName());
+        return ResponseEntity.ok(new ProjetoResponseDTO(projeto));
+    }
+    
+
     @PutMapping("/{id}/status/concluir")
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<ProjetoResponseDTO> atualizarStatus(

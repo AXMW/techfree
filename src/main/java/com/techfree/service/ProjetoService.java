@@ -174,6 +174,32 @@ public class ProjetoService {
         return projetoRepository.save(projeto);
     }
 
+    public Projeto atualizarLinkHospedagem(Long id, String linkProjetoHospedagem, String emailFreelancer) {
+        Projeto projeto = projetoRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
+
+        if (projeto.getFreelancerSelecionado() == null || 
+            !projeto.getFreelancerSelecionado().getUsuario().getEmail().equals(emailFreelancer)) {
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Acesso negado"
+                );
+        }
+
+        if (projeto.getStatus() != StatusProjeto.EM_ANDAMENTO) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "O projeto não está em andamento"
+                );
+        }
+
+        projeto.setLinkProjetoHospedagem(linkProjetoHospedagem);
+        return projetoRepository.save(projeto);
+    }
+
     public Projeto atualizarStatusProjeto(Long id, String emailEmpresa) {
         Projeto projeto = projetoRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(
