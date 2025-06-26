@@ -3,7 +3,7 @@ let nomeFantasia = '';
 let bio = '';
 let avatar = '';
 let emailContato = '';
-let telefone = '';
+let telefoneContato = '';
 let linkedin = '';
 let site = '';
 let descricao = '';
@@ -38,7 +38,7 @@ async function carregarPerfilEmpresa() {
     areaatuacao = data.areaAtuacao || '';
     avatar = data.avatar || '';
     emailContato = data.emailContato || '';
-    telefone = data.telefone || '';
+    telefoneContato = data.telefoneContato || '';
     linkedin = data.linkedin || '';
     site = data.site || '';
     descricao = data.bio || '';
@@ -55,7 +55,7 @@ function renderEmpresaProfile() {
             <div class="role mb-1">${areaatuacao}</div>
             <div class="profile-contact mt-2">
                 <div><i class="bi bi-envelope"></i><span>${emailContato}</span></div>
-                <div><i class="bi bi-whatsapp"></i><span>${telefone}</span></div>
+                <div><i class="bi bi-whatsapp"></i><span>${telefoneContato}</span></div>
             </div>
             <div class="profile-social mt-3">
                 ${linkedin && linkedin.trim() ? `<a href="${linkedin}" target="_blank"><i class="bi bi-linkedin"></i></a>` : ''}
@@ -111,10 +111,10 @@ function fillPopup(type) {
                     <div id="editEmailError"></div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Telefone</label>
+                    <label class="form-label">Telefone de contato</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
-                        <input type="text" class="form-control" id="editTelefone" placeholder="Telefone/WhatsApp" value="${telefone}">
+                        <input type="text" class="form-control" id="editTelefone" placeholder="Telefone/WhatsApp" value="${telefoneContato}">
                     </div>
                     <div id="editTelefoneError"></div>
                 </div>
@@ -283,7 +283,7 @@ document.getElementById('editForm').onsubmit = async function (e) {
         nomeFantasia = document.getElementById('editNome')?.value || '';
         areaatuacao = document.getElementById('editCargo')?.value || '';
         emailContato = emailVal;
-        telefone = telefoneVal;
+        telefoneContato = telefoneVal;
         linkedin = linkedinVal;
         site = siteVal;
     }
@@ -320,7 +320,7 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
         areaAtuacao: areaatuacao,
         avatar,
         emailContato,
-        telefone,
+        telefoneContato,
         linkedin,
         site,
         bio: descricao
@@ -345,7 +345,7 @@ function calcularProgressoEmpresa() {
         { nome: 'Atuação', valor: areaatuacao },
         { nome: 'Avatar', valor: avatar },
         { nome: 'E-mail de contato', valor: emailContato },
-        { nome: 'Telefone', valor: telefone },
+        { nome: 'Telefone de contato', valor: telefoneContato },
         { nome: 'LinkedIn', valor: linkedin },
         { nome: 'Site', valor: site },
         { nome: 'Sobre', valor: descricao }

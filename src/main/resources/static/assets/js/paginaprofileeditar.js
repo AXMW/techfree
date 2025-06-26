@@ -107,7 +107,7 @@ function renderProfile(profile) {
     `;
     let contatoHtml = `
         <div><i class="bi bi-envelope"></i><span>${profile.emailContato || ''}</span></div>
-        <div><i class="bi bi-whatsapp"></i><span>${profile.telefone || ''}</span></div>
+        <div><i class="bi bi-whatsapp"></i><span>${profile.telefoneContato || ''}</span></div>
     `;
     let experienciaHtml = (profile.experiencia || []).map((exp, idx) => `
         <div class="timeline-item" data-exp-idx="${idx}">
@@ -200,10 +200,10 @@ function fillPopup(type, isFirstOpen = false) {
                     <div id="editEmailError" class="text-danger mt-1" style="font-size:0.98rem;"></div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Telefone</label>
+                    <label class="form-label">Telefone de contato</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
-                        <input type="text" class="form-control no-margin" id="editWhatsapp" placeholder="Telefone/WhatsApp" value="${profileData.telefone || ''}">
+                        <input type="text" class="form-control no-margin" id="editWhatsapp" placeholder="Telefone/WhatsApp" value="${profileData.telefoneContato || ''}">
                     </div>
                     <div id="editWhatsappError" class="text-danger mt-1" style="font-size:0.98rem;"></div>
                 </div>
@@ -713,7 +713,7 @@ document.getElementById('editForm').onsubmit = function(e) {
         const areaAtuacao = document.getElementById('editCargo').value.trim();
         const avatar = document.getElementById('avatarUrlInput').value;
         const emailContato = document.getElementById('editEmail').value.trim();
-        const telefone = document.getElementById('editWhatsapp').value.trim();
+        const telefoneContato = document.getElementById('editWhatsapp').value.trim();
         const github = document.getElementById('editGithub').value.trim();
         const linkedin = document.getElementById('editLinkedin').value.trim();
         const portfolio = document.getElementById('editSite').value.trim();
@@ -745,7 +745,7 @@ document.getElementById('editForm').onsubmit = function(e) {
             setError('editEmailError', 'E-mail inválido.');
             hasError = true;
         }
-        if(telefone && !telRegex.test(telefone.replace(/\D/g, ''))) {
+        if(telefoneContato && !telRegex.test(telefoneContato.replace(/\D/g, ''))) {
             setError('editWhatsappError', 'Telefone/WhatsApp inválido.');
             hasError = true;
         }
@@ -767,7 +767,7 @@ document.getElementById('editForm').onsubmit = function(e) {
         profileData.areaAtuacao = areaAtuacao;
         profileData.avatar = avatar;
         profileData.emailContato = emailContato;
-        profileData.telefone = telefone;
+        profileData.telefoneContato = telefoneContato;
         profileData.github = github;
         profileData.linkedin = linkedin;
         profileData.portfolio = portfolio;
@@ -820,7 +820,7 @@ function calcularProgressoPerfil(profile) {
         { nome: "Nome", valor: profile.nome },
         { nome: "Área de Atuação", valor: profile.areaAtuacao },
         { nome: "E-mail de Contato", valor: profile.emailContato },
-        { nome: "Telefone/WhatsApp", valor: profile.telefone },
+        { nome: "Telefone de contato", valor: profile.telefoneContato },
         { nome: "GitHub", valor: profile.github },
         { nome: "LinkedIn", valor: profile.linkedin },
         { nome: "Site", valor: profile.portfolio },
@@ -903,7 +903,7 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
     const dto = {
         nome: profileData.nome,
         bio: profileData.bio,
-        telefone: profileData.telefone,
+        telefoneContato: profileData.telefoneContato,
         areaAtuacao: profileData.areaAtuacao,
         github: profileData.github,
         linkedin: profileData.linkedin,

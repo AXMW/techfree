@@ -24,7 +24,7 @@ async function buscarPerfilEmpresa() {
             areaAtuacao: data.areaAtuacao,
             avatar: data.avatar,
             emailContato: data.emailContato,
-            telefone: data.telefone,
+            telefoneContato: data.telefoneContato,
             site: data.site,
             linkedin: data.linkedin,
             descricao: data.bio,
@@ -72,7 +72,7 @@ function renderEmpresaProfile(profile) {
     // Contato
     let contatoHtml = `
         <div><i class="bi bi-envelope"></i><span>${profile.emailContato|| ""}</span></div>
-        <div><i class="bi bi-telephone"></i><span>${profile.telefone || ""}</span></div>
+        <div><i class="bi bi-telephone"></i><span>${profile.telefoneContato || ""}</span></div>
     `;
 
     // Avaliação média
@@ -154,7 +154,7 @@ function calcularProgressoEmpresa(profile) {
         { nome: "Nome Fantasia", valor: profile.nome },
         { nome: 'Atuação', valor: profile.areaAtuacao },
         { nome: "E-mail de contato", valor: profile.emailContato },
-        { nome: "Telefone", valor: profile.telefone },
+        { nome: "Telefone", valor: profile.telefoneContato },
         { nome: "LinkedIn", valor: profile.linkedin },
         { nome: "Site", valor: profile.site },
         { nome: "Sobre", valor: profile.descricao },

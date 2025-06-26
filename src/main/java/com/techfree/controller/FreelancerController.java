@@ -87,6 +87,7 @@ public class FreelancerController {
         if (dados.getCertificados() != null) freelancer.setCertificados(new ArrayList<>(dados.getCertificados()));
         if (dados.getAvatar() != null) freelancer.setAvatar(dados.getAvatar());
         if (dados.getEmailContato() != null) freelancer.setEmailContato(dados.getEmailContato());
+        if (dados.getEmail() != null) freelancer.getUsuario().setEmail(dados.getEmail());
         if (dados.getTelefoneContato() != null) freelancer.setTelefoneContato(dados.getTelefoneContato());
         if (dados.getExperiencia() != null) {
             // Limpa a lista original e adiciona os novos elementos

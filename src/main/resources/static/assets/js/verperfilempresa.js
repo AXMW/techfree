@@ -22,7 +22,7 @@ async function carregarPerfilEmpresa() {
             emailContato: data.emailContato,
             site: data.site,
             linkedin: data.linkedin,
-            telefone: data.telefone,
+            telefoneContato: data.telefoneContato,
             sobre: data.bio,
             avatar: data.avatar,
             projetos: data.projetos || [],
@@ -75,7 +75,7 @@ function renderEmpresaProfile(profile) {
             <div class="role mb-1">${profile.cargo || ""}</div>
             <div class="profile-contact mt-2">
                 <div><i class="bi bi-envelope"></i><span>${profile.emailContato || ""}</span></div>
-                <div><i class="bi bi-telephone"></i><span>${profile.telefone || ""}</span></div>
+                <div><i class="bi bi-telephone"></i><span>${profile.telefoneContato || ""}</span></div>
             </div>
             <div class="profile-social mt-3">
                 ${redesHtml}
