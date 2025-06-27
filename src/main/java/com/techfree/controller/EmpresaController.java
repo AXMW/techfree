@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.techfree.model.Projeto;
 import com.techfree.model.Usuario;
@@ -30,6 +32,9 @@ public class EmpresaController {
     private final AvaliacaoEmpresaRepository avaliacaoEmpresaRepository;
     private final UsuarioRepository usuarioRepository;
     private final JwtUtil jwtUtil;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public EmpresaController(
         EmpresaRepository empresaRepository,
@@ -117,6 +122,28 @@ public class EmpresaController {
         String token = jwtUtil.gerarToken(usuario.getEmail());
 
         return ResponseEntity.ok(new AlterarEmailDTO(novoEmail, token));
+    }
+
+    @PutMapping("/perfil/mudarSenha")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<Void> mudarSenha(
+            Authentication authentication,
+            @RequestBody String senhaAtual,
+            @RequestBody String novaSenha) {
+
+        String email = authentication.getName();
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (!usuario.getSenha().equals(passwordEncoder.encode(senhaAtual))) {
+            throw new RuntimeException("Senha atual incorreta");
+        }
+        
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.noContent().build();
     }
 
     // EMPRESA: deletar o perfil da empresa logada

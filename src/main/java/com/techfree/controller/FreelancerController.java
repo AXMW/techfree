@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.techfree.dto.FreelancerUpdateDTO;
 import com.techfree.dto.FreelancerVisualizacaoResponseDTO;
@@ -36,6 +37,9 @@ public class FreelancerController {
     private final FreelancerRepository freelancerRepository;
 
     private final UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private final JwtUtil jwtUtil;
 
@@ -152,6 +156,28 @@ public class FreelancerController {
         String token = jwtUtil.gerarToken(usuario.getEmail());
 
         return ResponseEntity.ok(new AlterarEmailDTO(novoEmail, token));
+    }
+
+    @PutMapping("/perfil/mudarSenha")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<Void> mudarSenha(
+            Authentication authentication,
+            @RequestBody String senhaAtual,
+            @RequestBody String novaSenha) {
+
+        String email = authentication.getName();
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (!usuario.getSenha().equals(passwordEncoder.encode(senhaAtual))) {
+            throw new RuntimeException("Senha atual incorreta");
+        }
+        
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.noContent().build();
     }
 
     // FREELANCER: deletar o perfil do freelancer logado
