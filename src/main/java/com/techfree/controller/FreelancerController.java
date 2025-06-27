@@ -42,7 +42,6 @@ public class FreelancerController {
     @Autowired
     private AvaliacaoFreelancerRepository avaliacaoFreelancerRepository;
 
-    @Autowired
     public FreelancerController(
         FreelancerRepository freelancerRepository,
         UsuarioRepository usuarioRepository,
