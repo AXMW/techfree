@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class AlterarEmailDTO {
+public class AlterarEmailResponseDTO {
 
     private String novoEmail;
     

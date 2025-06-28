@@ -12,7 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.techfree.model.Projeto;
 import com.techfree.model.Usuario;
-import com.techfree.dto.AlterarEmailDTO;
+import com.techfree.dto.AlterarEmailRequestDTO;
+import com.techfree.dto.AlterarEmailResponseDTO;
 import com.techfree.dto.EmpresaAutoVisualizacaoResponseDTO;
 import com.techfree.dto.EmpresaVisualizacaoResponseDTO;
 import com.techfree.model.Empresa;
@@ -104,9 +105,9 @@ public class EmpresaController {
 
     @PutMapping("/perfil/mudarEmail")
     @PreAuthorize("hasRole('EMPRESA')")
-    public ResponseEntity<AlterarEmailDTO> mudarEmail(
+    public ResponseEntity<AlterarEmailResponseDTO> mudarEmail(
             Authentication authentication,
-            @RequestBody String novoEmail) {
+            AlterarEmailRequestDTO novoEmailRequest) {
 
         String email = authentication.getName();
 
@@ -120,11 +121,11 @@ public class EmpresaController {
             throw new RuntimeException("");
         }
         
-        usuario.setEmail(novoEmail);
+        usuario.setEmail(novoEmailRequest.getNovoEmail());
         usuarioRepository.save(usuario);
         String token = jwtUtil.gerarToken(usuario.getEmail());
 
-        return ResponseEntity.ok(new AlterarEmailDTO(novoEmail, token));
+        return ResponseEntity.ok(new AlterarEmailResponseDTO(usuario.getEmail(), token));
     }
 
     @PutMapping("/perfil/mudarSenha")

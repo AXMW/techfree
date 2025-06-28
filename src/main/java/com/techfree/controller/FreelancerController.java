@@ -23,7 +23,7 @@ import com.techfree.repository.UsuarioRepository;
 import com.techfree.dto.FreelancerAutoVisualizacaoResponseDTO;
 import com.techfree.repository.AvaliacaoFreelancerRepository;
 import com.techfree.model.AvaliacaoFreelancer;
-import com.techfree.dto.AlterarEmailDTO;
+import com.techfree.dto.AlterarEmailResponseDTO;
 import com.techfree.security.JwtUtil;
 
 import java.security.Principal;
@@ -135,9 +135,9 @@ public class FreelancerController {
 
     @PutMapping("/perfil/mudarEmail")
     @PreAuthorize("hasRole('FREELANCER')")
-    public ResponseEntity<AlterarEmailDTO> mudarEmail(
+    public ResponseEntity<AlterarEmailResponseDTO> mudarEmail(
             Authentication authentication,
-            @RequestBody String novoEmail) {
+            AlterarEmailResponseDTO novoEmailDTO) {
 
         String email = authentication.getName();
 
@@ -151,11 +151,11 @@ public class FreelancerController {
             throw new RuntimeException("");
         }
         
-        usuario.setEmail(novoEmail);
+        usuario.setEmail(novoEmailDTO.getNovoEmail());
         usuarioRepository.save(usuario);
         String token = jwtUtil.gerarToken(usuario.getEmail());
 
-        return ResponseEntity.ok(new AlterarEmailDTO(novoEmail, token));
+        return ResponseEntity.ok(new AlterarEmailResponseDTO(usuario.getEmail(), token));
     }
 
     @PutMapping("/perfil/mudarSenha")
