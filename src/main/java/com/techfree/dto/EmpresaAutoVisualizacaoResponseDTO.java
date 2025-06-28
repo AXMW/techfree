@@ -2,6 +2,7 @@ package com.techfree.dto;
 import lombok.Getter;
 import com.techfree.model.Empresa;
 import com.techfree.model.AvaliacaoEmpresa;
+import com.techfree.model.Projeto;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +23,9 @@ public class EmpresaAutoVisualizacaoResponseDTO {
     private String emailContato;
     private Double avaliacaoMedia;
     private List<AvaliacaoEmpresaResponseDTO> feedbacks;
+    private List<Projeto> projetos;
 
-    public EmpresaAutoVisualizacaoResponseDTO(Empresa empresa, List<AvaliacaoEmpresa> avaliacoes) {
+    public EmpresaAutoVisualizacaoResponseDTO(Empresa empresa, List<Projeto> projetos, List<AvaliacaoEmpresa> avaliacoes) {
         this.id = empresa.getId();
         this.nomeFantasia = empresa.getNomeFantasia();
         this.razaoSocial = empresa.getRazaoSocial();
@@ -37,6 +39,7 @@ public class EmpresaAutoVisualizacaoResponseDTO {
         this.avatar = empresa.getAvatar();
         this.quantidadeDeFlags = empresa.getUsuario().getQuantidadeDeFlags();
         this.emailContato = empresa.getEmailContato();
+        this.projetos = projetos;
         if (avaliacoes != null && !avaliacoes.isEmpty()) {
             this.avaliacaoMedia = avaliacoes.stream()
                 .mapToDouble(AvaliacaoEmpresa::getNota)

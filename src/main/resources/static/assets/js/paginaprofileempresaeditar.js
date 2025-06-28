@@ -47,10 +47,12 @@ async function carregarPerfilEmpresa() {
 
 // Renderiza o perfil na tela usando as variáveis
 function renderEmpresaProfile() {
-    document.querySelector('.profile-header').innerHTML = `
+    const profileHeader = document.querySelector('.profile-header');
+    profileHeader.classList.add('d-flex', 'align-items-center');
+    profileHeader.innerHTML = `
         <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="header" title="Editar"><i class="bi bi-pencil-square"></i></button>
         <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa">
-        <div class="profile-info">
+        <div class="profile-info flex-grow-1">
             <h2>${nomeFantasia}</h2>
             <div class="role mb-1">${areaatuacao}</div>
             <div class="profile-contact mt-2">
@@ -63,7 +65,13 @@ function renderEmpresaProfile() {
             </div>
         </div>
     `;
-    document.getElementById('empresaSobre').innerHTML = descricao;
+    // Sobre
+    const sobreEl = document.getElementById('empresaSobre');
+    if (sobreEl) {
+        sobreEl.innerHTML = descricao && descricao.trim()
+            ? descricao
+            : '<p class="profile-timeline text-muted">Nenhuma informação sobre a empresa foi cadastrada ainda.</p>';
+    }
     atualizarBarraProgressoEmpresa();
 }
 

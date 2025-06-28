@@ -132,22 +132,52 @@ function renderProfile(profile) {
     `;
 
     // Sobre
-    document.getElementById('profileSobre').innerHTML = profile.sobre || '';
+    const sobreEl = document.getElementById('profileSobre');
+    if (sobreEl) {
+        sobreEl.innerHTML = profile.sobre && profile.sobre.trim()
+            ? profile.sobre
+            : '<p class="profile-timeline text-muted">Nenhuma informação sobre você foi cadastrada ainda.</p>';
+    }
 
     // Habilidades
-    document.getElementById('profileSkills').innerHTML = allSkills;
+    const skillsEl = document.getElementById('profileSkills');
+    if (skillsEl) {
+        skillsEl.innerHTML = allSkills && allSkills.trim()
+            ? allSkills
+            : '<p class="profile-timeline text-muted">Nenhuma habilidade cadastrada ainda.</p>';
+    }
 
-    // Experiência
-    document.getElementById('profileExperiencia').innerHTML = experienciaHtml;
+    // Experiência Profissional
+    const expEl = document.getElementById('profileExperiencia');
+    if (expEl) {
+        expEl.innerHTML = experienciaHtml && experienciaHtml.trim()
+            ? experienciaHtml
+            : '<p class="text-muted">Nenhuma experiência profissional cadastrada ainda.</p>';
+    }
 
     // Experiência Acadêmica
-    document.getElementById('profileExperienciaAcademica').innerHTML = experienciaAcademicaHtml;
+    const expAcadEl = document.getElementById('profileExperienciaAcademica');
+    if (expAcadEl) {
+        expAcadEl.innerHTML = experienciaAcademicaHtml && experienciaAcademicaHtml.trim()
+            ? experienciaAcademicaHtml
+            : '<p class="text-muted">Nenhuma experiência acadêmica cadastrada ainda.</p>';
+    }
 
     // Certificados
-    document.getElementById('profileCertificados').innerHTML = certificadosHtml;
+    const certsEl = document.getElementById('profileCertificados');
+    if (certsEl) {
+        certsEl.innerHTML = certificadosHtml && certificadosHtml.trim()
+            ? certificadosHtml
+            : '<p class="profile-timeline text-muted">Nenhum certificado cadastrado ainda.</p>';
+    }
 
     // Feedbacks
-    document.getElementById('profileFeedbacks').innerHTML = feedbacksHtml;
+    const feedbacksEl = document.getElementById('profileFeedbacks');
+    if (feedbacksEl) {
+        feedbacksEl.innerHTML = feedbacksHtml && feedbacksHtml.trim()
+            ? feedbacksHtml
+            : '<p class="profile-timeline text-muted">Nenhum feedback recebido ainda.</p>';
+    }
 
     // Atualiza o título da página
     document.title = `${profile.nome} - TechFree`;

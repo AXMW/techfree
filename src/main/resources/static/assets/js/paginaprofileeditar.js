@@ -136,11 +136,46 @@ function renderProfile(profile) {
         </div>
     `;
 
-    document.getElementById('profileSobre').innerHTML = profile.bio || '';
-    document.getElementById('profileSkills').innerHTML = allSkills;
-    document.getElementById('profileExperiencia').innerHTML = experienciaHtml;
-    document.getElementById('profileExperienciaAcademica').innerHTML = experienciaAcademicaHtml;
-    document.getElementById('profileCertificados').innerHTML = certificadosHtml;
+    // Sobre
+    const sobreEl = document.getElementById('profileSobre');
+    if (sobreEl) {
+        sobreEl.innerHTML = profile.bio && profile.bio.trim()
+            ? profile.bio
+            : '<p class="text-muted">Nenhuma informação sobre você foi cadastrada ainda.</p>';
+    }
+
+    // Habilidades
+    const skillsEl = document.getElementById('profileSkills');
+    if (skillsEl) {
+        skillsEl.innerHTML = allSkills && allSkills.trim()
+            ? allSkills
+            : '<p class="profile-timeline text-muted">Nenhuma habilidade cadastrada ainda.</p>';
+    }
+
+    // Experiência Profissional
+    const expEl = document.getElementById('profileExperiencia');
+    if (expEl) {
+        expEl.innerHTML = experienciaHtml && experienciaHtml.trim()
+            ? experienciaHtml
+            : '<p class="text-muted">Nenhuma experiência profissional cadastrada ainda.</p>';
+    }
+
+    // Experiência Acadêmica
+    const expAcadEl = document.getElementById('profileExperienciaAcademica');
+    if (expAcadEl) {
+        expAcadEl.innerHTML = experienciaAcademicaHtml && experienciaAcademicaHtml.trim()
+            ? experienciaAcademicaHtml
+            : '<p class="text-muted">Nenhuma experiência acadêmica cadastrada ainda.</p>';
+    }
+
+    // Certificados
+    const certsEl = document.getElementById('profileCertificados');
+    if (certsEl) {
+        certsEl.innerHTML = certificadosHtml && certificadosHtml.trim()
+            ? certificadosHtml
+            : '<p class="profile-timeline text-muted">Nenhum certificado cadastrado ainda.</p>';
+    }
+
     atualizarBarraProgresso(profile);
 }
 

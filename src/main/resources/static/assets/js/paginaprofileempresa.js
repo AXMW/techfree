@@ -134,18 +134,44 @@ function renderEmpresaProfile(profile) {
         </div>
     `;
 
+    // Sobre a Empresa
     const sobreEl = document.getElementById('empresaSobre');
-    if (sobreEl) sobreEl.textContent = profile.descricao || '';
+    if (sobreEl) {
+        sobreEl.innerHTML = profile.descricao && profile.descricao.trim()
+            ? profile.descricao
+            : '<p class="profile-timeline text-muted">Nenhuma informação sobre a empresa foi cadastrada ainda.</p>';
+    }
 
-    // Atualiza a seção de feedbacks com a avaliação média
-    const feedbacks = (profile.feedbacks || []).slice().reverse().slice(0, 3); // Pega os 3 últimos
-    const feedbacksHtml = feedbacks.map(fb => `
-        <div class="profile-feedback">
-            "${fb.texto}"
-        </div>
-    `).join('');
-    const container = document.getElementById('empresaProfileFeedbacks');
-    if (container) container.innerHTML = avaliacaoHtml + feedbacksHtml;
+    // Projetos Publicados
+    const projetosEl = document.getElementById('empresaProjetos');
+    if (projetosEl) {
+        if (profile.projetos && profile.projetos.length > 0) {
+            projetosEl.innerHTML = profile.projetos.map(p => `
+                <div class="timeline-item mb-3">
+                    <div class="timeline-title fw-bold">${p.nome || p.titulo || ''}</div>
+                    <div class="timeline-period">${p.data || ''}</div>
+                    <div class="timeline-item-desc">${p.descricao || ''}</div>
+                </div>
+            `).join('');
+        } else {
+            projetosEl.innerHTML = '<p class="text-muted">Nenhum projeto publicado ainda.</p>';
+        }
+    }
+
+    // Feedbacks de Freelancers
+    const feedbacksEl = document.getElementById('empresaProfileFeedbacks');
+    if (feedbacksEl) {
+        const feedbacks = (profile.feedbacks || []).slice().reverse().slice(0, 3);
+        if (feedbacks.length > 0) {
+            feedbacksEl.innerHTML = feedbacks.map(fb => `
+                <div class="profile-feedback">
+                    "${fb.texto}"
+                </div>
+            `).join('');
+        } else {
+            feedbacksEl.innerHTML = '<p class="profile-timeline text-muted">Nenhum feedback recebido ainda.</p>';
+        }
+    }
 }
 
 function calcularProgressoEmpresa(profile) {
