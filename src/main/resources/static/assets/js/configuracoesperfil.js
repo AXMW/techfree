@@ -131,9 +131,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                         method: 'PUT',
                         headers: {
                             'Authorization': 'Bearer ' + token,
-                            'Content-Type': 'text/plain'
+                            'Content-Type': 'application/json'
                         },
-                        body: emailAtual
+                        body: JSON.stringify({ novoEmail: emailAtual })
                     });
                     if (!respEmail.ok) throw new Error('Erro ao atualizar email');
                     const data = await respEmail.json();
@@ -148,6 +148,54 @@ document.addEventListener('DOMContentLoaded', async function () {
                     alert('Erro ao atualizar email');
                     console.error(e);
                 }
+            }
+        });
+    }
+
+    // Segurança: alterar senha
+    const btnAlterarSenha = document.querySelector('#security button[type="button"]');
+    if (btnAlterarSenha) {
+        btnAlterarSenha.addEventListener('click', async function () {
+            const senhaAtual = document.getElementById('current-password')?.value;
+            const novaSenha = document.getElementById('new-password')?.value;
+            const confirmarSenha = document.getElementById('confirm-password')?.value;
+
+            // Validação simples
+            if (!senhaAtual || !novaSenha || !confirmarSenha) {
+                alert('Preencha todos os campos de senha.');
+                return;
+            }
+            if (novaSenha !== confirmarSenha) {
+                alert('A nova senha e a confirmação não coincidem.');
+                return;
+            }
+
+            // Define endpoint conforme tipo de usuário
+            const urlMudarSenha = tipoUsuario === 'EMPRESA'
+                ? '/empresa/perfil/mudarSenha'
+                : '/freelancer/perfil/mudarSenha';
+
+            try {
+                const resp = await fetch(urlMudarSenha, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        senhaAtual: senhaAtual,
+                        novaSenha: novaSenha
+                    })
+                });
+                if (!resp.ok) throw new Error('Erro ao alterar senha');
+                alert('Senha alterada com sucesso!');
+                // Limpa os campos
+                document.getElementById('current-password').value = '';
+                document.getElementById('new-password').value = '';
+                document.getElementById('confirm-password').value = '';
+            } catch (e) {
+                alert('Erro ao alterar senha');
+                console.error(e);
             }
         });
     }
