@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.techfree.dto.AtualizarLinkDTO;
 import com.techfree.dto.ProjetoFiltroDTO;
 import com.techfree.dto.ProjetoRequestDTO;
 import com.techfree.dto.SelecionarFreelancerRequestDTO;
@@ -53,6 +54,9 @@ public class ProjetoService {
 
     @Autowired
     private FlagService flagService;
+
+    @Autowired
+    private EmailTemplateService emailTemplateService;
 
     public ProjetoService(ProjetoRepository projetoRepository) {
         this.projetoRepository = projetoRepository;
@@ -124,6 +128,9 @@ public class ProjetoService {
         projeto.setStatus(StatusProjeto.ABERTO);
         projeto.setEmpresa(empresa);
 
+        notificacaoService.criarNotificacao(TituloDeNotificacao.CRIACAO_DE_PROJETO, usuario, 
+            "Você criou um novo projeto: " + projeto.getTitulo(), null);
+
         return projetoRepository.save(projeto);
     }
 
@@ -161,6 +168,9 @@ public class ProjetoService {
             projeto.setPrazoEntrega(projeto.getDataInicio().plusMonths(dto.getDuracao()));
         }
 
+        notificacaoService.criarNotificacao(TituloDeNotificacao.ALTERACAO_DE_PROJETO, projeto.getEmpresa().getUsuario(), 
+            "O projeto " + projeto.getTitulo() + " foi atualizado.", null);
+
         if(dto.getTitulo() != null) projeto.setTitulo(dto.getTitulo());
         if(dto.getSubtitulo() != null) projeto.setSubtitulo(dto.getSubtitulo());
         if(dto.getGrauexperience() != null) projeto.setGrauexperience(dto.getGrauexperience());
@@ -174,7 +184,7 @@ public class ProjetoService {
         return projetoRepository.save(projeto);
     }
 
-    public Projeto atualizarLinkHospedagem(Long id, String linkProjetoHospedagem, String emailFreelancer) {
+    public Projeto atualizarLinkHospedagem(Long id, AtualizarLinkDTO dto, String emailFreelancer) {
         Projeto projeto = projetoRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
@@ -196,7 +206,7 @@ public class ProjetoService {
                 );
         }
 
-        projeto.setLinkProjetoHospedagem(linkProjetoHospedagem);
+        projeto.setLinkProjetoHospedagem(dto.getLinkProjetoHospedagem());
         return projetoRepository.save(projeto);
     }
 
@@ -220,6 +230,11 @@ public class ProjetoService {
                 "O projeto não está em revisão"
                 );
         }
+
+        notificacaoService.criarNotificacao(TituloDeNotificacao.PROJETO_FINALIZADO, projeto.getEmpresa().getUsuario(), 
+            "O projeto " + projeto.getTitulo() + " foi concluído.", null);
+        notificacaoService.criarNotificacao(TituloDeNotificacao.PROJETO_FINALIZADO, projeto.getFreelancerSelecionado().getUsuario(), 
+            "O projeto " + projeto.getTitulo() + " foi concluído.", null);
 
         try {
             projeto.setStatus(StatusProjeto.CONCLUIDO);
@@ -254,6 +269,9 @@ public class ProjetoService {
                 );
         }
 
+        notificacaoService.criarNotificacao(TituloDeNotificacao.ALTERACAO_DE_PROJETO, projeto.getEmpresa().getUsuario(), 
+            "O projeto " + projeto.getTitulo() + " foi colocado em revisão.", null);
+
         try {
             projeto.setStatus(StatusProjeto.REVISAO);
             projetoRepository.save(projeto);
@@ -286,6 +304,9 @@ public class ProjetoService {
                 "O projeto não pode ser colocado em andamento"
                 );
         }
+
+        notificacaoService.criarNotificacao(TituloDeNotificacao.ALTERACAO_DE_PROJETO, projeto.getEmpresa().getUsuario(), 
+            "O projeto " + projeto.getTitulo() + " foi colocado em andamento.", null);
 
         try {
             projeto.setStatus(StatusProjeto.EM_ANDAMENTO);
@@ -337,6 +358,9 @@ public class ProjetoService {
                 ));
 
         flagService.criarFlag(usuario.getId(), id);
+
+        notificacaoService.criarNotificacao(TituloDeNotificacao.PROJETO_CANCELADO, projeto.getEmpresa().getUsuario(), 
+            "O projeto " + projeto.getTitulo() + " foi cancelado.", null);
 
         usuario.setQuantidadeDeFlags(usuario.getQuantidadeDeFlags() + 1);
         if (usuario.getQuantidadeDeFlags() >= 3) {
@@ -415,10 +439,10 @@ public class ProjetoService {
             "Você foi selecionado para o projeto: " + projeto.getTitulo(), projeto.getEmpresa().getUsuario());
 
         // 5️⃣ Envia um e-mail
-        emailService.enviar(
+        emailService.enviarHtml(
             freelancer.getUsuario().getEmail(),
             "Você foi selecionado para o projeto " + projeto.getTitulo(),
-            EmailTemplateService.templateSelecionadoProjeto(freelancer.getNome(), projeto.getTitulo())
+            emailTemplateService.gerarTemplate(freelancer.getNome(), projeto.getTitulo(), StatusCandidatura.ACEITA)
         );
 
         // 6️⃣ Recusa todas as outras candidaturas dos outros freelancer para esse projeto

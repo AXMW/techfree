@@ -21,6 +21,7 @@ import com.techfree.dto.ProjetoResponseDTO;
 import com.techfree.dto.SelecionarFreelancerRequestDTO;
 import com.techfree.model.Projeto;
 import com.techfree.service.ProjetoService;
+import com.techfree.dto.AtualizarLinkDTO;
 
 @RestController
 @RequestMapping("/projetos")
@@ -153,10 +154,10 @@ public class ProjetoController {
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<ProjetoResponseDTO> atualizarlinkhospedagem(
         @PathVariable Long id,
-        @RequestBody String linkProjetoHospedagem,
+        @RequestBody AtualizarLinkDTO dto,
         Authentication auth) {
 
-        Projeto projeto = projetoService.atualizarLinkHospedagem(id, linkProjetoHospedagem, auth.getName());
+        Projeto projeto = projetoService.atualizarLinkHospedagem(id, dto, auth.getName());
         return ResponseEntity.ok(new ProjetoResponseDTO(projeto));
     }
     
