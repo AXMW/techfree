@@ -66,6 +66,18 @@ public class CandidaturaService {
             );
         }
 
+        notificacaoService.criarNotificacao(TituloDeNotificacao.CANDIDATURA_ENVIADA,
+            freelancer.getUsuario(),
+            "Você se candidatou ao projeto '" + projeto.getTitulo() + "'", 
+            projeto.getEmpresa().getUsuario()
+        );
+
+        notificacaoService.criarNotificacao(TituloDeNotificacao.CANDIDATURA_RECEBIDA,
+            projeto.getEmpresa().getUsuario(),
+            "Você recebeu uma candidatura para o projeto '" + projeto.getTitulo() + "'",
+             freelancer.getUsuario()
+        );
+
         Candidatura candidatura = new Candidatura();
         candidatura.setFreelancer(freelancer);
         candidatura.setProjeto(projeto);
@@ -142,6 +154,11 @@ public class CandidaturaService {
         String titulo = projeto.getTitulo();
         StatusCandidatura status = StatusCandidatura.RECUSADA;
         candidatura.setStatus(status);
+        notificacaoService.criarNotificacao(TituloDeNotificacao.REJEICAO_DE_CANDIDATURA,
+            candidatura.getFreelancer().getUsuario(),
+            "Sua candidatura para o projeto '" + titulo + "' foi recusada",
+            projeto.getEmpresa().getUsuario()
+        );
 
         emailService.enviarHtml(
             candidatura.getFreelancer().getUsuario().getEmail(),
