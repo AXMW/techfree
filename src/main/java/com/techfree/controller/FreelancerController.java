@@ -171,7 +171,7 @@ public class FreelancerController {
         Usuario usuario = usuarioRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        if (!usuario.getSenha().equals(alterarSenhaRequest.getSenhaAtual())) {
+        if (!passwordEncoder.matches(alterarSenhaRequest.getSenhaAtual(), usuario.getSenha())) {
             throw new RuntimeException("Senha atual incorreta");
         }
         
