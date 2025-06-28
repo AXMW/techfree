@@ -471,7 +471,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                             btnInserir.style.display = '';
                         };
                         btnConfirmar.onclick = async function () {
-                            const novoLink = linkProjetoInput.value.trim();
+                            const novoLink = linkProjeto.value.trim();
                             let urlValido = false;
                             let urlParaValidar = novoLink.replace(/\s+/g, '');
                             let feedback;
@@ -509,7 +509,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                             }
                             try {
                                 const token = localStorage.getItem('token');
-                                const resp = await fetch(`/projetos/${projetoId}`, {
+                                const resp = await fetch(`/projetos/${projetoId}/atualizar-link`, {
                                     method: 'PUT',
                                     headers: {
                                         'Authorization': 'Bearer ' + token,
@@ -568,7 +568,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         btnsEdicao.style.setProperty('display', 'none', 'important');
                     };
                     btnConfirmar.onclick = async function () {
-                        const novoLink = linkProjetoInput.value.trim();
+                        const novoLink = linkProjeto.value.trim();
                         let urlValido = false;
                         let urlParaValidar = novoLink.replace(/\s+/g, '');
                         let feedback;
@@ -606,7 +606,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         }
                         try {
                             const token = localStorage.getItem('token');
-                            const resp = await fetch(`/projetos/${projetoId}`, {
+                            const resp = await fetch(`/projetos/${projetoId}/atualizar-link`, {
                                 method: 'PUT',
                                 headers: {
                                     'Authorization': 'Bearer ' + token,
