@@ -23,6 +23,7 @@ import com.techfree.repository.UsuarioRepository;
 import com.techfree.dto.FreelancerAutoVisualizacaoResponseDTO;
 import com.techfree.repository.AvaliacaoFreelancerRepository;
 import com.techfree.model.AvaliacaoFreelancer;
+import com.techfree.dto.AlterarEmailRequestDTO;
 import com.techfree.dto.AlterarEmailResponseDTO;
 import com.techfree.dto.AlterarSenhaRequestDTO;
 import com.techfree.security.JwtUtil;
@@ -138,7 +139,7 @@ public class FreelancerController {
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<AlterarEmailResponseDTO> mudarEmail(
             Authentication authentication,
-            AlterarEmailResponseDTO novoEmailDTO) {
+            @RequestBody AlterarEmailRequestDTO novoEmailDTO) {
 
         String email = authentication.getName();
 
@@ -163,7 +164,7 @@ public class FreelancerController {
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<Void> mudarSenha(
             Authentication authentication,
-            AlterarSenhaRequestDTO alterarSenhaRequest) {
+            @RequestBody AlterarSenhaRequestDTO alterarSenhaRequest) {
 
         String email = authentication.getName();
 

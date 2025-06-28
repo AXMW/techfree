@@ -108,7 +108,7 @@ public class EmpresaController {
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<AlterarEmailResponseDTO> mudarEmail(
             Authentication authentication,
-            AlterarEmailRequestDTO novoEmailRequest) {
+            @RequestBody AlterarEmailRequestDTO novoEmailRequest) {
 
         String email = authentication.getName();
 
@@ -133,7 +133,7 @@ public class EmpresaController {
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<Void> mudarSenha(
             Authentication authentication,
-            AlterarSenhaRequestDTO  alterarSenhaRequest) {
+            @RequestBody AlterarSenhaRequestDTO  alterarSenhaRequest) {
 
         String email = authentication.getName();
 
