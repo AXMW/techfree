@@ -14,6 +14,7 @@ import com.techfree.model.Projeto;
 import com.techfree.model.Usuario;
 import com.techfree.dto.AlterarEmailRequestDTO;
 import com.techfree.dto.AlterarEmailResponseDTO;
+import com.techfree.dto.AlterarSenhaRequestDTO;
 import com.techfree.dto.EmpresaAutoVisualizacaoResponseDTO;
 import com.techfree.dto.EmpresaVisualizacaoResponseDTO;
 import com.techfree.model.Empresa;
@@ -132,19 +133,18 @@ public class EmpresaController {
     @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<Void> mudarSenha(
             Authentication authentication,
-            @RequestBody String senhaAtual,
-            @RequestBody String novaSenha) {
+            AlterarSenhaRequestDTO  alterarSenhaRequest) {
 
         String email = authentication.getName();
 
         Usuario usuario = usuarioRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        if (!usuario.getSenha().equals(passwordEncoder.encode(senhaAtual))) {
+        if (!usuario.getSenha().equals(passwordEncoder.encode(alterarSenhaRequest.getSenhaAtual()))) {
             throw new RuntimeException("Senha atual incorreta");
         }
         
-        usuario.setSenha(passwordEncoder.encode(novaSenha));
+        usuario.setSenha(passwordEncoder.encode(alterarSenhaRequest.getNovaSenha()));
         usuarioRepository.save(usuario);
 
         return ResponseEntity.noContent().build();

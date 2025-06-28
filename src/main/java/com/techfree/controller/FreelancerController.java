@@ -24,6 +24,7 @@ import com.techfree.dto.FreelancerAutoVisualizacaoResponseDTO;
 import com.techfree.repository.AvaliacaoFreelancerRepository;
 import com.techfree.model.AvaliacaoFreelancer;
 import com.techfree.dto.AlterarEmailResponseDTO;
+import com.techfree.dto.AlterarSenhaRequestDTO;
 import com.techfree.security.JwtUtil;
 
 import java.security.Principal;
@@ -162,19 +163,18 @@ public class FreelancerController {
     @PreAuthorize("hasRole('FREELANCER')")
     public ResponseEntity<Void> mudarSenha(
             Authentication authentication,
-            @RequestBody String senhaAtual,
-            @RequestBody String novaSenha) {
+            AlterarSenhaRequestDTO alterarSenhaRequest) {
 
         String email = authentication.getName();
 
         Usuario usuario = usuarioRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        if (!usuario.getSenha().equals(passwordEncoder.encode(senhaAtual))) {
+        if (!usuario.getSenha().equals(passwordEncoder.encode(alterarSenhaRequest.getSenhaAtual()))) {
             throw new RuntimeException("Senha atual incorreta");
         }
         
-        usuario.setSenha(passwordEncoder.encode(novaSenha));
+        usuario.setSenha(passwordEncoder.encode(alterarSenhaRequest.getNovaSenha()));
         usuarioRepository.save(usuario);
 
         return ResponseEntity.noContent().build();
