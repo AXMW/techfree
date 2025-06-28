@@ -419,77 +419,222 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // ...após const data = await response.json(); e antes de preencher o header do projeto...
         const linkProjetoInput = document.getElementById('linkProjeto');
-        if (linkProjetoInput) {
-            // Cria botão "Alterar Link"
-            let btnAlterar = document.createElement('button');
-            btnAlterar.type = 'button';
-            btnAlterar.className = 'btn btn-outline-secondary btn-sm ms-2';
-            btnAlterar.id = 'btnAlterarLinkProjeto';
-            btnAlterar.textContent = 'Alterar Link';
+        const linkProjetoContainer = linkProjetoInput ? linkProjetoInput.parentNode : null;
+        // tipoUsuario já foi declarado anteriormente, então não redeclare aqui
+        if (linkProjetoInput && linkProjetoContainer) {
+            // Remove elementos antigos (para evitar duplicidade ao recarregar)
+            Array.from(linkProjetoContainer.querySelectorAll('.nenhum-link-msg, #btnAlterarLinkProjeto, #btnInserirLinkProjeto, .d-flex, .link-clicavel')).forEach(e => e.remove());
 
-            // Cria container para botões de confirmação/cancelamento
-            let btnsEdicao = document.createElement('div');
-            btnsEdicao.className = 'mt-2 d-flex gap-3';
-            btnsEdicao.style.display = 'none'; // <-- já está invisível inicialmente
-
-            let btnConfirmar = document.createElement('button');
-            btnConfirmar.type = 'button';
-            btnConfirmar.className = 'btn btn-outline-secondary btn-sm';
-            btnConfirmar.textContent = 'Confirmar Alteração';
-
-            let btnCancelar = document.createElement('button');
-            btnCancelar.type = 'button';
-            btnCancelar.className = 'btn btn-outline-secondary btn-sm';
-            btnCancelar.textContent = 'Cancelar';
-
-            btnsEdicao.appendChild(btnConfirmar);
-            btnsEdicao.appendChild(btnCancelar);
-
-            // Insere o botão "Alterar Link" e os botões de edição após o input
-            linkProjetoInput.parentNode.appendChild(btnAlterar);
-            linkProjetoInput.parentNode.appendChild(btnsEdicao);
-
-            // Valor original
             let valorOriginal = data.linkProjetoHospedagem || '';
-
-            // Preenche o campo com o valor padrão e bloqueia se houver valor
-            linkProjetoInput.value = valorOriginal;
-            if (valorOriginal || valorOriginal === '') {
-                linkProjetoInput.readOnly = true;
-                btnAlterar.style.display = '';
-                btnsEdicao.style.display = 'none';
-                btnsEdicao.style.setProperty('display', 'none', 'important'); // Garante o !important
+            // Se não houver link, mostra mensagem e controla botões/inputs
+            if (!valorOriginal) {
+                // Esconde input
+                linkProjetoInput.style.display = 'none';
+                // Mensagem
+                let msg = document.createElement('div');
+                msg.className = 'nenhum-link-msg text-muted mb-2';
+                msg.innerText = 'Nenhum link ainda';
+                linkProjetoContainer.appendChild(msg);
+                if (tipoUsuario === 'FREELANCER') {
+                    // Botão para inserir link
+                    let btnInserir = document.createElement('button');
+                    btnInserir.type = 'button';
+                    btnInserir.className = 'btn btn-outline-secondary btn-sm';
+                    btnInserir.id = 'btnInserirLinkProjeto';
+                    btnInserir.textContent = 'Inserir link';
+                    linkProjetoContainer.appendChild(btnInserir);
+                    btnInserir.onclick = function () {
+                        msg.style.display = 'none';
+                        btnInserir.style.display = 'none';
+                        linkProjetoInput.style.display = '';
+                        linkProjetoInput.readOnly = false;
+                        linkProjetoInput.value = '';
+                        linkProjetoInput.focus();
+                        // Cria botões de confirmar/cancelar
+                        let btnsEdicao = document.createElement('div');
+                        btnsEdicao.className = 'mt-2 d-flex gap-3';
+                        let btnConfirmar = document.createElement('button');
+                        btnConfirmar.type = 'button';
+                        btnConfirmar.className = 'btn btn-outline-secondary btn-sm';
+                        btnConfirmar.textContent = 'Confirmar';
+                        let btnCancelar = document.createElement('button');
+                        btnCancelar.type = 'button';
+                        btnCancelar.className = 'btn btn-outline-secondary btn-sm';
+                        btnCancelar.textContent = 'Cancelar';
+                        btnsEdicao.appendChild(btnConfirmar);
+                        btnsEdicao.appendChild(btnCancelar);
+                        linkProjetoContainer.appendChild(btnsEdicao);
+                        btnCancelar.onclick = function () {
+                            btnsEdicao.remove();
+                            linkProjetoInput.style.display = 'none';
+                            msg.style.display = '';
+                            btnInserir.style.display = '';
+                        };
+                        btnConfirmar.onclick = async function () {
+                            const novoLink = linkProjetoInput.value.trim();
+                            let urlValido = false;
+                            let urlParaValidar = novoLink.replace(/\s+/g, '');
+                            let feedback;
+                            if (urlParaValidar !== '') {
+                                let urlTest = urlParaValidar;
+                                if (!/^https?:\/\//i.test(urlTest)) {
+                                    urlTest = 'https://' + urlTest;
+                                }
+                                try {
+                                    const parsed = new URL(urlTest);
+                                    urlValido = (parsed.protocol === 'http:' || parsed.protocol === 'https:') && /\./.test(parsed.hostname);
+                                } catch (e) {
+                                    urlValido = false;
+                                }
+                            }
+                            if (!urlValido) {
+                                linkProjetoInput.classList.add('is-invalid');
+                                feedback = document.getElementById('linkProjetoFeedback');
+                                if (!feedback) {
+                                    feedback = document.createElement('div');
+                                    feedback.id = 'linkProjetoFeedback';
+                                    feedback.className = 'invalid-feedback d-block';
+                                    feedback.innerText = 'Insira um link válido.';
+                                    linkProjetoInput.parentNode.appendChild(feedback);
+                                } else {
+                                    feedback.style.display = 'block';
+                                }
+                                linkProjetoInput.focus();
+                                linkProjetoInput.addEventListener('input', function limparInvalido() {
+                                    linkProjetoInput.classList.remove('is-invalid');
+                                    if (feedback) feedback.style.display = 'none';
+                                    linkProjetoInput.removeEventListener('input', limparInvalido);
+                                });
+                                return;
+                            }
+                            try {
+                                const token = localStorage.getItem('token');
+                                const resp = await fetch(`/projetos/${projetoId}`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Authorization': 'Bearer ' + token,
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ linkProjetoHospedagem: novoLink })
+                                });
+                                if (!resp.ok) throw new Error('Erro ao salvar link');
+                                location.reload();
+                            } catch (e) {
+                                alert('Erro ao salvar link.');
+                            }
+                        };
+                    };
+                }
+                // Para empresa, só mostra mensagem, nada mais
             } else {
-                linkProjetoInput.readOnly = false;
-                btnAlterar.style.display = 'none';
-                btnsEdicao.style.display = 'none';
-                btnsEdicao.style.setProperty('display', 'none', 'important'); // Garante o !important
+                // Se houver link
+                linkProjetoInput.style.display = '';
+                if (tipoUsuario === 'FREELANCER') {
+                    linkProjetoInput.value = valorOriginal;
+                    linkProjetoInput.readOnly = true;
+                    // Botão Alterar Link
+                    let btnAlterar = document.createElement('button');
+                    btnAlterar.type = 'button';
+                    btnAlterar.className = 'btn btn-outline-secondary btn-sm ms-2';
+                    btnAlterar.id = 'btnAlterarLinkProjeto';
+                    btnAlterar.textContent = 'Alterar link';
+                    linkProjetoContainer.appendChild(btnAlterar);
+                    // Botões de edição (criados mas escondidos)
+                    let btnsEdicao = document.createElement('div');
+                    btnsEdicao.className = 'mt-2 d-flex gap-3';
+                    // Garante ocultação com !important
+                    btnsEdicao.style.setProperty('display', 'none', 'important');
+                    let btnConfirmar = document.createElement('button');
+                    btnConfirmar.type = 'button';
+                    btnConfirmar.className = 'btn btn-outline-secondary btn-sm';
+                    btnConfirmar.textContent = 'Confirmar';
+                    let btnCancelar = document.createElement('button');
+                    btnCancelar.type = 'button';
+                    btnCancelar.className = 'btn btn-outline-secondary btn-sm';
+                    btnCancelar.textContent = 'Cancelar';
+                    btnsEdicao.appendChild(btnConfirmar);
+                    btnsEdicao.appendChild(btnCancelar);
+                    linkProjetoContainer.appendChild(btnsEdicao);
+                    btnAlterar.onclick = function () {
+                        linkProjetoInput.readOnly = false;
+                        linkProjetoInput.focus();
+                        btnAlterar.style.display = 'none';
+                        btnsEdicao.style.setProperty('display', 'flex', 'important');
+                    };
+                    btnCancelar.onclick = function () {
+                        linkProjetoInput.value = valorOriginal;
+                        linkProjetoInput.readOnly = true;
+                        btnAlterar.style.display = '';
+                        btnsEdicao.style.setProperty('display', 'none', 'important');
+                    };
+                    btnConfirmar.onclick = async function () {
+                        const novoLink = linkProjetoInput.value.trim();
+                        let urlValido = false;
+                        let urlParaValidar = novoLink.replace(/\s+/g, '');
+                        let feedback;
+                        if (urlParaValidar !== '') {
+                            let urlTest = urlParaValidar;
+                            if (!/^https?:\/\//i.test(urlTest)) {
+                                urlTest = 'https://' + urlTest;
+                            }
+                            try {
+                                const parsed = new URL(urlTest);
+                                urlValido = (parsed.protocol === 'http:' || parsed.protocol === 'https:') && /\./.test(parsed.hostname);
+                            } catch (e) {
+                                urlValido = false;
+                            }
+                        }
+                        if (!urlValido) {
+                            linkProjetoInput.classList.add('is-invalid');
+                            feedback = document.getElementById('linkProjetoFeedback');
+                            if (!feedback) {
+                                feedback = document.createElement('div');
+                                feedback.id = 'linkProjetoFeedback';
+                                feedback.className = 'invalid-feedback d-block';
+                                feedback.innerText = 'Insira um link válido.';
+                                linkProjetoInput.parentNode.appendChild(feedback);
+                            } else {
+                                feedback.style.display = 'block';
+                            }
+                            linkProjetoInput.focus();
+                            linkProjetoInput.addEventListener('input', function limparInvalido() {
+                                linkProjetoInput.classList.remove('is-invalid');
+                                if (feedback) feedback.style.display = 'none';
+                                linkProjetoInput.removeEventListener('input', limparInvalido);
+                            });
+                            return;
+                        }
+                        try {
+                            const token = localStorage.getItem('token');
+                            const resp = await fetch(`/projetos/${projetoId}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Authorization': 'Bearer ' + token,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ linkProjetoHospedagem: novoLink })
+                            });
+                            if (!resp.ok) throw new Error('Erro ao salvar link');
+                            location.reload();
+                        } catch (e) {
+                            alert('Erro ao salvar link.');
+                        }
+                    };
+                } else if (tipoUsuario === 'EMPRESA') {
+                    // Esconde input
+                    linkProjetoInput.style.display = 'none';
+                    // Mostra link clicável
+                    let link = valorOriginal;
+                    if (!/^https?:\/\//i.test(link)) link = 'https://' + link;
+                    let a = document.createElement('a');
+                    a.href = link;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.className = 'link-clicavel';
+                    a.innerText = valorOriginal;
+                    linkProjetoContainer.appendChild(a);
+                }
             }
-
-            // Ao clicar em "Alterar Link"
-            btnAlterar.onclick = function () {
-                linkProjetoInput.readOnly = false;
-                linkProjetoInput.focus();
-                btnAlterar.style.display = 'none';
-                btnsEdicao.style.setProperty('display', 'flex', 'important'); // Mostra Confirmar/Cancelar com !important
-            };
-
-            // Ao clicar em "Cancelar"
-            btnCancelar.onclick = function () {
-                linkProjetoInput.value = valorOriginal;
-                linkProjetoInput.readOnly = true;
-                btnAlterar.style.display = '';
-                btnsEdicao.style.setProperty('display', 'none', 'important'); // Esconde Confirmar/Cancelar com !important
-            };
-
-            // Ao clicar em "Confirmar Alteração"
-            btnConfirmar.onclick = function () {
-                valorOriginal = linkProjetoInput.value;
-                linkProjetoInput.readOnly = true;
-                btnAlterar.style.display = '';
-                btnsEdicao.style.setProperty('display', 'none', 'important'); // Esconde Confirmar/Cancelar com !important
-                // Aqui você pode adicionar lógica para salvar a alteração no backend, se necessário
-            };
         }
     } catch (e) {
         console.error(e);
