@@ -33,6 +33,13 @@ async function carregarPerfilEmpresa() {
         renderEmpresaProfile(profile);
         renderEmpresaProjetos(profile.projetos);
         renderEmpresaFeedbacks(profile);
+
+        // Depois de carregar o profile:
+        const link = document.getElementById('linkOportunidadesEmpresa');
+        if (link && profile.nome) {
+            // Codifica o nome para uso seguro na URL
+            link.href = `/listagem-projetos-vagas?empresa=${encodeURIComponent(profile.nome)}`;
+        }
     } catch (e) {
         alert('Erro ao carregar perfil da empresa');
         console.error(e);
@@ -67,31 +74,40 @@ function renderEmpresaProfile(profile) {
         redesHtml += `<a href="${profile.site}" target="_blank" rel="noopener noreferrer"><i class="bi bi-globe"></i></a>`;
     }
 
-    // Header dinâmico
-    document.querySelector('.profile-header').innerHTML = `
-        <img src="${profile.avatar || '/assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa" style="width: 120px; height: 120px; border-radius: 50%; object-fit: contain; border: 4px solid #FF6F00; background: #fff;">
-        <div class="profile-info">
-            <h2>${profile.nome}</h2>
-            <div class="role mb-1">${profile.cargo || ""}</div>
-            <div class="profile-contact mt-2">
-                <div><i class="bi bi-envelope"></i><span>${profile.emailContato || ""}</span></div>
-                <div><i class="bi bi-telephone"></i><span>${profile.telefoneContato || ""}</span></div>
+    // Header dinâmico igual ao padrão das outras páginas
+    const header = document.querySelector('.profile-header');
+    if (header) {
+        header.classList.add('d-flex', 'align-items-center');
+        header.innerHTML = `
+            <img src="${profile.avatar || '/assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa" style="width: 120px; height: 120px; border-radius: 50%; object-fit: contain; border: 4px solid #FF6F00; background: #fff;">
+            <div class="profile-info flex-grow-1">
+                <h2>${profile.nome}</h2>
+                <div class="role mb-1">${profile.cargo || ""}</div>
+                <div class="profile-contact mt-2">
+                    <div><i class="bi bi-envelope"></i><span>${profile.emailContato || ""}</span></div>
+                    <div><i class="bi bi-telephone"></i><span>${profile.telefoneContato || ""}</span></div>
+                </div>
+                <div class="profile-social mt-3">
+                    ${redesHtml}
+                </div>
+                <div class="profile-rating mt-3">
+                    ${stars}
+                    <span class="ms-2" style="color:#fff;font-size:1rem;">
+                        ${media.toFixed(1)}/5.0
+                        <span class="text-secondary ms-2">(${feedbackCount} feedback${feedbackCount === 1 ? '' : 's'})</span>
+                    </span>
+                </div>
             </div>
-            <div class="profile-social mt-3">
-                ${redesHtml}
-            </div>
-            <div class="profile-rating mt-3">
-                ${stars}
-                <span class="ms-2" style="color:#fff;font-size:1rem;">
-                    ${media.toFixed(1)}/5.0
-                    <span class="text-secondary ms-2">(${feedbackCount} feedback${feedbackCount === 1 ? '' : 's'})</span>
-                </span>
-            </div>
-        </div>
-    `;
+        `;
+    }
 
     // Sobre
-    document.getElementById('empresaSobre').textContent = profile.sobre || '';
+    const sobreEl = document.getElementById('empresaSobre');
+    if (sobreEl) {
+        sobreEl.innerHTML = profile.sobre && profile.sobre.trim()
+            ? profile.sobre
+            : '<p class="profile-timeline text-muted">Nenhuma informação sobre a empresa foi cadastrada ainda.</p>';
+    }
 }
 
 function renderEmpresaProjetos(projetos) {
@@ -110,17 +126,18 @@ function renderEmpresaProjetos(projetos) {
 }
 
 function renderEmpresaFeedbacks(profile) {
-    // Pega os 3 últimos feedbacks enviados
-    const feedbacksHtml = (profile.feedbacks || [])
-        .slice() // cópia
-        .reverse() // mais recentes primeiro
-        .slice(0, 3) // pega os 3 últimos
-        .map(fb => `
+    const container = document.getElementById('empresaProfileFeedbacks');
+    let feedbacksHtml = '';
+    const feedbacks = (profile.feedbacks || []).slice().reverse().slice(0, 3);
+    if (feedbacks.length === 0) {
+        feedbacksHtml = '<p class="profile-timeline text-muted">Nenhum feedback recebido ainda.</p>';
+    } else {
+        feedbacksHtml = feedbacks.map(fb => `
             <div class="profile-feedback">
                 "${fb.texto}"
             </div>
         `).join('');
-    const container = document.getElementById('empresaProfileFeedbacks');
+    }
     if (container) container.innerHTML = feedbacksHtml;
 }
 

@@ -98,3 +98,17 @@ document.getElementById('loadMoreBtn').addEventListener('click', loadMoreProject
 
 // Inicialização
 fetchProjects();
+
+// Preenche o campo de busca se houver parâmetro "empresa" na URL
+document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    const empresa = params.get('empresa');
+    if (empresa) {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.value = empresa;
+            // Opcional: já filtra automaticamente
+            filterProjects();
+        }
+    }
+});

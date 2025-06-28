@@ -61,7 +61,10 @@ public class EmpresaController {
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
         List<AvaliacaoEmpresa> avaliacoes = avaliacaoEmpresaRepository.findByEmpresa(empresa);
-        EmpresaAutoVisualizacaoResponseDTO empresaDto = new EmpresaAutoVisualizacaoResponseDTO(empresa, avaliacoes);
+        List<Projeto> projetos = projetoRepository.findByEmpresa(empresa); // Adicionado
+
+        // Passe os projetos para o DTO
+        EmpresaAutoVisualizacaoResponseDTO empresaDto = new EmpresaAutoVisualizacaoResponseDTO(empresa, projetos, avaliacoes);
         return empresaDto;
     }
 
