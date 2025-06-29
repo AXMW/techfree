@@ -22,6 +22,7 @@ import com.techfree.dto.AtualizarLinkDTO;
 import com.techfree.dto.ProjetoFiltroDTO;
 import com.techfree.dto.ProjetoRequestDTO;
 import com.techfree.dto.SelecionarFreelancerRequestDTO;
+import com.techfree.dto.CertificadoRequestDTO;
 import com.techfree.model.Usuario;
 import com.techfree.repository.UsuarioRepository;
 
@@ -57,6 +58,9 @@ public class ProjetoService {
 
     @Autowired
     private EmailTemplateService emailTemplateService;
+
+    @Autowired
+    private CertificadoService certificadoService;
 
     public ProjetoService(ProjetoRepository projetoRepository) {
         this.projetoRepository = projetoRepository;
@@ -241,6 +245,15 @@ public class ProjetoService {
         try {
             projeto.setStatus(StatusProjeto.CONCLUIDO);
             projetoRepository.save(projeto);
+            //TODO:implementar lógica de certifcado de conclusão
+            CertificadoRequestDTO certificadoRequest = new CertificadoRequestDTO();
+            certificadoRequest.setTitulo(projeto.getTitulo());
+            certificadoRequest.setDescricao("Certificamos que o freelancer concluiu com êxito o projeto '" + projeto.getTitulo() + "'. Parabéns pelo comprometimento, dedicação e entrega dos resultados esperados!");
+            certificadoRequest.setCargaHoraria(projeto.getDuracao() * 80); // Exemplo: 80 horas por mês
+            certificadoRequest.setDataConclusao(LocalDate.now());
+            certificadoRequest.setFreelancerId(projeto.getFreelancerSelecionado().getId());
+            certificadoRequest.setProjetoId(projeto.getId());
+            certificadoService.cadastrar(projeto.getFreelancerSelecionado().getUsuario().getEmail(), certificadoRequest);
             return projeto;
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(
