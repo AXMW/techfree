@@ -1,5 +1,6 @@
 package com.techfree.service;
 
+
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.layout.Document;
@@ -35,11 +36,17 @@ public class CertificadoPdfService {
             .setBold()
             .setFontColor(azulEscuro);
 
+        Paragraph placeholder = new Paragraph().add("")
+            .setTextAlignment(TextAlignment.LEFT)
+            .setMarginTop(0)
+            .setMarginBottom(0);
+        document.add(placeholder);
+
+
         Paragraph pTitulo = new Paragraph().add(titulo)
             .setTextAlignment(TextAlignment.CENTER)
             .setMarginTop(20)
             .setMarginBottom(20);
-        document.add(pTitulo);
 
         // Agora, desenha o fundo bege atrás do conteúdo, após garantir que a página existe
         document.flush();
@@ -94,14 +101,18 @@ public class CertificadoPdfService {
         document.add(assinatura);
 
 
-        // Agora, desenha a borda dourada após garantir que a página existe
+
+
+        // Apenas borda dourada fina e discreta para um visual mais limpo
         document.flush();
         PdfCanvas canvas = new PdfCanvas(pdf.getFirstPage());
-        canvas.setLineWidth(4f);
+        canvas.setLineWidth(3f);
         canvas.setStrokeColor(dourado);
         float margin = 20f;
         canvas.rectangle(margin, margin, pdf.getDefaultPageSize().getWidth() - 2 * margin, pdf.getDefaultPageSize().getHeight() - 2 * margin);
         canvas.stroke();
+
+        // Removidos círculos/adornos e marca d'água para garantir máxima legibilidade e visual profissional
 
         document.close();
         return baos.toByteArray();

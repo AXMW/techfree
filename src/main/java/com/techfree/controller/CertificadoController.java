@@ -67,14 +67,18 @@ public class CertificadoController {
 
     @GetMapping("/{id}/download")
     public ResponseEntity<byte[]> downloadCertificado(@PathVariable Long id, Principal principal) {
-        Certificado certificado = certificadoService.buscarPorIdEUsuario(id, principal.getName());
-        byte[] pdf = certificadoPdfService.gerarCertificadoPdf(certificado);
+        try {
+            Certificado certificado = certificadoService.buscarPorIdEUsuario(id, principal.getName());
+            byte[] pdf = certificadoPdfService.gerarCertificadoPdf(certificado);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDisposition(ContentDisposition.attachment().filename("certificado.pdf").build());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDisposition(ContentDisposition.attachment().filename("certificado.pdf").build());
 
-        return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+            return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/projetos/{id}")
