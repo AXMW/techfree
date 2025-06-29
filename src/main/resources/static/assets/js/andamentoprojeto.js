@@ -64,8 +64,94 @@ document.addEventListener('DOMContentLoaded', async function () {
         let botoesHtml = '';
         const statusUpper = (data.status || '').toUpperCase();
 
-        // Só mostra botões se NÃO estiver concluído ou cancelado
-        if (statusUpper !== 'CONCLUIDO' && statusUpper !== 'CANCELADO') {
+        // Função para verificar se já existe avaliação
+        async function verificarFeedbackExistente() {
+            const token = localStorage.getItem('token');
+            let url = '';
+            if (tipoUsuario === 'EMPRESA') {
+                url = `/avaliacoes/freelancer/projeto/${projetoId}`;
+            } else if (tipoUsuario === 'FREELANCER') {
+                url = `/avaliacoes/empresa/projeto/${projetoId}`;
+            } else {
+                return { podeFeedback: false, feedback: null };
+            }
+            try {
+                const resp = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (resp.status === 404) {
+                    return { podeFeedback: true, feedback: null };
+                } else if (resp.ok) {
+                    const feedback = await resp.json();
+                    return { podeFeedback: false, feedback };
+                } else {
+                    return { podeFeedback: false, feedback: null };
+                }
+            } catch (e) {
+                return { podeFeedback: false, feedback: null };
+            }
+        }
+
+        // Adiciona botão de feedback se CONCLUIDO e permitido
+        let podeFeedback = false;
+        let feedbackExistente = null;
+        if (statusUpper === 'CONCLUIDO') {
+            const resultadoFeedback = await verificarFeedbackExistente();
+            podeFeedback = resultadoFeedback.podeFeedback;
+            feedbackExistente = resultadoFeedback.feedback;
+            if (podeFeedback) {
+                botoesHtml = `
+                    <button class="btn btn-success" id="btnEnviarFeedback">Enviar Feedback</button>
+                `;
+            } else if (feedbackExistente) {
+                // Bloco de feedback já enviado
+                const nota = feedbackExistente.nota;
+                const comentario = feedbackExistente.comentario;
+                const dataCriacao = feedbackExistente.dataCriacao;
+                // Renderiza estrelas SVG (mesmo visual do sistema de envio)
+                let estrelas = '';
+                for (let i = 1; i <= 5; i++) {
+                    let fill = 0;
+                    if (nota >= i) {
+                        fill = 1;
+                    } else if (nota >= i - 0.5) {
+                        fill = 0.5;
+                    }
+                    estrelas += `<span style="position:relative; display:inline-block; width:1.5em; height:1.5em;">
+                        <svg width="1.5em" height="1.5em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="${fill === 1 ? '#FFD700' : fill === 0.5 ? 'url(#half-grad-'+i+')' : 'none'}" stroke="#FFD700" stroke-width="1"/>
+                            <defs>
+                                <linearGradient id="half-grad-${i}" x1="0" y1="0" x2="24" y2="0" gradientUnits="userSpaceOnUse">
+                                    <stop offset="50%" stop-color="#FFD700"/>
+                                    <stop offset="50%" stop-color="white" stop-opacity="0"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </span>`;
+                }
+                // Formata data para dd/mm/aaaa
+                let dataFormatada = '-';
+                if (dataCriacao) {
+                    const partes = dataCriacao.split('-');
+                    if (partes.length === 3) {
+                        dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+                    } else {
+                        dataFormatada = dataCriacao;
+                    }
+                }
+                botoesHtml = `
+                    <div class="info-card d-flex flex-column align-items-center" style="max-width: 400px; margin: 0 auto;">
+                        <div class="mb-2">Um feedback já foi enviado para este projeto:</div>
+                        <div class="mb-2" style="font-size:1.5em; color:#FFD700;">${estrelas}</div>
+                        <div class="mb-2"><strong>Comentário:</strong> ${comentario ? comentario : '-'}</div>
+                        <div class="mb-1"><strong>Data:</strong> ${dataFormatada}</div>
+                    </div>
+                `;
+            }
+        } else if (statusUpper !== 'CONCLUIDO' && statusUpper !== 'CANCELADO') {
             const fecharTexto = statusUpper === 'REVISAO' ? 'Fechar' : 'Cancelar';
             if (tipoUsuario === 'EMPRESA') {
                 if (statusUpper === 'REVISAO') {
@@ -103,9 +189,167 @@ document.addEventListener('DOMContentLoaded', async function () {
         const orientadorCard = infoCards[1]; // segundo .info-card
         if (orientadorCard && botoesHtml) {
             const div = document.createElement('div');
-            div.className = 'mt-3 mb-3 text-center';
+            div.className = 'mt-3 mb-3 d-flex justify-content-center gap-2'; // Alinha botões ao centro e com espaçamento
             div.innerHTML = botoesHtml;
             orientadorCard.parentNode.insertBefore(div, orientadorCard.nextSibling);
+
+            // Botão de feedback (status concluido)
+            const btnEnviarFeedback = div.querySelector('#btnEnviarFeedback');
+            if (btnEnviarFeedback) {
+                btnEnviarFeedback.addEventListener('click', function () {
+                    // Cria modal de feedback se não existir
+                    let modalFeedback = document.getElementById('modalFeedback');
+                    if (!modalFeedback) {
+                        modalFeedback = document.createElement('div');
+                        modalFeedback.className = 'modal fade';
+                        modalFeedback.id = 'modalFeedback';
+                        modalFeedback.tabIndex = -1;
+                        modalFeedback.innerHTML = `
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title">Enviar Feedback</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <form id="formFeedback">
+                                    <div class="mb-3">
+                                      <label class="form-label">Nota (0 a 5)</label>
+                                      <div id="starRating" class="mb-2" style="font-size:2rem; color:#FFD700; cursor:pointer; user-select:none;"></div>
+                                      <input type="hidden" id="notaFeedback" required>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="comentarioFeedback" class="form-label">Comentário</label>
+                                      <textarea class="form-control" id="comentarioFeedback" rows="3" maxlength="200" required></textarea>
+                                      <div class="form-text text-end"><span id="contadorFeedback">0</span>/200</div>
+                                    </div>
+                                  </form>
+                                  <div id="feedbackMsg" class="text-danger small"></div>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-center gap-2">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                  <button type="button" class="btn btn-secondary" id="confirmarFeedback">Enviar</button>
+                                </div>
+                              </div>
+                            </div>
+                        `;
+                        document.body.appendChild(modalFeedback);
+                    }
+                    const modal = new bootstrap.Modal(modalFeedback);
+                    modal.show();
+
+                    // Limpa campos ao abrir
+
+                    document.getElementById('notaFeedback').value = '';
+                    document.getElementById('comentarioFeedback').value = '';
+                    document.getElementById('feedbackMsg').innerText = '';
+                    document.getElementById('contadorFeedback').innerText = '0';
+                    // Renderiza estrelas
+                    renderStarRating(0);
+
+                    // Atualiza contador de caracteres
+
+                    const comentarioInput = document.getElementById('comentarioFeedback');
+                    comentarioInput.addEventListener('input', function () {
+                        const len = comentarioInput.value.length;
+                        document.getElementById('contadorFeedback').innerText = len;
+                    });
+
+                    // Sistema de estrelas
+                    function renderStarRating(value) {
+                        const starDiv = document.getElementById('starRating');
+                        starDiv.innerHTML = '';
+                        let stars = '';
+                        for (let i = 1; i <= 5; i++) {
+                            let fill = 0;
+                            if (value >= i) {
+                                fill = 1;
+                            } else if (value >= i - 0.5) {
+                                fill = 0.5;
+                            }
+                            stars += `<span class="star-clickable" data-star="${i}" style="position:relative; display:inline-block; width:1.5em; height:1.5em; cursor:pointer;">
+                                <svg width="1.5em" height="1.5em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="${fill === 1 ? '#FFD700' : fill === 0.5 ? 'url(#half-grad-'+i+')' : 'none'}" stroke="#FFD700" stroke-width="1"/>
+                                    <defs>
+                                        <linearGradient id="half-grad-${i}" x1="0" y1="0" x2="24" y2="0" gradientUnits="userSpaceOnUse">
+                                            <stop offset="50%" stop-color="#FFD700"/>
+                                            <stop offset="50%" stop-color="white" stop-opacity="0"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </span>`;
+                        }
+                        starDiv.innerHTML = stars;
+
+                        // Adiciona eventos para detectar metade ou inteira
+                        Array.from(starDiv.querySelectorAll('.star-clickable')).forEach((star, idx) => {
+                            star.onmousemove = function(e) {
+                                const rect = star.getBoundingClientRect();
+                                const x = e.clientX - rect.left;
+                                const isHalf = x < rect.width / 2;
+                                renderStarRating(isHalf ? idx + 0.5 : idx + 1);
+                            };
+                            star.onclick = function(e) {
+                                const rect = star.getBoundingClientRect();
+                                const x = e.clientX - rect.left;
+                                const isHalf = x < rect.width / 2;
+                                const val = isHalf ? idx + 0.5 : idx + 1;
+                                document.getElementById('notaFeedback').value = val;
+                                renderStarRating(val);
+                            };
+                        });
+                        starDiv.onmouseleave = function() {
+                            renderStarRating(parseFloat(document.getElementById('notaFeedback').value) || 0);
+                        };
+                    }
+
+                    // Evento de envio
+                    const btnConfirmarFeedback = document.getElementById('confirmarFeedback');
+                    btnConfirmarFeedback.onclick = async function () {
+                        const nota = parseFloat(document.getElementById('notaFeedback').value);
+                        const comentario = document.getElementById('comentarioFeedback').value.trim();
+                        const feedbackMsg = document.getElementById('feedbackMsg');
+                        if (isNaN(nota) || nota < 0 || nota > 5) {
+                            feedbackMsg.innerText = 'Selecione uma nota de 0 a 5 (pode ser meio ponto).';
+                            return;
+                        }
+                        if (!comentario) {
+                            feedbackMsg.innerText = 'O comentário é obrigatório.';
+                            return;
+                        }
+                        if (comentario.length > 200) {
+                            feedbackMsg.innerText = 'O comentário deve ter no máximo 200 caracteres.';
+                            return;
+                        }
+                        feedbackMsg.innerText = '';
+                        try {
+                            const token = localStorage.getItem('token');
+                            // Define endpoint conforme tipoUsuario
+                            const tipoUsuario = localStorage.getItem('tipoUsuario');
+                            const endpoint = (tipoUsuario === 'EMPRESA') ? '/avaliacoes/freelancer' : '/avaliacoes/empresa';
+                            const resp = await fetch(endpoint, {
+                                method: 'POST',
+                                headers: {
+                                    'Authorization': 'Bearer ' + token,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    projetoId: Number(projetoId),
+                                    nota: nota,
+                                    comentario: comentario
+                                })
+                            });
+                            if (!resp.ok) throw new Error('Erro ao enviar feedback');
+                            modal.hide();
+                            alert('Feedback enviado com sucesso!');
+                            // Atualiza a tela para refletir o novo estado (remove botão e mostra card)
+                            location.reload();
+                        } catch (e) {
+                            feedbackMsg.innerText = 'Erro ao enviar feedback.';
+                        }
+                    };
+                });
+            }
 
             // Adiciona eventos aos botões
             // Botão "Enviar para revisão" (FREELANCER)
@@ -423,7 +667,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // tipoUsuario já foi declarado anteriormente, então não redeclare aqui
         if (linkProjetoInput && linkProjetoContainer) {
             // Remove elementos antigos (para evitar duplicidade ao recarregar)
-            Array.from(linkProjetoContainer.querySelectorAll('.nenhum-link-msg, #btnAlterarLinkProjeto, #btnInserirLinkProjeto, .d-flex, .link-clicavel')).forEach(e => e.remove());
+            Array.from(linkProjetoContainer.querySelectorAll('.nenhum-link-msg, #btnAlterarLinkProjeto, #btnInserirLinkProjeto, .d-flex, .link-clicavel, .msg-projeto-concluido')).forEach(e => e.remove());
 
             let valorOriginal = data.linkProjetoHospedagem || '';
             // Se não houver link, mostra mensagem e controla botões/inputs
@@ -502,7 +746,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                                 linkProjetoInput.focus();
                                 linkProjetoInput.addEventListener('input', function limparInvalido() {
                                     linkProjetoInput.classList.remove('is-invalid');
-                                    if (feedback) feedback.style.display = 'none';
+                                    if (feedback) feedback.style.setProperty('display', 'none', 'important');
                                     linkProjetoInput.removeEventListener('input', limparInvalido);
                                 });
                                 return;
@@ -532,94 +776,102 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (tipoUsuario === 'FREELANCER') {
                     linkProjetoInput.value = valorOriginal;
                     linkProjetoInput.readOnly = true;
-                    // Botão Alterar Link
-                    let btnAlterar = document.createElement('button');
-                    btnAlterar.type = 'button';
-                    btnAlterar.className = 'btn btn-outline-secondary btn-sm ms-2';
-                    btnAlterar.id = 'btnAlterarLinkProjeto';
-                    btnAlterar.textContent = 'Alterar link';
-                    linkProjetoContainer.appendChild(btnAlterar);
-                    // Botões de edição (criados mas escondidos)
-                    let btnsEdicao = document.createElement('div');
-                    btnsEdicao.className = 'mt-2 d-flex gap-3';
-                    // Garante ocultação com !important
-                    btnsEdicao.style.setProperty('display', 'none', 'important');
-                    let btnConfirmar = document.createElement('button');
-                    btnConfirmar.type = 'button';
-                    btnConfirmar.className = 'btn btn-outline-secondary btn-sm';
-                    btnConfirmar.textContent = 'Confirmar';
-                    let btnCancelar = document.createElement('button');
-                    btnCancelar.type = 'button';
-                    btnCancelar.className = 'btn btn-outline-secondary btn-sm';
-                    btnCancelar.textContent = 'Cancelar';
-                    btnsEdicao.appendChild(btnConfirmar);
-                    btnsEdicao.appendChild(btnCancelar);
-                    linkProjetoContainer.appendChild(btnsEdicao);
-                    btnAlterar.onclick = function () {
-                        linkProjetoInput.readOnly = false;
-                        linkProjetoInput.focus();
-                        btnAlterar.style.display = 'none';
-                        btnsEdicao.style.setProperty('display', 'flex', 'important');
-                    };
-                    btnCancelar.onclick = function () {
-                        linkProjetoInput.value = valorOriginal;
-                        linkProjetoInput.readOnly = true;
-                        btnAlterar.style.display = '';
+                    if (statusUpper === 'CONCLUIDO' || statusUpper === 'CANCELADO') {
+                        // Mostra mensagem de projeto concluído
+                        let msgConcluido = document.createElement('div');
+                        msgConcluido.className = 'msg-projeto-concluido text-info mt-2';
+                        msgConcluido.innerText = 'O projeto foi concluído.';
+                        linkProjetoContainer.appendChild(msgConcluido);
+                    } else {
+                        // Botão Alterar Link
+                        let btnAlterar = document.createElement('button');
+                        btnAlterar.type = 'button';
+                        btnAlterar.className = 'btn btn-outline-secondary btn-sm ms-2';
+                        btnAlterar.id = 'btnAlterarLinkProjeto';
+                        btnAlterar.textContent = 'Alterar link';
+                        linkProjetoContainer.appendChild(btnAlterar);
+                        // Botões de edição (criados mas escondidos)
+                        let btnsEdicao = document.createElement('div');
+                        btnsEdicao.className = 'mt-2 d-flex gap-3';
+                        // Garante ocultação com !important
                         btnsEdicao.style.setProperty('display', 'none', 'important');
-                    };
-                    btnConfirmar.onclick = async function () {
-                        const novoLink = linkProjeto.value.trim();
-                        let urlValido = false;
-                        let urlParaValidar = novoLink.replace(/\s+/g, '');
-                        let feedback;
-                        if (urlParaValidar !== '') {
-                            let urlTest = urlParaValidar;
-                            if (!/^https?:\/\//i.test(urlTest)) {
-                                urlTest = 'https://' + urlTest;
+                        let btnConfirmar = document.createElement('button');
+                        btnConfirmar.type = 'button';
+                        btnConfirmar.className = 'btn btn-outline-secondary btn-sm';
+                        btnConfirmar.textContent = 'Confirmar';
+                        let btnCancelar = document.createElement('button');
+                        btnCancelar.type = 'button';
+                        btnCancelar.className = 'btn btn-outline-secondary btn-sm';
+                        btnCancelar.textContent = 'Cancelar';
+                        btnsEdicao.appendChild(btnConfirmar);
+                        btnsEdicao.appendChild(btnCancelar);
+                        linkProjetoContainer.appendChild(btnsEdicao);
+                        btnAlterar.onclick = function () {
+                            linkProjetoInput.readOnly = false;
+                            linkProjetoInput.focus();
+                            btnAlterar.style.display = 'none';
+                            btnsEdicao.style.setProperty('display', 'flex', 'important');
+                        };
+                        btnCancelar.onclick = function () {
+                            linkProjetoInput.value = valorOriginal;
+                            linkProjetoInput.readOnly = true;
+                            btnAlterar.style.display = '';
+                            btnsEdicao.style.setProperty('display', 'none', 'important');
+                        };
+                        btnConfirmar.onclick = async function () {
+                            const novoLink = linkProjeto.value.trim();
+                            let urlValido = false;
+                            let urlParaValidar = novoLink.replace(/\s+/g, '');
+                            let feedback;
+                            if (urlParaValidar !== '') {
+                                let urlTest = urlParaValidar;
+                                if (!/^https?:\/\//i.test(urlTest)) {
+                                    urlTest = 'https://' + urlTest;
+                                }
+                                try {
+                                    const parsed = new URL(urlTest);
+                                    urlValido = (parsed.protocol === 'http:' || parsed.protocol === 'https:') && /\./.test(parsed.hostname);
+                                } catch (e) {
+                                    urlValido = false;
+                                }
+                            }
+                            if (!urlValido) {
+                                linkProjetoInput.classList.add('is-invalid');
+                                feedback = document.getElementById('linkProjetoFeedback');
+                                if (!feedback) {
+                                    feedback = document.createElement('div');
+                                    feedback.id = 'linkProjetoFeedback';
+                                    feedback.className = 'invalid-feedback d-block';
+                                    feedback.innerText = 'Insira um link válido.';
+                                    linkProjetoInput.parentNode.appendChild(feedback);
+                                } else {
+                                    feedback.style.display = 'block';
+                                }
+                                linkProjetoInput.focus();
+                                linkProjetoInput.addEventListener('input', function limparInvalido() {
+                                    linkProjetoInput.classList.remove('is-invalid');
+                                    if (feedback) feedback.style.setProperty('display', 'none', 'important');
+                                    linkProjetoInput.removeEventListener('input', limparInvalido);
+                                });
+                                return;
                             }
                             try {
-                                const parsed = new URL(urlTest);
-                                urlValido = (parsed.protocol === 'http:' || parsed.protocol === 'https:') && /\./.test(parsed.hostname);
+                                const token = localStorage.getItem('token');
+                                const resp = await fetch(`/projetos/${projetoId}/atualizar-link`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Authorization': 'Bearer ' + token,
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ linkProjetoHospedagem: novoLink })
+                                });
+                                if (!resp.ok) throw new Error('Erro ao salvar link');
+                                location.reload();
                             } catch (e) {
-                                urlValido = false;
+                                alert('Erro ao salvar link.');
                             }
-                        }
-                        if (!urlValido) {
-                            linkProjetoInput.classList.add('is-invalid');
-                            feedback = document.getElementById('linkProjetoFeedback');
-                            if (!feedback) {
-                                feedback = document.createElement('div');
-                                feedback.id = 'linkProjetoFeedback';
-                                feedback.className = 'invalid-feedback d-block';
-                                feedback.innerText = 'Insira um link válido.';
-                                linkProjetoInput.parentNode.appendChild(feedback);
-                            } else {
-                                feedback.style.display = 'block';
-                            }
-                            linkProjetoInput.focus();
-                            linkProjetoInput.addEventListener('input', function limparInvalido() {
-                                linkProjetoInput.classList.remove('is-invalid');
-                                if (feedback) feedback.style.display = 'none';
-                                linkProjetoInput.removeEventListener('input', limparInvalido);
-                            });
-                            return;
-                        }
-                        try {
-                            const token = localStorage.getItem('token');
-                            const resp = await fetch(`/projetos/${projetoId}/atualizar-link`, {
-                                method: 'PUT',
-                                headers: {
-                                    'Authorization': 'Bearer ' + token,
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ linkProjetoHospedagem: novoLink })
-                            });
-                            if (!resp.ok) throw new Error('Erro ao salvar link');
-                            location.reload();
-                        } catch (e) {
-                            alert('Erro ao salvar link.');
-                        }
-                    };
+                        };
+                    }
                 } else if (tipoUsuario === 'EMPRESA') {
                     // Esconde input
                     linkProjetoInput.style.display = 'none';
