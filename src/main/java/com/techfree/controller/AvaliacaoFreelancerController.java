@@ -53,9 +53,9 @@ public class AvaliacaoFreelancerController {
     }
 
     @GetMapping("/projeto/{id}")
-    @PreAuthorize("hasRole('EMPRESA')")
-    public ResponseEntity<List<AvaliacaoFreelancerResponseDTO>> obterAvaliacaoPorIdDoProjeto(@PathVariable Long id) {
-        List<AvaliacaoFreelancerResponseDTO> avaliacao = service.obterPorIdDoProjeto(id);
+    @PreAuthorize("hasRole('EMPRESA') or hasRole('FREELANCER')")
+    public ResponseEntity<AvaliacaoFreelancerResponseDTO> obterAvaliacaoPorIdDoProjeto(@PathVariable Long id) {
+        AvaliacaoFreelancerResponseDTO avaliacao = service.obterPorIdDoProjeto(id);
         return ResponseEntity.ok(avaliacao);
     }
 }

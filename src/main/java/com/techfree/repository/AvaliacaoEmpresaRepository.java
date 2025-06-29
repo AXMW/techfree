@@ -4,6 +4,7 @@ import com.techfree.model.Empresa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import com.techfree.model.Freelancer;
+import java.util.Optional;
 import com.techfree.model.Projeto;
 import java.util.List;
 
@@ -13,5 +14,5 @@ public interface AvaliacaoEmpresaRepository extends JpaRepository<AvaliacaoEmpre
     List<AvaliacaoEmpresa> findByProjetoId(Long projetoId);
     List<AvaliacaoEmpresa> findByFreelancerId(Long freelancerId);
     List<AvaliacaoEmpresa> findByFreelancer(Freelancer freelancer);
-    List<AvaliacaoEmpresa> findByProjeto(Projeto projeto);
+    Optional<AvaliacaoEmpresa> findByProjeto(Projeto projeto);
 }

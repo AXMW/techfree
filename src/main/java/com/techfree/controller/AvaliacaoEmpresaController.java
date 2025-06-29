@@ -53,9 +53,9 @@ public class AvaliacaoEmpresaController {
     }
 
     @GetMapping("/projeto/{id}")
-    @PreAuthorize("hasRole('FREELANCER')")
-    public ResponseEntity<List<AvaliacaoEmpresaResponseDTO>> obterAvaliacaoPorIdDoProjeto(@PathVariable Long id) {
-        List<AvaliacaoEmpresaResponseDTO> avaliacao = service.obterPorIdDoProjeto(id);
+    @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
+    public ResponseEntity<AvaliacaoEmpresaResponseDTO> obterAvaliacaoPorIdDoProjeto(@PathVariable Long id) {
+        AvaliacaoEmpresaResponseDTO avaliacao = service.obterPorIdDoProjeto(id);
         return ResponseEntity.ok(avaliacao);
     }
 

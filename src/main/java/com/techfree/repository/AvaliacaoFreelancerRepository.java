@@ -7,6 +7,7 @@ import com.techfree.model.AvaliacaoFreelancer;
 import com.techfree.model.Freelancer;
 import com.techfree.model.Empresa;
 import com.techfree.model.Projeto;
+import java.util.Optional;
 import java.util.List;
 
 @Repository
@@ -15,5 +16,5 @@ public interface AvaliacaoFreelancerRepository extends JpaRepository<AvaliacaoFr
     List<AvaliacaoFreelancer> findByProjetoId(Long projetoId);
     List<AvaliacaoFreelancer> findByEmpresaId(Long empresaId);
     List<AvaliacaoFreelancer> findByEmpresa(Empresa empresa);
-    List<AvaliacaoFreelancer> findByProjeto(Projeto projeto);
+    Optional<AvaliacaoFreelancer> findByProjeto(Projeto projeto);
 }

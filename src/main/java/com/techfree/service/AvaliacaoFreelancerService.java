@@ -50,6 +50,14 @@ public class AvaliacaoFreelancerService {
         if(projeto.getStatus() != StatusProjeto.CONCLUIDO) {
             throw new RuntimeException("Projeto não está concluído, avaliação não permitida");
         }
+        if(!projeto.getEmpresa().equals(empresa)) {
+            throw new RuntimeException("Empresa não é a responsável por este projeto");
+        }
+
+        repository.findByProjeto(projeto)
+            .ifPresent(avaliacao -> {
+                throw new RuntimeException("Avaliação já realizada para este projeto");
+            });
 
         AvaliacaoFreelancer avaliacao = new AvaliacaoFreelancer();
         avaliacao.setEmpresa(empresa);
@@ -92,14 +100,13 @@ public class AvaliacaoFreelancerService {
         return new AvaliacaoFreelancerResponseDTO(avaliacao);
     }
 
-    public List<AvaliacaoFreelancerResponseDTO> obterPorIdDoProjeto(Long id) {
+    public AvaliacaoFreelancerResponseDTO obterPorIdDoProjeto(Long id) {
         Projeto projeto = projetoRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
         
-        List<AvaliacaoFreelancer> avaliacao = repository.findByProjeto(projeto);
+        AvaliacaoFreelancer avaliacao = repository.findByProjeto(projeto)
+            .orElseThrow(() -> new RuntimeException("Avaliação não encontrada para este projeto"));
         
-        return avaliacao.stream()
-            .map(AvaliacaoFreelancerResponseDTO::new)
-            .toList();
+        return  new AvaliacaoFreelancerResponseDTO(avaliacao);
     }
 }
