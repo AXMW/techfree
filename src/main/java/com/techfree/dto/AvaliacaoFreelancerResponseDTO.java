@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public class AvaliacaoFreelancerResponseDTO {
     private Long id;
-    private Integer nota;
+    private Double nota;
     private String comentario;
     private String nomeFreelancer;
     private String tituloProjeto;

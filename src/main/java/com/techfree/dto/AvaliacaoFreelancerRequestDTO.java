@@ -6,6 +6,6 @@ import lombok.Setter;
 @Setter
 public class AvaliacaoFreelancerRequestDTO {
     private Long projetoId;
-    private Integer nota;
+    private Double nota;
     private String comentario;
 }

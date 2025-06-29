@@ -55,7 +55,7 @@ public class FreelancerAutoVisualizacaoResponseDTO {
         this.emailContato = freelancer.getEmailContato();
         if (avaliacoes != null && !avaliacoes.isEmpty()) {
             this.avaliacaoMedia = avaliacoes.stream()
-                .mapToInt(AvaliacaoFreelancer::getNota)
+                .mapToDouble(AvaliacaoFreelancer::getNota)
                 .average()
                 .orElse(0.0);
             this.feedbacks = avaliacoes.stream()

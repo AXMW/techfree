@@ -17,7 +17,7 @@ public class AvaliacaoEmpresa {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer nota;
+    private Double nota;
     private String comentario;
     private LocalDate dataCriacao;
 
