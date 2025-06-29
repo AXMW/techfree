@@ -29,4 +29,8 @@ public class AvaliacaoEmpresa {
 
     @ManyToOne
     private Projeto projeto; // projeto relacionado
+
+    public AvaliacaoEmpresa() {
+        this.dataCriacao = LocalDate.now();
+    }
 }

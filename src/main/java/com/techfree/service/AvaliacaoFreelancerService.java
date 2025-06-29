@@ -1,6 +1,7 @@
 package com.techfree.service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,12 +10,15 @@ import com.techfree.dto.AvaliacaoFreelancerRequestDTO;
 import com.techfree.dto.AvaliacaoFreelancerResponseDTO;
 import com.techfree.model.AvaliacaoFreelancer;
 import com.techfree.model.Empresa;
+import com.techfree.model.Freelancer;
 import com.techfree.model.Projeto;
 import com.techfree.repository.AvaliacaoFreelancerRepository;
 import com.techfree.repository.EmpresaRepository;
 import com.techfree.repository.ProjetoRepository;
 import com.techfree.model.Usuario;
+import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.UsuarioRepository;
+import com.techfree.enums.StatusProjeto;
 
 @Service
 public class AvaliacaoFreelancerService {
@@ -30,6 +34,9 @@ public class AvaliacaoFreelancerService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private FreelancerRepository freelancerRepository;
+
     public AvaliacaoFreelancerResponseDTO criar(String emailEmpresa, AvaliacaoFreelancerRequestDTO dto) {
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
@@ -39,6 +46,10 @@ public class AvaliacaoFreelancerService {
 
         Empresa empresa = empresaRepository.findByUsuario(usuario)
             .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+
+        if(projeto.getStatus() != StatusProjeto.CONCLUIDO) {
+            throw new RuntimeException("Projeto não está concluído, avaliação não permitida");
+        }
 
         AvaliacaoFreelancer avaliacao = new AvaliacaoFreelancer();
         avaliacao.setEmpresa(empresa);
@@ -50,5 +61,45 @@ public class AvaliacaoFreelancerService {
 
         repository.save(avaliacao);
         return new AvaliacaoFreelancerResponseDTO(avaliacao);
+    }
+
+    public List<AvaliacaoFreelancerResponseDTO> obterPorIdDoFreelancer(Long id) {
+        Freelancer freelancer = freelancerRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+        
+        List<AvaliacaoFreelancer> avaliacao = repository.findByFreelancer(freelancer);
+        
+        return avaliacao.stream()
+            .map(AvaliacaoFreelancerResponseDTO::new)
+            .toList();
+    }
+
+    public List<AvaliacaoFreelancerResponseDTO> obterPorIdDaEmpresa(Long id) {
+        Empresa empresa = empresaRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+        
+        List<AvaliacaoFreelancer> avaliacao = repository.findByEmpresa(empresa);
+            
+        return avaliacao.stream()
+            .map(AvaliacaoFreelancerResponseDTO::new)
+            .toList();
+    }
+
+    public AvaliacaoFreelancerResponseDTO obterPorId(Long id) {
+        AvaliacaoFreelancer avaliacao = repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Avaliação não encontrada"));
+        
+        return new AvaliacaoFreelancerResponseDTO(avaliacao);
+    }
+
+    public List<AvaliacaoFreelancerResponseDTO> obterPorIdDoProjeto(Long id) {
+        Projeto projeto = projetoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+        
+        List<AvaliacaoFreelancer> avaliacao = repository.findByProjeto(projeto);
+        
+        return avaliacao.stream()
+            .map(AvaliacaoFreelancerResponseDTO::new)
+            .toList();
     }
 }

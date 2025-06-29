@@ -29,4 +29,8 @@ public class AvaliacaoFreelancer {
 
     @ManyToOne
     private Projeto projeto; // projeto relacionado
+
+    public AvaliacaoFreelancer() {
+        this.dataCriacao = LocalDate.now();
+    }
 }
