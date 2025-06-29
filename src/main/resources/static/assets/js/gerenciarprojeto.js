@@ -202,6 +202,12 @@ function renderProjects() {
             }
         }
 
+        // Adiciona botão Enviar Feedback para projetos fechados
+        if (p.status === 'fechado' && p.rawStatus && p.rawStatus.toUpperCase() !== 'CANCELADO') {
+            // Somente se não for cancelado
+            actions += `<button class="btn btn-outline-primary btn-sm enviar-feedback-btn" data-id="${p.id}"><i class="bi bi-star"></i> Enviar Feedback</button>`;
+        }
+
         if (p.status === 'aberto') {
             statusClass = 'status-aberto';
         } else if (p.status === 'andamento') {
@@ -304,6 +310,187 @@ function renderProjects() {
             };
         });
     }
+
+    // Ação do botão Enviar Feedback
+    document.querySelectorAll('.enviar-feedback-btn').forEach(btn => {
+        btn.onclick = async function () {
+            const id = this.getAttribute('data-id');
+            const token = localStorage.getItem('token');
+            let endpoint = '';
+            if (tipoUsuario === 'freelancer') {
+                endpoint = `/avaliacoes/empresa/projeto/${id}`;
+            } else {
+                endpoint = `/avaliacoes/freelancer/projeto/${id}`;
+            }
+            try {
+                const resp = await fetch(endpoint, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (resp.status === 404) {
+                    // Abrir modal de feedback igual ao andamentoprojeto.js
+                    let modalFeedback = document.getElementById('modalFeedback');
+                    if (!modalFeedback) {
+                        modalFeedback = document.createElement('div');
+                        modalFeedback.className = 'modal fade';
+                        modalFeedback.id = 'modalFeedback';
+                        modalFeedback.tabIndex = -1;
+                        modalFeedback.innerHTML = `
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title">Enviar Feedback</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <form id="formFeedback">
+                                    <div class="mb-3">
+                                      <label class="form-label">Nota (0 a 5)</label>
+                                      <div id="starRating" class="mb-2" style="font-size:2rem; color:#FFD700; cursor:pointer; user-select:none;"></div>
+                                      <input type="hidden" id="notaFeedback" required>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="comentarioFeedback" class="form-label">Comentário</label>
+                                      <textarea class="form-control" id="comentarioFeedback" rows="3" maxlength="200" required></textarea>
+                                      <div class="form-text text-end"><span id="contadorFeedback">0</span>/200</div>
+                                    </div>
+                                  </form>
+                                  <div id="feedbackMsg" class="text-danger small"></div>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-center gap-2">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                  <button type="button" class="btn btn-secondary" id="confirmarFeedback">Enviar</button>
+                                </div>
+                              </div>
+                            </div>
+                        `;
+                        document.body.appendChild(modalFeedback);
+                    }
+                    const modal = new bootstrap.Modal(modalFeedback);
+                    modal.show();
+
+                    // Limpa campos ao abrir
+                    document.getElementById('notaFeedback').value = '';
+                    document.getElementById('comentarioFeedback').value = '';
+                    document.getElementById('feedbackMsg').innerText = '';
+                    document.getElementById('contadorFeedback').innerText = '0';
+                    renderStarRating(0);
+
+                    // Atualiza contador de caracteres
+                    const comentarioInput = document.getElementById('comentarioFeedback');
+                    comentarioInput.addEventListener('input', function () {
+                        const len = comentarioInput.value.length;
+                        document.getElementById('contadorFeedback').innerText = len;
+                    });
+
+                    // Sistema de estrelas
+                    function renderStarRating(value) {
+                        const starDiv = document.getElementById('starRating');
+                        starDiv.innerHTML = '';
+                        let stars = '';
+                        for (let i = 1; i <= 5; i++) {
+                            let fill = 0;
+                            if (value >= i) fill = 1;
+                            else if (value >= i - 0.5) fill = 0.5;
+                            stars += `<span class="star-clickable" data-value="${i - 0.5}" style="position:relative; display:inline-block; width:1.5em; height:1.5em;">
+                                <svg width="1.5em" height="1.5em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="${fill === 1 ? '#FFD700' : fill === 0.5 ? 'url(#half-grad-'+i+')' : 'none'}" stroke="#FFD700" stroke-width="1"/>
+                                    <defs>
+                                        <linearGradient id="half-grad-${i}" x1="0" y1="0" x2="24" y2="0" gradientUnits="userSpaceOnUse">
+                                            <stop offset="50%" stop-color="#FFD700"/>
+                                            <stop offset="50%" stop-color="white" stop-opacity="0"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </span>`;
+                        }
+                        starDiv.innerHTML = stars;
+                        // Adiciona eventos para detectar metade ou inteira
+                        Array.from(starDiv.querySelectorAll('.star-clickable')).forEach((star, idx) => {
+                            star.onmousemove = function (e) {
+                                let rect = star.getBoundingClientRect();
+                                let x = e.clientX - rect.left;
+                                let percent = x / rect.width;
+                                let val = percent < 0.5 ? parseFloat(star.getAttribute('data-value')) : parseFloat(star.getAttribute('data-value')) + 0.5;
+                                renderStarRating(val);
+                            };
+                            star.onclick = function (e) {
+                                let rect = star.getBoundingClientRect();
+                                let x = e.clientX - rect.left;
+                                let percent = x / rect.width;
+                                let val = percent < 0.5 ? parseFloat(star.getAttribute('data-value')) : parseFloat(star.getAttribute('data-value')) + 0.5;
+                                document.getElementById('notaFeedback').value = val;
+                                renderStarRating(val);
+                            };
+                        });
+                        starDiv.onmouseleave = function () {
+                            let val = parseFloat(document.getElementById('notaFeedback').value) || 0;
+                            renderStarRating(val);
+                        };
+                    }
+
+                    // Evento de envio
+                    const btnConfirmarFeedback = document.getElementById('confirmarFeedback');
+                    btnConfirmarFeedback.onclick = async function () {
+                        const nota = parseFloat(document.getElementById('notaFeedback').value);
+                        const comentario = document.getElementById('comentarioFeedback').value.trim();
+                        const feedbackMsg = document.getElementById('feedbackMsg');
+                        if (isNaN(nota) || nota < 0 || nota > 5) {
+                            feedbackMsg.innerText = 'Selecione uma nota válida entre 0 e 5.';
+                            return;
+                        }
+                        if (!comentario) {
+                            feedbackMsg.innerText = 'O comentário é obrigatório.';
+                            return;
+                        }
+                        if (comentario.length > 200) {
+                            feedbackMsg.innerText = 'O comentário deve ter no máximo 200 caracteres.';
+                            return;
+                        }
+                        feedbackMsg.innerText = '';
+                        // Envia feedback
+                        let postEndpoint = '';
+                        if (tipoUsuario === 'freelancer') {
+                            postEndpoint = '/avaliacoes/empresa';
+                        } else {
+                            postEndpoint = '/avaliacoes/freelancer';
+                        }
+                        try {
+                            const resp = await fetch(postEndpoint, {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + token
+                                },
+                                body: JSON.stringify({
+                                    projetoId: id,
+                                    nota: Math.round(nota * 2) / 2, // Garante 0.5 steps
+                                    comentario: comentario
+                                })
+                            });
+                            if (resp.ok) {
+                                modal.hide();
+                                alert('Feedback enviado com sucesso!');
+                                carregarProjects();
+                            } else {
+                                feedbackMsg.innerText = 'Erro ao enviar feedback.';
+                            }
+                        } catch (e) {
+                            feedbackMsg.innerText = 'Erro ao enviar feedback.';
+                        }
+                    };
+                } else {
+                    alert('Você já enviou um feedback para esse projeto');
+                }
+            } catch (e) {
+                alert('Erro ao verificar feedback.');
+            }
+        };
+    });
 }
 
 if (document.getElementById('searchInput')) {

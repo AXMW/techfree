@@ -780,7 +780,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         // Mostra mensagem de projeto concluído
                         let msgConcluido = document.createElement('div');
                         msgConcluido.className = 'msg-projeto-concluido text-info mt-2';
-                        msgConcluido.innerText = 'O projeto foi concluído.';
+                        msgConcluido.innerText = 'O projeto foi encerrado.';
                         linkProjetoContainer.appendChild(msgConcluido);
                     } else {
                         // Botão Alterar Link
