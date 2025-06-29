@@ -68,4 +68,6 @@ public class Projeto {
     public void prePersist() {
         this.dataCriacao = LocalDateTime.now();
     }
+
+    private String anexoAuxiliar;
 }
