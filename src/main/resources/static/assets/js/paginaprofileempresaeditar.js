@@ -114,7 +114,7 @@ function fillPopup(type) {
                     <label class="form-label">E-mail de contato</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                        <input type="text" class="form-control" id="editEmail" placeholder="E-mail" value="${emailContato}">
+                        <input type="text" class="form-control no-margin" id="editEmail" placeholder="E-mail" value="${emailContato}">
                     </div>
                     <div id="editEmailError"></div>
                 </div>
@@ -122,7 +122,7 @@ function fillPopup(type) {
                     <label class="form-label">Telefone de contato</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
-                        <input type="text" class="form-control" id="editTelefone" placeholder="Telefone/WhatsApp" value="${telefoneContato}">
+                        <input type="text" class="form-control no-margin" id="editTelefone" placeholder="Telefone/WhatsApp" value="${telefoneContato}">
                     </div>
                     <div id="editTelefoneError"></div>
                 </div>
@@ -130,7 +130,7 @@ function fillPopup(type) {
                     <label class="form-label">LinkedIn</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-linkedin"></i></span>
-                        <input type="text" class="form-control" id="editLinkedin" placeholder="LinkedIn URL" value="${linkedin}">
+                        <input type="text" class="form-control no-margin" id="editLinkedin" placeholder="LinkedIn URL" value="${linkedin}">
                     </div>
                     <div id="editLinkedinError"></div>
                 </div>
@@ -138,7 +138,7 @@ function fillPopup(type) {
                     <label class="form-label">Site</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-globe"></i></span>
-                        <input type="text" class="form-control" id="editSite" placeholder="Site URL" value="${site}">
+                        <input type="text" class="form-control no-margin" id="editSite" placeholder="Site URL" value="${site}">
                     </div>
                     <div id="editSiteError"></div>
                 </div>

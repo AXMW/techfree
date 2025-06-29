@@ -126,10 +126,6 @@ function preencherSidebar(projeto) {
         <div class="mb-3">
             ${projeto.requisitos.slice(0, 3).map(tec => `<span class="badge badge-tech">${tec}</span>`).join('')}
         </div>
-        <div class="project-anexo">
-            <i class="bi bi-paperclip"></i>
-            <strong>Anexo:</strong> <a href="${projeto.anexo.url}" target="_blank">${projeto.anexo.nome}</a>
-        </div>
         ${candidaturaBtn}
     `;
 }
@@ -174,10 +170,138 @@ document.addEventListener('click', async function (e) {
     }
 });
 
+function renderEditarVagaBtn(projeto) {
+    const tipoUsuario = localStorage.getItem('tipoUsuario');
+    const editarVagaDiv = document.getElementById('editarVagaContainer');
+    if (editarVagaDiv && projeto.status && projeto.status.toUpperCase() === 'ABERTO') {
+        if (tipoUsuario === 'EMPRESA') {
+            editarVagaDiv.innerHTML = `
+                <button id="btnAbrirModalEditarVaga" class="btn btn-warning w-100 mt-3">
+                    <i class="bi bi-pencil-square"></i> Editar Vaga
+                </button>
+            `;
+            document.getElementById('btnAbrirModalEditarVaga').onclick = function() {
+                openEditVagaPopup(projeto);
+            };
+        } else {
+            editarVagaDiv.innerHTML = '';
+        }
+    } else if (editarVagaDiv) {
+        editarVagaDiv.innerHTML = '';
+    }
+}
+
 // Inicialização
 async function inicializar() {
     await carregarDetalhesDoProjeto();
     preencherProjeto(projeto);
     preencherSidebar(projeto);
+    renderEditarVagaBtn(projeto);
 }
 inicializar();
+
+document.getElementById('formEditarVaga').onsubmit = async function(e) {
+    e.preventDefault();
+    const duracao = document.getElementById('editDuracao').value;
+    const emailContato = document.getElementById('editEmailContato').value;
+    const grau = document.getElementById('editGrau').value;
+    const anexoInput = document.getElementById('editAnexo');
+    const token = localStorage.getItem('token');
+
+    // Monta objeto para envio
+    const body = {
+        duracao,
+        emailPraContato: emailContato,
+        grau
+    };
+
+    // Se houver arquivo, faz upload separado (exemplo)
+    if (anexoInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append('file', anexoInput.files[0]);
+        const resp = await fetch(`/api/files/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        if (resp.ok) {
+            body.anexo = await resp.text(); // Supondo que backend retorna URL/nome do arquivo
+        } else {
+            alert('Erro ao enviar arquivo');
+            return;
+        }
+    }
+
+    // Envia atualização do projeto
+    const resp = await fetch(`/projetos/${projetoId}/editar-campos`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(body)
+    });
+
+    if (resp.ok) {
+        // Atualiza campo "Atualizado em"
+        const agora = new Date();
+        const atualizadoEm = agora.toLocaleString('pt-BR');
+        document.getElementById('campoAtualizadoEm').textContent = `Atualizado em: ${atualizadoEm}`;
+        alert('Vaga atualizada com sucesso!');
+        // Opcional: recarregar detalhes do projeto
+        await carregarDetalhesDoProjeto();
+        preencherProjeto(projeto);
+        preencherSidebar(projeto);
+        renderEditarVagaBtn(projeto);
+        // Fecha modal
+        closeEditVagaPopup();
+    } else {
+        alert('Erro ao atualizar vaga');
+    }
+};
+
+function openEditVagaPopup(projeto) {
+    // Preenche campos do modal
+    document.getElementById('editDuracao').value = parseInt(projeto.duracao) || '';
+    document.getElementById('editEmailContato').value = projeto.emailPraContato || '';
+    document.getElementById('editGrau').value = projeto.grau || 'Júnior';
+    document.getElementById('anexoAtual').innerHTML = projeto.anexo && projeto.anexo.nome
+        ? `<span class="text-info">Atual: <a href="${projeto.anexo.url}" target="_blank">${projeto.anexo.nome}</a></span>`
+        : '<span class="text-muted">Nenhum anexo</span>';
+    document.getElementById('campoAtualizadoEm').textContent = projeto.atualizadoEm
+        ? `Atualizado em: ${projeto.atualizadoEm}`
+        : '';
+    document.getElementById('editAnexo').value = '';
+
+    document.getElementById('editVagaOverlay').style.display = 'flex';
+    document.getElementById('editVagaPopup').style.display = 'block';
+}
+
+function closeEditVagaPopup() {
+    document.getElementById('editVagaOverlay').style.display = 'none';
+    document.getElementById('editVagaPopup').style.display = 'none';
+}
+
+// Botão de abrir
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'btnAbrirModalEditarVaga') {
+        openEditVagaPopup(projeto);
+    }
+});
+
+// Certifique-se de que o DOM já carregou
+document.addEventListener('DOMContentLoaded', function() {
+    // Botão de fechar
+    const btnClose = document.getElementById('closeEditVagaPopup');
+    if (btnClose) {
+        btnClose.onclick = closeEditVagaPopup;
+    }
+
+    // Fechar ao clicar fora do modal (no overlay)
+    const overlay = document.getElementById('editVagaOverlay');
+    if (overlay) {
+        overlay.onclick = function(e) {
+            // Fecha só se clicar diretamente no overlay, não no conteúdo do modal
+            if (e.target === overlay) closeEditVagaPopup();
+        };
+    }
+});

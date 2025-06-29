@@ -94,6 +94,24 @@ document.getElementById('vagaForm').addEventListener('submit', async function (e
     const duracao = this.elements.duracao.value;
     const descricao = quill.root.innerHTML; // Aqui vem o HTML formatado
 
+    // Pegue o arquivo
+    const anexoInput = document.getElementById('anexo');
+    let anexoAuxiliar = '';
+    if (anexoInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append('file', anexoInput.files[0]);
+        const resp = await fetch('/api/files/upload', {
+            method: 'POST',
+            body: formData
+        });
+        if (resp.ok) {
+            anexoAuxiliar = await resp.text(); // ou resp.json() dependendo do backend
+        } else {
+            alert('Erro ao enviar arquivo');
+            return;
+        }
+    }
+
     // Monte o objeto conforme seu DTO de registro
     const vaga = {
         titulo: titulo,
@@ -104,8 +122,8 @@ document.getElementById('vagaForm').addEventListener('submit', async function (e
         emailPraContato: email,
         telefonePraContato: telefoneContato,
         duracao: duracao,
-        descricao: descricao
-        // Adicione outros campos se necessário
+        descricao: descricao,
+        anexoAuxiliar: anexoAuxiliar // <-- aqui está o caminho do arquivo
     };
 
     console.log(vaga);
@@ -214,6 +232,47 @@ document.addEventListener('DOMContentLoaded', function () {
             link.setAttribute('rel', 'noopener noreferrer');
         });
     });
+
+    const telefoneInput = document.getElementById('telefone');
+    if (telefoneInput) aplicarMascaraTelefone(telefoneInput);
 });
+
+function aplicarMascaraTelefone(input) {
+    input.addEventListener('input', function() {
+        let v = input.value.replace(/\D/g, '');
+        if (v.length > 11) v = v.slice(0, 11);
+        if (v.length > 0) v = '(' + v;
+        if (v.length > 3) v = v.slice(0, 3) + ') ' + v.slice(3);
+        if (v.length > 10) v = v.slice(0, 10) + '-' + v.slice(10);
+        else if (v.length > 6) v = v.slice(0, 9) + (v.length > 6 ? '-' + v.slice(9) : '');
+        if (v.endsWith('-')) v = v.slice(0, -1);
+        input.value = v;
+    });
+}
+
+// UPLOAD DE ARQUIVO
+const uploadArea = document.getElementById('uploadArea');
+const inputFile = document.getElementById('anexo');
+const nomeArquivo = document.getElementById('nomeArquivoSelecionado');
+const btnSelecionar = document.getElementById('btnSelecionarArquivo');
+
+btnSelecionar.onclick = () => inputFile.click();
+uploadArea.onclick = (e) => {
+    if (e.target === uploadArea) inputFile.click();
+};
+inputFile.onchange = () => {
+    nomeArquivo.textContent = inputFile.files.length ? inputFile.files[0].name : '';
+};
+// Drag and drop (opcional)
+uploadArea.ondragover = e => { e.preventDefault(); uploadArea.classList.add('bg-secondary'); };
+uploadArea.ondragleave = e => { e.preventDefault(); uploadArea.classList.remove('bg-secondary'); };
+uploadArea.ondrop = e => {
+    e.preventDefault();
+    uploadArea.classList.remove('bg-secondary');
+    if (e.dataTransfer.files.length) {
+        inputFile.files = e.dataTransfer.files;
+        nomeArquivo.textContent = inputFile.files[0].name;
+    }
+};
 
 
