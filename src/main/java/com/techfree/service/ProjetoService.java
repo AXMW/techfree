@@ -180,6 +180,7 @@ public class ProjetoService {
         if(dto.getDuracao() != 0) projeto.setDuracao(dto.getDuracao());
         if(dto.getEmailPraContato() != null) projeto.setEmailPraContato(dto.getEmailPraContato());
         if(dto.getMensagem() != null) projeto.setMensagem(dto.getMensagem());
+        if(dto.getAnexoAuxiliar() != null) projeto.setAnexoAuxiliar(dto.getAnexoAuxiliar());
         
         return projetoRepository.save(projeto);
     }

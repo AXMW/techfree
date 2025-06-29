@@ -28,4 +28,6 @@ public class ProjetoRequestDTO {
 
     private String mensagem;
 
+    private String anexoAuxiliar;
+
 }
