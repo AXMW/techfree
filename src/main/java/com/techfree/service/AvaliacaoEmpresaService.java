@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.techfree.dto.AvaliacaoEmpresaRequestDTO;
 import com.techfree.dto.AvaliacaoEmpresaResponseDTO;
@@ -17,6 +18,7 @@ import com.techfree.repository.ProjetoRepository;
 import com.techfree.repository.UsuarioRepository;
 import com.techfree.model.Empresa;
 import com.techfree.repository.EmpresaRepository;
+import org.springframework.http.HttpStatus;
 import com.techfree.model.Usuario;
 import com.techfree.enums.StatusProjeto;
 
@@ -39,21 +41,39 @@ public class AvaliacaoEmpresaService {
 
     public AvaliacaoEmpresaResponseDTO criar(String emailFreelancer, AvaliacaoEmpresaRequestDTO dto) {
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
-            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, 
+                "Projeto não encontrado"
+                ));
 
         Usuario usuario = usuarioRepository.findByEmail(emailFreelancer)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+            "Usuário não encontrado"
+            ));
         Freelancer freelancer = freelancerRepository.findByUsuario(usuario)
-            .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Freelancer não encontrado"
+            ));
         if(projeto.getStatus() != StatusProjeto.CONCLUIDO) {
-            throw new RuntimeException("Projeto não está concluído, avaliação não permitida");
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "Projeto não está concluído, avaliação não permitida"
+                );
         }
         if(!projeto.getFreelancerSelecionado().equals(freelancer)) {
-            throw new RuntimeException("Freelancer não é o selecionado para este projeto");
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Freelancer não é o selecionado para este projeto"
+                );
         }
         repository.findByProjeto(projeto)
             .ifPresent(avaliacao -> {
-                throw new RuntimeException("Avaliação já realizada para este projeto");
+                throw new ResponseStatusException(
+                    HttpStatus.CONFLICT, // 409
+                    "Avaliação já realizada para este projeto"
+                    );
             });
              
 
@@ -71,7 +91,10 @@ public class AvaliacaoEmpresaService {
 
     public List<AvaliacaoEmpresaResponseDTO> obterPorIdDaEmpresa(Long id) {
         Empresa empresa = empresaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Empresa não encontrada"
+                ));
         
         List<AvaliacaoEmpresa> avaliacao = repository.findByEmpresa(empresa);
             
@@ -82,14 +105,20 @@ public class AvaliacaoEmpresaService {
 
     public AvaliacaoEmpresaResponseDTO obterPorId(Long id) {
         AvaliacaoEmpresa avaliacao = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Avaliação não encontrada"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Avaliação não encontrada"
+                ));
         
         return new AvaliacaoEmpresaResponseDTO(avaliacao);
     }
 
     public List<AvaliacaoEmpresaResponseDTO> obterPorIdDoFreelancer(Long id) {
         Freelancer freelancer = freelancerRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Freelancer não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Freelancer não encontrado"
+                ));
         
         List<AvaliacaoEmpresa> avaliacao = repository.findByFreelancer(freelancer);
         
@@ -100,10 +129,16 @@ public class AvaliacaoEmpresaService {
 
     public AvaliacaoEmpresaResponseDTO obterPorIdDoProjeto(Long id) {
         Projeto projeto = projetoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Projeto não encontrado"
+                ));
         
         AvaliacaoEmpresa avaliacao = repository.findByProjeto(projeto)
-            .orElseThrow(() -> new RuntimeException("Avaliação não encontrada para este projeto"));
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, // 404
+                "Avaliação não encontrada para este projeto"
+                ));
         
         return avaliacao != null ? new AvaliacaoEmpresaResponseDTO(avaliacao) : null;
         
