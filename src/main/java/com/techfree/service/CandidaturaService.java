@@ -53,6 +53,14 @@ public class CandidaturaService {
                 "Freelancer não encontrado"
                 ));
 
+        if (usuario.getQuantidadeDeFlags() >= 3) {
+            usuario.setEnabled(false); // Desabilita o usuário se atingir 3 flags
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
+                );
+        }
+
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
@@ -147,6 +155,14 @@ public class CandidaturaService {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Você não tem permissão para alterar esta candidatura"
+                );
+        }
+
+        if (projeto.getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
+            projeto.getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
                 );
         }
 

@@ -119,6 +119,14 @@ public class ProjetoService {
                 "Empresa não encontrada"
                 ));
 
+        if (usuario.getQuantidadeDeFlags() >= 3) {
+            usuario.setEnabled(false); // Desabilita o usuário se atingir 3 flags
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
+                );
+        }
+
         Projeto projeto = new Projeto();
         projeto.setTitulo(dto.getTitulo());
         projeto.setSubtitulo(dto.getSubtitulo());
@@ -166,6 +174,14 @@ public class ProjetoService {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Acesso negado"
+                );
+        }
+
+        if (projeto.getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
+            projeto.getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
                 );
         }
 
@@ -410,6 +426,14 @@ public class ProjetoService {
                 );
         }
 
+        if (projeto.getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
+            projeto.getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
+                );
+        }
+
         projetoRepository.delete(projeto);
     }
 
@@ -424,6 +448,14 @@ public class ProjetoService {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Você não tem permissão para selecionar freelancer nesse projeto."
+                );
+        }
+
+        if (projeto.getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
+            projeto.getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
                 );
         }
 

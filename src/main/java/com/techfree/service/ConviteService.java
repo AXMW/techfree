@@ -56,6 +56,14 @@ public class ConviteService {
                 "Projeto não encontrado"
                 ));
 
+        if (projeto.getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
+            projeto.getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
+                );
+        }
+
         if(projeto.getFreelancerSelecionado() != null) {
             throw new ResponseStatusException(
                 HttpStatus.CONFLICT, // 409
@@ -119,6 +127,14 @@ public class ConviteService {
                 );
         }
 
+        if (convite.getProjeto().getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
+            convite.getProjeto().getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
+                );
+        }
+
         conviteRepository.delete(convite);
     }
 
@@ -133,6 +149,14 @@ public class ConviteService {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Você não tem permissão para aceitar este convite"
+                );
+        }
+
+        if (convite.getFreelancer().getUsuario().getQuantidadeDeFlags() >= 3) {
+            convite.getFreelancer().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
                 );
         }
 
@@ -180,6 +204,14 @@ public class ConviteService {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Você não tem permissão para recusar este convite"
+                );
+        }
+
+        if (convite.getFreelancer().getUsuario().getQuantidadeDeFlags() >= 3) {
+            convite.getFreelancer().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
                 );
         }
 
