@@ -42,4 +42,15 @@ public class NotificacaoService {
         notificacao.setRemetente(remetente);
         notificacaoRepository.save(notificacao);
     }
+
+    public void excluir(Long id, String email) {
+        Notificacao notificacao = notificacaoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Notificação não encontrada"));
+
+        if (!notificacao.getUsuario().getEmail().equals(email)) {
+            throw new RuntimeException("Acesso negado");
+        }
+
+        notificacaoRepository.delete(notificacao);
+    }
 }
