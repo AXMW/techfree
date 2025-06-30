@@ -21,6 +21,7 @@ import com.techfree.repository.EmpresaRepository;
 import org.springframework.http.HttpStatus;
 import com.techfree.model.Usuario;
 import com.techfree.enums.StatusProjeto;
+import com.techfree.enums.TituloDeNotificacao;
 
 @Service
 public class AvaliacaoEmpresaService {
@@ -38,6 +39,9 @@ public class AvaliacaoEmpresaService {
 
     @Autowired
     private EmpresaRepository empresaRepository;
+
+    @Autowired
+    private NotificacaoService notificacaoService;
 
     public AvaliacaoEmpresaResponseDTO criar(String emailFreelancer, AvaliacaoEmpresaRequestDTO dto) {
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
@@ -86,6 +90,10 @@ public class AvaliacaoEmpresaService {
         avaliacao.setDataCriacao(LocalDate.now());
 
         repository.save(avaliacao);
+
+        // Notificar a empresa sobre o novo feedback
+        notificacaoService.criarNotificacao(TituloDeNotificacao.FEEDBACK_RECEBIDO, projeto.getEmpresa().getUsuario(), 
+            "O projeto " + projeto.getTitulo() + " foi cancelado.", null);
         return new AvaliacaoEmpresaResponseDTO(avaliacao);
     }
 
