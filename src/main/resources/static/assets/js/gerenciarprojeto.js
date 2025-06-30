@@ -177,12 +177,12 @@ function renderProjects() {
             </button>
         `;
 
-        // Empresa: editar/desativar/ver candidatos (NÃO mostra baixar certificado)
+        // Empresa: editar/cancelar/ver candidatos (NÃO mostra baixar certificado)
         if (tipoUsuario !== 'freelancer') {
             if (p.status !== 'fechado') {
                 actions += `
                     <button class="btn btn-outline-info btn-sm"><i class="bi bi-pencil"></i> Editar</button>
-                    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-slash-circle"></i> Desativar</button>
+                    <button class="btn btn-outline-danger btn-sm desativar-btn" data-id="${p.id}"><i class="bi bi-slash-circle"></i> Cancelar</button>
                 `;
             }
             if (p.status === 'aberto') {
@@ -198,14 +198,72 @@ function renderProjects() {
                 p.rawStatus &&
                 p.rawStatus.toUpperCase() === 'CONCLUIDO'
             ) {
-                actions += `<button class="btn btn-success btn-sm"><i class="bi bi-download"></i> Baixar certificado</button>`;
+                actions += `<button class="btn btn-success btn-sm baixar-certificado-btn" data-id="${p.id}"><i class="bi bi-download"></i> Baixar certificado</button>`;
             }
+    // Ação do botão Baixar certificado
+    document.querySelectorAll('.baixar-certificado-btn').forEach(btn => {
+        btn.onclick = async function () {
+            const idProjeto = this.getAttribute('data-id');
+            const token = localStorage.getItem('token');
+            try {
+                // Primeiro GET para obter o id do certificado
+                const respCert = await fetch(`/certificados/projetos/${idProjeto}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (!respCert.ok) {
+                    alert('Erro ao buscar certificado do projeto.');
+                    return;
+                }
+                const certData = await respCert.json();
+                const idCertificado = certData.id;
+                if (!idCertificado) {
+                    alert('Certificado não encontrado para este projeto.');
+                    return;
+                }
+                // Segundo GET para baixar o certificado
+                const respDownload = await fetch(`/certificados/${idCertificado}/download`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                if (!respDownload.ok) {
+                    alert('Erro ao baixar o certificado.');
+                    return;
+                }
+                // Baixar arquivo
+                const blob = await respDownload.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                // Tenta obter nome do arquivo do header ou usa padrão
+                let filename = `certificado_${idProjeto}.pdf`;
+                const disposition = respDownload.headers.get('Content-Disposition');
+                if (disposition && disposition.indexOf('filename=') !== -1) {
+                    filename = disposition.split('filename=')[1].replace(/"/g, '').trim();
+                }
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                }, 100);
+            } catch (e) {
+                alert('Erro ao baixar o certificado.');
+            }
+        };
+    });
         }
 
         // Adiciona botão Enviar Feedback para projetos fechados
         if (p.status === 'fechado' && p.rawStatus && p.rawStatus.toUpperCase() !== 'CANCELADO') {
             // Somente se não for cancelado
-            actions += `<button class="btn btn-outline-primary btn-sm enviar-feedback-btn" data-id="${p.id}"><i class="bi bi-star"></i> Enviar Feedback</button>`;
+            actions += `<button class="btn btn-primary btn-sm enviar-feedback-btn" data-id="${p.id}"><i class="bi bi-star"></i> Enviar Feedback</button>`;
         }
 
         if (p.status === 'aberto') {
@@ -285,9 +343,40 @@ function renderProjects() {
     } else {
         // Ação do botão desistir para freelancers
         document.querySelectorAll('.desistir-btn').forEach(btn => {
-            btn.onclick = async function () {
+            btn.onclick = function () {
                 const id = this.getAttribute('data-id');
-                if (confirm('Tem certeza que deseja desistir deste projeto?')) {
+                let modalDesistir = document.getElementById('modalDesistirProjeto');
+                if (!modalDesistir) {
+                    modalDesistir = document.createElement('div');
+                    modalDesistir.className = 'modal fade';
+                    modalDesistir.id = 'modalDesistirProjeto';
+                    modalDesistir.tabIndex = -1;
+                    modalDesistir.innerHTML = `
+                        <div class="modal-dialog" style="min-width: 420px; max-width: 540px;">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Desistir do Projeto</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                            </div>
+                            <div class="modal-body">
+                              Tem certeza que deseja desistir deste projeto? Esta ação não pode ser desfeita.
+                            </div>
+                            <div class="modal-footer d-flex justify-content-center gap-2">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                              <button type="button" class="btn btn-secondary" id="confirmarDesistirProjeto">Confirmar Desistência</button>
+                            </div>
+                          </div>
+                        </div>
+                    `;
+                    document.body.appendChild(modalDesistir);
+                }
+                const modal = new bootstrap.Modal(modalDesistir);
+                modal.show();
+
+                // Remove event listener anterior para evitar múltiplos binds
+                const btnConfirmar = document.getElementById('confirmarDesistirProjeto');
+                btnConfirmar.onclick = null;
+                btnConfirmar.onclick = async function () {
                     const token = localStorage.getItem('token');
                     try {
                         const resp = await fetch(`/projetos/${id}/status/cancelar`, {
@@ -299,14 +388,16 @@ function renderProjects() {
                             }
                         });
                         if (resp.ok) {
-                            await carregarProjects();
+                            modal.hide();
+                            alert('Você desistiu do projeto com sucesso!');
+                            carregarProjects();
                         } else {
                             alert('Erro ao desistir do projeto.');
                         }
                     } catch (e) {
                         alert('Erro ao desistir do projeto.');
                     }
-                }
+                };
             };
         });
     }
@@ -489,6 +580,65 @@ function renderProjects() {
             } catch (e) {
                 alert('Erro ao verificar feedback.');
             }
+        };
+    });
+
+    document.querySelectorAll('.desativar-btn').forEach(btn => {
+        btn.onclick = function () {
+            const id = this.getAttribute('data-id');
+            let modalCancel = document.getElementById('modalCancelarProjeto');
+            if (!modalCancel) {
+                modalCancel = document.createElement('div');
+                modalCancel.className = 'modal fade';
+                modalCancel.id = 'modalCancelarProjeto';
+                modalCancel.tabIndex = -1;
+            modalCancel.innerHTML = `
+                <div class="modal-dialog" style="min-width: 420px; max-width: 540px;">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Cancelar Projeto</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                      Tem certeza que deseja cancelar este projeto? Esta ação não pode ser desfeita.
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center gap-2">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                      <button type="button" class="btn btn-secondary" id="confirmarCancelarProjeto">Confirmar Cancelamento</button>
+                    </div>
+                  </div>
+                </div>
+            `;
+                document.body.appendChild(modalCancel);
+            }
+            const modal = new bootstrap.Modal(modalCancel);
+            modal.show();
+
+            // Remove event listener anterior para evitar múltiplos binds
+            const btnConfirmar = document.getElementById('confirmarCancelarProjeto');
+            btnConfirmar.onclick = null;
+            btnConfirmar.onclick = async function () {
+                const token = localStorage.getItem('token');
+                try {
+                    const resp = await fetch(`/projetos/${id}/status/cancelar`, {
+                        method: 'PUT',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        }
+                    });
+                    if (resp.ok) {
+                        modal.hide();
+                        alert('Projeto cancelado com sucesso!');
+                        carregarProjects();
+                    } else {
+                        alert('Erro ao cancelar o projeto.');
+                    }
+                } catch (e) {
+                    alert('Erro ao cancelar o projeto.');
+                }
+            };
         };
     });
 }
