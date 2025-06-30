@@ -653,3 +653,14 @@ if (document.getElementById('clearFilters')) {
     });
 }
 carregarProjects();
+
+document.addEventListener('DOMContentLoaded', function () {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'fechados') {
+        // Ativa a aba "Fechados"
+        const tabFechados = document.getElementById('tab-fechados');
+        if (tabFechados) {
+            tabFechados.click();
+        }
+    }
+});

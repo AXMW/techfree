@@ -537,3 +537,8 @@
     display: block;
     max-width: 100%;
 }
+
+#notificacoesDropdown.dropdown-menu {
+    min-width: 10px; /* ou o valor que preferir */
+    max-width: 450px;
+}

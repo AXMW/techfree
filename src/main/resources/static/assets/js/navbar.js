@@ -26,14 +26,13 @@ async function carregarNotificacoes() {
         return data.map(n => ({
             id: n.id,
             tituloOriginal: n.titulo, // salva o original para lógica de link
-            // Título: troca _ por espaço e deixa só a primeira letra maiúscula
             titulo: n.titulo
                 .replace(/_/g, ' ')
                 .toLowerCase()
                 .replace(/^\s*\w/, c => c.toUpperCase()),
             detalhes: n.mensagem,
             tempo: formatarTempo(n.data),
-            unread: !n.lida,
+            lida: n.lida, // <-- alterado de unread para lida
             projetoId: n.projetoId,
             link: '' // será preenchido ao renderizar
         }));
@@ -48,7 +47,7 @@ function criarNotificacaoLi(n, idx) {
     const li = document.createElement('li');
     li.innerHTML = `
         <a href="${link}" class="notification-link" style="text-decoration:none;display:block;">
-            <div class="notification-item${n.unread ? ' unread' : ''}">
+            <div class="notification-item${!n.lida ? ' unread' : ''}">
                 <div class="notification-content">
                     <div class="notification-title">${n.titulo}</div>
                     <div class="notification-details">${n.detalhes}</div>
@@ -94,7 +93,7 @@ function renderNotificacoes(quantidade = 3) {
 function atualizarBadgeNotificacoes() {
     const badge = document.querySelector('#dropdownNotificacoes .badge');
     if (!badge) return;
-    const novas = notificacoes.filter(n => n.unread).length;
+    const novas = notificacoes.filter(n => !n.lida).length; // <-- alterado
     if (novas > 0) {
         badge.textContent = novas;
         badge.style.display = '';
@@ -145,13 +144,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (idx !== -1) {
                         const n = notificacoes[idx];
                         const link = getNotificacaoLink(n);
+                        const token = localStorage.getItem('token');
+                        // Marca como lida no backend antes de redirecionar
+                        await fetch(`/notificacoes/${n.id}/lida`, {
+                            method: 'PUT',
+                            headers: { 'Authorization': 'Bearer ' + token }
+                        });
                         if (link && link !== '#') {
                             window.location.href = link;
                         } else {
                             alert('Tipo de notificação desconhecido!');
                         }
                     }
-                    // ... (restante do código para marcar como lida, se necessário)
                 }
             }
 
@@ -341,7 +345,7 @@ function getNotificacaoLink(n) {
         return '#';
     }
     if (rawTitulo === 'PROJETO_CANCELADO') {
-        return '/gerenciar-projetos';
+        return '/gerenciar-projetos?tab=fechados';
     }
     // Se não for nenhum dos casos conhecidos, retorna '#'
     return '#';
