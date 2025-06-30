@@ -373,12 +373,6 @@ public class ProjetoService {
                 "Usuário não encontrado"
                 ));
 
-        flagService.criarFlag(usuario.getId(), id);
-
-        notificacaoService.criarNotificacao(TituloDeNotificacao.PROJETO_CANCELADO, projeto.getEmpresa().getUsuario(), 
-            "O projeto " + projeto.getTitulo() + " foi cancelado.", null, projeto.getId());
-
-        usuario.setQuantidadeDeFlags(usuario.getQuantidadeDeFlags() + 1);
         if (usuario.getQuantidadeDeFlags() >= 3) {
             usuario.setEnabled(false); // Desabilita o usuário se atingir 3 flags
             throw new ResponseStatusException(
@@ -386,6 +380,14 @@ public class ProjetoService {
                 "Usuário desabilitado devido a muitas flags"
                 );
         }
+
+        flagService.criarFlag(usuario.getId(), id);
+
+        notificacaoService.criarNotificacao(TituloDeNotificacao.PROJETO_CANCELADO, projeto.getEmpresa().getUsuario(), 
+            "O projeto " + projeto.getTitulo() + " foi cancelado.", null, projeto.getId());
+
+        usuario.setQuantidadeDeFlags(usuario.getQuantidadeDeFlags() + 1);
+        
         usuarioRepository.save(usuario);
 
         projeto.setStatus(StatusProjeto.CANCELADO);
