@@ -95,7 +95,7 @@ public class AvaliacaoFreelancerService {
 
         // Notificar a empresa sobre o novo feedback
         notificacaoService.criarNotificacao(TituloDeNotificacao.FEEDBACK_RECEBIDO, projeto.getFreelancerSelecionado().getUsuario(), 
-            "O projeto " + projeto.getTitulo() + " foi cancelado.", null);
+            "O projeto " + projeto.getTitulo() + " foi cancelado.", null, projeto.getId());
 
         return new AvaliacaoFreelancerResponseDTO(avaliacao);
     }

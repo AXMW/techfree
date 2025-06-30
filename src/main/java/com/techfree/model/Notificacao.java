@@ -32,6 +32,8 @@ public class Notificacao {
 
     private LocalDateTime data;
 
+    private Long projetoId;
+
     @ManyToOne
     private Usuario remetente;
 

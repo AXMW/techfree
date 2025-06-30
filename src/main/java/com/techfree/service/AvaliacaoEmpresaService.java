@@ -93,7 +93,7 @@ public class AvaliacaoEmpresaService {
 
         // Notificar a empresa sobre o novo feedback
         notificacaoService.criarNotificacao(TituloDeNotificacao.FEEDBACK_RECEBIDO, projeto.getEmpresa().getUsuario(), 
-            "O projeto " + projeto.getTitulo() + " foi cancelado.", null);
+            "O projeto " + projeto.getTitulo() + " foi cancelado.", null, projeto.getId());
         return new AvaliacaoEmpresaResponseDTO(avaliacao);
     }
 

@@ -134,7 +134,7 @@ public class ProjetoService {
         projeto.setAnexoAuxiliar(dto.getAnexoAuxiliar());
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.CRIACAO_DE_PROJETO, usuario, 
-            "Você criou um novo projeto: " + projeto.getTitulo(), null);
+            "Você criou um novo projeto: " + projeto.getTitulo(), null, projeto.getId());
 
         return projetoRepository.save(projeto);
     }
@@ -174,7 +174,7 @@ public class ProjetoService {
         }
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.ALTERACAO_DE_PROJETO, projeto.getEmpresa().getUsuario(), 
-            "O projeto " + projeto.getTitulo() + " foi atualizado.", null);
+            "O projeto " + projeto.getTitulo() + " foi atualizado.", null, projeto.getId());
 
         if(dto.getTitulo() != null) projeto.setTitulo(dto.getTitulo());
         if(dto.getSubtitulo() != null) projeto.setSubtitulo(dto.getSubtitulo());
@@ -239,9 +239,9 @@ public class ProjetoService {
         }
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.PROJETO_FINALIZADO, projeto.getEmpresa().getUsuario(), 
-            "O projeto " + projeto.getTitulo() + " foi concluído.", null);
+            "O projeto " + projeto.getTitulo() + " foi concluído.", null, projeto.getId());
         notificacaoService.criarNotificacao(TituloDeNotificacao.PROJETO_FINALIZADO, projeto.getFreelancerSelecionado().getUsuario(), 
-            "O projeto " + projeto.getTitulo() + " foi concluído.", null);
+            "O projeto " + projeto.getTitulo() + " foi concluído.", null, projeto.getId());
 
         try {
             projeto.setStatus(StatusProjeto.CONCLUIDO);
@@ -286,7 +286,7 @@ public class ProjetoService {
         }
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.ALTERACAO_DE_PROJETO, projeto.getEmpresa().getUsuario(), 
-            "O projeto " + projeto.getTitulo() + " foi colocado em revisão.", null);
+            "O projeto " + projeto.getTitulo() + " foi colocado em revisão.", null, projeto.getId());
 
         try {
             projeto.setStatus(StatusProjeto.REVISAO);
@@ -322,7 +322,7 @@ public class ProjetoService {
         }
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.ALTERACAO_DE_PROJETO, projeto.getEmpresa().getUsuario(), 
-            "O projeto " + projeto.getTitulo() + " foi colocado em andamento.", null);
+            "O projeto " + projeto.getTitulo() + " foi colocado em andamento.", null, projeto.getId());
 
         try {
             projeto.setStatus(StatusProjeto.EM_ANDAMENTO);
@@ -376,7 +376,7 @@ public class ProjetoService {
         flagService.criarFlag(usuario.getId(), id);
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.PROJETO_CANCELADO, projeto.getEmpresa().getUsuario(), 
-            "O projeto " + projeto.getTitulo() + " foi cancelado.", null);
+            "O projeto " + projeto.getTitulo() + " foi cancelado.", null, projeto.getId());
 
         usuario.setQuantidadeDeFlags(usuario.getQuantidadeDeFlags() + 1);
         if (usuario.getQuantidadeDeFlags() >= 3) {
@@ -452,7 +452,7 @@ public class ProjetoService {
 
         // 4️⃣ Cria uma notificação persistente
         notificacaoService.criarNotificacao(TituloDeNotificacao.APROVACAO_DE_CANDIDATURA, freelancer.getUsuario(), 
-            "Você foi selecionado para o projeto: " + projeto.getTitulo(), projeto.getEmpresa().getUsuario());
+            "Você foi selecionado para o projeto: " + projeto.getTitulo(), projeto.getEmpresa().getUsuario(), projeto.getId());
 
         // 5️⃣ Envia um e-mail
         emailService.enviarHtml(

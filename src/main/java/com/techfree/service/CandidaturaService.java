@@ -69,13 +69,13 @@ public class CandidaturaService {
         notificacaoService.criarNotificacao(TituloDeNotificacao.CANDIDATURA_ENVIADA,
             freelancer.getUsuario(),
             "Você se candidatou ao projeto '" + projeto.getTitulo() + "'", 
-            projeto.getEmpresa().getUsuario()
+            projeto.getEmpresa().getUsuario(), projeto.getId()
         );
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.CANDIDATURA_RECEBIDA,
             projeto.getEmpresa().getUsuario(),
             "Você recebeu uma candidatura para o projeto '" + projeto.getTitulo() + "'",
-             freelancer.getUsuario()
+             freelancer.getUsuario(), projeto.getId()
         );
 
         Candidatura candidatura = new Candidatura();
@@ -157,7 +157,7 @@ public class CandidaturaService {
         notificacaoService.criarNotificacao(TituloDeNotificacao.REJEICAO_DE_CANDIDATURA,
             candidatura.getFreelancer().getUsuario(),
             "Sua candidatura para o projeto '" + titulo + "' foi recusada",
-            projeto.getEmpresa().getUsuario()
+            projeto.getEmpresa().getUsuario(), projeto.getId()
         );
 
         emailService.enviarHtml(

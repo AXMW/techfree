@@ -65,7 +65,7 @@ public class ConviteService {
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.CONVITE_DE_EMPRESA, freelancer.getUsuario(), 
             "Você recebeu um convite para o projeto: " + projeto.getTitulo(),
-            projeto.getEmpresa().getUsuario()
+            projeto.getEmpresa().getUsuario(), projeto.getId()
         );
 
         Convite convite = new Convite();
@@ -163,7 +163,7 @@ public class ConviteService {
             TituloDeNotificacao.CONVITE_ACEITO,
             convite.getFreelancer().getUsuario(),
             "O convite para o projeto " + convite.getProjeto().getTitulo() + " foi aceito.",
-            convite.getProjeto().getEmpresa().getUsuario()
+            convite.getProjeto().getEmpresa().getUsuario(), convite.getProjeto().getId()
         );
 
         return convite;
@@ -198,7 +198,7 @@ public class ConviteService {
             TituloDeNotificacao.CONVITE_RECUSADO,
             convite.getFreelancer().getUsuario(),
             "O convite para o projeto " + convite.getProjeto().getTitulo() + " foi recusado.",
-            convite.getProjeto().getEmpresa().getUsuario()
+            convite.getProjeto().getEmpresa().getUsuario(), convite.getProjeto().getId()
         );
 
         return convite;

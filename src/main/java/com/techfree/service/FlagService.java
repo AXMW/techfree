@@ -40,7 +40,7 @@ public class FlagService {
         Usuario usuario = usuarioRepository.findById(usuarioId)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        notificacaoService.criarNotificacao(TituloDeNotificacao.FLAG, usuario, "Você recebeu uma flag por causa de um cancelamento de projeto", null);
+        notificacaoService.criarNotificacao(TituloDeNotificacao.FLAG, usuario, "Você recebeu uma flag por causa de um cancelamento de projeto", null, projetoId);
 
         flagRepository.save(flag);
     }

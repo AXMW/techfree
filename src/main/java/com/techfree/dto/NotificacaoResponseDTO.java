@@ -21,6 +21,8 @@ public class NotificacaoResponseDTO {
 
     private Usuario remetente;
 
+    private Long projetoId;
+
     public NotificacaoResponseDTO(Notificacao n) {
         this.id = n.getId();
         this.titulo = n.getTitulo();
@@ -29,5 +31,6 @@ public class NotificacaoResponseDTO {
         this.lida = n.isLida();
         this.usuario = n.getUsuario();
         this.remetente = n.getRemetente();
+        this.projetoId = n.getProjetoId();
     }
 }

@@ -34,12 +34,13 @@ public class NotificacaoService {
         notificacaoRepository.save(n);
     }
 
-    public void criarNotificacao(TituloDeNotificacao titulo, Usuario usuario, String mensagem, Usuario remetente) {
+    public void criarNotificacao(TituloDeNotificacao titulo, Usuario usuario, String mensagem, Usuario remetente, Long projetoId) {
         Notificacao notificacao = new Notificacao();
         notificacao.setTitulo(titulo);
         notificacao.setUsuario(usuario);
         notificacao.setMensagem(mensagem);
         notificacao.setRemetente(remetente);
+        notificacao.setProjetoId(projetoId);
         notificacaoRepository.save(notificacao);
     }
 

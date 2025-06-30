@@ -61,7 +61,7 @@ public class CertificadoService {
         c.setProjeto(projeto);
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.CERTIFICADO_DE_CONCLUSAO, freelancer.getUsuario(),
-            "Você recebeu um certificado de conclusão", null);
+            "Você recebeu um certificado de conclusão", null, projeto.getId());
 
         certificadoRepository.save(c);
         return new CertificadoResponseDTO(c);
