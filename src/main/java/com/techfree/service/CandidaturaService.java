@@ -53,8 +53,7 @@ public class CandidaturaService {
                 "Freelancer não encontrado"
                 ));
 
-        if (usuario.getQuantidadeDeFlags() >= 3) {
-            usuario.setEnabled(false); // Desabilita o usuário se atingir 3 flags
+        if (!usuario.isEnabled()) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Usuário desabilitado devido a muitas flags"
@@ -158,7 +157,7 @@ public class CandidaturaService {
                 );
         }
 
-        if (projeto.getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
+        if (!projeto.getEmpresa().getUsuario().isEnabled()) {
             projeto.getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403

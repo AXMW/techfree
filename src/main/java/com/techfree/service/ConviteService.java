@@ -56,8 +56,7 @@ public class ConviteService {
                 "Projeto não encontrado"
                 ));
 
-        if (projeto.getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
-            projeto.getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+        if (!projeto.getEmpresa().getUsuario().isEnabled()) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Usuário desabilitado devido a muitas flags"
@@ -127,8 +126,7 @@ public class ConviteService {
                 );
         }
 
-        if (convite.getProjeto().getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
-            convite.getProjeto().getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+        if (!convite.getProjeto().getEmpresa().getUsuario().isEnabled()) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Usuário desabilitado devido a muitas flags"
@@ -152,8 +150,7 @@ public class ConviteService {
                 );
         }
 
-        if (convite.getFreelancer().getUsuario().getQuantidadeDeFlags() >= 3) {
-            convite.getFreelancer().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+        if (!convite.getFreelancer().getUsuario().isEnabled()) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Usuário desabilitado devido a muitas flags"
@@ -207,8 +204,7 @@ public class ConviteService {
                 );
         }
 
-        if (convite.getFreelancer().getUsuario().getQuantidadeDeFlags() >= 3) {
-            convite.getFreelancer().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+        if (!convite.getFreelancer().getUsuario().isEnabled()) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Usuário desabilitado devido a muitas flags"

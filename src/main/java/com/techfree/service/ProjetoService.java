@@ -119,8 +119,7 @@ public class ProjetoService {
                 "Empresa não encontrada"
                 ));
 
-        if (usuario.getQuantidadeDeFlags() >= 3) {
-            usuario.setEnabled(false); // Desabilita o usuário se atingir 3 flags
+        if (!usuario.isEnabled()) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Usuário desabilitado devido a muitas flags"
@@ -178,8 +177,7 @@ public class ProjetoService {
                 );
         }
 
-        if (projeto.getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
-            projeto.getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+        if (!projeto.getEmpresa().getUsuario().isEnabled()) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Usuário desabilitado devido a muitas flags"
@@ -390,8 +388,7 @@ public class ProjetoService {
                 "Usuário não encontrado"
                 ));
 
-        if (usuario.getQuantidadeDeFlags() >= 3) {
-            usuario.setEnabled(false); // Desabilita o usuário se atingir 3 flags
+        if (!usuario.isEnabled()) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Usuário desabilitado devido a muitas flags"
@@ -404,6 +401,9 @@ public class ProjetoService {
             "O projeto " + projeto.getTitulo() + " foi cancelado.", null, projeto.getId());
 
         usuario.setQuantidadeDeFlags(usuario.getQuantidadeDeFlags() + 1);
+        if (usuario.getQuantidadeDeFlags() >= 3) {
+            usuario.setEnabled(false); // Desabilita o usuário se atingir 3 flags
+        }
         
         usuarioRepository.save(usuario);
 
@@ -427,8 +427,7 @@ public class ProjetoService {
                 );
         }
 
-        if (projeto.getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
-            projeto.getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+        if (!projeto.getEmpresa().getUsuario().isEnabled()) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Usuário desabilitado devido a muitas flags"
@@ -452,8 +451,7 @@ public class ProjetoService {
                 );
         }
 
-        if (projeto.getEmpresa().getUsuario().getQuantidadeDeFlags() >= 3) {
-            projeto.getEmpresa().getUsuario().setEnabled(false); // Desabilita o usuário se atingir 3 flags
+        if (!projeto.getEmpresa().getUsuario().isEnabled()) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, // 403
                 "Usuário desabilitado devido a muitas flags"
