@@ -526,3 +526,14 @@
     color: #ffffff !important;
     transition: background 0.15s;
 }
+
+/* Permitir quebra de linha e mostrar texto completo nas notificações */
+#mainNav .notification-title,
+#mainNav .notification-details {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    word-break: break-word;
+    display: block;
+    max-width: 100%;
+}

@@ -10,105 +10,44 @@ if (faqSearch) {
     });
 }
 
-// Exemplo de notificações em JSON
-const notificacoes = [
-    {
-        titulo: "Novo comentário",
-        detalhes: 'Projeto Z: "Gostei da sua ideia, podemos conversar?"',
-        tempo: "5 min",
-        unread: true,
-        link: "/projetos/123"
-    },
-    {
-        titulo: "Novo seguidor",
-        detalhes: 'João Silva começou a seguir você.',
-        tempo: "10 min",
-        unread: true,
-        link: "/perfil/joao-silva"
-    },
-    {
-        titulo: "Nova mensagem no projeto X",
-        detalhes: 'Projeto X: "Preciso de um desenvolvedor para app mobile..."',
-        tempo: "2h",
-        unread: true,
-        link: "/mensagens"
-    },
-    {
-        titulo: "Mensagem do suporte",
-        detalhes: 'Seu chamado foi respondido pelo suporte técnico.',
-        tempo: "3 horas",
-        unread: false,
-        link: "/suporte"
-    },
-    {
-        titulo: "Atualização de proposta",
-        detalhes: 'Sua proposta para o projeto "Dashboard" foi atualizada.',
-        tempo: "8h",
-        unread: false,
-        link: "/propostas"
-    },
-    {
-        titulo: "Seu perfil foi atualizado",
-        detalhes: "As alterações no seu perfil foram salvas com sucesso.",
-        tempo: "1 dia",
-        unread: false,
-        link: "/minha-conta.html"
-    },
-    {
-        titulo: "Pagamento recebido",
-        detalhes: 'Você recebeu um pagamento de R$ 500,00 pelo projeto "App Delivery".',
-        tempo: "2 dias",
-        unread: false,
-        link: "/financeiro"
-    },
-    {
-        titulo: "Prazo de entrega alterado",
-        detalhes: 'O prazo do projeto "Landing Page" foi alterado para 30/06.',
-        tempo: "2 dias",
-        unread: false,
-        link: "/projetos/landing-page"
-    },
-    {
-        titulo: "Proposta recebida",
-        detalhes: 'Projeto Y: "Temos interesse em sua proposta, confira os detalhes."',
-        tempo: "3 dias",
-        unread: false,
-        link: "/propostas"
-    },
-    {
-        titulo: "Projeto finalizado",
-        detalhes: 'O projeto "Landing Page" foi marcado como concluído.',
-        tempo: "4 dias",
-        unread: false,
-        link: "/projetos/landing-page"
-    },
-    {
-        titulo: "Seu perfil foi atualizado",
-        detalhes: "As alterações no seu perfil foram salvas com sucesso.",
-        tempo: "1 dia",
-        unread: false,
-        link: "/minha-conta.html"
-    },
-    {
-        titulo: "Avaliação recebida",
-        detalhes: 'Você recebeu uma nova avaliação 5 estrelas no projeto "Site Portfólio".',
-        tempo: "6 dias",
-        unread: false,
-        link: "/avaliacoes"
-    },
-    {
-        titulo: "Convite para projeto",
-        detalhes: 'Empresa ABC convidou você para participar do projeto "E-commerce".',
-        tempo: "1 semana",
-        unread: false,
-        link: "/projetos/e-commerce"
+// Buscar notificações do backend
+let notificacoes = [];
+
+async function carregarNotificacoes() {
+    const token = localStorage.getItem('token');
+    if (!token) return [];
+    try {
+        const resp = await fetch('/notificacoes', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!resp.ok) throw new Error('Erro ao buscar notificações');
+        const data = await resp.json();
+        // Mapeia para o formato usado no frontend
+        return data.map(n => ({
+            id: n.id,
+            tituloOriginal: n.titulo, // salva o original para lógica de link
+            // Título: troca _ por espaço e deixa só a primeira letra maiúscula
+            titulo: n.titulo
+                .replace(/_/g, ' ')
+                .toLowerCase()
+                .replace(/^\s*\w/, c => c.toUpperCase()),
+            detalhes: n.mensagem,
+            tempo: formatarTempo(n.data),
+            unread: !n.lida,
+            projetoId: n.projetoId,
+            link: '' // será preenchido ao renderizar
+        }));
+    } catch (e) {
+        return [];
     }
-];
+}
 
 function criarNotificacaoLi(n, idx) {
+    // Gera o link dinâmico
+    const link = getNotificacaoLink(n);
     const li = document.createElement('li');
     li.innerHTML = `
-        <a href="${n.link}" class="notification-link" style="text-decoration:none;display:block;">
+        <a href="${link}" class="notification-link" style="text-decoration:none;display:block;">
             <div class="notification-item${n.unread ? ' unread' : ''}">
                 <div class="notification-content">
                     <div class="notification-title">${n.titulo}</div>
@@ -169,37 +108,68 @@ function atualizarBadgeNotificacoes() {
 document.addEventListener('DOMContentLoaded', function () {
     renderNotificacoes(notificacoesVisiveis);
 
-    // Delegação de eventos para remover notificação
     const notificacoesDropdown = document.getElementById('notificacoesDropdown');
     if (notificacoesDropdown) {
-        notificacoesDropdown.addEventListener('click', function (e) {
+        notificacoesDropdown.addEventListener('click', async function (e) {
+            // Remover notificação (X)
             if (e.target.closest('.notification-remove')) {
                 e.stopPropagation();
                 e.preventDefault();
                 const notificationItem = e.target.closest('.notification-item');
                 if (notificationItem) {
-                    const li = notificationItem.closest('li');
                     const title = notificationItem.querySelector('.notification-title').textContent;
                     const details = notificationItem.querySelector('.notification-details').textContent;
                     const idx = notificacoes.findIndex(n => n.titulo === title && n.detalhes === details);
                     if (idx !== -1) {
+                        const id = notificacoes[idx].id;
+                        const token = localStorage.getItem('token');
+                        await fetch(`/notificacoes/${id}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': 'Bearer ' + token }
+                        });
                         notificacoes.splice(idx, 1);
                         notificacoesVisiveis = Math.max(0, notificacoesVisiveis - 1);
                         renderNotificacoes(notificacoesVisiveis);
                     }
                 }
             }
-        });
 
-        // Evento para ver mais notificações (+3 por clique)
-        notificacoesDropdown.addEventListener('click', function (e) {
+            // Marcar como lida ao clicar no link
+            if (e.target.closest('.notification-link')) {
+                e.preventDefault();
+                const notificationItem = e.target.closest('.notification-item');
+                if (notificationItem) {
+                    const title = notificationItem.querySelector('.notification-title').textContent;
+                    const details = notificationItem.querySelector('.notification-details').textContent;
+                    const idx = notificacoes.findIndex(n => n.titulo === title && n.detalhes === details);
+                    if (idx !== -1) {
+                        const n = notificacoes[idx];
+                        const link = getNotificacaoLink(n);
+                        if (link && link !== '#') {
+                            window.location.href = link;
+                        } else {
+                            alert('Tipo de notificação desconhecido!');
+                        }
+                    }
+                    // ... (restante do código para marcar como lida, se necessário)
+                }
+            }
+
+            // Ver mais notificações
             if (e.target && e.target.id === 'verMaisBtn') {
                 e.stopPropagation();
+                e.preventDefault();
                 notificacoesVisiveis = Math.min(notificacoesVisiveis + 3, notificacoes.length);
                 renderNotificacoes(notificacoesVisiveis);
             }
         });
     }
+});
+
+// Carregar e renderizar notificações ao iniciar
+document.addEventListener('DOMContentLoaded', async function () {
+    notificacoes = await carregarNotificacoes();
+    renderNotificacoes(notificacoesVisiveis);
 });
 
 // Perfil e botões dinâmicos
@@ -339,4 +309,55 @@ if (projetoDropdown) {
     projetoDropdown.addEventListener('hide.bs.dropdown', function () {
         projetoDropdown.classList.remove('active');
     });
+}
+
+// Lista de títulos que levam para detalhes do projeto
+const TITULOS_PROJETO = [
+    'ALTERACAO_DE_PROJETO',
+    'APROVACAO_DE_CANDIDATURA',
+    'REJEICAO_DE_CANDIDATURA',
+    'CONVITE_DE_EMPRESA',
+    'CERTIFICADO_DE_CONCLUSAO',
+    'PROJETO_ENTREGUE',
+    'CANDIDATURA_ENVIADA',
+    'CONVITE_ACEITO',
+    'CONVITE_RECUSADO',
+    'CRIACAO_DE_PROJETO',
+    'PROJETO_FINALIZADO',
+    'CANDIDATURA_RECEBIDA'
+];
+
+// Função para decidir o link da notificação (NÃO chama alert aqui!)
+function getNotificacaoLink(n) {
+    const rawTitulo = n.tituloOriginal;
+    const tipoUsuario = localStorage.getItem('tipoUsuario');
+    if (rawTitulo === 'FLAG' || rawTitulo === 'FEEDBACK_RECEBIDO') {
+        if (tipoUsuario === 'EMPRESA') return '/pagina-profile-empresa';
+        if (tipoUsuario === 'FREELANCER') return '/pagina-profile';
+        return '/pagina-profile';
+    }
+    if (TITULOS_PROJETO.includes(rawTitulo)) {
+        if (n.projetoId) return `/detalhes-projeto/${n.projetoId}`;
+        return '#';
+    }
+    if (rawTitulo === 'PROJETO_CANCELADO') {
+        return '/gerenciar-projetos';
+    }
+    // Se não for nenhum dos casos conhecidos, retorna '#'
+    return '#';
+}
+
+// Função para formatar o tempo da notificação
+function formatarTempo(dataIso) {
+    const data = new Date(dataIso);
+    const agora = new Date();
+    const diffMs = agora - data;
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return 'agora';
+    if (diffMin < 60) return `${diffMin} min`;
+    const diffH = Math.floor(diffMin / 60);
+    if (diffH < 24) return `${diffH}h`;
+    const diffD = Math.floor(diffH / 24);
+    if (diffD < 7) return `${diffD} dia${diffD > 1 ? 's' : ''}`;
+    return data.toLocaleDateString('pt-BR');
 }
