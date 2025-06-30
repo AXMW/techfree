@@ -140,11 +140,12 @@ public class ProjetoService {
         projeto.setStatus(StatusProjeto.ABERTO);
         projeto.setEmpresa(empresa);
         projeto.setAnexoAuxiliar(dto.getAnexoAuxiliar());
+        projeto = projetoRepository.save(projeto);
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.CRIACAO_DE_PROJETO, usuario, 
             "Você criou um novo projeto: " + projeto.getTitulo(), null, projeto.getId());
 
-        return projetoRepository.save(projeto);
+        return projeto;
     }
 
     public List<Projeto> listarPorEmpresa(String emailEmpresa) {
