@@ -56,12 +56,11 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async fu
 
     e.preventDefault();
 
-    // Pegue o token e email (ajuste conforme sua lógica)
-    const urlParams = new URLSearchParams(window.location.search);
-    // const token = urlParams.get('token');
-    // const email = urlParams.get('email');
+    // Pega o token da URL (formato /reset-password/{token})
+    const pathParts = window.location.pathname.split('/');
+    const token = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
 
-    if (!token || !email) {
+    if (!token) {
         alert('Link inválido ou expirado.');
         return;
     }
@@ -71,7 +70,6 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async fu
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                email: email,
                 token: token,
                 novaSenha: senha
             })

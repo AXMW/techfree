@@ -148,7 +148,7 @@ public class AuthenticationService {
 
     public void solicitarRecuperacaoSenha(RecuperarSenhaRequestDTO dto) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(dto.email());
-        if (usuarioOpt.isEmpty()) throw new RuntimeException("Usuário não encontrado");
+        if (usuarioOpt.isEmpty()) return; // Não existe usuário com esse email
 
         String token = UUID.randomUUID().toString(); // ou um JWT
 
@@ -158,7 +158,7 @@ public class AuthenticationService {
         tokenEntity.setExpiracao(LocalDateTime.now().plusHours(1));
         tokenRepository.save(tokenEntity);
 
-        String link = "http://localhost:8080/auth/resetar-senha?token=" + token;
+        String link = "http://localhost:8080/reset-password/" + token;
 
         emailService.enviarEmail(
             dto.email(),

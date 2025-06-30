@@ -170,12 +170,12 @@ public class PaginaController {
         return "publicarVaga";
     }
 
-    @GetMapping("/reset-password1")
+    @GetMapping("/reset-password-request")
     public String resetPassword1() {
         return "resetPassword1";
     }
 
-    @GetMapping("/reset-password2")
+    @GetMapping("/reset-password/{token}")
     public String resetPassword2() {
         return "resetPassword2";
     }
