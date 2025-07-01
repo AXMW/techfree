@@ -103,15 +103,38 @@ function renderProfile(profile) {
 
     // Feedbacks (apenas os 3 últimos enviados)
     let feedbacksHtml = (profile.feedbacks || [])
-        .slice() // cópia
-        .reverse() // mais recentes primeiro
-        .slice(0, 3) // pega os 3 últimos
-        .map(fb => `
-            <div class="profile-feedback">
-                <strong>Empresa: ${fb.empresa}</strong><br>
-                "${fb.texto}"
-            </div>
-        `).join('');
+        .slice()
+        .reverse()
+        .slice(0, 3)
+        .map(fb => {
+            let nota = typeof fb.nota === 'number' ? fb.nota : 0;
+            let data = fb.dataCriacao ? new Date(fb.dataCriacao).toLocaleDateString('pt-BR') : '';
+            let comentario = fb.comentario || fb.texto || '';
+            let nomeEmpresa = fb.nomeEmpresa || fb.empresa || '-';
+            let tituloProjeto = fb.tituloProjeto || '';
+            // Estrelas amarelas e menores
+            let stars = '';
+            let fullStars = Math.floor(nota);
+            let halfStar = nota % 1 >= 0.5;
+            for (let i = 0; i < 5; i++) {
+                if (i < fullStars) {
+                    stars += '<i class="bi bi-star-fill" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                } else if (i === fullStars && halfStar) {
+                    stars += '<i class="bi bi-star-half" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                } else {
+                    stars += '<i class="bi bi-star" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                }
+            }
+            return `
+                <div class="profile-feedback mb-3">
+                    <div><strong>Data:</strong> ${data}</div>
+                    <div><strong>Empresa:</strong> ${nomeEmpresa}</div>
+                    <div><strong>Projeto:</strong> ${tituloProjeto}</div>
+                    <div><strong>Nota:</strong> ${nota.toFixed(1)} ${stars}</div>
+                    <div><strong>Comentário:</strong> "${comentario}"</div>
+                </div>
+            `;
+        }).join('');
 
     // Monta o HTML (sem email, telefone e sem flags)
     document.querySelector('.profile-header').innerHTML = `
