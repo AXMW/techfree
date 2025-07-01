@@ -1,4 +1,5 @@
 // Variáveis globais para os dados do perfil
+
 let nomeFantasia = '';
 let bio = '';
 let avatar = '';
@@ -7,13 +8,16 @@ let telefoneContato = '';
 let linkedin = '';
 let site = '';
 let descricao = '';
+let assinaturaPath = '';
 let currentPopupType = '';
 
 // Variável para armazenar o preview da imagem do avatar
 let avatarPreviewDataUrl = '';
-
 // Variável para armazenar o preview anterior da imagem do avatar, antes da edição
 let avatarPreviewDataUrlBeforeEdit = '';
+// Variável para armazenar o preview da assinatura
+let assinaturaPreviewDataUrl = '';
+let assinaturaPreviewDataUrlBeforeEdit = '';
 
 // Função de máscara para telefone
 function aplicarMascaraTelefone(input) {
@@ -42,6 +46,8 @@ async function carregarPerfilEmpresa() {
     linkedin = data.linkedin || '';
     site = data.site || '';
     descricao = data.bio || '';
+    assinaturaPath = data.assinaturaPath || '';
+    assinaturaPreviewDataUrl = '';
     renderEmpresaProfile();
 }
 
@@ -51,7 +57,7 @@ function renderEmpresaProfile() {
     profileHeader.classList.add('d-flex', 'align-items-center');
     profileHeader.innerHTML = `
         <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="header" title="Editar"><i class="bi bi-pencil-square"></i></button>
-        <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa">
+        <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa" style="object-fit: cover;">
         <div class="profile-info flex-grow-1">
             <h2>${nomeFantasia}</h2>
             <div class="role mb-1">${areaatuacao}</div>
@@ -95,12 +101,24 @@ function fillPopup(type) {
             title.textContent = 'Editar Dados da Empresa';
             html = `
         <div class="mb-3 text-center">
-            <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" id="avatarPreview" class="rounded-circle mb-2" style="width:90px;height:90px;object-fit:contain;border:3px solid #FF6F00;background:#fff;">
+            <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" id="avatarPreview" class="rounded-circle mb-2" style="width:90px;height:90px;object-fit:cover;border:3px solid #FF6F00;background:#fff;">
             <div>
                 <label class="form-label d-block">Logo</label>
-                <input type="file" class="form-control mb-2" id="avatarInput" style="padding: 0 1.1rem !important; height: 50px; align-content: center;" accept="image/*">
+                <input type="file" class="form-control mb-2" id="avatarInput" style="padding: 0 1.1rem !important; height: 50px; align-content: center; margin-bottom: 2.2rem !important;" accept="image/*">
                 <input type="hidden" id="avatarUrlInput" value="${avatarPreviewDataUrl || avatar || ''}">
             </div>
+        </div>
+        <div class="mb-3 text-center">
+            <div>
+                <label class="form-label d-block" style="margin-bottom:1.2rem;">Assinatura</label>
+                ${(assinaturaPreviewDataUrl || assinaturaPath) ? `<div><img src="${assinaturaPreviewDataUrl || assinaturaPath}" id="assinaturaPreview" class="mb-2" style="width:220px;height:110px;object-fit:contain;border:2px solid #FF6F00;background:#fff;"></div>` : ''}
+                <input type="file" class="form-control mb-2" id="assinaturaInput" style="padding: 0 1.1rem !important; height: 50px; align-content: center; margin-bottom:2.2rem !important;" accept="image/png">
+                <input type="hidden" id="assinaturaUrlInput" value="${assinaturaPreviewDataUrl || assinaturaPath || ''}">
+            </div>
+        </div>
+        <div class="mb-3" style="margin-top:2.2rem;">
+            <label class="form-label">Nome da Empresa</label>
+            <input type="text" class="form-control" id="editNome" value="${nomeFantasia}">
         </div>
                 <div class="mb-3">
                     <label class="form-label">Nome da Empresa</label>
@@ -159,7 +177,7 @@ function fillPopup(type) {
     }
     fields.innerHTML = html;
 
-    // Avatar preview ao selecionar arquivo
+    // Avatar e assinatura preview ao selecionar arquivo
     if (type === 'header') {
         const avatarInput = document.getElementById('avatarInput');
         const avatarPreview = document.getElementById('avatarPreview');
@@ -177,6 +195,66 @@ function fillPopup(type) {
                 avatarInput._selectedFile = file; // Guarda o arquivo para upload posterior
             }
         });
+        // Assinatura preview ao selecionar arquivo
+        const assinaturaInput = document.getElementById('assinaturaInput');
+        const assinaturaPreview = document.getElementById('assinaturaPreview');
+        const assinaturaUrlInput = document.getElementById('assinaturaUrlInput');
+        assinaturaInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.type !== 'image/png') {
+                    showModalAssinaturaPng();
+                    assinaturaInput.value = '';
+                    assinaturaInput._selectedFile = null;
+                    assinaturaPreviewDataUrl = '';
+                    assinaturaUrlInput.value = '';
+                    assinaturaPreview.src = 'assets/img/default-signature.png';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function (ev) {
+                    assinaturaPreview.src = ev.target.result;
+                    assinaturaPreviewDataUrl = ev.target.result;
+                    assinaturaUrlInput.value = ev.target.result;
+                };
+                reader.readAsDataURL(file);
+                assinaturaInput._selectedFile = file; // Guarda o arquivo para upload posterior
+            } else {
+                assinaturaPreview.src = assinaturaPath || 'assets/img/default-signature.png';
+            }
+        });
+
+// Função para mostrar modal de erro de assinatura PNG
+function showModalAssinaturaPng() {
+    let modal = document.getElementById('assinaturaPngModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'assinaturaPngModal';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.5)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '9999';
+        modal.innerHTML = `
+            <div style="background:#fff;padding:2rem 2.5rem;border-radius:1rem;min-width:320px;max-width:90vw;text-align:center;box-shadow:0 2px 16px #0002;">
+                <h5 style="color:#FF6F00;font-weight:700;">Atenção</h5>
+                <p style="margin:1.5rem 0 2rem 0;">O arquivo de assinatura deve estar no formato de PNG.</p>
+                <button id="closeAssinaturaPngModal" class="btn btn-warning" style="font-weight:700;min-width:120px;">OK</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.getElementById('closeAssinaturaPngModal').onclick = function() {
+            modal.style.display = 'none';
+        };
+    } else {
+        modal.style.display = 'flex';
+    }
+}
         // Aplica máscara ao telefone
         const telefoneInput = document.getElementById('editTelefone');
         if (telefoneInput) aplicarMascaraTelefone(telefoneInput);
@@ -192,6 +270,7 @@ document.body.addEventListener('click', function (e) {
         currentPopupType = type;
         if (type === 'header') {
             avatarPreviewDataUrlBeforeEdit = avatarPreviewDataUrl;
+            assinaturaPreviewDataUrlBeforeEdit = assinaturaPreviewDataUrl;
         }
         fillPopup(type);
         overlay.classList.add('active');
@@ -210,9 +289,12 @@ getPopupElements().closeBtn.onclick = function() {
     closeOverlay();
     if (currentPopupType === 'header') {
         avatarPreviewDataUrl = avatarPreviewDataUrlBeforeEdit;
+        assinaturaPreviewDataUrl = assinaturaPreviewDataUrlBeforeEdit;
         // Limpa o arquivo selecionado ao fechar/cancelar
         const avatarInput = document.getElementById('avatarInput');
         if (avatarInput) avatarInput._selectedFile = null;
+        const assinaturaInput = document.getElementById('assinaturaInput');
+        if (assinaturaInput) assinaturaInput._selectedFile = null;
     }
 };
 getPopupElements().overlay.onclick = function(e) {
@@ -220,9 +302,12 @@ getPopupElements().overlay.onclick = function(e) {
         closeOverlay();
         if (currentPopupType === 'header') {
             avatarPreviewDataUrl = avatarPreviewDataUrlBeforeEdit;
+            assinaturaPreviewDataUrl = assinaturaPreviewDataUrlBeforeEdit;
             // Limpa o arquivo selecionado ao fechar/cancelar
             const avatarInput = document.getElementById('avatarInput');
             if (avatarInput) avatarInput._selectedFile = null;
+            const assinaturaInput = document.getElementById('assinaturaInput');
+            if (assinaturaInput) assinaturaInput._selectedFile = null;
         }
     }
 };
@@ -288,6 +373,10 @@ document.getElementById('editForm').onsubmit = async function (e) {
         if (avatarPreview) {
             avatarPreviewDataUrl = avatarPreview.src;
         }
+        const assinaturaPreview = document.getElementById('assinaturaPreview');
+        if (assinaturaPreview) {
+            assinaturaPreviewDataUrl = assinaturaPreview.src;
+        }
         nomeFantasia = document.getElementById('editNome')?.value || '';
         areaatuacao = document.getElementById('editCargo')?.value || '';
         emailContato = emailVal;
@@ -316,9 +405,30 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
         });
         if (resp.ok) {
             avatar = await resp.text(); // Atualiza o avatar com a URL real
-            avatarPreviewDataUrl = ''; // Limpa o preview local
+            avatarPreviewDataUrl = '';
         } else {
             alert('Erro ao enviar imagem');
+            return;
+        }
+    }
+
+    // Se houver um novo arquivo de assinatura selecionado, faça o upload agora
+    if (document.getElementById('assinaturaInput')?._selectedFile) {
+        const file = document.getElementById('assinaturaInput')._selectedFile;
+        const formData = new FormData();
+        formData.append('file', file);
+        if (assinaturaPath) {
+            formData.append('oldFile', assinaturaPath);
+        }
+        const resp = await fetch('/empresa/upload-assinatura', {
+            method: 'POST',
+            body: formData
+        });
+        if (resp.ok) {
+            assinaturaPath = await resp.text(); // Atualiza o path da assinatura
+            assinaturaPreviewDataUrl = '';
+        } else {
+            alert('Erro ao enviar assinatura');
             return;
         }
     }
@@ -331,7 +441,8 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
         telefoneContato,
         linkedin,
         site,
-        bio: descricao
+        bio: descricao,
+        assinaturaPath
     };
     const resp = await fetch('/empresa/perfil', {
         method: 'PUT',
@@ -347,7 +458,7 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
 };
 
 function calcularProgressoEmpresa() {
-    // Campos obrigatórios para o perfil estar completo
+    // Campos obrigatórios para o perfil estar completo, incluindo assinatura
     const campos = [
         { nome: 'Nome da Empresa', valor: nomeFantasia },
         { nome: 'Atuação', valor: areaatuacao },
@@ -356,7 +467,8 @@ function calcularProgressoEmpresa() {
         { nome: 'Telefone de contato', valor: telefoneContato },
         { nome: 'LinkedIn', valor: linkedin },
         { nome: 'Site', valor: site },
-        { nome: 'Sobre', valor: descricao }
+        { nome: 'Sobre', valor: descricao },
+        { nome: 'Assinatura', valor: assinaturaPath }
     ];
     const preenchidos = campos.filter(c => c.valor && c.valor.trim() !== '');
     const percent = Math.round((preenchidos.length / campos.length) * 100);

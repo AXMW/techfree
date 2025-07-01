@@ -126,7 +126,7 @@ function renderProfile(profile) {
 
     document.querySelector('.profile-header').innerHTML = `
         <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="header" title="Editar"><i class="bi bi-pencil-square"></i></button>
-        <img src="${avatarPreviewDataUrl || profile.avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Avatar do Usuário">
+        <img src="${avatarPreviewDataUrl || profile.avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Avatar do Usuário" style="object-fit: cover;">
         <div class="profile-info flex-grow-1">
             <h2>${profile.nome || ''}</h2>
             <div class="role mb-1">${profile.areaAtuacao || ''}</div>
