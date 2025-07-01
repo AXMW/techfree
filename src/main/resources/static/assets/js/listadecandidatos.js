@@ -61,7 +61,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function renderCandidatos() {
-        candidatesList.innerHTML = '';
+        // Abas: Pendentes e Recusados
+        const listPendentes = document.getElementById('candidates-list-pendentes');
+        const listRecusados = document.getElementById('candidates-list-recusados');
+        const paginationEl = document.querySelector('#pendentes .pagination');
+        if (listPendentes) listPendentes.innerHTML = '';
+        if (listRecusados) listRecusados.innerHTML = '';
+        if (paginationEl) paginationEl.innerHTML = '';
 
         // Separar candidatos pendentes e recusados
         const pendentes = candidatosFiltrados.filter(c => c.status !== 'RECUSADA');
@@ -74,17 +80,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Renderizar pendentes
         if (pagePendentes.length) {
-            const pendentesHeader = document.createElement('h4');
-            pendentesHeader.className = 'mb-3 text-info';
-            pendentesHeader.textContent = 'Candidatos Pendentes';
-            candidatesList.appendChild(pendentesHeader);
-
             pagePendentes.forEach(c => {
                 const card = document.createElement('div');
                 card.className = 'candidate-card';
-
                 card.innerHTML = `
-                    <img src="https://randomuser.me/api/portraits/men/${c.freelancerId % 99}.jpg" class="candidate-avatar" alt="Avatar">
+                    <img src="${c.freelancerAvatar ? c.freelancerAvatar : `https://randomuser.me/api/portraits/men/${c.freelancerId % 99}.jpg`}" class="candidate-avatar" alt="Avatar">
                     <div class="candidate-info">
                         <h5>${c.freelancerNome || 'Nome não informado'}</h5>
                         ${c.freelancerAreaDeAtuacao ? `<span class="badge bg-info">${c.freelancerAreaDeAtuacao}</span>` : ''}
@@ -95,28 +95,22 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <div class="candidate-actions">
                         <button class="btn btn-success btn-sm aprovar-btn" data-freelancer-id="${c.freelancerId}" data-projeto-id="${projetoId}" data-candidatura-id="${c.id}"><i class="bi bi-check-circle"></i> Aprovar</button>
                         <button class="btn btn-danger btn-sm recusar-btn" data-freelancer-id="${c.freelancerId}" data-projeto-id="${projetoId}" data-candidatura-id="${c.id}"><i class="bi bi-x-circle"></i> Rejeitar</button>
-                        <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Ver Perfil</a>
+                        <a href="/ver-perfil-freelancer/${c.freelancerId}" class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Ver Perfil</a>
                     </div>
                 `;
-                candidatesList.appendChild(card);
+                listPendentes.appendChild(card);
             });
-        } else {
-            candidatesList.innerHTML += `<div class="text-center text-muted py-3">Nenhum candidato pendente encontrado para este projeto.</div>`;
+        } else if (listPendentes) {
+            listPendentes.innerHTML = `<div class="text-center text-muted py-3">Nenhum candidato pendente encontrado para este projeto.</div>`;
         }
 
         // Renderizar recusados (sem paginação)
         if (recusados.length) {
-            const recusadosHeader = document.createElement('h4');
-            recusadosHeader.className = 'mb-3 mt-4 text-danger';
-            recusadosHeader.textContent = 'Candidatos Recusados';
-            candidatesList.appendChild(recusadosHeader);
-
             recusados.forEach(c => {
                 const card = document.createElement('div');
                 card.className = 'candidate-card';
-
                 card.innerHTML = `
-                    <img src="https://randomuser.me/api/portraits/men/${c.freelancerId % 99}.jpg" class="candidate-avatar" alt="Avatar">
+                    <img src="${c.freelancerAvatar ? c.freelancerAvatar : `https://randomuser.me/api/portraits/men/${c.freelancerId % 99}.jpg`}" class="candidate-avatar" alt="Avatar">
                     <div class="candidate-info">
                         <h5>${c.freelancerNome || 'Nome não informado'}</h5>
                         ${c.freelancerAreaDeAtuacao ? `<span class="badge bg-info">${c.freelancerAreaDeAtuacao}</span>` : ''}
@@ -126,11 +120,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <div class="mt-2"><span class="badge bg-danger">Candidato Recusado</span></div>
                     </div>
                     <div class="candidate-actions">
-                        <a href="#" class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Ver Perfil</a>
+                        <a href="/ver-perfil-freelancer/${c.freelancerId}" class="btn btn-outline-light btn-sm"><i class="bi bi-eye"></i> Ver Perfil</a>
                     </div>
                 `;
-                candidatesList.appendChild(card);
+                listRecusados.appendChild(card);
             });
+        } else if (listRecusados) {
+            listRecusados.innerHTML = `<div class="text-center text-muted py-3">Nenhum candidato recusado encontrado para este projeto.</div>`;
         }
 
         // Eventos para Aprovar e Recusar (apenas para pendentes)
@@ -262,8 +258,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function renderPagination() {
-        if (!pagination) return;
-        // Paginação só para pendentes
+        // Paginação só para pendentes, na aba correta
+        const paginationEl = document.querySelector('#pendentes .pagination');
+        if (!paginationEl) return;
         const pendentes = candidatosFiltrados.filter(c => c.status !== 'RECUSADA');
         const totalPages = Math.ceil(pendentes.length / perPage);
         let html = '';
@@ -282,10 +279,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             <a class="page-link" href="#" data-page="${currentPage + 1}"><i class="bi bi-chevron-right"></i></a>
         </li>`;
 
-        pagination.innerHTML = html;
+        paginationEl.innerHTML = html;
 
         // Eventos de clique
-        pagination.querySelectorAll('a.page-link').forEach(link => {
+        paginationEl.querySelectorAll('a.page-link').forEach(link => {
             link.onclick = function (e) {
                 e.preventDefault();
                 const page = Number(this.getAttribute('data-page'));
@@ -299,6 +296,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Evento de busca
+    // Garante que o filtro funcione ao digitar e ao buscar
     searchForm.addEventListener('submit', function (e) {
         e.preventDefault();
         filtrarCandidatos();
@@ -307,6 +305,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     searchInput.addEventListener('input', function () {
         filtrarCandidatos();
     });
+
+    // Garante que o botão de buscar (caso não seja submit) também funcione
+    const btnBuscar = searchForm.querySelector('button[type="submit"]');
+    if (btnBuscar) {
+        btnBuscar.addEventListener('click', function(e) {
+            e.preventDefault();
+            filtrarCandidatos();
+        });
+    }
 
     carregarCandidatos();
 });
