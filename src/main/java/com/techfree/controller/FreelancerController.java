@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.techfree.dto.FreelancerUpdateDTO;
 import com.techfree.dto.FreelancerVisualizacaoResponseDTO;
+import com.techfree.dto.ListarTodosFreelancerDTO;
 import com.techfree.model.Freelancer;
 import com.techfree.model.ExperienciaAcademica;
 import com.techfree.model.ExperienciaProfissional;
@@ -225,8 +226,22 @@ public class FreelancerController {
 
     @GetMapping("/listar-todos")
     @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
-    public ResponseEntity<List<Freelancer>> pegarTodos() {
+    public ResponseEntity<List<ListarTodosFreelancerDTO>> pegarTodos() {
         List<Freelancer> freelancers = freelancerRepository.findAll();
-        return ResponseEntity.ok(freelancers);
+        return ResponseEntity.ok(
+            freelancers.stream()
+                .map(f -> new ListarTodosFreelancerDTO(
+                    f.getNome(),
+                    f.getEmailContato(),
+                    f.getHabilidades(),
+                    f.getTelefoneContato(),
+                    f.getGithub(),
+                    f.getLinkedin(),
+                    f.getPortfolio(),
+                    f.getAreaAtuacao(),
+                    f.getAvatar()
+                ))
+                .toList()
+        );
     }
 }

@@ -18,6 +18,7 @@ import com.techfree.dto.AlterarEmailResponseDTO;
 import com.techfree.dto.AlterarSenhaRequestDTO;
 import com.techfree.dto.EmpresaAutoVisualizacaoResponseDTO;
 import com.techfree.dto.EmpresaVisualizacaoResponseDTO;
+import com.techfree.dto.ListarTodosEmpresaDTO;
 import com.techfree.model.Empresa;
 import com.techfree.repository.EmpresaRepository;
 import com.techfree.repository.ProjetoRepository;
@@ -252,8 +253,19 @@ public class EmpresaController {
 
     @GetMapping("/listar-todos")
     @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
-    public ResponseEntity<List<Empresa>> pegarTodos() {
+    public ResponseEntity<List<ListarTodosEmpresaDTO>> pegarTodos() {
         List<Empresa> empresas = empresaRepository.findAll();
-        return ResponseEntity.ok(empresas);
+        return ResponseEntity.ok(
+            empresas.stream()
+                .map(empresa -> new ListarTodosEmpresaDTO(
+                    empresa.getNomeFantasia(),
+                    empresa.getAreaAtuacao(),
+                    empresa.getEmailContato(),
+                    empresa.getTelefoneContato(),
+                    empresa.getSite(),
+                    empresa.getLinkedin(),
+                    empresa.getAvatar()))
+                .toList()
+        );
     }
 }
