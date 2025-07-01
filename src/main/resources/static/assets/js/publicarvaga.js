@@ -79,9 +79,63 @@ document.addEventListener('click', function(e) {
 });
 
 
+
 document.getElementById('vagaForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     const token = localStorage.getItem('token');
+
+    // 1. Verifica assinatura antes de publicar
+    try {
+        const respPerfil = await fetch('/empresa/perfil/verPerfil', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        });
+        if (respPerfil.ok) {
+            const perfil = await respPerfil.json();
+            if (!perfil.assinaturaPath) {
+                // Cria modal se não existir
+                let modalAssinatura = document.getElementById('modalAssinaturaObrigatoria');
+                if (!modalAssinatura) {
+                    modalAssinatura = document.createElement('div');
+                    modalAssinatura.className = 'modal fade';
+                    modalAssinatura.id = 'modalAssinaturaObrigatoria';
+                    modalAssinatura.tabIndex = -1;
+                    modalAssinatura.innerHTML = `
+                        <div class="modal-dialog" style="min-width: 420px; max-width: 600px;">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Assinatura obrigatória</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                            </div>
+                            <div class="modal-body">
+                              Você não tem uma assinatura cadastrada, por favor acesse a edição do seu perfil e faça o upload de uma assinatura para continuar o processo de publicação de oportunidade.
+                            </div>
+                            <div class="modal-footer d-flex justify-content-center gap-2">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                              <a href="/pagina-profile-empresa-editar" class="btn btn-secondary">Ir para configurações de perfil</a>
+                            </div>
+                          </div>
+                        </div>
+                    `;
+                    document.body.appendChild(modalAssinatura);
+                }
+                const modal = new bootstrap.Modal(modalAssinatura);
+                modal.show();
+                // Impede qualquer outro submit ou mensagem
+                return false;
+            }
+        } else {
+            alert('Erro ao verificar assinatura da empresa.');
+            return;
+        }
+    } catch (err) {
+        alert('Erro ao verificar assinatura da empresa.');
+        return;
+    }
+
     // Pegue os valores dos campos
     const titulo = this.elements.titulo.value;
     const subtitulo = this.elements.subtitulo.value;
@@ -167,7 +221,6 @@ document.getElementById('vagaForm').addEventListener('submit', async function (e
 
 // Ao enviar o form, adiciona as tags como campos ocultos
 document.getElementById('vagaForm').addEventListener('submit', function(e) {
-    e.preventDefault();
     // Remove campos ocultos antigos
     document.querySelectorAll('.hidden-tag').forEach(el => el.remove());
     tags.forEach(tag => {
@@ -179,12 +232,11 @@ document.getElementById('vagaForm').addEventListener('submit', function(e) {
         this.appendChild(input);
     });
 
-    // Exemplo de envio: alert e reset
-    alert('Vaga publicada com sucesso!');
-    this.reset();
-    // Limpa tags
-    tags = [];
-    document.querySelectorAll('.tag').forEach(el => el.remove());
+    // Só mostra mensagem de sucesso se realmente foi publicada
+    // (essa função não deve mostrar alert, pois o submit já é controlado acima)
+    // this.reset();
+    // tags = [];
+    // document.querySelectorAll('.tag').forEach(el => el.remove());
 });
 
 // FORMATAÇÃO DO CAMPO DE PAGAMENTO
