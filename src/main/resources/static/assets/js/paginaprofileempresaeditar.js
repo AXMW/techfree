@@ -57,7 +57,7 @@ function renderEmpresaProfile() {
     profileHeader.classList.add('d-flex', 'align-items-center');
     profileHeader.innerHTML = `
         <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="header" title="Editar"><i class="bi bi-pencil-square"></i></button>
-        <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa">
+        <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa" style="object-fit: cover;">
         <div class="profile-info flex-grow-1">
             <h2>${nomeFantasia}</h2>
             <div class="role mb-1">${areaatuacao}</div>
@@ -101,20 +101,24 @@ function fillPopup(type) {
             title.textContent = 'Editar Dados da Empresa';
             html = `
         <div class="mb-3 text-center">
-            <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" id="avatarPreview" class="rounded-circle mb-2" style="width:90px;height:90px;object-fit:contain;border:3px solid #FF6F00;background:#fff;">
+            <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" id="avatarPreview" class="rounded-circle mb-2" style="width:90px;height:90px;object-fit:cover;border:3px solid #FF6F00;background:#fff;">
             <div>
                 <label class="form-label d-block">Logo</label>
-                <input type="file" class="form-control mb-2" id="avatarInput" style="padding: 0 1.1rem !important; height: 50px; align-content: center;" accept="image/*">
+                <input type="file" class="form-control mb-2" id="avatarInput" style="padding: 0 1.1rem !important; height: 50px; align-content: center; margin-bottom: 2.2rem !important;" accept="image/*">
                 <input type="hidden" id="avatarUrlInput" value="${avatarPreviewDataUrl || avatar || ''}">
             </div>
         </div>
         <div class="mb-3 text-center">
-            <img src="${assinaturaPreviewDataUrl || assinaturaPath || 'assets/img/default-signature.png'}" id="assinaturaPreview" class="mb-2" style="width:120px;height:60px;object-fit:contain;border:2px solid #FF6F00;background:#fff;">
             <div>
-                <label class="form-label d-block">Assinatura</label>
-                <input type="file" class="form-control mb-2" id="assinaturaInput" style="padding: 0 1.1rem !important; height: 50px; align-content: center;" accept="image/png">
+                <label class="form-label d-block" style="margin-bottom:1.2rem;">Assinatura</label>
+                ${(assinaturaPreviewDataUrl || assinaturaPath) ? `<div><img src="${assinaturaPreviewDataUrl || assinaturaPath}" id="assinaturaPreview" class="mb-2" style="width:220px;height:110px;object-fit:contain;border:2px solid #FF6F00;background:#fff;"></div>` : ''}
+                <input type="file" class="form-control mb-2" id="assinaturaInput" style="padding: 0 1.1rem !important; height: 50px; align-content: center; margin-bottom:2.2rem !important;" accept="image/png">
                 <input type="hidden" id="assinaturaUrlInput" value="${assinaturaPreviewDataUrl || assinaturaPath || ''}">
             </div>
+        </div>
+        <div class="mb-3" style="margin-top:2.2rem;">
+            <label class="form-label">Nome da Empresa</label>
+            <input type="text" class="form-control" id="editNome" value="${nomeFantasia}">
         </div>
                 <div class="mb-3">
                     <label class="form-label">Nome da Empresa</label>
@@ -454,7 +458,7 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
 };
 
 function calcularProgressoEmpresa() {
-    // Campos obrigatórios para o perfil estar completo
+    // Campos obrigatórios para o perfil estar completo, incluindo assinatura
     const campos = [
         { nome: 'Nome da Empresa', valor: nomeFantasia },
         { nome: 'Atuação', valor: areaatuacao },
@@ -463,7 +467,8 @@ function calcularProgressoEmpresa() {
         { nome: 'Telefone de contato', valor: telefoneContato },
         { nome: 'LinkedIn', valor: linkedin },
         { nome: 'Site', valor: site },
-        { nome: 'Sobre', valor: descricao }
+        { nome: 'Sobre', valor: descricao },
+        { nome: 'Assinatura', valor: assinaturaPath }
     ];
     const preenchidos = campos.filter(c => c.valor && c.valor.trim() !== '');
     const percent = Math.round((preenchidos.length / campos.length) * 100);
