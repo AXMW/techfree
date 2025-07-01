@@ -223,7 +223,7 @@ public class FreelancerController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/pegarTodos")
+    @GetMapping("/listar-todos")
     @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
     public ResponseEntity<List<Freelancer>> pegarTodos() {
         List<Freelancer> freelancers = freelancerRepository.findAll();

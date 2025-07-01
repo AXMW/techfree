@@ -249,7 +249,7 @@ public class EmpresaController {
         }
     }
 
-    @GetMapping("/pegarTodos")
+    @GetMapping("/listar-todos")
     @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
     public ResponseEntity<List<Empresa>> pegarTodos() {
         List<Empresa> empresas = empresaRepository.findAll();
