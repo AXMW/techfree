@@ -209,6 +209,12 @@ async function inicializar() {
     preencherProjeto(projeto);
     preencherSidebar(projeto);
     renderEditarVagaBtn(projeto);
+
+    // Se veio com ?editar=1 na URL, abre o modal de edição automaticamente
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('editar') === '1') {
+        openEditVagaPopup(projeto);
+    }
 }
 inicializar();
 

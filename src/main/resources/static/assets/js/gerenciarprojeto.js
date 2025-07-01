@@ -179,14 +179,21 @@ function renderProjects() {
 
         // Empresa: editar/cancelar/ver candidatos (NÃO mostra baixar certificado)
         if (tipoUsuario !== 'freelancer') {
-            if (p.status !== 'fechado') {
-                actions += `
-                    <button class="btn btn-outline-info btn-sm"><i class="bi bi-pencil"></i> Editar</button>
-                    <button class="btn btn-outline-danger btn-sm desativar-btn" data-id="${p.id}"><i class="bi bi-slash-circle"></i> Cancelar</button>
-                `;
-            }
+            // Só mostra editar para projetos ABERTOS
             if (p.status === 'aberto') {
+                actions += `
+                    <button class="btn btn-outline-info btn-sm editar-btn" data-id="${p.id}">
+                        <i class="bi bi-pencil"></i> Editar
+                    </button>
+                `;
+                actions += `<button class="btn btn-outline-danger btn-sm desativar-btn" data-id="${p.id}"><i class="bi bi-slash-circle"></i> Cancelar</button>`;
                 actions += `<button class="btn btn-outline-warning btn-sm ver-candidatos-btn" data-id="${p.id}"><i class="bi bi-people"></i> Ver candidatos</button>`;
+            } else {
+                // Para outros status, só mostra visualizar (e outros botões, se houver)
+                // Não mostra o botão Editar
+                if (p.status !== 'fechado') {
+                    actions += `<button class="btn btn-outline-danger btn-sm desativar-btn" data-id="${p.id}"><i class="bi bi-slash-circle"></i> Cancelar</button>`;
+                }
             }
         } else {
             // Freelancer: só visualizar, desistir e baixar certificado se CONCLUIDO
@@ -592,7 +599,7 @@ function renderProjects() {
                 modalCancel.className = 'modal fade';
                 modalCancel.id = 'modalCancelarProjeto';
                 modalCancel.tabIndex = -1;
-            modalCancel.innerHTML = `
+                modalCancel.innerHTML = `
                 <div class="modal-dialog" style="min-width: 420px; max-width: 540px;">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -639,6 +646,15 @@ function renderProjects() {
                     alert('Erro ao cancelar o projeto.');
                 }
             };
+        };
+    });
+
+    // Ação do botão Editar
+    document.querySelectorAll('.editar-btn').forEach(btn => {
+        btn.onclick = function () {
+            const id = this.getAttribute('data-id');
+            // Redireciona para detalhes-projeto com parâmetro para abrir o modal de edição
+            window.location.href = `/detalhes-projeto/${id}?editar=1`;
         };
     });
 }
