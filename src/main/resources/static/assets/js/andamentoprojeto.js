@@ -306,10 +306,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                     // Evento de envio
                     const btnConfirmarFeedback = document.getElementById('confirmarFeedback');
                     btnConfirmarFeedback.onclick = async function () {
-                        const nota = parseFloat(document.getElementById('notaFeedback').value);
+                        let nota = parseFloat(document.getElementById('notaFeedback').value);
                         const comentario = document.getElementById('comentarioFeedback').value.trim();
                         const feedbackMsg = document.getElementById('feedbackMsg');
-                        if (isNaN(nota) || nota < 0 || nota > 5) {
+                        if (isNaN(nota)) nota = 0; // Permite nota 0 se nada selecionado
+                        if (nota < 0 || nota > 5) {
                             feedbackMsg.innerText = 'Selecione uma nota de 0 a 5 (pode ser meio ponto).';
                             return;
                         }
