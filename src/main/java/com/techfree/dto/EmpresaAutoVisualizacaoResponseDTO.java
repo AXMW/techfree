@@ -24,6 +24,7 @@ public class EmpresaAutoVisualizacaoResponseDTO {
     private Double avaliacaoMedia;
     private List<AvaliacaoEmpresaResponseDTO> feedbacks;
     private List<Projeto> projetos;
+    private String assinaturaPath;
 
     public EmpresaAutoVisualizacaoResponseDTO(Empresa empresa, List<Projeto> projetos, List<AvaliacaoEmpresa> avaliacoes) {
         this.id = empresa.getId();
@@ -52,6 +53,7 @@ public class EmpresaAutoVisualizacaoResponseDTO {
             this.avaliacaoMedia = null;
             this.feedbacks = List.of();
         }
+        this.assinaturaPath = empresa.getAssinaturaPath();
     }
 
 }
