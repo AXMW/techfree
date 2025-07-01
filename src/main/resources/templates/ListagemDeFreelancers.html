@@ -21,85 +21,78 @@
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <main>
-        <section class="bg-dark py-5">
+        <section class="bg-dark py-5 min-vh-100">
             <div class="container">
-                <div class="projects-header mb-4">
-                    <h1 class="display-6 fw-bold mb-2">Projetos e Vagas Disponíveis</h1>
-                    <div class="fs-5 mb-1">Encontre oportunidades para participar de projetos ou vagas abertas</div>
+                <div class="projects-header mb-5 text-center">
+                    <h1 class="display-5 fw-bold mb-2 text-white">Freelancers Cadastrados</h1>
+                    <div class="fs-5 mb-1 text-light">Veja os freelancers participantes da plataforma</div>
                 </div>
                 <!-- Filtros -->
-                <div class="filter-bar mb-4">
-                    <form id="filterForm" class="row g-2 align-items-center">
-                        <div class="col-md-10">
-                            <input type="text" class="form-control" id="searchInput" placeholder="Buscar por palavra-chave, empresa, etc.">
+                <div class="filter-bar mb-5 d-flex justify-content-center">
+                    <form id="filterForm" class="row g-2 align-items-center w-100" style="max-width:600px;">
+                        <div class="col-9 col-md-10">
+                            <input type="text" class="form-control form-control-lg shadow-sm" id="searchInput" placeholder="Buscar por nome, área de atuação, e-mail, etc." style="border-radius:2rem;">
                         </div>
-                        <div class="col-md-2 text-end">
-                            <button type="submit" class="btn btn-info w-100"><i class="bi bi-search"></i></button>
+                        <div class="col-3 col-md-2 text-end">
+                            <button type="submit" class="btn btn-info w-100 py-2 px-0" style="border-radius:2rem;"><i class="bi bi-search"></i></button>
                         </div>
                     </form>
                 </div>
-                <div id="projects-list">
-                    <!-- Projeto 1 -->
-                    <div class="project-card" data-tags="React,Node.js,MongoDB" data-company="TechFree" data-desc="plataforma web projetos gestão entregas" data-lang="JavaScript">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="project-title">Plataforma de Gestão de Projetos Integrados</span>
-                            <span class="project-company">TechFree</span>
-                        </div>
-                        <div class="project-desc">
-                            Desenvolva uma plataforma web para conectar empresas, estudantes e instituições de ensino, facilitando a gestão de projetos e entregas.
-                        </div>
-                        <div class="project-info">
-                            <i class="bi bi-clock"></i> Duração: 3 meses
-                        </div>
-                        <div class="project-tags mb-2">
-                            <span class="badge">React</span>
-                            <span class="badge">Node.js</span>
-                            <span class="badge">MongoDB</span>
-                        </div>
-                        <a href="#" class="btn btn-outline-light btn-sm mt-2"><i class="bi bi-eye"></i> Ver Detalhes</a>
-                    </div>
-                    <!-- Projeto 2 -->
-                    <div class="project-card" data-tags="Angular,Firebase,UX/UI" data-company="LogiTech" data-desc="controle estoque dashboard mobile" data-lang="JavaScript">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="project-title">Sistema de Controle de Estoque</span>
-                            <span class="project-company">LogiTech</span>
-                        </div>
-                        <div class="project-desc">
-                            Crie um sistema para controle de estoque com dashboard, relatórios e integração com dispositivos móveis.
-                        </div>
-                        <div class="project-info">
-                            <i class="bi bi-clock"></i> Duração: 6 meses
-                        </div>
-                        <div class="project-tags mb-2">
-                            <span class="badge">Angular</span>
-                            <span class="badge">Firebase</span>
-                            <span class="badge">UX/UI</span>
-                        </div>
-                        <a href="#" class="btn btn-outline-light btn-sm mt-2"><i class="bi bi-eye"></i> Ver Detalhes</a>
-                    </div>
-                    <!-- Projeto 3 -->
-                    <div class="project-card" data-tags="Flutter,Firebase,Psicologia" data-company="MindCare" data-desc="app saúde mental gamificação notificações" data-lang="Dart">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="project-title">App de Saúde Mental</span>
-                            <span class="project-company">MindCare</span>
-                        </div>
-                        <div class="project-desc">
-                            Participe do desenvolvimento de um app mobile para acompanhamento de saúde mental com gamificação e notificações.
-                        </div>
-                        <div class="project-info">
-                            <i class="bi bi-clock"></i> Duração: 4 meses
-                        </div>
-                        <div class="project-tags mb-2">
-                            <span class="badge">Flutter</span>
-                            <span class="badge">Firebase</span>
-                            <span class="badge">Psicologia</span>
-                        </div>
-                        <a href="#" class="btn btn-outline-light btn-sm mt-2"><i class="bi bi-eye"></i> Ver Detalhes</a>
-                    </div>
+                <div id="freelancers-list" class="row g-4 justify-content-center">
+                    <!-- Freelancers serão renderizados via JS -->
                 </div>
-                <button id="loadMoreBtn" class="load-more-btn"><i class="bi bi-plus-circle"></i> Carregar mais</button>
+                <div class="d-flex justify-content-center mt-4">
+                    <button id="loadMoreBtn" class="btn btn-outline-info btn-lg px-4 py-2" style="border-radius:2rem;"><i class="bi bi-plus-circle"></i> Carregar mais</button>
+                </div>
             </div>
         </section>
+        <style>
+            .empresa-card {
+                border: none;
+                border-radius: 1.5rem;
+                transition: transform 0.18s, box-shadow 0.18s;
+                min-height: 370px;
+            }
+            .empresa-card:hover {
+                transform: translateY(-6px) scale(1.009);
+                box-shadow: 0 1px 8px 0 #155b63c9, 0 2px 10px 0 #0002;
+            }
+            .empresa-card .card-body {
+                padding: 2.2rem 1.2rem 1.2rem 1.2rem;
+            }
+            .empresa-card .rounded-circle {
+                border: 3px solid #06a0b2;
+                background: #fff;
+                box-shadow: 0 2px 12px #ff6f0033;
+            }
+            .empresa-card .card-title {
+                font-size: 1.25rem;
+                font-weight: 700;
+            }
+            .empresa-card .text-muted {
+                font-size: 1.08rem;
+                color: #06a0b2!important;
+                font-weight: 600;
+            }
+            .empresa-card .mb-2, .empresa-card .mb-3 {
+                font-size: 1.01rem;
+            }
+            .empresa-card .bi {
+                color: #06a0b2;
+                font-size: 1.2em;
+                vertical-align: middle;
+            }
+            .empresa-card a {
+                color: #06a0b2;
+                font-weight: 600;
+                text-decoration: none;
+                margin-right: 0.5rem;
+                transition: color 0.15s;
+            }
+            .empresa-card a:hover {
+                color: #27a2afc9;
+            }
+        </style>
     </main>
 
     <!-- Footer fragment -->
@@ -107,7 +100,7 @@
     
     
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/listagemprojetosvagas.js"></script>
+    <script src="assets/js/listagemfreelancers.js"></script>
     <!-- Navbar fragment -->
     <script src="assets/js/navbar.js"></script>
     <!-- Footer fragment -->
