@@ -133,21 +133,61 @@ function renderProfile(profile) {
         </div>
     `).join('');
 
-    // Feedbacks (apenas os 3 últimos enviados)
+    // Descobre o tipo de perfil logado
+    const tipoUsuario = (localStorage.getItem('tipoUsuario') || '').toLowerCase();
+
+    // Feedbacks (apenas os 3 mais recentes)
     let feedbacksHtml = (profile.feedbacks || [])
-        .slice() // cria uma cópia para não alterar o original
-        .reverse() // inverte para pegar os mais recentes primeiro
-        .slice(0, 3) // pega os 3 últimos
-        .map(fb => `
-            <div class="profile-feedback">
-                <strong>Empresa: ${fb.empresa}</strong><br>
-                "${fb.texto}"
+        .slice()
+        .reverse()
+        .slice(0, 3)
+        .map(fb => {
+            let nome = tipoUsuario === 'freelancer' ? fb.nomeEmpresa : fb.nomeFreelancer;
+            let tituloProjeto = fb.tituloProjeto || '';
+            let nota = typeof fb.nota === 'number' ? fb.nota : 0;
+            let data = fb.dataCriacao ? new Date(fb.dataCriacao).toLocaleDateString('pt-BR') : '';
+            let comentario = fb.comentario || fb.texto || '';
+
+            // Estrelas amarelas e menores
+            let stars = '';
+            let fullStars = Math.floor(nota);
+            let halfStar = nota % 1 >= 0.5;
+            for (let i = 0; i < 5; i++) {
+                if (i < fullStars) {
+                    stars += '<i class="bi bi-star-fill" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                } else if (i === fullStars && halfStar) {
+                    stars += '<i class="bi bi-star-half" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                } else {
+                    stars += '<i class="bi bi-star" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                }
+            }
+
+            return `
+                <div class="profile-feedback mb-3">
+                    <div><strong>Data:</strong> ${data}</div>
+                    <div><strong>${tipoUsuario === 'freelancer' ? 'Empresa' : 'Freelancer'}:</strong> ${nome || '-'}</div>
+                    <div><strong>Projeto:</strong> ${tituloProjeto}</div>
+                    <div><strong>Nota:</strong> ${nota.toFixed(1)} ${stars}</div>
+                    <div><strong>Comentário:</strong> "${comentario}"</div>
+                </div>
+            `;
+        }).join('');
+
+    // Botão "Ver todos" se houver mais de 3 feedbacks
+    let verTodosBtn = '';
+    if ((profile.feedbacks || []).length > 0) {
+        verTodosBtn = `
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-outline-warning btn-sm" id="btnVerTodosFeedbacks">
+                    <i class="bi bi-list-stars"></i> Ver todos
+                </button>
             </div>
-        `).join('');
+        `;
+    }
 
     // Monta o HTML
     document.querySelector('.profile-header').innerHTML = `
-        <img src="${profile.avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Avatar do Usuário">
+        <img src="${profile.avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Avatar do Usuário" style="object-fit: cover;">
         <div class="profile-info flex-grow-1">
             <h2>${profile.nome}</h2>
             <div class="role mb-1">${profile.areaAtuacao || ""}</div>
@@ -215,9 +255,69 @@ function renderProfile(profile) {
     // Feedbacks Recentes
     const feedbacksEl = document.getElementById('profileFeedbacks');
     if (feedbacksEl) {
-        feedbacksEl.innerHTML = feedbacksHtml && feedbacksHtml.trim()
+        feedbacksEl.innerHTML = (feedbacksHtml && feedbacksHtml.trim()
             ? feedbacksHtml
-            : '<p class="profile-timeline text-muted">Nenhum feedback recebido ainda.</p>';
+            : '<p class="profile-timeline text-muted">Nenhum feedback recebido ainda.</p>')
+            + verTodosBtn;
+    }
+
+    // Modal para todos os feedbacks (adicione só uma vez)
+    if (!document.getElementById('modalTodosFeedbacks')) {
+        const modalHtml = `
+        <div class="modal fade" id="modalTodosFeedbacks" tabindex="-1" aria-labelledby="modalTodosFeedbacksLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content bg-dark text-light">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalTodosFeedbacksLabel">Todos os Feedbacks</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+              </div>
+              <div class="modal-body" id="modalTodosFeedbacksBody"></div>
+            </div>
+          </div>
+        </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+    }
+
+    // Evento do botão "Ver todos"
+    const btnVerTodos = document.getElementById('btnVerTodosFeedbacks');
+    if (btnVerTodos) {
+        btnVerTodos.onclick = function () {
+            const allFeedbacks = (profile.feedbacks || [])
+                .slice()
+                .reverse()
+                .map(fb => {
+                    let nome = tipoUsuario === 'freelancer' ? fb.nomeEmpresa : fb.nomeFreelancer;
+                    let tituloProjeto = fb.tituloProjeto || '';
+                    let nota = typeof fb.nota === 'number' ? fb.nota : 0;
+                    let data = fb.dataCriacao ? new Date(fb.dataCriacao).toLocaleDateString('pt-BR') : '';
+                    let comentario = fb.comentario || fb.texto || '';
+                    let stars = '';
+                    let fullStars = Math.floor(nota);
+                    let halfStar = nota % 1 >= 0.5;
+                    for (let i = 0; i < 5; i++) {
+                        if (i < fullStars) {
+                            stars += '<i class="bi bi-star-fill" style="color:#FFD700;font-size:1.1em;vertical-align:middle;"></i>';
+                        } else if (i === fullStars && halfStar) {
+                            stars += '<i class="bi bi-star-half" style="color:#FFD700;font-size:1.1em;vertical-align:middle;"></i>';
+                        } else {
+                            stars += '<i class="bi bi-star" style="color:#FFD700;font-size:1.1em;vertical-align:middle;"></i>';
+                        }
+                    }
+                    return `
+                        <div class="profile-feedback mb-3 border-bottom pb-2">
+                            <div><strong>Data:</strong> ${data}</div>
+                            <div><strong>${tipoUsuario === 'freelancer' ? 'Empresa' : 'Freelancer'}:</strong> ${nome || '-'}</div>
+                            <div><strong>Projeto:</strong> ${tituloProjeto}</div>
+                            <div><strong>Nota:</strong> ${nota.toFixed(1)} ${stars}</div>
+                            <div><strong>Comentário:</strong> "${comentario}"</div>
+                        </div>
+                    `;
+                }).join('');
+            document.getElementById('modalTodosFeedbacksBody').innerHTML = allFeedbacks || '<p class="text-muted">Nenhum feedback recebido ainda.</p>';
+            const modal = new bootstrap.Modal(document.getElementById('modalTodosFeedbacks'));
+            modal.show();
+        };
     }
 }
 
