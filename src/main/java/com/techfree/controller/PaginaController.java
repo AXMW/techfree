@@ -51,6 +51,18 @@ public class PaginaController {
         return "FAQ";
     }
 
+    @PreAuthorize("hasRole('EMPRESA')")
+    @GetMapping("/listagem-freelancers")
+    public String ListagemDeFreelancers() {
+        return "ListagemDeFreelancers";
+    }
+
+    @PreAuthorize("hasRole('FREELANCER')")
+    @GetMapping("/listagem-empresas")
+    public String ListagemDeEmpresas() {
+        return "ListagemDeEmpresas";
+    }
+
     @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
     @GetMapping("/andamento-projeto/{id}")
     public String andamentoProjeto(
