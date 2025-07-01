@@ -126,6 +126,13 @@ public class ProjetoService {
                 );
         }
 
+        if(empresa.getAssinaturaPath() == null || empresa.getAssinaturaPath().isEmpty()) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "A empresa deve ter uma assinatura digital para criar um projeto"
+                );
+        }
+
         Projeto projeto = new Projeto();
         projeto.setTitulo(dto.getTitulo());
         projeto.setSubtitulo(dto.getSubtitulo());
