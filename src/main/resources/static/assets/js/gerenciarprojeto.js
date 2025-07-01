@@ -207,64 +207,67 @@ function renderProjects() {
             ) {
                 actions += `<button class="btn btn-success btn-sm baixar-certificado-btn" data-id="${p.id}"><i class="bi bi-download"></i> Baixar certificado</button>`;
             }
+
     // Ação do botão Baixar certificado
-    document.querySelectorAll('.baixar-certificado-btn').forEach(btn => {
-        btn.onclick = async function () {
-            const idProjeto = this.getAttribute('data-id');
-            const token = localStorage.getItem('token');
-            try {
-                // Primeiro GET para obter o id do certificado
-                const respCert = await fetch(`/certificados/projetos/${idProjeto}`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + token
+    setTimeout(() => {
+        document.querySelectorAll('.baixar-certificado-btn').forEach(btn => {
+            btn.onclick = async function () {
+                const idProjeto = this.getAttribute('data-id');
+                const token = localStorage.getItem('token');
+                try {
+                    // Primeiro GET para obter o id do certificado
+                    const respCert = await fetch(`/certificados/projetos/${idProjeto}`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        }
+                    });
+                    if (!respCert.ok) {
+                        alert('Erro ao buscar certificado do projeto.');
+                        return;
                     }
-                });
-                if (!respCert.ok) {
-                    alert('Erro ao buscar certificado do projeto.');
-                    return;
-                }
-                const certData = await respCert.json();
-                const idCertificado = certData.id;
-                if (!idCertificado) {
-                    alert('Certificado não encontrado para este projeto.');
-                    return;
-                }
-                // Segundo GET para baixar o certificado
-                const respDownload = await fetch(`/certificados/${idCertificado}/download`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + token
+                    const certData = await respCert.json();
+                    const idCertificado = certData.id;
+                    if (!idCertificado) {
+                        alert('Certificado não encontrado para este projeto.');
+                        return;
                     }
-                });
-                if (!respDownload.ok) {
+                    // Segundo GET para baixar o certificado
+                    const respDownload = await fetch(`/certificados/${idCertificado}/download`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    });
+                    if (!respDownload.ok) {
+                        alert('Erro ao baixar o certificado.');
+                        return;
+                    }
+                    // Baixar arquivo
+                    const blob = await respDownload.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    // Tenta obter nome do arquivo do header ou usa padrão
+                    let filename = `certificado_${idProjeto}.pdf`;
+                    const disposition = respDownload.headers.get('Content-Disposition');
+                    if (disposition && disposition.indexOf('filename=') !== -1) {
+                        filename = disposition.split('filename=')[1].replace(/"/g, '').trim();
+                    }
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => {
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    }, 100);
+                } catch (e) {
                     alert('Erro ao baixar o certificado.');
-                    return;
                 }
-                // Baixar arquivo
-                const blob = await respDownload.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                // Tenta obter nome do arquivo do header ou usa padrão
-                let filename = `certificado_${idProjeto}.pdf`;
-                const disposition = respDownload.headers.get('Content-Disposition');
-                if (disposition && disposition.indexOf('filename=') !== -1) {
-                    filename = disposition.split('filename=')[1].replace(/"/g, '').trim();
-                }
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                setTimeout(() => {
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(a);
-                }, 100);
-            } catch (e) {
-                alert('Erro ao baixar o certificado.');
-            }
-        };
-    });
+            };
+        });
+    }, 0);
         }
 
         // Adiciona botão Enviar Feedback para projetos fechados
