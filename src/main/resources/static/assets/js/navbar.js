@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
             algumAtivo = true;
         }
     });
-
+    
     // Se nenhum link bateu, nenhum fica ativo
     if (!algumAtivo) {
         navLinks.forEach(link => link.classList.remove('active'));
@@ -302,6 +302,19 @@ document.addEventListener('DOMContentLoaded', function () {
             <li><a class="dropdown-item" href="/listagem-projetos-vagas">Procurar Vaga</a></li>
             <li><a class="dropdown-item" href="/gerenciar-projetos">Gerenciar Projetos</a></li>
         `;
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const tipoUsuario = localStorage.getItem('tipoUsuario');
+    const buscarPerfisLink = document.getElementById('buscar-perfis-link');
+    if (!buscarPerfisLink) return;
+
+    if (tipoUsuario === 'EMPRESA') {
+        buscarPerfisLink.setAttribute('href', '/listagem-freelancers');
+    } else {
+        buscarPerfisLink.setAttribute('href', '/listagem-empresas');
     }
 });
 
