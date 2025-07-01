@@ -757,7 +757,11 @@ section.bg-dark {
 
 .accordion-button:not(.collapsed) {
     background: #FF6F00;
-    color: #fff;
+    color: #22243a;
+}
+
+.accordion-button:not(.collapsed) .faq-icon i {
+    color: #22243a !important;
 }
 
 .accordion-button:focus {
