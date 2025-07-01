@@ -210,6 +210,7 @@ public class EmpresaController {
     }
 
     @PostMapping("/upload-assinatura")
+    @PreAuthorize("hasRole('EMPRESA')")
     public ResponseEntity<?> uploadAssinatura(Authentication Auth, @RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) return ResponseEntity.badRequest().body("Arquivo vazio");
 
