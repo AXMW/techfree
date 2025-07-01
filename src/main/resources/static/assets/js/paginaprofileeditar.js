@@ -853,8 +853,8 @@ function calcularProgressoPerfil(profile) {
     const campos = [
         { nome: "Foto", valor: profile.avatar },
         { nome: "Nome", valor: profile.nome },
-        { nome: "Área de Atuação", valor: profile.areaAtuacao },
-        { nome: "E-mail de Contato", valor: profile.emailContato },
+        { nome: "Cargo", valor: profile.areaAtuacao },
+        { nome: "E-mail de contato", valor: profile.emailContato },
         { nome: "Telefone de contato", valor: profile.telefoneContato },
         { nome: "GitHub", valor: profile.github },
         { nome: "LinkedIn", valor: profile.linkedin },

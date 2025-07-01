@@ -275,14 +275,15 @@ function renderEmpresaProfile(profile) {
 
 function calcularProgressoEmpresa(profile) {
     const campos = [
-        { nome: "Logo", valor: profile.avatar },
-        { nome: "Nome Fantasia", valor: profile.nome },
+        { nome: 'Nome da Empresa', valor: profile.nome },
         { nome: 'Atuação', valor: profile.areaAtuacao },
-        { nome: "E-mail de contato", valor: profile.emailContato },
-        { nome: "Telefone", valor: profile.telefoneContato },
-        { nome: "LinkedIn", valor: profile.linkedin },
-        { nome: "Site", valor: profile.site },
-        { nome: "Sobre", valor: profile.descricao },
+        { nome: 'Avatar', valor: profile.avatar },
+        { nome: 'E-mail de contato', valor: profile.emailContato },
+        { nome: 'Telefone de contato', valor: profile.telefoneContato },
+        { nome: 'LinkedIn', valor: profile.linkedin },
+        { nome: 'Site', valor: profile.site },
+        { nome: 'Sobre', valor: profile.descricao },
+        { nome: 'Assinatura', valor: profile.assinaturaPath }
     ];
     const total = campos.length;
     const preenchidos = campos.filter(c => c.valor && String(c.valor).trim() !== "").length;
