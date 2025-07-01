@@ -8,6 +8,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class ListarTodosFreelancerDTO {
+    private Long id;
     private String nome;
     private String emailContato;
     private List<String> habilidades;
