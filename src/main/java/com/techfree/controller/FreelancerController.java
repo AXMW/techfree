@@ -222,4 +222,11 @@ public class FreelancerController {
         FreelancerVisualizacaoResponseDTO response = new FreelancerVisualizacaoResponseDTO(freelancer.get(), avaliacoes);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/pegarTodos")
+    @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
+    public ResponseEntity<List<Freelancer>> pegarTodos() {
+        List<Freelancer> freelancers = freelancerRepository.findAll();
+        return ResponseEntity.ok(freelancers);
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.techfree.model.Projeto;
 import com.techfree.model.Usuario;
@@ -206,5 +207,52 @@ public class EmpresaController {
         List<AvaliacaoEmpresa> avaliacoes = avaliacaoEmpresaRepository.findByEmpresa(empresa);
         EmpresaVisualizacaoResponseDTO response = new EmpresaVisualizacaoResponseDTO(empresa, projetos, avaliacoes);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/upload-assinatura")
+    public ResponseEntity<?> uploadAssinatura(Authentication Auth, @RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) return ResponseEntity.badRequest().body("Arquivo vazio");
+
+        String email = Auth.getName();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Empresa empresa = empresaRepository.findByUsuario(usuario)
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+
+        java.nio.file.Path uploadDir = java.nio.file.Paths.get("src/main/resources/static/assets/assinaturas/");
+        try {
+            if (!java.nio.file.Files.exists(uploadDir)) {
+                java.nio.file.Files.createDirectories(uploadDir);
+            }
+
+            String originalName = file.getOriginalFilename();
+            if(originalName == null || originalName.isBlank()) {
+                originalName = "assinatura.png";
+            }
+            String ext = "png";
+            String originalLower = originalName.toLowerCase();
+            if (originalLower.endsWith(".jpg") || originalLower.endsWith(".jpeg")) {
+                ext = "jpg";
+            } else if (originalLower.endsWith(".png")) {
+                ext = "png";
+            }
+            String fileName = "assinatura_empresa_" + empresa.getId() + "." + ext;
+            java.nio.file.Path filePath = uploadDir.resolve(fileName);
+            java.nio.file.Files.copy(file.getInputStream(), filePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+            // Salve o caminho relativo no banco
+            empresa.setAssinaturaPath("/assets/assinaturas/" + fileName);
+            empresaRepository.save(empresa);
+            return ResponseEntity.ok("Upload realizado com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro ao salvar arquivo: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/pegarTodos")
+    @PreAuthorize("hasRole('FREELANCER') or hasRole('EMPRESA')")
+    public ResponseEntity<List<Empresa>> pegarTodos() {
+        List<Empresa> empresas = empresaRepository.findAll();
+        return ResponseEntity.ok(empresas);
     }
 }

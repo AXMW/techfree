@@ -92,12 +92,28 @@ public class CertificadoPdfService {
             .setMarginBottom(60);
         document.add(corpo);
 
-        // Espaço para assinatura destacado
-        Paragraph assinatura = new Paragraph("\n___________________________\nAssinatura da Empresa")
+        // Espaço para assinatura destacado com imagem da assinatura
+        // Caminho da imagem da assinatura (ajuste conforme sua estrutura)
+        String assinaturaPath = "src/main/resources/static" + certificado.getProjeto().getEmpresa().getAssinaturaPath();
+        try {
+            com.itextpdf.layout.element.Image assinaturaImg = new com.itextpdf.layout.element.Image(
+                com.itextpdf.io.image.ImageDataFactory.create(assinaturaPath)
+            );
+            assinaturaImg.setWidth(80); // tamanho fixo pequeno
+            assinaturaImg.setHeight(40); // altura fixa pequena
+            assinaturaImg.setHorizontalAlignment(com.itextpdf.layout.properties.HorizontalAlignment.CENTER);
+            assinaturaImg.setMarginTop(10);
+            assinaturaImg.setMarginBottom(0);
+            document.add(assinaturaImg);
+        } catch (Exception e) {
+            // Se não encontrar a imagem, apenas pula
+        }
+
+        Paragraph assinatura = new Paragraph(certificado.getProjeto().getEmpresa().getNomeFantasia() + "\nAssinatura da Empresa")
             .setTextAlignment(TextAlignment.CENTER)
             .setFontSize(14)
             .setFontColor(azulEscuro)
-            .setMarginTop(40);
+            .setMarginTop(5);
         document.add(assinatura);
 
 

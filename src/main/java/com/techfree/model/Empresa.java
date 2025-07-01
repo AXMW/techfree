@@ -38,6 +38,8 @@ public class Empresa {
 
     private String telefoneContato;
 
+    private String assinaturaPath;
+
     @Column(unique = true, nullable = false)
     private String cnpj;
 
