@@ -132,11 +132,37 @@ function renderEmpresaFeedbacks(profile) {
     if (feedbacks.length === 0) {
         feedbacksHtml = '<p class="profile-timeline text-muted">Nenhum feedback recebido ainda.</p>';
     } else {
-        feedbacksHtml = feedbacks.map(fb => `
-            <div class="profile-feedback">
-                "${fb.texto}"
-            </div>
-        `).join('');
+        feedbacksHtml = feedbacks.map(fb => {
+            let nota = typeof fb.nota === 'number' ? fb.nota : 0;
+            let data = fb.dataCriacao ? new Date(fb.dataCriacao).toLocaleDateString('pt-BR') : '';
+            let comentario = fb.comentario || fb.texto || '';
+            let nomeFreelancer = fb.nomeFreelancer || '-';
+            let tituloProjeto = fb.tituloProjeto || '';
+
+            // Estrelas amarelas e menores
+            let stars = '';
+            let fullStars = Math.floor(nota);
+            let halfStar = nota % 1 >= 0.5;
+            for (let i = 0; i < 5; i++) {
+                if (i < fullStars) {
+                    stars += '<i class="bi bi-star-fill" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                } else if (i === fullStars && halfStar) {
+                    stars += '<i class="bi bi-star-half" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                } else {
+                    stars += '<i class="bi bi-star" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                }
+            }
+
+            return `
+                <div class="profile-feedback mb-3">
+                    <div><strong>Data:</strong> ${data}</div>
+                    <div><strong>Freelancer:</strong> ${nomeFreelancer}</div>
+                    <div><strong>Projeto:</strong> ${tituloProjeto}</div>
+                    <div><strong>Nota:</strong> ${nota.toFixed(1)} ${stars}</div>
+                    <div><strong>Comentário:</strong> "${comentario}"</div>
+                </div>
+            `;
+        }).join('');
     }
     if (container) container.innerHTML = feedbacksHtml;
 }

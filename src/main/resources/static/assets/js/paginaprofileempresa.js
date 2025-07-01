@@ -162,28 +162,128 @@ function renderEmpresaProfile(profile) {
     const feedbacksEl = document.getElementById('empresaProfileFeedbacks');
     if (feedbacksEl) {
         const feedbacks = (profile.feedbacks || []).slice().reverse().slice(0, 3);
-        if (feedbacks.length > 0) {
-            feedbacksEl.innerHTML = feedbacks.map(fb => `
-                <div class="profile-feedback">
-                    "${fb.texto}"
+        let feedbacksHtml = '';
+        feedbacksHtml = feedbacks.length > 0
+            ? feedbacks.map(fb => {
+                // Se o backend trouxer mais campos, ajuste aqui
+                let nota = typeof fb.nota === 'number' ? fb.nota : 0;
+                let data = fb.dataCriacao ? new Date(fb.dataCriacao).toLocaleDateString('pt-BR') : '';
+                let comentario = fb.comentario || fb.texto || '';
+                let nomeFreelancer = fb.nomeFreelancer || '-';
+                let tituloProjeto = fb.tituloProjeto || '';
+
+                // Estrelas amarelas e menores
+                let stars = '';
+                let fullStars = Math.floor(nota);
+                let halfStar = nota % 1 >= 0.5;
+                for (let i = 0; i < 5; i++) {
+                    if (i < fullStars) {
+                        stars += '<i class="bi bi-star-fill" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                    } else if (i === fullStars && halfStar) {
+                        stars += '<i class="bi bi-star-half" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                    } else {
+                        stars += '<i class="bi bi-star" style="color:#FFD700;font-size:0.8em;vertical-align:middle;"></i>';
+                    }
+                }
+
+                return `
+                    <div class="profile-feedback mb-3">
+                        <div><strong>Data:</strong> ${data}</div>
+                        <div><strong>Freelancer:</strong> ${nomeFreelancer}</div>
+                        <div><strong>Projeto:</strong> ${tituloProjeto}</div>
+                        <div><strong>Nota:</strong> ${nota.toFixed(1)} ${stars}</div>
+                        <div><strong>Comentário:</strong> "${comentario}"</div>
+                    </div>
+                `;
+            }).join('')
+            : '<p class="profile-timeline text-muted">Nenhum feedback recebido ainda.</p>';
+
+        // Botão "Ver todos" se houver pelo menos 1 feedback
+        let verTodosBtn = '';
+        if ((profile.feedbacks || []).length > 0) {
+            verTodosBtn = `
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-outline-warning btn-sm" id="btnVerTodosFeedbacksEmpresa">
+                        <i class="bi bi-list-stars"></i> Ver todos
+                    </button>
                 </div>
-            `).join('');
-        } else {
-            feedbacksEl.innerHTML = '<p class="profile-timeline text-muted">Nenhum feedback recebido ainda.</p>';
+            `;
+        }
+
+        feedbacksEl.innerHTML = feedbacksHtml + verTodosBtn;
+
+        // Modal para todos os feedbacks (adicione só uma vez)
+        if (!document.getElementById('modalTodosFeedbacksEmpresa')) {
+            const modalHtml = `
+            <div class="modal fade" id="modalTodosFeedbacksEmpresa" tabindex="-1" aria-labelledby="modalTodosFeedbacksEmpresaLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content bg-dark text-light">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalTodosFeedbacksEmpresaLabel">Todos os Feedbacks</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                  </div>
+                  <div class="modal-body" id="modalTodosFeedbacksEmpresaBody"></div>
+                </div>
+              </div>
+            </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        // Evento do botão "Ver todos"
+        const btnVerTodos = document.getElementById('btnVerTodosFeedbacksEmpresa');
+        if (btnVerTodos) {
+            btnVerTodos.onclick = function () {
+                const allFeedbacks = (profile.feedbacks || [])
+                    .slice()
+                    .reverse()
+                    .map(fb => {
+                        let nota = typeof fb.nota === 'number' ? fb.nota : 0;
+                        let data = fb.dataCriacao ? new Date(fb.dataCriacao).toLocaleDateString('pt-BR') : '';
+                        let comentario = fb.comentario || fb.texto || '';
+                        let nomeFreelancer = fb.nomeFreelancer || '-';
+                        let tituloProjeto = fb.tituloProjeto || '';
+                        let stars = '';
+                        let fullStars = Math.floor(nota);
+                        let halfStar = nota % 1 >= 0.5;
+                        for (let i = 0; i < 5; i++) {
+                            if (i < fullStars) {
+                                stars += '<i class="bi bi-star-fill" style="color:#FFD700;font-size:1.1em;vertical-align:middle;"></i>';
+                            } else if (i === fullStars && halfStar) {
+                                stars += '<i class="bi bi-star-half" style="color:#FFD700;font-size:1.1em;vertical-align:middle;"></i>';
+                            } else {
+                                stars += '<i class="bi bi-star" style="color:#FFD700;font-size:1.1em;vertical-align:middle;"></i>';
+                            }
+                        }
+                        return `
+                            <div class="profile-feedback mb-3 border-bottom pb-2">
+                                <div><strong>Data:</strong> ${data}</div>
+                                <div><strong>Freelancer:</strong> ${nomeFreelancer}</div>
+                                <div><strong>Projeto:</strong> ${tituloProjeto}</div>
+                                <div><strong>Nota:</strong> ${nota.toFixed(1)} ${stars}</div>
+                                <div><strong>Comentário:</strong> "${comentario}"</div>
+                            </div>
+                        `;
+                    }).join('');
+                document.getElementById('modalTodosFeedbacksEmpresaBody').innerHTML = allFeedbacks || '<p class="text-muted">Nenhum feedback recebido ainda.</p>';
+                const modal = new bootstrap.Modal(document.getElementById('modalTodosFeedbacksEmpresa'));
+                modal.show();
+            };
         }
     }
 }
 
 function calcularProgressoEmpresa(profile) {
     const campos = [
-        { nome: "Logo", valor: profile.avatar },
-        { nome: "Nome Fantasia", valor: profile.nome },
+        { nome: 'Nome da Empresa', valor: profile.nome },
         { nome: 'Atuação', valor: profile.areaAtuacao },
-        { nome: "E-mail de contato", valor: profile.emailContato },
-        { nome: "Telefone", valor: profile.telefoneContato },
-        { nome: "LinkedIn", valor: profile.linkedin },
-        { nome: "Site", valor: profile.site },
-        { nome: "Sobre", valor: profile.descricao },
+        { nome: 'Avatar', valor: profile.avatar },
+        { nome: 'E-mail de contato', valor: profile.emailContato },
+        { nome: 'Telefone de contato', valor: profile.telefoneContato },
+        { nome: 'LinkedIn', valor: profile.linkedin },
+        { nome: 'Site', valor: profile.site },
+        { nome: 'Sobre', valor: profile.descricao },
+        { nome: 'Assinatura', valor: profile.assinaturaPath }
     ];
     const total = campos.length;
     const preenchidos = campos.filter(c => c.valor && String(c.valor).trim() !== "").length;
