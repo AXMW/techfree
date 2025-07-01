@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,22 +61,6 @@ public class ConviteController {
         var convites = conviteService.listarPorEmpresa(auth.getName());
         var dtos = convites.stream().map(ConviteResponseDTO::new).toList();
         return ResponseEntity.ok(dtos);
-    }
-
-    // FREELANCER: aceitar o convite
-    @PutMapping("/{id}/aceitar")
-    @PreAuthorize("hasRole('FREELANCER')")
-    public ResponseEntity<Void> aceitarConvite(@PathVariable Long id, Authentication auth) {
-        conviteService.aceitarConvite(id, auth.getName());
-        return ResponseEntity.noContent().build();
-    }
-
-    // FREELANCER: recusar o convite
-    @PutMapping("/{id}/recusar")
-    @PreAuthorize("hasRole('FREELANCER')")
-    public ResponseEntity<Void> recusarConvite(@PathVariable Long id, Authentication auth) {
-        conviteService.recusarConvite(id, auth.getName());
-        return ResponseEntity.noContent().build();
     }
 
     // EMPRESA: deletar um convite
