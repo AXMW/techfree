@@ -243,6 +243,41 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const tipoUsuario = localStorage.getItem('tipoUsuario');
+    const projetoDropdownMenu = document.getElementById('projetoDropdownMenu');
+    if (!projetoDropdownMenu) return;
+
+    projetoDropdownMenu.innerHTML = ''; // Limpa antes
+
+    if (tipoUsuario === 'EMPRESA') {
+        // Empresa: Criar Vaga e Gerenciar Projetos
+        projetoDropdownMenu.innerHTML = `
+            <li><a class="dropdown-item" href="/publicar-vaga">Criar Vaga</a></li>
+            <li><a class="dropdown-item" href="/gerenciar-projetos">Gerenciar Projetos</a></li>
+        `;
+    } else {
+        // Freelancer ou visitante: Procurar Vaga e Gerenciar Projetos
+        projetoDropdownMenu.innerHTML = `
+            <li><a class="dropdown-item" href="/listagem-projetos-vagas">Procurar Vaga</a></li>
+            <li><a class="dropdown-item" href="/gerenciar-projetos">Gerenciar Projetos</a></li>
+        `;
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const tipoUsuario = localStorage.getItem('tipoUsuario');
+    const buscarPerfisLink = document.getElementById('buscar-perfis-link');
+    if (!buscarPerfisLink) return;
+
+    if (tipoUsuario === 'EMPRESA') {
+        buscarPerfisLink.setAttribute('href', '/listagem-freelancers');
+    } else {
+        buscarPerfisLink.setAttribute('href', '/listagem-empresas');
+    }
+});
+
+
 // Seleciona o botão correto na navbar conforme a URL
 document.addEventListener('DOMContentLoaded', function () {
     const path = window.location.pathname;
@@ -280,41 +315,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             window.location.href = '/login';
         });
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    const tipoUsuario = localStorage.getItem('tipoUsuario');
-    const projetoDropdownMenu = document.getElementById('projetoDropdownMenu');
-    if (!projetoDropdownMenu) return;
-
-    projetoDropdownMenu.innerHTML = ''; // Limpa antes
-
-    if (tipoUsuario === 'EMPRESA') {
-        // Empresa: Criar Vaga e Gerenciar Projetos
-        projetoDropdownMenu.innerHTML = `
-            <li><a class="dropdown-item" href="/publicar-vaga">Criar Vaga</a></li>
-            <li><a class="dropdown-item" href="/gerenciar-projetos">Gerenciar Projetos</a></li>
-        `;
-    } else {
-        // Freelancer ou visitante: Procurar Vaga e Gerenciar Projetos
-        projetoDropdownMenu.innerHTML = `
-            <li><a class="dropdown-item" href="/listagem-projetos-vagas">Procurar Vaga</a></li>
-            <li><a class="dropdown-item" href="/gerenciar-projetos">Gerenciar Projetos</a></li>
-        `;
-    }
-});
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    const tipoUsuario = localStorage.getItem('tipoUsuario');
-    const buscarPerfisLink = document.getElementById('buscar-perfis-link');
-    if (!buscarPerfisLink) return;
-
-    if (tipoUsuario === 'EMPRESA') {
-        buscarPerfisLink.setAttribute('href', '/listagem-freelancers');
-    } else {
-        buscarPerfisLink.setAttribute('href', '/listagem-empresas');
     }
 });
 
