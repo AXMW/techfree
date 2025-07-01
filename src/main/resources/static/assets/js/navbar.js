@@ -318,17 +318,16 @@ if (projetoDropdown) {
 // Lista de títulos que levam para detalhes do projeto
 const TITULOS_PROJETO = [
     'ALTERACAO_DE_PROJETO',
-    'APROVACAO_DE_CANDIDATURA',
     'REJEICAO_DE_CANDIDATURA',
     'CONVITE_DE_EMPRESA',
     'CERTIFICADO_DE_CONCLUSAO',
     'PROJETO_ENTREGUE',
-    'CANDIDATURA_ENVIADA',
     'CONVITE_ACEITO',
     'CONVITE_RECUSADO',
     'CRIACAO_DE_PROJETO',
     'PROJETO_FINALIZADO',
-    'CANDIDATURA_RECEBIDA'
+    'CANDIDATURA_RECEBIDA',
+    'PROJETO_CANCELADO'
 ];
 
 // Função para decidir o link da notificação (NÃO chama alert aqui!)
@@ -341,11 +340,12 @@ function getNotificacaoLink(n) {
         return '/pagina-profile';
     }
     if (TITULOS_PROJETO.includes(rawTitulo)) {
-        if (n.projetoId) return `/detalhes-projeto/${n.projetoId}`;
+        if (n.projetoId) return `/andamento-projeto/${n.projetoId}`;
         return '#';
     }
-    if (rawTitulo === 'PROJETO_CANCELADO') {
-        return '/gerenciar-projetos?tab=fechados';
+    if (rawTitulo === 'APROVACAO_DE_CANDIDATURA' || rawTitulo === 'CANDIDATURA_ENVIADA') {
+        if (n.projetoId) return `/detalhes-projeto/${n.projetoId}`;
+        return '#';
     }
     // Se não for nenhum dos casos conhecidos, retorna '#'
     return '#';
