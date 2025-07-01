@@ -347,6 +347,10 @@ function getNotificacaoLink(n) {
         if (n.projetoId) return `/detalhes-projeto/${n.projetoId}`;
         return '#';
     }
+    if (rawTitulo === 'CANDIDATURA_ENVIADA') {
+        if (n.projetoId) return `/lista-candidatos/${n.projetoId}`;
+        return '#';
+    }
     // Se não for nenhum dos casos conhecidos, retorna '#'
     return '#';
 }
