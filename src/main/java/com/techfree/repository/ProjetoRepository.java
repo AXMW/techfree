@@ -17,4 +17,6 @@ public interface ProjetoRepository extends JpaRepository<Projeto, Long>, JpaSpec
     List<Projeto> findByStatusAndEmpresaUsuarioEmail(StatusProjeto status, String EmpresaUsuarioEmail);
     List<Projeto> findByStatusAndFreelancerSelecionadoUsuarioEmail(StatusProjeto status, String freelancerSelecionadoUsuarioEmail);
     List<Projeto> findByEmpresa(Empresa empresa);
+    List<Projeto> findByFreelancerSelecionadoUsuarioEmail(String email);
+    List<Projeto> findByFreelancerSelecionadoUsuarioEmailAndStatus(String email, StatusProjeto status);
 }
