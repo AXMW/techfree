@@ -208,6 +208,59 @@ function renderProfile(profile) {
     if (titleTag) titleTag.textContent = `${profile.nome} - TechFree`;
 }
 
+async function carregarProjetosAbertos() {
+    try {
+        const resp = await fetch('/projetos');
+        if (!resp.ok) throw new Error('Erro ao buscar projetos');
+        const projetos = await resp.json();
+        // Filtra apenas projetos com status "ABERTO"
+        return projetos.filter(p => p.status === 'ABERTO');
+    } catch (e) {
+        return [];
+    }
+}
+
+function popularSelectProjetos(projetos) {
+    const select = document.getElementById('selectProject');
+    if (!select) return;
+    // Limpa opções antigas, mantém o placeholder
+    select.innerHTML = '<option selected disabled>Escolha uma opção</option>';
+    projetos.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.titulo || p.nome || `Projeto ${p.id}`;
+        select.appendChild(opt);
+    });
+}
+
+async function enviarConviteProjeto() {
+    const select = document.getElementById('selectProject');
+    if (!select) return;
+    const projetoId = select.value;
+    if (!projetoId || projetoId === 'Escolha uma opção') {
+        alert('Selecione um projeto para convidar!');
+        return;
+    }
+    try {
+        const resp = await fetch('/convites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ projetoId, freelancerId })
+        });
+        if (!resp.ok) throw new Error('Erro ao enviar convite');
+        alert('Convite enviado com sucesso!');
+    } catch (e) {
+        alert('Erro ao enviar convite.');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     carregarPerfilFreelancer();
+    carregarProjetosAbertos().then(popularSelectProjetos);
+    const btn = document.querySelector('.invite-btn');
+    if (btn) {
+        btn.onclick = enviarConviteProjeto;
+    }
 });

@@ -64,6 +64,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         let botoesHtml = '';
         const statusUpper = (data.status || '').toUpperCase();
 
+        // FREELANCER: Botão de baixar certificado se CONCLUIDO
+        let btnCertificadoHtml = '';
+        if (tipoUsuario === 'FREELANCER' && statusUpper === 'CONCLUIDO') {
+            btnCertificadoHtml = `<button class="btn btn-outline-success" id="btnBaixarCertificado"><i class="bi bi-download"></i> Baixar certificado</button>`;
+        }
+
         // Função para verificar se já existe avaliação
         async function verificarFeedbackExistente() {
             const token = localStorage.getItem('token');
@@ -103,9 +109,27 @@ document.addEventListener('DOMContentLoaded', async function () {
             podeFeedback = resultadoFeedback.podeFeedback;
             feedbackExistente = resultadoFeedback.feedback;
             if (podeFeedback) {
-                botoesHtml = `
-                    <button class="btn btn-success" id="btnEnviarFeedback">Enviar Feedback</button>
-                `;
+                if (tipoUsuario === 'EMPRESA') {
+                    // Empresa: só Enviar Feedback, centralizado
+                    botoesHtml += `
+                        <div class="d-flex justify-content-center w-100" style="max-width:400px;margin:0 auto;">
+                            <button class="btn btn-outline-info" id="btnEnviarFeedback">Enviar Feedback</button>
+                        </div>
+                    `;
+                } else {
+                    // Freelancer: Enviar Feedback e Baixar certificado lado a lado
+                    botoesHtml += `
+                        <div class="row justify-content-center w-100" style="max-width:400px;margin:0 auto;">
+                            <div class="col-12 col-md-6 d-flex justify-content-center mb-2 mb-md-0">
+                                <button class="btn btn-outline-info w-100" id="btnEnviarFeedback">Enviar Feedback</button>
+                            </div>
+                            <div class="col-12 col-md-6 d-flex justify-content-center">
+                                ${btnCertificadoHtml}
+                            </div>
+                        </div>
+                    `;
+                    btnCertificadoHtml = '';
+                }
             } else if (feedbackExistente) {
                 // Bloco de feedback já enviado
                 const nota = feedbackExistente.nota;
@@ -142,38 +166,54 @@ document.addEventListener('DOMContentLoaded', async function () {
                         dataFormatada = dataCriacao;
                     }
                 }
-                botoesHtml = `
+                botoesHtml += `
                     <div class="info-card d-flex flex-column align-items-center" style="max-width: 400px; margin: 0 auto;">
                         <div class="mb-2">Um feedback já foi enviado para este projeto:</div>
                         <div class="mb-2" style="font-size:1.5em; color:#FFD700;">${estrelas}</div>
                         <div class="mb-2"><strong>Comentário:</strong> ${comentario ? comentario : '-'}</div>
                         <div class="mb-1"><strong>Data:</strong> ${dataFormatada}</div>
+                        <div class="mt-3 w-100 d-flex justify-content-center">${btnCertificadoHtml}</div>
                     </div>
                 `;
+                btnCertificadoHtml = '';
             }
         } else if (statusUpper !== 'CONCLUIDO' && statusUpper !== 'CANCELADO') {
             const fecharTexto = statusUpper === 'REVISAO' ? 'Fechar' : 'Cancelar';
             if (tipoUsuario === 'EMPRESA') {
                 if (statusUpper === 'REVISAO') {
+                    // Fechar e Devolver lado a lado, centralizados, responsivos
                     botoesHtml = `
-                        <button class="btn btn-danger me-2" id="btnFecharProjeto">${fecharTexto}</button>
-                        <button class="btn btn-warning" id="btnDevolverProjeto">Devolver</button>
+                        <div class="row justify-content-center w-100" style="max-width:400px;margin:0 auto;">
+                            <div class="col-12 col-md-6 d-flex justify-content-center mb-2 mb-md-0">
+                                <button class="btn btn-danger w-100" id="btnFecharProjeto">${fecharTexto}</button>
+                            </div>
+                            <div class="col-12 col-md-6 d-flex justify-content-center">
+                                <button class="btn btn-warning w-100" id="btnDevolverProjeto">Devolver</button>
+                            </div>
+                        </div>
                     `;
                 } else {
+                    // Fechar sozinho, centralizado
                     botoesHtml = `
-                        <button class="btn btn-danger" id="btnFecharProjeto">${fecharTexto}</button>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-danger" id="btnFecharProjeto">${fecharTexto}</button>
+                        </div>
                     `;
                 }
             } else if (tipoUsuario === 'FREELANCER') {
                 // Só mostra "Enviar para revisão" se NÃO estiver em revisão
                 if (statusUpper !== 'REVISAO') {
                     botoesHtml = `
-                        <button class="btn btn-primary me-2" id="btnEnviarRevisao">Enviar para revisão</button>
-                        <button class="btn btn-danger" id="btnFecharProjeto">Desistir</button>
+                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                            <button class="btn btn-primary me-2" id="btnEnviarRevisao">Enviar para revisão</button>
+                            <button class="btn btn-danger" id="btnFecharProjeto">Desistir</button>
+                        </div>
                     `;
                 } else {
                     botoesHtml = `
-                        <button class="btn btn-danger" id="btnFecharProjeto">Desistir</button>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-danger" id="btnFecharProjeto">Desistir</button>
+                        </div>
                     `;
                 }
             }
@@ -187,17 +227,73 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Seleciona o bloco de contato do orientador (segundo .info-card na sidebar)
         const infoCards = document.querySelectorAll('.col-lg-4 .info-card');
         const orientadorCard = infoCards[1]; // segundo .info-card
-        if (orientadorCard && botoesHtml) {
+        if (orientadorCard && (botoesHtml || btnCertificadoHtml)) {
             const div = document.createElement('div');
-            div.className = 'mt-3 mb-3 d-flex justify-content-center gap-2'; // Alinha botões ao centro e com espaçamento
-            div.innerHTML = botoesHtml;
+            div.className = 'mt-3 mb-3';
+            div.innerHTML = `${botoesHtml}${btnCertificadoHtml}`;
             orientadorCard.parentNode.insertBefore(div, orientadorCard.nextSibling);
+            // Botão de baixar certificado (FREELANCER, CONCLUIDO)
+            const btnBaixarCertificado = div.querySelector('#btnBaixarCertificado');
+            if (btnBaixarCertificado) {
+                btnBaixarCertificado.addEventListener('click', async function () {
+                    btnBaixarCertificado.disabled = true;
+                    btnBaixarCertificado.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Baixando...';
+                    try {
+                        const token = localStorage.getItem('token');
+                        // 1. Buscar o id do certificado
+                        const resp = await fetch(`/certificados/projetos/${projetoId}`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': 'Bearer ' + token
+                            }
+                        });
+                        if (!resp.ok) throw new Error('Erro ao buscar certificado');
+                        const certData = await resp.json();
+                        const certificadoId = certData.id;
+                        if (!certificadoId) throw new Error('Certificado não encontrado');
+                        // 2. Baixar o certificado
+                        const downloadResp = await fetch(`/certificados/${certificadoId}/download`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': 'Bearer ' + token
+                            }
+                        });
+                        if (!downloadResp.ok) throw new Error('Erro ao baixar certificado');
+                        const blob = await downloadResp.blob();
+                        // Tenta obter nome do arquivo do header
+                        let filename = `certificado_${certificadoId}.pdf`;
+                        const disposition = downloadResp.headers.get('Content-Disposition');
+                        if (disposition && disposition.indexOf('filename=') !== -1) {
+                            const match = disposition.match(/filename="?([^";]+)"?/);
+                            if (match && match[1]) filename = match[1];
+                        }
+                        // Cria link para download
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        setTimeout(() => {
+                            window.URL.revokeObjectURL(url);
+                            a.remove();
+                        }, 100);
+                        btnBaixarCertificado.innerHTML = '<i class="bi bi-download"></i> Baixar certificado';
+                        btnBaixarCertificado.disabled = false;
+                    } catch (e) {
+                        btnBaixarCertificado.innerHTML = '<i class="bi bi-download"></i> Baixar certificado';
+                        btnBaixarCertificado.disabled = false;
+                        alert('Erro ao baixar certificado.');
+                    }
+                });
+            }
 
+            // ...existing code for feedback/modal, revisão, devolução, fechar projeto...
             // Botão de feedback (status concluido)
             const btnEnviarFeedback = div.querySelector('#btnEnviarFeedback');
             if (btnEnviarFeedback) {
                 btnEnviarFeedback.addEventListener('click', function () {
-                    // Cria modal de feedback se não existir
+                    // ...existing code...
                     let modalFeedback = document.getElementById('modalFeedback');
                     if (!modalFeedback) {
                         modalFeedback = document.createElement('div');
@@ -239,7 +335,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     modal.show();
 
                     // Limpa campos ao abrir
-
                     document.getElementById('notaFeedback').value = '';
                     document.getElementById('comentarioFeedback').value = '';
                     document.getElementById('feedbackMsg').innerText = '';
@@ -248,7 +343,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     renderStarRating(0);
 
                     // Atualiza contador de caracteres
-
                     const comentarioInput = document.getElementById('comentarioFeedback');
                     comentarioInput.addEventListener('input', function () {
                         const len = comentarioInput.value.length;

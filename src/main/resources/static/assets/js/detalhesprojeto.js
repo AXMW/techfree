@@ -123,7 +123,7 @@ function preencherSidebar(projeto) {
     const tipoUsuario = localStorage.getItem('tipoUsuario');
     let candidaturaBtn = '';
     if (tipoUsuario === 'FREELANCER') {
-        candidaturaBtn = `<a href="#" class="btn btn-info w-100 apply-btn shadow mt-4">Candidatar-se</a>`;
+        candidaturaBtn = `<a href="#" class="btn btn-info w-100 apply-btn shadow mt-4" style="color: #fff">Candidatar-se</a>`;
     }
 
     document.getElementById('sidebarResumo').innerHTML = `
