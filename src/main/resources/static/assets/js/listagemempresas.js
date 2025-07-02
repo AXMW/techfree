@@ -40,24 +40,33 @@ function renderEmpresas() {
             return 'https://' + url.replace(/^\/*/, '');
         }
         col.innerHTML = `
-            <div class="card h-100 empresa-card w-100">
+            <div class="card h-100 empresa-card w-100 empresa-card-clickable" data-id="${e.id}">
                 <div class="card-body d-flex flex-column align-items-center text-center">
                     <div class="empresa-avatar-wrap mb-3">
                         <img src="${e.avatar || 'assets/img/default-avatar.png'}" alt="Logo" class="rounded-circle" style="width:96px;height:96px;object-fit:cover;">
                     </div>
                     <h5 class="card-title mb-1">${e.nomeFantasia || '-'}</h5>
-                    <div class="empresa-area mb-2" style="color:#06a0b2;font-weight:600;">${e.areaAtuacao || '-'}</div>
+                    <div class="empresa-area mb-2" style="color:#FF6F00;font-weight:600;">${e.areaAtuacao || '-'}</div>
                     <div class="mb-2 w-100 d-flex flex-column align-items-center gap-1">
                         <span><i class="bi bi-envelope"></i> <span class="ms-1">${e.emailContato || '-'}</span></span>
                         <span><i class="bi bi-whatsapp"></i> <span class="ms-1">${e.telefoneContato || '-'}</span></span>
                         <span class="d-flex flex-row gap-2">
-                            ${e.likedin ? `<a href='${makeAbsolute(e.likedin)}' target='_blank' rel='noopener' class='ms-1' title='LinkedIn'><i class='bi bi-linkedin'></i></a>` : ''}
+                            ${e.linkedin ? `<a href='${makeAbsolute(e.linkedin)}' target='_blank' rel='noopener' class='ms-1' title='LinkedIn'><i class='bi bi-linkedin'></i></a>` : ''}
                             ${e.site ? `<a href='${makeAbsolute(e.site)}' target='_blank' rel='noopener' class='ms-1' title='Site'><i class='bi bi-globe'></i></a>` : ''}
                         </span>
                     </div>
                 </div>
             </div>
         `;
+        // Adiciona evento de clique para redirecionar ao perfil da empresa
+        col.querySelector('.empresa-card-clickable').addEventListener('click', function(evn) {
+            // Evita que clique em links internos (linkedin/site) dispare o redirecionamento do card
+            if (evn.target.closest('a')) return;
+            const id = this.getAttribute('data-id');
+            if (id) {
+                window.location.href = `/ver-perfil-empresa/${id}`;
+            }
+        });
         lista.appendChild(col);
     });
     // Esconde botão se não houver mais

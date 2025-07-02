@@ -41,20 +41,20 @@ function renderFreelancers() {
         }
         // Pega até 3 habilidades e monta as tags com cor personalizada
         let habilidadesTags = '-';
-        const tagStyle = 'background:#06a0b2;color:#fff;font-weight:600;';
+        const tagStyle = 'background:#FF6F00;color:#fff;font-weight:600;';
         if (Array.isArray(f.habilidades) && f.habilidades.length > 0) {
             habilidadesTags = f.habilidades.slice(0, 3).map(h => `<span class="badge me-1" style="${tagStyle}">${h}</span>`).join(' ');
         } else if (typeof f.habilidades === 'string' && f.habilidades.trim() !== '') {
             habilidadesTags = `<span class="badge me-1" style="${tagStyle}">${f.habilidades}</span>`;
         }
         col.innerHTML = `
-            <div class="card h-100 empresa-card w-100">
+            <div class="card h-100 empresa-card w-100 freelancer-card-clickable" data-id="${f.id}">
                 <div class="card-body d-flex flex-column align-items-center text-center">
                     <div class="empresa-avatar-wrap mb-3">
                         <img src="${f.avatar || 'assets/img/default-avatar.png'}" alt="Avatar" class="rounded-circle" style="width:96px;height:96px;object-fit:cover;">
                     </div>
                     <h5 class="card-title mb-1">${f.nome || '-'}</h5>
-                    <div class="empresa-area mb-2" style="color:#06a0b2;font-weight:600;">${f.areaAtuacao || '-'}</div>
+                    <div class="empresa-area mb-2" style="color:#FF6F00;font-weight:600;">${f.areaAtuacao || '-'}</div>
                     <div class="mb-2 w-100 d-flex flex-column align-items-center gap-1">
                         <span><i class="bi bi-envelope"></i> <span class="ms-1">${f.emailContato || '-'}</span></span>
                         <span><i class="bi bi-whatsapp"></i> <span class="ms-1">${f.telefoneContato || '-'}</span></span>
@@ -70,6 +70,15 @@ function renderFreelancers() {
                 </div>
             </div>
         `;
+        // Adiciona evento de clique para redirecionar ao perfil do freelancer
+        col.querySelector('.freelancer-card-clickable').addEventListener('click', function(evn) {
+            // Evita que clique em links internos (github/linkedin/portfolio) dispare o redirecionamento do card
+            if (evn.target.closest('a')) return;
+            const id = this.getAttribute('data-id');
+            if (id) {
+                window.location.href = `/ver-perfil-freelancer/${id}`;
+            }
+        });
         lista.appendChild(col);
     });
     document.getElementById('loadMoreBtn').style.display = (filtradas.length > fim) ? '' : 'none';
