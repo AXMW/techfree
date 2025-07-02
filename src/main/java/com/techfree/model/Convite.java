@@ -2,7 +2,6 @@ package com.techfree.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import com.techfree.enums.StatusConvite;
 
 
 
@@ -18,16 +17,8 @@ public class Convite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "TEXT")
-    private String mensagem;
-
     @Column(name = "data_convite")
     private String dataConvite;
-
-   @Builder.Default
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private StatusConvite status = StatusConvite.ENVIADO;
 
     @ManyToOne
     @JoinColumn(name = "freelancer_id", nullable = false)

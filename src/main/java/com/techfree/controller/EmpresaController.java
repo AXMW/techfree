@@ -258,12 +258,13 @@ public class EmpresaController {
         return ResponseEntity.ok(
             empresas.stream()
                 .map(empresa -> new ListarTodosEmpresaDTO(
+                    empresa.getId(),
                     empresa.getNomeFantasia(),
                     empresa.getAreaAtuacao(),
                     empresa.getEmailContato(),
                     empresa.getTelefoneContato(),
-                    empresa.getSite(),
                     empresa.getLinkedin(),
+                    empresa.getSite(),
                     empresa.getAvatar()))
                 .toList()
         );

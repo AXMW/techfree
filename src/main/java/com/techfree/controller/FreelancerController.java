@@ -231,6 +231,7 @@ public class FreelancerController {
         return ResponseEntity.ok(
             freelancers.stream()
                 .map(f -> new ListarTodosFreelancerDTO(
+                    f.getId(),
                     f.getNome(),
                     f.getEmailContato(),
                     f.getHabilidades(),

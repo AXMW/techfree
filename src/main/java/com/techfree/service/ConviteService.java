@@ -12,7 +12,6 @@ import com.techfree.model.Usuario;
 import com.techfree.repository.ConviteRepository;
 import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.ProjetoRepository;
-import com.techfree.enums.StatusConvite;
 import com.techfree.enums.StatusProjeto;
 import com.techfree.enums.TituloDeNotificacao;
 import org.springframework.web.server.ResponseStatusException;
@@ -63,6 +62,13 @@ public class ConviteService {
                 );
         }
 
+        if(projeto.getStatus() != StatusProjeto.ABERTO) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, // 400
+                "O projeto não está aberto para convites"
+                );
+        }
+
         if(projeto.getFreelancerSelecionado() != null) {
             throw new ResponseStatusException(
                 HttpStatus.CONFLICT, // 409
@@ -78,8 +84,13 @@ public class ConviteService {
         Convite convite = new Convite();
         convite.setFreelancer(freelancer);
         convite.setProjeto(projeto);
-        convite.setMensagem(dto.getMensagem());
-        convite.setStatus(StatusConvite.ENVIADO);
+
+        if (!projeto.getEmpresa().getUsuario().isEnabled()) {
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, // 403
+                "Usuário desabilitado devido a muitas flags"
+                );
+        }
 
         return conviteRepository.save(convite);
     }
@@ -134,102 +145,6 @@ public class ConviteService {
         }
 
         conviteRepository.delete(convite);
-    }
-
-    public Convite aceitarConvite(Long id, String email) {
-        Convite convite = conviteRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND, // 404
-                "Convite não encontrado"
-                ));
-
-        if (!convite.getFreelancer().getUsuario().getEmail().equals(email)) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, // 403
-                "Você não tem permissão para aceitar este convite"
-                );
-        }
-
-        if (!convite.getFreelancer().getUsuario().isEnabled()) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, // 403
-                "Usuário desabilitado devido a muitas flags"
-                );
-        }
-
-        if(convite.getProjeto().getFreelancerSelecionado() != null) {
-            throw new ResponseStatusException(
-                HttpStatus.CONFLICT, // 409
-                "Este projeto já tem um freelancer selecionado"
-                );
-        }
-
-        if(convite.getStatus() == StatusConvite.RECUSADO) {
-            throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, // 400
-                "Você não pode aceitar um convite já recusado"
-                );
-        }
-
-        convite.getProjeto().setFreelancerSelecionado(convite.getFreelancer());
-        convite.getProjeto().setStatus(StatusProjeto.EM_ANDAMENTO);
-        projetoRepository.save(convite.getProjeto());
-
-        convite.setStatus(StatusConvite.ACEITO);
-        conviteRepository.save(convite);
-
-        // Enviar notificação
-        notificacaoService.criarNotificacao(
-            
-            TituloDeNotificacao.CONVITE_ACEITO,
-            convite.getFreelancer().getUsuario(),
-            "O convite para o projeto " + convite.getProjeto().getTitulo() + " foi aceito.",
-            convite.getProjeto().getEmpresa().getUsuario(), convite.getProjeto().getId()
-        );
-
-        return convite;
-    }
-
-    public Convite recusarConvite(Long id, String email) {
-        Convite convite = conviteRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND, // 404
-                "Convite não encontrado"
-                ));
-
-        if (!convite.getFreelancer().getUsuario().getEmail().equals(email)) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, // 403
-                "Você não tem permissão para recusar este convite"
-                );
-        }
-
-        if (!convite.getFreelancer().getUsuario().isEnabled()) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, // 403
-                "Usuário desabilitado devido a muitas flags"
-                );
-        }
-
-        if(convite.getStatus() == StatusConvite.ACEITO) {
-            throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, // 400
-                "Você não pode recusar um convite já aceito"
-                );
-        }
-
-        convite.setStatus(StatusConvite.RECUSADO);
-        conviteRepository.save(convite);
-
-        // Enviar notificação
-        notificacaoService.criarNotificacao(
-            TituloDeNotificacao.CONVITE_RECUSADO,
-            convite.getFreelancer().getUsuario(),
-            "O convite para o projeto " + convite.getProjeto().getTitulo() + " foi recusado.",
-            convite.getProjeto().getEmpresa().getUsuario(), convite.getProjeto().getId()
-        );
-
-        return convite;
     }
 
     public List<Convite> listarPorProjeto(Long projetoId, String emailEmpresa) {

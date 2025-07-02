@@ -79,7 +79,7 @@ function renderEmpresaProfile(profile) {
     if (header) {
         header.classList.add('d-flex', 'align-items-center');
         header.innerHTML = `
-            <img src="${profile.avatar || '/assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa" style="width: 120px; height: 120px; border-radius: 50%; object-fit: contain; border: 4px solid #FF6F00; background: #fff;">
+            <img src="${profile.avatar || '/assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #FF6F00; background: #fff;">
             <div class="profile-info flex-grow-1">
                 <h2>${profile.nome}</h2>
                 <div class="role mb-1">${profile.cargo || ""}</div>

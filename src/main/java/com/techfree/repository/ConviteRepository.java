@@ -14,8 +14,4 @@ public interface ConviteRepository extends JpaRepository<Convite, Long> {
     Optional<Convite> findByProjetoAndFreelancer(Projeto projeto, Freelancer freelancer);
     List<Convite> findByFreelancerId(Long freelancerId);
     List<Convite> findByProjetoId(Long projetoId);
-    List<Convite> findByStatus(String status);
-    List<Convite> findByStatusAndFreelancerId(String status, Long freelancerId);
-    List<Convite> findByStatusAndProjetoId(String status, Long projetoId);
-    List<Convite> findByStatusAndFreelancerIdAndProjetoId(String status, Long freelancerId, Long projetoId);
 }

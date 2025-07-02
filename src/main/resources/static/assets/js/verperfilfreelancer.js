@@ -138,7 +138,7 @@ function renderProfile(profile) {
 
     // Monta o HTML (sem email, telefone e sem flags)
     document.querySelector('.profile-header').innerHTML = `
-        <img src="${profile.avatar || '/assets/img/default-avatar.png'}" class="profile-avatar" alt="Avatar do Usuário">
+        <img src="${profile.avatar || '/assets/img/default-avatar.png'}" class="profile-avatar" alt="Avatar do Usuário" style="object-fit: cover;">
         <div class="profile-info flex-grow-1">
             <h2>${profile.nome}</h2>
             <div class="role mb-1">${profile.cargo || ''}</div>

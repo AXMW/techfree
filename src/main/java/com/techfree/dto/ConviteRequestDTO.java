@@ -11,12 +11,10 @@ import com.techfree.model.Convite;
 @AllArgsConstructor
 public class ConviteRequestDTO {
     private Long projetoId;
-    private String mensagem;
     private Long freelancerId;
 
     public ConviteRequestDTO(Convite convite) {
         this.projetoId = convite.getProjeto().getId();
-        this.mensagem = convite.getMensagem();
         this.freelancerId = convite.getFreelancer().getId();
     }
 }
