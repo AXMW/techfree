@@ -95,15 +95,17 @@ function preencherProjeto(projeto) {
         </div>
         <div class="section-title">Descrição do Projeto</div>
         <p class="fs-5 text-muted" id="descricaoProjeto"></p>
+        ${localStorage.getItem('tipoUsuario') === 'EMPRESA' ? `
         <div class="project-anexo">
             <i class="bi bi-paperclip"></i>
-            <strong>Anexo:</strong>
+            <strong>Briefing:</strong>
             ${
                 projeto.anexo && projeto.anexo.nome
                     ? `<a href="${projeto.anexo.url}" class="link-light text-decoration-underline" target="_blank">${projeto.anexo.nome}</a>`
                     : '<span class="text-muted">Nenhum anexo</span>'
             }
         </div>
+        ` : ''}
     `;
 
     const descricaoFormatada = projeto.descricao

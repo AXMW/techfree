@@ -97,7 +97,28 @@
                             </div>
                         </div>
                         <div class="col-md-3 align-self-stretch d-flex flex-column h-100">
-                            <label for="anexo" class="form-label">Arquivo Anexado</label>
+                            <label for="anexo" class="form-label d-flex align-items-center gap-1">Briefing
+                                <span tabindex="0" id="briefingInfoIcon" style="cursor: pointer;">
+                                    <i class="bi bi-info-circle-fill text-info" style="font-size: 1.1em;"></i>
+                                </span>
+                            </label>
+                            <!-- Modal Briefing Info -->
+                            <div class="modal fade" id="modalBriefingInfo" tabindex="-1" aria-labelledby="modalBriefingInfoLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="modalBriefingInfoLabel">Informação sobre o Briefing</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    Esse arquivo estará disponível para alteração apenas enquanto o projeto não for iniciado.
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                             <div id="uploadArea" class="border rounded p-3 text-center flex-grow-1 d-flex flex-column justify-content-center"
                                 style="cursor:pointer; background:#23243a; min-height: 180px;">
                                 <i class="bi bi-cloud-arrow-up" style="font-size:2rem;"></i>

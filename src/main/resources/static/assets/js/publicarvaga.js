@@ -151,6 +151,10 @@ document.getElementById('vagaForm').addEventListener('submit', async function (e
     // Pegue o arquivo
     const anexoInput = document.getElementById('anexo');
     let anexoAuxiliar = '';
+    if (anexoInput.files.length === 0) {
+        alert('O campo Briefing é obrigatório. Por favor, anexe um arquivo.');
+        return;
+    }
     if (anexoInput.files.length > 0) {
         const formData = new FormData();
         formData.append('file', anexoInput.files[0]);

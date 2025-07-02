@@ -40,6 +40,27 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <li><strong>Ferramentas:</strong> ${data.requisitos ? data.requisitos.split(',').join(', ') : ''}</li>
                 `;
             }
+            // Adiciona Briefing em destaque, se houver anexoAuxiliar
+            if (data.anexoAuxiliar) {
+                let briefingDiv = document.getElementById('briefing-download');
+                if (!briefingDiv) {
+                    briefingDiv = document.createElement('div');
+                    briefingDiv.id = 'briefing-download';
+                    briefingDiv.className = 'mt-3';
+                    sidebarCards[0].appendChild(briefingDiv);
+                }
+                // Nome do arquivo (tenta extrair do path)
+                let nomeArquivo = data.anexoAuxiliar;
+                if (nomeArquivo.lastIndexOf('/') !== -1) nomeArquivo = nomeArquivo.substring(nomeArquivo.lastIndexOf('/') + 1);
+                if (nomeArquivo.lastIndexOf('\\') !== -1) nomeArquivo = nomeArquivo.substring(nomeArquivo.lastIndexOf('\\') + 1);
+                briefingDiv.innerHTML = `
+                    <div class="d-flex justify-content-center">
+                        <a href="/uploads/${nomeArquivo}" class="btn btn-outline-info btn-sm" style="--bs-btn-color: #0dcaf0; --bs-btn-border-color: #0dcaf0; --bs-btn-hover-bg: #0dcaf0; --bs-btn-hover-border-color: #0dcaf0; --bs-btn-hover-color: #fff;" download>
+                            <i class="bi bi-download"></i> Baixar Briefing
+                        </a>
+                    </div>
+                `;
+            }
         }
 
         // Preenche contato do orientador (exemplo: usando emailPraContato)
