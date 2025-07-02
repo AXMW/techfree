@@ -21,6 +21,7 @@ import com.techfree.repository.EmpresaRepository;
 import org.springframework.http.HttpStatus;
 import com.techfree.model.Usuario;
 import com.techfree.enums.StatusProjeto;
+import com.techfree.enums.TipoLog;
 import com.techfree.enums.TituloDeNotificacao;
 
 @Service
@@ -42,6 +43,9 @@ public class AvaliacaoEmpresaService {
 
     @Autowired
     private NotificacaoService notificacaoService;
+
+    @Autowired
+    private LogService logService;
 
     public AvaliacaoEmpresaResponseDTO criar(String emailFreelancer, AvaliacaoEmpresaRequestDTO dto) {
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
@@ -93,7 +97,12 @@ public class AvaliacaoEmpresaService {
 
         // Notificar a empresa sobre o novo feedback
         notificacaoService.criarNotificacao(TituloDeNotificacao.FEEDBACK_RECEBIDO, projeto.getEmpresa().getUsuario(), 
-            "O projeto " + projeto.getTitulo() + " foi cancelado.", null, projeto.getId());
+            "Você recebeu um novo feedback no projeto" + projeto.getTitulo(), null, projeto.getId());
+
+        logService.registrar(TipoLog.FEEDBACK_DE_EMPRESA,
+            "Avaliação criada para a empresa " + projeto.getEmpresa().getId() + " no projeto " + projeto.getId(),
+            projeto.getFreelancerSelecionado().getUsuario());
+            
         return new AvaliacaoEmpresaResponseDTO(avaliacao);
     }
 

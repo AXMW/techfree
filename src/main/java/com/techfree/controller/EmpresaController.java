@@ -26,6 +26,8 @@ import com.techfree.repository.AvaliacaoEmpresaRepository;
 import com.techfree.repository.UsuarioRepository;
 import com.techfree.model.AvaliacaoEmpresa;
 import com.techfree.security.JwtUtil;
+import com.techfree.service.LogService;
+import com.techfree.enums.TipoLog;
 
 @RestController
 @RequestMapping("/empresa")
@@ -39,6 +41,9 @@ public class EmpresaController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private LogService logService;
 
     public EmpresaController(
         EmpresaRepository empresaRepository,
@@ -102,6 +107,10 @@ public class EmpresaController {
         if(dadosAtualizados.getTelefoneContato() != null) empresa.setTelefoneContato(dadosAtualizados.getTelefoneContato());
         
 
+        logService.registrar(TipoLog.ATUALIZACAO_PERFIL_EMPRESA,
+            "Perfil da empresa " + empresa.getId() + " atualizado",
+            usuario
+        );
         empresaRepository.save(empresa);
         return ResponseEntity.ok(empresa);
     }
@@ -128,6 +137,11 @@ public class EmpresaController {
         usuarioRepository.save(usuario);
         String token = jwtUtil.gerarToken(usuario.getEmail());
 
+        logService.registrar(TipoLog.ATUALIZACAO_EMAIL_EMPRESA,
+            "Email da empresa " + empresa.getId() + " atualizado",
+            usuario
+        );
+
         return ResponseEntity.ok(new AlterarEmailResponseDTO(usuario.getEmail(), token));
     }
 
@@ -148,6 +162,11 @@ public class EmpresaController {
         
         usuario.setSenha(passwordEncoder.encode(alterarSenhaRequest.getNovaSenha()));
         usuarioRepository.save(usuario);
+
+        logService.registrar(TipoLog.ATUALIZACAO_SENHA_EMPRESA,
+            "Senha da empresa " + usuario.getId() + " atualizada",
+            usuario
+        );
 
         return ResponseEntity.noContent().build();
     }
@@ -245,6 +264,10 @@ public class EmpresaController {
             // Salve o caminho relativo no banco
             empresa.setAssinaturaPath("/assets/assinaturas/" + fileName);
             empresaRepository.save(empresa);
+            logService.registrar(TipoLog.UPLOAD_DE_ASSINATURA,
+                "Assinatura da empresa " + empresa.getId() + " atualizada",
+                usuario
+            );
             return ResponseEntity.ok("Upload realizado com sucesso!");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Erro ao salvar arquivo: " + e.getMessage());

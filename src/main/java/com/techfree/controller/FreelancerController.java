@@ -28,6 +28,8 @@ import com.techfree.dto.AlterarEmailRequestDTO;
 import com.techfree.dto.AlterarEmailResponseDTO;
 import com.techfree.dto.AlterarSenhaRequestDTO;
 import com.techfree.security.JwtUtil;
+import com.techfree.service.LogService;
+import com.techfree.enums.TipoLog;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -48,6 +50,9 @@ public class FreelancerController {
 
     @Autowired
     private AvaliacaoFreelancerRepository avaliacaoFreelancerRepository;
+
+    @Autowired
+    private LogService logService;
 
     public FreelancerController(
         FreelancerRepository freelancerRepository,
@@ -132,6 +137,11 @@ public class FreelancerController {
             }
         }
 
+        logService.registrar(TipoLog.ATUALIZACAO_PERFIL_FREELANCER,
+            "Perfil do freelancer " + freelancer.getId() + " atualizado",
+            usuario
+        );
+
         freelancerRepository.save(freelancer);
         return ResponseEntity.ok(freelancer);
     }
@@ -158,6 +168,11 @@ public class FreelancerController {
         usuarioRepository.save(usuario);
         String token = jwtUtil.gerarToken(usuario.getEmail());
 
+        logService.registrar(TipoLog.ATUALIZACAO_EMAIL_FREELANCER,
+            "Email do freelancer " + freelancer.getId() + " atualizado",
+            usuario
+        );
+
         return ResponseEntity.ok(new AlterarEmailResponseDTO(usuario.getEmail(), token));
     }
 
@@ -178,6 +193,11 @@ public class FreelancerController {
         
         usuario.setSenha(passwordEncoder.encode(alterarSenhaRequest.getNovaSenha()));
         usuarioRepository.save(usuario);
+
+        logService.registrar(TipoLog.ATUALIZACAO_SENHA_FREELANCER,
+            "Senha do freelancer " + usuario.getId() + " atualizada",
+            usuario
+        );
 
         return ResponseEntity.noContent().build();
     }

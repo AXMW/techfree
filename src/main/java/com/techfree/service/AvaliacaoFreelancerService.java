@@ -21,6 +21,7 @@ import com.techfree.model.Usuario;
 import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.UsuarioRepository;
 import com.techfree.enums.StatusProjeto;
+import com.techfree.enums.TipoLog;
 import com.techfree.enums.TituloDeNotificacao;
 
 @Service
@@ -42,6 +43,9 @@ public class AvaliacaoFreelancerService {
 
     @Autowired
     private NotificacaoService notificacaoService;
+
+    @Autowired
+    private LogService logService;
 
     public AvaliacaoFreelancerResponseDTO criar(String emailEmpresa, AvaliacaoFreelancerRequestDTO dto) {
         Projeto projeto = projetoRepository.findById(dto.getProjetoId())
@@ -94,8 +98,11 @@ public class AvaliacaoFreelancerService {
         repository.save(avaliacao);
 
         // Notificar a empresa sobre o novo feedback
-        notificacaoService.criarNotificacao(TituloDeNotificacao.FEEDBACK_RECEBIDO, projeto.getFreelancerSelecionado().getUsuario(), 
-            "O projeto " + projeto.getTitulo() + " foi cancelado.", null, projeto.getId());
+        notificacaoService.criarNotificacao(TituloDeNotificacao.FEEDBACK_RECEBIDO, projeto.getFreelancerSelecionado().getUsuario(), "Você recebeu um novo feedback no projeto " + projeto.getTitulo(), null, projeto.getId());
+
+        logService.registrar(TipoLog.FEEDBACK_DE_FREELANCER,
+            "Avaliação criada para o freelancer " + projeto.getFreelancerSelecionado().getId() + " no projeto " + projeto.getId(),
+            projeto.getEmpresa().getUsuario());
 
         return new AvaliacaoFreelancerResponseDTO(avaliacao);
     }

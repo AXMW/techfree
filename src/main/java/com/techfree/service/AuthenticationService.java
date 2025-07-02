@@ -2,6 +2,7 @@ package com.techfree.service;
 import com.techfree.dto.LoginRequestDTO;
 import com.techfree.dto.LoginResponseDTO;
 import com.techfree.dto.RecuperarSenhaRequestDTO;
+import com.techfree.enums.TipoLog;
 import com.techfree.enums.TipoUsuario;
 import com.techfree.model.Empresa;
 import com.techfree.model.Freelancer;
@@ -64,6 +65,9 @@ public class AuthenticationService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private LogService logService;
+
     public LoginResponseDTO login(LoginRequestDTO loginDTO) {
         
         Authentication auth = authenticationManager.authenticate(
@@ -76,6 +80,11 @@ public class AuthenticationService {
 
         Usuario usuario = (Usuario) auth.getPrincipal();
         String token = jwtUtil.gerarToken(usuario.getEmail());
+
+        logService.registrar(TipoLog.LOGIN,
+            "Usuário " + usuario.getId() + " logou no sistema",
+            usuario
+        );
 
         return new LoginResponseDTO(token, usuario.getTipo());
     }
@@ -108,6 +117,11 @@ public class AuthenticationService {
             freelancer.getUsuario().getEmail(),
             "Bem-vindo à TechFree!",
             EmailTemplateService.templateBoasVindas(freelancer.getNome(), "Freelancer")
+        );
+
+        logService.registrar(TipoLog.REGISTRO_FREELANCER,
+            "Freelancer " + freelancer.getId() + " registrado no sistema",
+            freelancer.getUsuario()
         );
 
         return new SignupResponseDTO(freelancer.getNome(), freelancer.getUsuario().getTipo());
@@ -143,6 +157,11 @@ public class AuthenticationService {
             EmailTemplateService.templateBoasVindas(empresa.getNomeFantasia(), "Empresa")
         );
 
+        logService.registrar(TipoLog.REGISTRO_EMPRESA,
+            "Empresa " + empresa.getId() + " registrada no sistema",
+            empresa.getUsuario()
+        );
+
         return new SignupResponseDTO(empresa.getNomeFantasia(), empresa.getUsuario().getTipo());
     }
 
@@ -165,6 +184,11 @@ public class AuthenticationService {
             "Recuperação de senha - TechFree",
             EmailTemplateService.templateRecuperarSenha(link)
         );
+
+        logService.registrar(TipoLog.RECUPERACAO_DE_SENHA,
+            "Solicitação de recuperação de senha para o usuário " + dto.email(),
+            null // Não há usuário associado a essa ação
+        );
     }
 
     public void redefinirSenha(ResetarSenhaDTO dto) {
@@ -179,6 +203,11 @@ public class AuthenticationService {
 
         usuario.setSenha(passwordEncoder.encode(dto.novaSenha()));
         usuarioRepository.save(usuario);
+
+        logService.registrar(TipoLog.REDEFINICAO_DE_SENHA,
+            "Senha redefinida para o usuário " + usuario.getEmail(),
+            usuario
+        );
 
         tokenRepository.delete(token); // limpa token usado
     }

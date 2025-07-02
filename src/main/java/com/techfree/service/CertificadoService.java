@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.techfree.dto.CertificadoRequestDTO;
 import com.techfree.dto.CertificadoResponseDTO;
+import com.techfree.enums.TipoLog;
 import com.techfree.enums.TituloDeNotificacao;
 import com.techfree.model.Certificado;
 import com.techfree.repository.CertificadoRepository;
@@ -32,6 +33,9 @@ public class CertificadoService {
 
     @Autowired
     private NotificacaoService notificacaoService;
+
+    @Autowired
+    private LogService logService;
 
     public List<CertificadoResponseDTO> listarPorFreelancer(String email) {
         Usuario usuario = usuarioRepository.findByEmail(email)
@@ -63,6 +67,10 @@ public class CertificadoService {
         notificacaoService.criarNotificacao(TituloDeNotificacao.CERTIFICADO_DE_CONCLUSAO, freelancer.getUsuario(),
             "Você recebeu um certificado de conclusão", null, projeto.getId());
 
+        logService.registrar(TipoLog.CERTIFICADO_DE_CONCLUSAO, 
+            "Certificado criado para o freelancer " + freelancer.getId() + " no projeto " + projeto.getId(), 
+            freelancer.getUsuario());
+        
         certificadoRepository.save(c);
         return new CertificadoResponseDTO(c);
     }

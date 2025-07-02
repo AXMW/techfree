@@ -13,6 +13,7 @@ import com.techfree.repository.ConviteRepository;
 import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.ProjetoRepository;
 import com.techfree.enums.StatusProjeto;
+import com.techfree.enums.TipoLog;
 import com.techfree.enums.TituloDeNotificacao;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,9 @@ public class ConviteService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private LogService logService;
 
     public Convite criarConvite(ConviteRequestDTO dto, String emailFreelancer) {
         Usuario usuario = usuarioRepository.findByEmail(emailFreelancer)
@@ -79,6 +83,11 @@ public class ConviteService {
         notificacaoService.criarNotificacao(TituloDeNotificacao.CONVITE_DE_EMPRESA, freelancer.getUsuario(), 
             "Você recebeu um convite para o projeto: " + projeto.getTitulo(),
             projeto.getEmpresa().getUsuario(), projeto.getId()
+        );
+
+        logService.registrar(TipoLog.CONVITE_ENVIADO, 
+            "Convite enviado para o freelancer " + freelancer.getId() + " para o projeto " + projeto.getId(), 
+            projeto.getEmpresa().getUsuario()
         );
 
         Convite convite = new Convite();

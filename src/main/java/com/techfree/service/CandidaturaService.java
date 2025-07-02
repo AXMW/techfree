@@ -11,6 +11,7 @@ import com.techfree.repository.CandidaturaRepository;
 import com.techfree.repository.FreelancerRepository;
 import com.techfree.repository.ProjetoRepository;
 import com.techfree.enums.StatusCandidatura;
+import com.techfree.enums.TipoLog;
 import com.techfree.enums.TituloDeNotificacao;
 import com.techfree.service.email.EmailTemplateService;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,6 +40,9 @@ public class CandidaturaService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private LogService logService;
     
 
     public Candidatura criarCandidatura(CandidaturaRequestDTO dto, String emailFreelancer) {
@@ -83,6 +87,11 @@ public class CandidaturaService {
             projeto.getEmpresa().getUsuario(),
             "Você recebeu uma candidatura para o projeto '" + projeto.getTitulo() + "'",
              freelancer.getUsuario(), projeto.getId()
+        );
+
+        logService.registrar(TipoLog.CANDIDATURA_ENVIADA, 
+            "Candidatura enviada pelo freelancer " + freelancer.getId() + " para o projeto " + projeto.getId(), 
+            freelancer.getUsuario()
         );
 
         Candidatura candidatura = new Candidatura();
@@ -175,15 +184,17 @@ public class CandidaturaService {
             projeto.getEmpresa().getUsuario(), projeto.getId()
         );
 
+        logService.registrar(TipoLog.CANDIDATURA_RECUSADA, 
+            "Candidatura " + candidaturaId + " recusada pelo usuário " + emailEmpresa, 
+            projeto.getEmpresa().getUsuario()
+        );
+
         emailService.enviarHtml(
             candidatura.getFreelancer().getUsuario().getEmail(),
             "Sua candidatura foi " + status.name().toLowerCase(),
             emailTemplateService.gerarTemplate(nome, titulo, status)
         );
 
-        notificacaoService.notificar(TituloDeNotificacao.CANDIDATURA_ENVIADA,
-            "Sua candidatura para o projeto '" + titulo + "' foi " + status.name().toLowerCase(),
-            candidatura.getFreelancer().getUsuario(), projeto.getEmpresa().getUsuario()
-        );
+        candidaturaRepository.save(candidatura);
     }
 }

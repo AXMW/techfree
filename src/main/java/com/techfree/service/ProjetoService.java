@@ -11,6 +11,7 @@ import com.techfree.specifications.ProjetoSpecification;
 import com.techfree.repository.CandidaturaRepository;
 import com.techfree.enums.StatusCandidatura;
 import com.techfree.enums.StatusProjeto;
+import com.techfree.enums.TipoLog;
 import com.techfree.enums.TituloDeNotificacao;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,9 @@ public class ProjetoService {
 
     @Autowired
     private CertificadoService certificadoService;
+
+    @Autowired
+    private LogService logService;
 
     public ProjetoService(ProjetoRepository projetoRepository) {
         this.projetoRepository = projetoRepository;
@@ -151,6 +155,8 @@ public class ProjetoService {
         notificacaoService.criarNotificacao(TituloDeNotificacao.CRIACAO_DE_PROJETO, usuario, 
             "Você criou um novo projeto: " + projeto.getTitulo(), null, projeto.getId());
 
+        logService.registrar(TipoLog.CRIACAO_DE_PROJETO, 
+            "Projeto '" + projeto.getId() + "' criado pela empresa " + empresa.getId(), empresa.getUsuario());
         return projeto;
     }
 
@@ -197,6 +203,11 @@ public class ProjetoService {
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.ALTERACAO_DE_PROJETO, projeto.getEmpresa().getUsuario(), 
             "O projeto " + projeto.getTitulo() + " foi atualizado.", null, projeto.getId());
+        
+        logService.registrar(TipoLog.PROJETO_ATUALIZADO, 
+            "Projeto '" + projeto.getId() + "' atualizado pela empresa " + projeto.getId(), projeto.getEmpresa().getUsuario());
+
+
 
         if(dto.getTitulo() != null) projeto.setTitulo(dto.getTitulo());
         if(dto.getSubtitulo() != null) projeto.setSubtitulo(dto.getSubtitulo());
@@ -265,6 +276,9 @@ public class ProjetoService {
         notificacaoService.criarNotificacao(TituloDeNotificacao.PROJETO_FINALIZADO, projeto.getFreelancerSelecionado().getUsuario(), 
             "O projeto " + projeto.getTitulo() + " foi concluído.", null, projeto.getId());
 
+        logService.registrar(TipoLog.PROJETO_FINALIZADO, 
+            "Projeto '" + projeto.getId() + "' concluído pela empresa " + projeto.getEmpresa().getId(), projeto.getEmpresa().getUsuario());
+
         try {
             projeto.setStatus(StatusProjeto.CONCLUIDO);
             projetoRepository.save(projeto);
@@ -310,6 +324,9 @@ public class ProjetoService {
         notificacaoService.criarNotificacao(TituloDeNotificacao.ALTERACAO_DE_PROJETO, projeto.getEmpresa().getUsuario(), 
             "O projeto " + projeto.getTitulo() + " foi colocado em revisão.", null, projeto.getId());
 
+        logService.registrar(TipoLog.PROJETO_EM_REVISAO, 
+            "Projeto '" + projeto.getId() + "' colocado em revisão pelo freelancer " + projeto.getFreelancerSelecionado().getId(), projeto.getFreelancerSelecionado().getUsuario());
+
         try {
             projeto.setStatus(StatusProjeto.REVISAO);
             projetoRepository.save(projeto);
@@ -343,8 +360,11 @@ public class ProjetoService {
                 );
         }
 
-        notificacaoService.criarNotificacao(TituloDeNotificacao.ALTERACAO_DE_PROJETO, projeto.getEmpresa().getUsuario(), 
+        notificacaoService.criarNotificacao(TituloDeNotificacao.ALTERACAO_DE_PROJETO, projeto.getFreelancerSelecionado().getUsuario(), 
             "O projeto " + projeto.getTitulo() + " foi colocado em andamento.", null, projeto.getId());
+
+        logService.registrar(TipoLog.PROJETO_EM_ANDAMENTO, 
+            "Projeto '" + projeto.getId() + "' colocado em andamento pela empresa " + projeto.getEmpresa().getId(), projeto.getEmpresa().getUsuario());
 
         try {
             projeto.setStatus(StatusProjeto.EM_ANDAMENTO);
@@ -406,6 +426,11 @@ public class ProjetoService {
 
         notificacaoService.criarNotificacao(TituloDeNotificacao.PROJETO_CANCELADO, projeto.getEmpresa().getUsuario(), 
             "O projeto " + projeto.getTitulo() + " foi cancelado.", null, projeto.getId());
+        notificacaoService.criarNotificacao(TituloDeNotificacao.PROJETO_CANCELADO, projeto.getFreelancerSelecionado().getUsuario(), 
+            "O projeto " + projeto.getTitulo() + " foi cancelado.", null, projeto.getId());
+
+        logService.registrar(TipoLog.PROJETO_CANCELADO, 
+            "Projeto '" + projeto.getId() + "' cancelado pelo usuário " + usuario.getId(), usuario);
 
         usuario.setQuantidadeDeFlags(usuario.getQuantidadeDeFlags() + 1);
         if (usuario.getQuantidadeDeFlags() >= 3) {
@@ -440,6 +465,7 @@ public class ProjetoService {
                 "Usuário desabilitado devido a muitas flags"
                 );
         }
+        
 
         projetoRepository.delete(projeto);
     }
@@ -494,6 +520,8 @@ public class ProjetoService {
         notificacaoService.criarNotificacao(TituloDeNotificacao.APROVACAO_DE_CANDIDATURA, freelancer.getUsuario(), 
             "Você foi selecionado para o projeto: " + projeto.getTitulo(), projeto.getEmpresa().getUsuario(), projeto.getId());
 
+        logService.registrar(TipoLog.FREELANCER_SELECIONADO, 
+            "Freelancer '" + freelancer.getId() + "' selecionado para o projeto '" + projeto.getId() + "' pela empresa " + projeto.getEmpresa().getId(), projeto.getEmpresa().getUsuario());
         // 5️⃣ Envia um e-mail
         emailService.enviarHtml(
             freelancer.getUsuario().getEmail(),
