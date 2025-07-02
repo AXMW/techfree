@@ -331,16 +331,13 @@ if (projetoDropdown) {
 // Lista de títulos que levam para detalhes do projeto
 const TITULOS_PROJETO = [
     'ALTERACAO_DE_PROJETO',
-    'REJEICAO_DE_CANDIDATURA',
-    'CONVITE_DE_EMPRESA',
     'CERTIFICADO_DE_CONCLUSAO',
     'PROJETO_ENTREGUE',
-    'CONVITE_ACEITO',
-    'CONVITE_RECUSADO',
     'CRIACAO_DE_PROJETO',
     'PROJETO_FINALIZADO',
-    'CANDIDATURA_RECEBIDA',
-    'PROJETO_CANCELADO'
+    'PROJETO_CANCELADO',
+    'APROVACAO_DE_CANDIDATURA',
+    'CANDIDATURA_APROVADA'
 ];
 
 // Função para decidir o link da notificação (NÃO chama alert aqui!)
@@ -356,11 +353,11 @@ function getNotificacaoLink(n) {
         if (n.projetoId) return `/andamento-projeto/${n.projetoId}`;
         return '#';
     }
-    if (rawTitulo === 'APROVACAO_DE_CANDIDATURA' || rawTitulo === 'CANDIDATURA_ENVIADA') {
+    if (rawTitulo === 'CANDIDATURA_ENVIADA' || rawTitulo === 'REJEICAO_DE_CANDIDATURA' || rawTitulo === 'CONVITE_DE_EMPRESA') {
         if (n.projetoId) return `/detalhes-projeto/${n.projetoId}`;
         return '#';
     }
-    if (rawTitulo === 'CANDIDATURA_ENVIADA') {
+    if (rawTitulo === 'CANDIDATURA_RECEBIDA') {
         if (n.projetoId) return `/lista-candidatos/${n.projetoId}`;
         return '#';
     }
