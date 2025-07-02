@@ -154,6 +154,7 @@ function renderProjects() {
     document.getElementById('list-todos').innerHTML = '';
     document.getElementById('list-oportunidades').innerHTML = '';
     document.getElementById('list-andamento').innerHTML = '';
+    document.getElementById('list-revisar').innerHTML = '';
     document.getElementById('list-fechados').innerHTML = '';
     projects.forEach(p => {
         let show = true;
@@ -322,7 +323,12 @@ function renderProjects() {
         if (tipoUsuario === 'freelancer' && p.status === 'aberto') document.getElementById('list-oportunidades').appendChild(card.cloneNode(true));
         // Empresa: oportunidades normais
         if (tipoUsuario !== 'freelancer' && p.status === 'aberto') document.getElementById('list-oportunidades').appendChild(card.cloneNode(true));
-        if (p.status === 'andamento') document.getElementById('list-andamento').appendChild(card.cloneNode(true));
+        // Para empresas, não mostra projetos em REVISAO na aba "Em Andamento"
+        if (p.status === 'andamento' && !(tipoUsuario !== 'freelancer' && p.rawStatus && p.rawStatus.toUpperCase() === 'REVISAO')) {
+            document.getElementById('list-andamento').appendChild(card.cloneNode(true));
+        }
+        // Adiciona na aba Revisar apenas projetos com rawStatus REVISAO e só para empresas
+        if (tipoUsuario !== 'freelancer' && p.rawStatus && p.rawStatus.toUpperCase() === 'REVISAO') document.getElementById('list-revisar').appendChild(card.cloneNode(true));
         if (p.status === 'fechado') document.getElementById('list-fechados').appendChild(card.cloneNode(true));
     });
 

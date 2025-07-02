@@ -42,6 +42,10 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="tab-andamento" data-bs-toggle="tab" data-bs-target="#andamento" type="button" role="tab">Em Andamento</button>
                     </li>
+                    <!-- Apenas para empresas -->
+                    <li class="nav-item d-none" id="li-tab-revisar" role="presentation">
+                        <button class="nav-link" id="tab-revisar" data-bs-toggle="tab" data-bs-target="#revisar" type="button" role="tab">Revisar</button>
+                    </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="tab-fechados" data-bs-toggle="tab" data-bs-target="#fechados" type="button" role="tab">Fechados</button>
                     </li>
@@ -60,11 +64,25 @@
                     <div class="tab-pane fade" id="andamento" role="tabpanel">
                         <div id="list-andamento"></div>
                     </div>
+                    <!-- Projetos Revisar (apenas empresas) -->
+                    <div class="tab-pane fade" id="revisar" role="tabpanel">
+                        <div id="list-revisar"></div>
+                    </div>
                     <!-- Projetos Fechados -->
                     <div class="tab-pane fade" id="fechados" role="tabpanel">
                         <div id="list-fechados"></div>
                     </div>
                 </div>
+                <script>
+                // Exibe a aba Revisar apenas para empresas
+                document.addEventListener('DOMContentLoaded', function() {
+                    var tipoUsuario = (localStorage.getItem('tipoUsuario') || '').toLowerCase();
+                    var liTabRevisar = document.getElementById('li-tab-revisar');
+                    if (liTabRevisar && tipoUsuario !== 'freelancer') {
+                        liTabRevisar.classList.remove('d-none');
+                    }
+                });
+                </script>
             </div>
         </section>
     </main>

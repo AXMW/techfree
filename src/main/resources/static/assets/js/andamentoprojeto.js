@@ -747,7 +747,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (data.mensagem) {
                     conteudoDiv.innerHTML = data.mensagem.replace(/\n/g, '<br>');
                 } else {
-                    conteudoDiv.innerHTML = 'Consulte a descrição do projeto para mais detalhes.';
+                    conteudoDiv.innerHTML = 'Consulte o brief do projeto para mais detalhes.';
                 }
             }
             // Adiciona ou atualiza o conteúdo no card
