@@ -2,23 +2,29 @@ package com.techfree.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.techfree.dto.GraficoDeBarraEmpresaDTO;
 import com.techfree.dto.GraficoDeBarraFreelancerDTO;
+import com.techfree.dto.GraficoDeColunaEmpresaDTO;
 import com.techfree.dto.GraficoDeColunaFreelancerDTO;
+import com.techfree.dto.GraficoDeLinhaEmpresaDTO;
 import com.techfree.dto.GraficoDeLinhaFreelancerDTO;
+import com.techfree.dto.GraficoDePizzaEmpresaDTO;
 import com.techfree.dto.GraficoDePizzaFreelancerDTO;
 import com.techfree.service.DashboardService;
 
-@RestControlller
+@RestController
 @RequestMapping("/dashboard")
 public class DashboardController {
 
-    @AutoWired
+    @Autowired
     private DashboardService dashboardService;
     
     @GetMapping("/freelancer/colunas")
@@ -49,32 +55,32 @@ public class DashboardController {
         return ResponseEntity.ok(pizza);
     }
 
-    //@GetMapping("/empresa/colunas")
-    //@PreAuthorize("hasRole('EMPRESA')")
-    //public ResponseEntity<List<GraficoDeColunaEmpresaDTO>> obterGraficoDeColunasEmpresa(Authentication auth) {
-    //    List<GraficoDeColunaEmpresaDTO> colunas = dashboardService.obterGraficoDeColunaEmpresa(auth.getName());
-    //    return ResponseEntity.ok(colunas);
-    //}
-//
-    //@GetMapping("/empresa/linhas")
-    //@PreAuthorize("hasRole('EMPRESA')")
-    //public ResponseEntity<List<GraficoDeLinhaEmpresaDTO>> obterGraficoDeLinhasEmpresa(Authentication auth) {
-    //    List<GraficoDeLinhaEmpresaDTO> linhas = dashboardService.obterGraficoDeLinhaEmpresa(auth.getName());
-    //    return ResponseEntity.ok(linhas);
-    //}
-//
-    //@GetMapping("/empresa/barras")
-    //@PreAuthorize("hasRole('EMPRESA')")
-    //public ResponseEntity<List<GraficoDeBarraEmpresaDTO>> obterGraficoDeBarrasEmpresa(Authentication auth) {
-    //    List<GraficoDeBarraEmpresaDTO> barras = dashboardService.obterGraficoDeBarraEmpresa(auth.getName());
-    //    return ResponseEntity.ok(barras);
-    //}
-//
-    //@GetMapping("/empresa/pizza")
-    //@PreAuthorize("hasRole('EMPRESA')")
-    //public ResponseEntity<List<GraficoDePizzaEmpresaDTO>> obterGraficoDePizzaEmpresa(Authentication auth) {
-    //    List<GraficoDePizzaEmpresaDTO> pizza = dashboardService.obterGraficoDePizzaEmpresa(auth.getName());
-    //    return ResponseEntity.ok(pizza);
-    //}
+    @GetMapping("/empresa/colunas")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<List<GraficoDeColunaEmpresaDTO>> obterGraficoDeColunasEmpresa(Authentication auth) {
+        List<GraficoDeColunaEmpresaDTO> colunas = dashboardService.obterGraficoDeColunaEmpresa(auth.getName());
+        return ResponseEntity.ok(colunas);
+    }
+
+    @GetMapping("/empresa/linhas")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<List<GraficoDeLinhaEmpresaDTO>> obterGraficoDeLinhasEmpresa(Authentication auth) {
+        List<GraficoDeLinhaEmpresaDTO> linhas = dashboardService.obterGraficoDeLinhaEmpresa(auth.getName());
+        return ResponseEntity.ok(linhas);
+    }
+
+    @GetMapping("/empresa/barras")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<List<GraficoDeBarraEmpresaDTO>> obterGraficoDeBarrasEmpresa(Authentication auth) {
+        List<GraficoDeBarraEmpresaDTO> barras = dashboardService.obterGraficoDeBarraEmpresa(auth.getName());
+        return ResponseEntity.ok(barras);
+    }
+
+    @GetMapping("/empresa/pizza")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<List<GraficoDePizzaEmpresaDTO>> obterGraficoDePizzaEmpresa(Authentication auth) {
+        List<GraficoDePizzaEmpresaDTO> pizza = dashboardService.obterGraficoDePizzaEmpresa(auth.getName());
+        return ResponseEntity.ok(pizza);
+    }
 
 }

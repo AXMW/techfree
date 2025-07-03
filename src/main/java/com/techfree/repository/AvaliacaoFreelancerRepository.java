@@ -17,4 +17,5 @@ public interface AvaliacaoFreelancerRepository extends JpaRepository<AvaliacaoFr
     List<AvaliacaoFreelancer> findByEmpresaId(Long empresaId);
     List<AvaliacaoFreelancer> findByEmpresa(Empresa empresa);
     Optional<AvaliacaoFreelancer> findByProjeto(Projeto projeto);
+    Optional<AvaliacaoFreelancer> findByFreelancerAndProjeto(Freelancer freelancer, Projeto projeto);
 }

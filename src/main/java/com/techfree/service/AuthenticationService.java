@@ -184,10 +184,11 @@ public class AuthenticationService {
             "Recuperação de senha - TechFree",
             EmailTemplateService.templateRecuperarSenha(link)
         );
+        
 
         logService.registrar(TipoLog.RECUPERACAO_DE_SENHA,
             "Solicitação de recuperação de senha para o usuário " + dto.email(),
-            null // Não há usuário associado a essa ação
+            usuarioOpt.get() // Não há usuário associado a essa ação
         );
     }
 
