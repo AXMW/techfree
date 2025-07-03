@@ -219,12 +219,18 @@ public class DashboardService {
                 "Nenhum projeto encontrado para o usuário"
             );
         }
+        List<Projeto> projetosComDataInicio = new java.util.ArrayList<>();
+        for(Projeto projeto : projetos) {
+            if(projeto.getDataInicio() != null) {
+                projetosComDataInicio.add(projeto);
+            }
+        }
         
-        projetos.sort((p1, p2) -> p1.getDataInicio().compareTo(p2.getDataInicio()));
+        projetosComDataInicio.sort((p1, p2) -> p1.getDataInicio().compareTo(p2.getDataInicio()));
 
         List<Projeto> projetosComFreelancer = new java.util.ArrayList<>();
 
-        for(Projeto projeto : projetos) {
+        for(Projeto projeto : projetosComDataInicio) {
             if(projeto.getFreelancerSelecionado() != null) {
                 projetosComFreelancer.add(projeto);
             }
