@@ -1,6 +1,7 @@
 function validarSenhaForte(senha) {
     const requisitos = [
         { regex: /.{8,}/, texto: "Mínimo 8 caracteres" },
+        { regex: /^.{0,20}$/, texto: "Máximo 20 caracteres" },
         { regex: /[A-Z]/, texto: "1 letra maiúscula" },
         { regex: /[a-z]/, texto: "1 letra minúscula" },
         { regex: /[0-9]/, texto: "1 número" },
@@ -87,14 +88,13 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async fu
     }
 });
 
-// Feedback ao digitar, só depois do submit
+// Feedback ao digitar senha e confirmação (valida nos dois campos)
 document.querySelector('input[name="newPassword"]').addEventListener('input', function () {
     if (!tentouSubmit) return;
-    if (this.value === '') {
-        mostrarErrosSenha('senhaErrorReset', []);
-    } else {
-        mostrarErrosSenha('senhaErrorReset', validarSenhaForte(this.value));
-    }
+    mostrarErrosSenha('senhaErrorReset', validarSenhaForte(this.value));
+    // Valida confirmação ao digitar a senha também
+    const senhaConfirm = document.querySelector('input[name="password"]').value;
+    mostrarErroConfirmacao('confirmaSenhaErrorReset', senhaConfirm !== this.value ? 'As senhas não coincidem.' : '');
 });
 document.querySelector('input[name="password"]').addEventListener('input', function () {
     if (!tentouSubmit) return;

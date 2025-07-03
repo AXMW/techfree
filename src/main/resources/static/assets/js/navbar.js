@@ -333,11 +333,17 @@ const TITULOS_PROJETO = [
     'ALTERACAO_DE_PROJETO',
     'CERTIFICADO_DE_CONCLUSAO',
     'PROJETO_ENTREGUE',
-    'CRIACAO_DE_PROJETO',
     'PROJETO_FINALIZADO',
     'PROJETO_CANCELADO',
     'APROVACAO_DE_CANDIDATURA',
     'CANDIDATURA_APROVADA'
+];
+
+const TITULOS_VAGA = [
+    'CRIACAO_DE_PROJETO',
+    'CANDIDATURA_ENVIADA',
+    'REJEICAO_DE_CANDIDATURA',
+    'CONVITE_DE_EMPRESA'
 ];
 
 // Função para decidir o link da notificação (NÃO chama alert aqui!)
@@ -353,7 +359,7 @@ function getNotificacaoLink(n) {
         if (n.projetoId) return `/andamento-projeto/${n.projetoId}`;
         return '#';
     }
-    if (rawTitulo === 'CANDIDATURA_ENVIADA' || rawTitulo === 'REJEICAO_DE_CANDIDATURA' || rawTitulo === 'CONVITE_DE_EMPRESA') {
+    if (TITULOS_VAGA.includes(rawTitulo)) {
         if (n.projetoId) return `/detalhes-projeto/${n.projetoId}`;
         return '#';
     }

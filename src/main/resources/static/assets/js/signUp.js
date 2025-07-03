@@ -129,7 +129,6 @@ function maskCPF(value) {
 // Máscara para CNPJ
 function maskCNPJ(value) {
     return value
-        .replace(/\D/g, '')
         .replace(/^(\d{2})(\d)/, '$1.$2')
         .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
         .replace(/\.(\d{3})(\d)/, '.$1/$2')
@@ -148,20 +147,23 @@ if (cpfInput) {
 const cnpjInput = document.getElementById('cnpj');
 if (cnpjInput) {
     cnpjInput.addEventListener('input', function () {
-        this.value = maskCNPJ(this.value);
+        // Sempre aplica a máscara, mesmo se o campo estiver vazio
+        let val = this.value.replace(/\D/g, '');
+        if (val.length > 14) val = val.slice(0, 14); // Limita a 14 dígitos
+        this.value = maskCNPJ(val);
     });
 }
 
 function validarSenhaForte(senha) {
     const requisitos = [
         { regex: /.{8,}/, texto: "Mínimo 8 caracteres" },
+        { regex: /^.{0,20}$/, texto: "Máximo 20 caracteres" },
         { regex: /[A-Z]/, texto: "1 letra maiúscula" },
         { regex: /[a-z]/, texto: "1 letra minúscula" },
         { regex: /[0-9]/, texto: "1 número" },
         { regex: /[^A-Za-z0-9]/, texto: "1 caractere especial" }
     ];
-    const faltando = requisitos.filter(r => !r.regex.test(senha)).map(r => r.texto);
-    return faltando;
+    return requisitos.filter(r => !r.regex.test(senha)).map(r => r.texto);
 }
 
 function mostrarErrosSenha(idDiv, faltando) {
@@ -421,12 +423,18 @@ document.getElementById('formEmpresa').addEventListener('submit', async function
     }
 });
 
-// Opcional: validação ao digitar (feedback instantâneo)
+// Validação ao digitar senha e confirmação (feedback instantâneo)
 document.querySelector('input[name="password"]').addEventListener('input', function() {
     mostrarErrosSenha('senhaErrorPessoa', validarSenhaForte(this.value));
+    // Valida confirmação ao digitar a senha também
+    const senhaConfirm = document.querySelector('input[name="passwordConfirm"]').value;
+    mostrarErroConfirmacao('confirmaSenhaErrorPessoa', senhaConfirm !== this.value ? 'As senhas não coincidem.' : '');
 });
 document.querySelector('input[name="passwordEmpresa"]').addEventListener('input', function() {
     mostrarErrosSenha('senhaErrorEmpresa', validarSenhaForte(this.value));
+    // Valida confirmação ao digitar a senha também
+    const senhaConfirm = document.querySelector('input[name="passwordEmpresaConfirm"]').value;
+    mostrarErroConfirmacao('confirmaSenhaErrorEmpresa', senhaConfirm !== this.value ? 'As senhas não coincidem.' : '');
 });
 document.querySelector('input[name="passwordConfirm"]').addEventListener('input', function() {
     const senha = document.querySelector('input[name="password"]').value;
@@ -438,11 +446,48 @@ document.querySelector('input[name="passwordEmpresaConfirm"]').addEventListener(
 });
 
 function validarCPFCompleto(cpf) {
-    return /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf);
+    // Remove máscara
+    cpf = cpf.replace(/[^\d]+/g, '');
+    if (cpf.length !== 11) return false;
+    let soma = 0, resto;
+    for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+    resto = (soma * 10) % 11;
+    if ((resto === 10) || (resto === 11)) resto = 0;
+    if (resto !== parseInt(cpf.substring(9, 10))) return false;
+    soma = 0;
+    for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+    resto = (soma * 10) % 11;
+    if ((resto === 10) || (resto === 11)) resto = 0;
+    if (resto !== parseInt(cpf.substring(10, 11))) return false;
+    return true;
 }
 
 function validarCNPJCompleto(cnpj) {
-    return /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj);
+    // Remove máscara
+    cnpj = cnpj.replace(/[^\d]+/g, '');
+    if (cnpj.length !== 14) return false;
+    let tamanho = cnpj.length - 2;
+    let numeros = cnpj.substring(0, tamanho);
+    let digitos = cnpj.substring(tamanho);
+    let soma = 0;
+    let pos = tamanho - 7;
+    for (let i = tamanho; i >= 1; i--) {
+        soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+        if (pos < 2) pos = 9;
+    }
+    let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+    if (resultado !== parseInt(digitos.charAt(0))) return false;
+    tamanho = tamanho + 1;
+    numeros = cnpj.substring(0, tamanho);
+    soma = 0;
+    pos = tamanho - 7;
+    for (let i = tamanho; i >= 1; i--) {
+        soma += parseInt(numeros.charAt(tamanho - i)) * pos--;
+        if (pos < 2) pos = 9;
+    }
+    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+    if (resultado !== parseInt(digitos.charAt(1))) return false;
+    return true;
 }
 
 function validarEmail(email) {

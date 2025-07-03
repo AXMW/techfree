@@ -160,13 +160,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             const novaSenha = document.getElementById('new-password')?.value;
             const confirmarSenha = document.getElementById('confirm-password')?.value;
 
-            // Validação simples
+            // Validação de senha forte
+            const faltando = validarSenhaForte(novaSenha || '');
+            mostrarErrosSenhaConfig('senhaErrorConfig', faltando);
+
             if (!senhaAtual || !novaSenha || !confirmarSenha) {
                 alert('Preencha todos os campos de senha.');
                 return;
             }
             if (novaSenha !== confirmarSenha) {
                 alert('A nova senha e a confirmação não coincidem.');
+                return;
+            }
+            if (faltando.length > 0) {
+                alert('A nova senha não atende aos requisitos.');
                 return;
             }
 
@@ -198,5 +205,74 @@ document.addEventListener('DOMContentLoaded', async function () {
                 console.error(e);
             }
         });
+    }
+
+    // Função de validação de senha forte (igual ao cadastro)
+    function validarSenhaForte(senha) {
+        const requisitos = [
+            { regex: /.{8,}/, texto: "Mínimo 8 caracteres" },
+            { regex: /^.{0,20}$/, texto: "Máximo 20 caracteres" },
+            { regex: /[A-Z]/, texto: "1 letra maiúscula" },
+            { regex: /[a-z]/, texto: "1 letra minúscula" },
+            { regex: /[0-9]/, texto: "1 número" },
+            { regex: /[^A-Za-z0-9]/, texto: "1 caractere especial" }
+        ];
+        return requisitos.filter(r => !r.regex.test(senha)).map(r => r.texto);
+    }
+
+    // Exibe erros de senha
+    function mostrarErrosSenhaConfig(idDiv, faltando) {
+        const div = document.getElementById(idDiv);
+        if (!div) return;
+        if (faltando.length === 0) {
+            div.textContent = "";
+            div.classList.add('d-none');
+        } else {
+            div.innerHTML = "<p style='margin-left: 10px; margin-bottom: 0'>A senha deve conter:</p><ul style='margin-bottom: 0'>" +
+                faltando.map(f => `<li>${f}</li>`).join('') + "</ul>";
+            div.classList.remove('d-none');
+        }
+    }
+
+    // Adiciona div de erro de senha se não existir
+    let senhaErrorDiv = document.getElementById('senhaErrorConfig');
+    if (!senhaErrorDiv) {
+        senhaErrorDiv = document.createElement('div');
+        senhaErrorDiv.id = 'senhaErrorConfig';
+        senhaErrorDiv.classList.add('mt-1', 'mb-2', 'erro-senha', 'd-none');
+        const senhaField = document.getElementById('new-password');
+        if (senhaField) senhaField.parentNode.appendChild(senhaErrorDiv);
+    }
+
+    // Validação ao digitar nova senha
+    const newPasswordInput = document.getElementById('new-password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+
+    if (newPasswordInput && confirmPasswordInput) {
+        // Valida confirmação ao digitar a nova senha
+        newPasswordInput.addEventListener('input', function () {
+            mostrarErrosSenhaConfig('senhaErrorConfig', validarSenhaForte(this.value));
+            const senhaConfirm = confirmPasswordInput.value;
+            mostrarErroConfirmacaoConfig('confirmaSenhaErrorConfig', senhaConfirm !== this.value ? 'As senhas não coincidem.' : '');
+        });
+
+        // Valida confirmação ao digitar o campo de confirmação
+        confirmPasswordInput.addEventListener('input', function () {
+            const senha = newPasswordInput.value;
+            mostrarErroConfirmacaoConfig('confirmaSenhaErrorConfig', this.value !== senha ? 'As senhas não coincidem.' : '');
+        });
+    }
+
+    // Função para mostrar erro de confirmação de senha
+    function mostrarErroConfirmacaoConfig(idDiv, msg) {
+        const div = document.getElementById(idDiv);
+        if (!div) return;
+        if (!msg) {
+            div.textContent = "";
+            div.classList.add('d-none');
+        } else {
+            div.textContent = msg;
+            div.classList.remove('d-none');
+        }
     }
 });
