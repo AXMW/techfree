@@ -251,15 +251,15 @@ document.addEventListener('DOMContentLoaded', function () {
     projetoDropdownMenu.innerHTML = ''; // Limpa antes
 
     if (tipoUsuario === 'EMPRESA') {
-        // Empresa: Criar Vaga e Gerenciar Projetos
+        // Empresa: Criar Oportunidade e Gerenciar Projetos
         projetoDropdownMenu.innerHTML = `
-            <li><a class="dropdown-item" href="/publicar-vaga">Criar Vaga</a></li>
+            <li><a class="dropdown-item" href="/publicar-vaga">Criar Oportunidade</a></li>
             <li><a class="dropdown-item" href="/gerenciar-projetos">Gerenciar Projetos</a></li>
         `;
     } else {
-        // Freelancer ou visitante: Procurar Vaga e Gerenciar Projetos
+        // Freelancer ou visitante: Procurar Oportunidade e Gerenciar Projetos
         projetoDropdownMenu.innerHTML = `
-            <li><a class="dropdown-item" href="/listagem-projetos-vagas">Procurar Vaga</a></li>
+            <li><a class="dropdown-item" href="/listagem-projetos-vagas">Procurar Oportunidade</a></li>
             <li><a class="dropdown-item" href="/gerenciar-projetos">Gerenciar Projetos</a></li>
         `;
     }
