@@ -45,6 +45,7 @@ public class Freelancer {
 
     private LocalDate dataNascimento;
 
+    @Column(columnDefinition = "TEXT")
     private String avatar;
 
     private String emailContato;

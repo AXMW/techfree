@@ -32,6 +32,7 @@ public class Empresa {
 
     private boolean ativo;
 
+    @Column(columnDefinition = "TEXT")
     private String avatar;
 
     private String emailContato;

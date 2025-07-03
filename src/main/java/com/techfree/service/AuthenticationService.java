@@ -23,14 +23,18 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.techfree.dto.RegistroEmpresaDTO;
 import com.techfree.dto.RegistroFreelancerDTO;
 import com.techfree.dto.ResetarSenhaDTO;
@@ -95,6 +99,15 @@ public class AuthenticationService {
         usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         usuario.setTipo(TipoUsuario.FREELANCER);
 
+        List<Freelancer> freelancerValidacao = freelancerRepository.findByCpf(dto.getCpf());
+
+        if(freelancerValidacao.size() > 0) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+            "Já existe um freelancer cadastrado com esse CPF"
+            );
+        }
+
         Role roleFreelancer = roleRepository.findByNome("FREELANCER")
             .orElseThrow(() -> new RuntimeException("Role FREELANCER não encontrada"));
             Set<Role> sla = new HashSet<Role>();
@@ -133,6 +146,14 @@ public class AuthenticationService {
         usuario.setEmail(dto.getEmail());
         usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         usuario.setTipo(TipoUsuario.EMPRESA);
+
+        Optional<Empresa> empresaValidacao = empresaRepository.findByCnpj(dto.getCnpj());
+        if(empresaValidacao.isPresent()) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Já existe uma empresa cadastrada com esse CNPJ"
+            );
+        }
 
         Role roleEmpresa = roleRepository.findByNome("EMPRESA")
             .orElseThrow(() -> new RuntimeException("Role EMPRESA não encontrada"));
