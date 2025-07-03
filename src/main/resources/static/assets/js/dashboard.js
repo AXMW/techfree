@@ -1,5 +1,41 @@
 // Identificação do tipoUsuario igual ao gerenciarprojeto.js
 document.addEventListener('DOMContentLoaded', async function() {
+  // Atualiza o nome de boas-vindas conforme o tipo de usuário
+  async function atualizarNomeUsuarioDashboard() {
+    const tipoUsuario = (localStorage.getItem('tipoUsuario') || '').toLowerCase();
+    let nome = '';
+    let url = '';
+    if (tipoUsuario === 'empresa') {
+      url = '/empresa/perfil/verPerfil';
+    } else if (tipoUsuario === 'freelancer') {
+      url = '/freelancer/perfil/verPerfil';
+    }
+    if (url) {
+      try {
+        const token = localStorage.getItem('token');
+        const resp = await fetch(url, {
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + token
+          }
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          if (tipoUsuario === 'empresa' && data.nomeFantasia) {
+            nome = data.nomeFantasia;
+          } else if (tipoUsuario === 'freelancer' && data.nome) {
+            nome = data.nome;
+          }
+        }
+      } catch {}
+    }
+    // Atualiza o texto na tela
+    const el = document.querySelector('.fw-bold.text-success.mb-2');
+    if (el) {
+      el.textContent = nome ? `Bem-vindo, ${nome}!` : 'Bem-vindo!';
+    }
+  }
+  atualizarNomeUsuarioDashboard();
   // Função utilitária para gerar relatório em PDF (usando jsPDF)
   async function gerarRelatorioDashboard() {
     const tipoUsuario = (localStorage.getItem('tipoUsuario') || '').toLowerCase();
@@ -18,19 +54,36 @@ document.addEventListener('DOMContentLoaded', async function() {
     let y = 20;
     let algumGrafico = false;
 
-    // Função para adicionar gráfico ao PDF, cada gráfico em uma página
-    async function addChartToPDF(canvas, titulo) {
+    // Função para adicionar gráfico ao PDF, cada gráfico em uma página, com cor de destaque e descrição
+    async function addChartToPDF(canvas, titulo, descricao, corDestaque) {
       if (algumGrafico) {
         doc.addPage();
         y = 20;
       }
-      const imgData = canvas.toDataURL('image/png', 1.0);
+      // Cor de destaque para o título
       doc.setFontSize(16);
+      if (corDestaque) {
+        doc.setTextColor(corDestaque.r, corDestaque.g, corDestaque.b);
+      } else {
+        doc.setTextColor(78, 115, 223); // Azul padrão
+      }
       doc.text(titulo, 10, y);
-      y += 5;
+      y += 8;
+      // Descrição (em preto, menor)
+      if (descricao) {
+        doc.setFontSize(11);
+        doc.setTextColor(33, 37, 41); // Preto
+        var splitDesc = doc.splitTextToSize(descricao, 180);
+        doc.text(splitDesc, 10, y);
+        y += splitDesc.length * 6 + 2;
+      }
+      // Gráfico
+      const imgData = canvas.toDataURL('image/png', 1.0);
       doc.addImage(imgData, 'PNG', 10, y, 180, 60);
       y += 65;
       algumGrafico = true;
+      // Reset cor para padrão
+      doc.setTextColor(0, 0, 0);
     }
 
     // Gráfico 1: Projetos por mês/ano
@@ -46,7 +99,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (resp.ok) {
           const canvas = document.getElementById('graficoProjetosAno');
           if (canvas && canvas.chartInstance && canvas.chartInstance.data && canvas.chartInstance.data.datasets[0].data.some(v => v > 0)) {
-            await addChartToPDF(canvas, 'Quantidade de Projetos por Mês');
+            await addChartToPDF(
+              canvas,
+              'Quantidade de Projetos por Mês',
+              'Este gráfico apresenta o número de projetos finalizados a cada mês pela empresa. A visualização permite acompanhar o ritmo de contratações e entregas ao longo do tempo, identificar padrões de sazonalidade na demanda e avaliar o volume de trabalho efetivamente encerrado em cada período.',
+              { r: 78, g: 115, b: 223 }
+            );
           }
         }
       } catch {}
@@ -62,7 +120,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (resp.ok) {
           const canvas = document.getElementById('graficoProjetosAno');
           if (canvas && canvas.chartInstance && canvas.chartInstance.data && canvas.chartInstance.data.datasets[0].data.some(v => v > 0)) {
-            await addChartToPDF(canvas, 'Projetos Concluídos por Ano');
+            await addChartToPDF(
+              canvas,
+              'Projetos Concluídos por Ano',
+              'Este gráfico apresenta a quantidade total de projetos finalizados a cada ano. Ele permite visualizar a evolução da atuação ao longo do tempo, identificar tendências de crescimento ou queda na demanda, e avaliar o desempenho geral do freelancer ou da empresa em períodos distintos.',
+              { r: 28, g: 200, b: 138 }
+            );
           }
         }
       } catch {}
@@ -80,7 +143,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (resp.ok) {
           const grafico2 = document.getElementById('tituloGrafico2')?.parentElement.querySelector('canvas');
           if (grafico2 && grafico2.chartInstance && grafico2.chartInstance.data && grafico2.chartInstance.data.datasets[0].data.some(v => v > 0)) {
-            await addChartToPDF(grafico2, 'Avaliações dos Freelancers');
+            await addChartToPDF(
+              grafico2,
+              'Avaliações dos Freelancers',
+              'Este gráfico reúne as notas atribuídas pela empresa aos freelancers contratados, após a conclusão dos projetos. Ele oferece uma visão clara da percepção de qualidade, pontualidade e profissionalismo dos profissionais envolvidos, sendo uma métrica valiosa para mapear parcerias bem-sucedidas e orientar futuras contratações.',
+              { r: 54, g: 185, b: 204 }
+            );
           }
         }
       } catch {}
@@ -95,7 +163,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (resp.ok) {
           const grafico2 = document.getElementById('tituloGrafico2')?.parentElement.querySelector('canvas');
           if (grafico2 && grafico2.chartInstance && grafico2.chartInstance.data && grafico2.chartInstance.data.datasets[0].data.some(v => v > 0)) {
-            await addChartToPDF(grafico2, 'Área de Atuação das Empresas Contratantes');
+            await addChartToPDF(
+              grafico2,
+              'Área de Atuação das Empresas Contratantes',
+              'Este gráfico mostra a distribuição dos setores de atuação das empresas que contrataram seus serviços na plataforma. A análise dessas áreas ajuda a entender o perfil dos contratantes, identificar nichos de mercado mais ativos e orientar estratégias de posicionamento e especialização.',
+              { r: 246, g: 194, b: 62 }
+            );
           }
         }
       } catch {}
@@ -113,7 +186,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (resp.ok) {
           const grafico3 = document.querySelector('#tituloGrafico3 ~ .mb-3 canvas');
           if (grafico3 && grafico3.chartInstance && grafico3.chartInstance.data && grafico3.chartInstance.data.datasets[0].data.some(v => v > 0)) {
-            await addChartToPDF(grafico3, 'Investimento Mensal');
+            await addChartToPDF(
+              grafico3,
+              'Investimento Mensal',
+              'Este gráfico exibe o valor total investido mensalmente em contratações de freelancers através da plataforma. Ele permite à empresa acompanhar os custos operacionais com mão de obra externa, comparar o investimento ao longo dos meses e auxiliar no planejamento orçamentário e estratégico.',
+              { r: 255, g: 95, b: 215 }
+            );
           }
         }
       } catch {}
@@ -128,14 +206,64 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (resp.ok) {
           const grafico3 = document.querySelector('#tituloGrafico3 ~ .mb-3 canvas');
           if (grafico3 && grafico3.chartInstance && grafico3.chartInstance.data && grafico3.chartInstance.data.datasets[0].data.some(v => v > 0)) {
-            await addChartToPDF(grafico3, 'Receita Mensal');
+            await addChartToPDF(
+              grafico3,
+              'Receita Mensal',
+              'Este gráfico exibe os valores recebidos mês a mês ao longo de um período determinado. Ele auxilia no acompanhamento do fluxo de receita, sazonalidade de faturamento e na projeção de metas financeiras, úteis para freelancers que desejam fazer acompanhamentos precisos dentro da plataforma.',
+              { r: 174, g: 87, b: 255 }
+            );
           }
         }
       } catch {}
     }
 
     if (!algumGrafico) {
-      alert('Nenhum gráfico disponível para gerar relatório.');
+      // Cria modal Bootstrap se não existir
+      let modal = document.getElementById('modalRelatorioVazio');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.className = 'modal fade';
+        modal.id = 'modalRelatorioVazio';
+        modal.tabIndex = -1;
+        modal.innerHTML = `
+          <div class="modal-dialog" style="min-width: 320px; max-width: 400px;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Atenção</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+              </div>
+              <div class="modal-body text-center">
+                <div class="mb-3" style="font-size: 1.1rem;">Nenhum gráfico disponível para gerar relatório.</div>
+              </div>
+              <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="fecharModalRelatorioVazio">OK</button>
+              </div>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      }
+      // Usa Bootstrap Modal
+      if (window.bootstrap && window.bootstrap.Modal) {
+        const bsModal = new bootstrap.Modal(modal);
+        bsModal.show();
+      } else {
+        // fallback: exibe como block
+        modal.style.display = 'block';
+      }
+      // Remove modal do DOM ao fechar
+      modal.addEventListener('hidden.bs.modal', function() {
+        modal.remove();
+      });
+      // Também remove ao clicar no botão OK (caso fallback)
+      document.getElementById('fecharModalRelatorioVazio').onclick = function() {
+        if (window.bootstrap && window.bootstrap.Modal) {
+          const bsModal = bootstrap.Modal.getInstance(modal);
+          if (bsModal) bsModal.hide();
+        } else {
+          modal.remove();
+        }
+      };
       return;
     }
     doc.save('relatorio-dashboard.pdf');
@@ -363,7 +491,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         descricaoGrafico3.style.marginTop = '0.5rem';
         descricaoGrafico3.style.marginBottom = '1rem';
       }
-      // Montar gráfico de investimento mensal para empresa
+      // Montar gráfico de investimento mensal para empresa (último mês do eixo X sempre o mês atual)
       var grafico3 = document.querySelector('#tituloGrafico3 ~ .mb-3 canvas');
       if (grafico3) {
         try {
@@ -383,25 +511,15 @@ document.addEventListener('DOMContentLoaded', async function() {
           } else {
             data = await resp.json();
           }
-          // Encontrar o mês mais recente nos dados
-          let maxData = null;
-          data.forEach(item => {
-            if (item.prazoEntrega) {
-              const dt = new Date(item.prazoEntrega);
-              if (!maxData || dt > maxData) {
-                maxData = dt;
-              }
-            }
-          });
-          // Se não houver dados, usa o mês atual
-          if (!maxData) maxData = new Date();
-          // Monta os últimos 12 meses a partir do mês mais recente dos dados
+          // Sempre usa o mês atual como último mês do eixo X
           const mesesLabels = [];
           const mesesChave = [];
           const mesesAbrev = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+          const now = new Date();
+          // Gera os últimos 12 meses, terminando no mês atual
           for (let i = 11; i >= 0; i--) {
-            const d = new Date(maxData.getFullYear(), maxData.getMonth() - i, 1);
-            const chave = d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0');
+            let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            let chave = d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0');
             mesesChave.push(chave);
             mesesLabels.push(mesesAbrev[d.getMonth()] + '/' + d.getFullYear().toString().slice(-2));
           }
@@ -547,28 +665,14 @@ document.addEventListener('DOMContentLoaded', async function() {
           } else {
             data = await resp.json();
           }
-          // Encontrar o mês mais recente nos dados
-          let maxData = null;
-          data.forEach(item => {
-            if (item.prazoEntrega) {
-              const dt = new Date(item.prazoEntrega);
-              if (!maxData || dt > maxData) {
-                maxData = dt;
-              }
-            }
-          });
-          // Se não houver dados, usa o mês atual
-          if (!maxData) maxData = new Date();
-          // Monta os últimos 12 meses a partir do mês mais recente dos dados
+          // Sempre usa o mês atual como último mês do eixo X
           const mesesLabels = [];
           const mesesChave = [];
           const mesesAbrev = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-          // Gera os últimos 12 meses a partir do mês mais recente, respeitando transição de ano
-          let ano = maxData.getFullYear();
-          let mes = maxData.getMonth(); // 0-11
-          // Monta os meses do mais antigo (esquerda) para o mais recente (direita)
-          for (let i = 0; i < 12; i++) {
-            let d = new Date(ano, mes - 11 + i, 1);
+          const now = new Date();
+          // Gera os últimos 12 meses, terminando no mês atual
+          for (let i = 11; i >= 0; i--) {
+            let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
             let chave = d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0');
             mesesChave.push(chave);
             mesesLabels.push(mesesAbrev[d.getMonth()] + '/' + d.getFullYear().toString().slice(-2));
