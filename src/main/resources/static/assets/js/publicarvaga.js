@@ -143,6 +143,21 @@ document.getElementById('vagaForm').addEventListener('submit', async function (e
     const requisitos = tags.join(',');
     const pagamento = this.elements.pagamento.value;
     const pagamentoFinal = pagamento.replace(/\./g, '').replace(',', '.').replace(/[^\d.]/g, '');
+
+    // Validação do valor máximo do pagamento
+    const pagamentoErrorDiv = document.getElementById('pagamentoError');
+    if (parseFloat(pagamentoFinal) > 999999.99) {
+        if (pagamentoErrorDiv) {
+            pagamentoErrorDiv.textContent = 'O valor máximo permitido para pagamento é R$ 999.999,99.';
+            pagamentoErrorDiv.classList.remove('d-none');
+        }
+        this.elements.pagamento.focus();
+        return;
+    } else if (pagamentoErrorDiv) {
+        pagamentoErrorDiv.textContent = '';
+        pagamentoErrorDiv.classList.add('d-none');
+    }
+
     const email = this.elements.contato.value;
     const telefoneContato = this.elements.telefone.value;
     const duracao = this.elements.duracao.value;
