@@ -30,6 +30,8 @@ import com.techfree.dto.AlterarSenhaRequestDTO;
 import com.techfree.security.JwtUtil;
 import com.techfree.service.LogService;
 import com.techfree.enums.TipoLog;
+import com.techfree.repository.ExperienciaProfissionalRepository;
+import com.techfree.repository.ExperienciaAcademicaRepository;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -53,6 +55,12 @@ public class FreelancerController {
 
     @Autowired
     private LogService logService;
+
+    @Autowired
+    private ExperienciaProfissionalRepository experienciaProfissionalRepository;
+
+    @Autowired
+    private ExperienciaAcademicaRepository experienciaAcademicaRepository;
 
     public FreelancerController(
         FreelancerRepository freelancerRepository,
@@ -110,11 +118,17 @@ public class FreelancerController {
         if (dados.getEmailContato() != null) freelancer.setEmailContato(dados.getEmailContato());
         if (dados.getTelefoneContato() != null) freelancer.setTelefoneContato(dados.getTelefoneContato());
         if (dados.getExperiencia() != null) {
-            // Limpa a lista original e adiciona os novos elementos
             freelancer.getExperiencia().clear();
             for (var dto : dados.getExperiencia()) {
-                var exp = new ExperienciaProfissional();
-                exp.setId(dto.getId());
+                ExperienciaProfissional exp;
+                if (dto.getId() != null) {
+                    exp = experienciaProfissionalRepository.findById(dto.getId()).orElse(null);
+                    if (exp == null) {
+                        exp = new ExperienciaProfissional();
+                    }
+                } else {
+                    exp = new ExperienciaProfissional();
+                }
                 exp.setEmpresa(dto.getEmpresa());
                 exp.setCargo(dto.getCargo());
                 exp.setTempo(dto.getTempo());
@@ -126,8 +140,15 @@ public class FreelancerController {
         if (dados.getExperienciaAcademica() != null) {
             freelancer.getExperienciaAcademica().clear();
             for (var dto : dados.getExperienciaAcademica()) {
-                var exp = new ExperienciaAcademica();
-                exp.setId(dto.getId());
+                ExperienciaAcademica exp;
+                if (dto.getId() != null) {
+                    exp = experienciaAcademicaRepository.findById(dto.getId()).orElse(null);
+                    if (exp == null) {
+                        exp = new ExperienciaAcademica();
+                    }
+                } else {
+                    exp = new ExperienciaAcademica();
+                }
                 exp.setInstituicao(dto.getInstituicao());
                 exp.setCurso(dto.getCurso());
                 exp.setPeriodo(dto.getPeriodo());
