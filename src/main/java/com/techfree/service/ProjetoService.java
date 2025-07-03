@@ -421,6 +421,12 @@ public class ProjetoService {
                 "Usuário desabilitado devido a muitas flags"
                 );
         }
+        if(projeto.getFreelancerSelecionado() == null) {
+            projeto.setStatus(StatusProjeto.CANCELADO);
+            projetoRepository.save(projeto);
+
+            return projeto;
+        }
 
         flagService.criarFlag(usuario.getId(), id);
 
