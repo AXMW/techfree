@@ -803,9 +803,9 @@ document.getElementById('editForm').onsubmit = function(e) {
         profileData.avatar = avatar;
         profileData.emailContato = emailContato;
         profileData.telefoneContato = telefoneContato;
-        profileData.github = github;
-        profileData.linkedin = linkedin;
-        profileData.portfolio = portfolio;
+        profileData.github = formatarUrl(github);
+        profileData.linkedin = formatarUrl(linkedin);
+        profileData.portfolio = formatarUrl(portfolio);
     }
     if(type === 'sobre') {
         profileData.bio = document.getElementById('editSobre').value.trim();
@@ -972,7 +972,17 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
     if(resp.ok) {
         alert('Perfil atualizado com sucesso!');
         carregarPerfil();
+        window.location.href = '/pagina-profile';
     } else {
         alert('Erro ao atualizar perfil');
     }
 };
+
+// Função para garantir que o link tenha http:// ou https://
+function formatarUrl(url) {
+    if (!url) return '';
+    if (!/^https?:\/\//i.test(url)) {
+        return 'http://' + url;
+    }
+    return url;
+}

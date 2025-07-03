@@ -31,7 +31,8 @@ async function buscarPerfilEmpresa() {
             projetos: data.projetos,
             flags: data.quantidadeDeFlags,
             avaliacao: data.avaliacaoMedia || 0, // Use o valor fixo ou 0 se preferir
-            feedbacks: data.feedbacks
+            feedbacks: data.feedbacks,
+            assinaturaPath: data.assinaturaPath || ''
         };
 
         renderEmpresaProfile(profile);
@@ -131,6 +132,13 @@ function renderEmpresaProfile(profile) {
             <span class="flags-text mt-1">
                 ${(profile.flags || 0)}/3 flags
             </span>
+        </div>
+        <div class="assinatura-status position-absolute" style="bottom: 10px; right: 20px; min-width: 120px; text-align: right;">
+            <span style="font-weight:600;color:#fff;">Assinatura:</span>
+            ${profile.assinaturaPath
+                ? '<span class="text-success ms-1" title="Assinatura cadastrada"><i class="bi bi-check-circle-fill"></i></span>'
+                : '<span class="text-danger ms-1" title="Assinatura não cadastrada"><i class="bi bi-x-circle-fill"></i></span>'
+            }
         </div>
     `;
 

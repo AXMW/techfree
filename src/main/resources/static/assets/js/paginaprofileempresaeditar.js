@@ -54,7 +54,7 @@ async function carregarPerfilEmpresa() {
 // Renderiza o perfil na tela usando as variáveis
 function renderEmpresaProfile() {
     const profileHeader = document.querySelector('.profile-header');
-    profileHeader.classList.add('d-flex', 'align-items-center');
+    profileHeader.classList.add('d-flex', 'align-items-center', 'position-relative');
     profileHeader.innerHTML = `
         <button class="btn btn-edit-icon edit-btn position-absolute top-0 end-0 m-2" data-edit="header" title="Editar"><i class="bi bi-pencil-square"></i></button>
         <img src="${avatarPreviewDataUrl || avatar || 'assets/img/default-avatar.png'}" class="profile-avatar" alt="Logo da Empresa" style="object-fit: cover;">
@@ -69,6 +69,13 @@ function renderEmpresaProfile() {
                 ${linkedin && linkedin.trim() ? `<a href="${linkedin}" target="_blank"><i class="bi bi-linkedin"></i></a>` : ''}
                 ${site && site.trim() ? `<a href="${site}" target="_blank"><i class="bi bi-globe"></i></a>` : ''}
             </div>
+        </div>
+        <div class="assinatura-status position-absolute" style="bottom: 10px; right: 20px; min-width: 120px; text-align: right;">
+            <span style="font-weight:600;color:#fff;">Assinatura:</span>
+            ${assinaturaPath
+                ? '<span class="text-success ms-1" title="Assinatura cadastrada"><i class="bi bi-check-circle-fill"></i></span>'
+                : '<span class="text-danger ms-1" title="Assinatura não cadastrada"><i class="bi bi-x-circle-fill"></i></span>'
+            }
         </div>
     `;
     // Sobre
@@ -381,8 +388,8 @@ document.getElementById('editForm').onsubmit = async function (e) {
         areaatuacao = document.getElementById('editCargo')?.value || '';
         emailContato = emailVal;
         telefoneContato = telefoneVal;
-        linkedin = linkedinVal;
-        site = siteVal;
+        linkedin = formatarUrl(linkedinVal);
+        site = formatarUrl(siteVal);
     }
 
     renderEmpresaProfile();
@@ -452,6 +459,7 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
     if (resp.ok) {
         alert('Perfil atualizado com sucesso!');
         carregarPerfilEmpresa();
+        window.location.href = '/pagina-profile-empresa';
     } else {
         alert('Erro ao atualizar perfil');
     }
@@ -500,3 +508,12 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarPerfilEmpresa();
     atualizarBarraProgressoEmpresa();
 });
+
+// Função para garantir que o link tenha http:// ou https://
+function formatarUrl(url) {
+    if (!url) return '';
+    if (!/^https?:\/\//i.test(url)) {
+        return 'http://' + url;
+    }
+    return url;
+}
