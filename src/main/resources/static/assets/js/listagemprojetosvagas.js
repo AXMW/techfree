@@ -5,7 +5,7 @@ let projects = [];
 // Busca projetos do backend
 async function fetchProjects() {
     try {
-        const response = await fetch('http://localhost:8080/projetos/listar-abertos-freelancer');
+        const response = await fetch('/projetos/listar-abertos-freelancer');
         if (!response.ok) throw new Error('Erro ao buscar projetos');
         projects = await response.json();
         loaded = 0;
