@@ -226,7 +226,7 @@ document.getElementById('formPessoa').addEventListener('submit', async function 
         mostrarErroCampo('cpfErrorPessoa', 'CPF obrigatório.');
         erro = true;
     } else if (!validarCPFCompleto(cpf)) {
-        mostrarErroCampo('cpfErrorPessoa', 'CPF incompleto.');
+        mostrarErroCampo('cpfErrorPessoa', 'CPF incorreto.');
         erro = true;
     } else {
         mostrarErroCampo('cpfErrorPessoa', '');
@@ -345,7 +345,7 @@ document.getElementById('formEmpresa').addEventListener('submit', async function
         mostrarErroCampo('cnpjErrorEmpresa', 'CNPJ obrigatório.');
         erro = true;
     } else if (!validarCNPJCompleto(cnpj)) {
-        mostrarErroCampo('cnpjErrorEmpresa', 'CNPJ incompleto.');
+        mostrarErroCampo('cnpjErrorEmpresa', 'CNPJ incorreto.');
         erro = true;
     } else {
         mostrarErroCampo('cnpjErrorEmpresa', '');

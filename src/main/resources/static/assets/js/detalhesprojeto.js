@@ -39,15 +39,7 @@ async function carregarDetalhesDoProjeto() {
             grau: data.grauexperience,
             pagamento: data.orcamento,
             anexo: data.anexoAuxiliar
-                ? {
-                    // Pega o que vem depois do primeiro "_"
-                    nome: (() => {
-                        const nomeArquivo = data.anexoAuxiliar.split('/').pop();
-                        const idx = nomeArquivo.indexOf('_');
-                        return idx !== -1 ? nomeArquivo.substring(idx + 1) : nomeArquivo;
-                    })(),
-                    url: '/uploads/' + data.anexoAuxiliar.split('/').pop() // ajuste conforme sua rota real
-                }
+                ? '/uploads/' + data.anexoAuxiliar.split('/').pop()
                 : null,
             emailPraContato: data.emailPraContato,
             site: data.site,
@@ -103,8 +95,12 @@ function preencherProjeto(projeto) {
             <i class="bi bi-paperclip"></i>
             <strong>Briefing:</strong>
             ${
-                projeto.anexo && projeto.anexo.nome
-                    ? `<a href="${projeto.anexo.url}" class="link-light text-decoration-underline" target="_blank">${projeto.anexo.nome}</a>`
+                projeto.anexo
+                    ? `<a href="${projeto.anexo}" class="link-light text-decoration-underline" target="_blank">${(() => {
+    const nomeArquivo = projeto.anexo.split('/').pop();
+    const idx = nomeArquivo.indexOf('_');
+    return idx !== -1 ? nomeArquivo.substring(idx + 1) : nomeArquivo;
+})()}</a>`
                     : '<span class="text-muted">Nenhum anexo</span>'
             }
         </div>
@@ -243,24 +239,20 @@ document.getElementById('formEditarVaga').onsubmit = async function(e) {
     if (anexoInput.files.length > 0) {
         const formData = new FormData();
         formData.append('file', anexoInput.files[0]);
-        // Se já existe anexo anterior, envie o nome dele para o backend apagar
         if (projeto.anexo) {
-            // Se projeto.anexo for string (nome/caminho), envie direto
-            // Se for objeto, ajuste para projeto.anexo.nome
-            formData.append('oldFile', typeof projeto.anexo === 'string' ? projeto.anexo : projeto.anexo.nome);
+            formData.append('oldFile', projeto.anexo.split('/').pop());
         }
         const resp = await fetch(`/api/files/upload`, {
             method: 'POST',
             body: formData
         });
         if (resp.ok) {
-            body.anexoAuxiliar = await resp.text(); // ou await resp.json() se backend retornar objeto
+            body.anexoAuxiliar = await resp.text(); // deve ser só o caminho retornado pelo backend
         } else {
             alert('Erro ao enviar arquivo');
             return;
         }
     } else {
-        // Se não anexou novo arquivo, mantenha o atual
         body.anexoAuxiliar = projeto.anexo || null;
     }
 
@@ -297,8 +289,14 @@ function openEditVagaPopup(projeto) {
     document.getElementById('editDuracao').value = parseInt(projeto.duracao) || '';
     document.getElementById('editEmailContato').value = projeto.emailPraContato || '';
     document.getElementById('editGrau').value = projeto.grau || 'Júnior';
-    document.getElementById('anexoAtual').innerHTML = projeto.anexo && projeto.anexo.nome
-        ? `<span class="text-info">Atual: <a href="${projeto.anexo.url}" target="_blank">${projeto.anexo.nome}</a></span>`
+    document.getElementById('anexoAtual').innerHTML = projeto.anexo
+        ? `<span class="text-info">Atual: <a href="${projeto.anexo}" target="_blank">${
+            (() => {
+                const nomeArquivo = projeto.anexo.split('/').pop();
+                const idx = nomeArquivo.indexOf('_');
+                return idx !== -1 ? nomeArquivo.substring(idx + 1) : nomeArquivo;
+            })()
+        }</a></span>`
         : '<span class="text-muted">Nenhum anexo</span>';
     document.getElementById('campoAtualizadoEm').textContent = projeto.atualizadoEm
         ? `Atualizado em: ${projeto.atualizadoEm}`
