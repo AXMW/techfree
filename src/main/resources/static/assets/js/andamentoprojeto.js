@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8080/projetos/${projetoId}`, {
+        const response = await fetch(`/projetos/${projetoId}`, {
             headers: {
                 'Accept': 'application/json',
                 'Authorization': 'Bearer ' + token

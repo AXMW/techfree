@@ -164,7 +164,7 @@ document.addEventListener('click', async function (e) {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/candidaturas', {
+            const response = await fetch('/candidaturas', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

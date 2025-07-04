@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function carregarCandidatos() {
         try {
-            const response = await fetch(`http://localhost:8080/candidaturas/projeto/${projetoId}`);
+            const response = await fetch(`/candidaturas/projeto/${projetoId}`);
             if (!response.ok) throw new Error('Erro ao buscar candidatos');
             candidatos = await response.json();
 
