@@ -28,6 +28,30 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.querySelector('.project-header .fs-5').textContent = data.subtitulo || '';
         document.querySelector('.project-header .fw-semibold').textContent = data.empresa || '';
 
+        // Atualiza a foto/avatar do projeto se existir a variável "avatarEmpresa" no retorno
+        if (data.avatarEmpresa) {
+            // Seleciona o container da imagem e do nome da empresa
+            const headerImgContainer = document.querySelector('.project-header .d-flex.align-items-center.mb-2');
+            if (headerImgContainer) {
+                // Remove qualquer imagem existente
+                const oldImg = headerImgContainer.querySelector('img');
+                if (oldImg) oldImg.remove();
+                // Cria nova tag img
+                const avatarImg = document.createElement('img');
+                avatarImg.className = 'company-logo me-3';
+                avatarImg.alt = 'Logo da Empresa';
+                avatarImg.src = data.avatarEmpresa;
+                avatarImg.style.objectFit = 'cover';
+                // Insere a imagem antes do nome da empresa
+                const spanEmpresa = headerImgContainer.querySelector('span.fw-semibold');
+                if (spanEmpresa) {
+                    headerImgContainer.insertBefore(avatarImg, spanEmpresa);
+                } else {
+                    headerImgContainer.appendChild(avatarImg);
+                }
+            }
+        }
+
         // Preenche detalhes do projeto na sidebar
         const sidebarCards = document.querySelectorAll('.col-lg-4 .info-card');
         if (sidebarCards.length > 0) {
