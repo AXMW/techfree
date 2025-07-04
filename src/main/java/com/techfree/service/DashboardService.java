@@ -1,6 +1,5 @@
 package com.techfree.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,24 +64,14 @@ public class DashboardService {
         projetos.sort((p1, p2) -> p1.getPrazoEntrega().compareTo(p2.getPrazoEntrega()));
         
 
-        LocalDate today = projetos.get(projetos.size() - 1).getPrazoEntrega();
-        LocalDate limit = today.minusYears(5);
-
-        List<Projeto> projetosGrafico = new java.util.ArrayList<>();
-        for(Projeto projeto : projetos) {
-            if(projeto.getPrazoEntrega().isAfter(limit) && projeto.getPrazoEntrega().isBefore(today)) {
-                projetosGrafico.add(projeto);
-            }
-        }
-
-        if (projetosGrafico.isEmpty()) {
+        if (projetos.isEmpty()) {
             throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
                 "Nenhum projeto encontrado para o usuário dentro do período especificado"
             );
         }
 
-        return projetosGrafico.stream()
+        return projetos.stream()
             .map(projeto -> {
                 GraficoDeColunaFreelancerDTO dto = new GraficoDeColunaFreelancerDTO();
                 dto.setPrazoEntrega(projeto.getPrazoEntrega());
@@ -102,7 +91,7 @@ public class DashboardService {
         }
             
 
-        List<Projeto> projetos = projetoRepository.findByFreelancerSelecionadoUsuarioEmail(email);
+        List<Projeto> projetos = projetoRepository.findByFreelancerSelecionadoUsuario(usuario);
         if (projetos.isEmpty()) {
             throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
@@ -113,24 +102,15 @@ public class DashboardService {
         projetos.sort((p1, p2) -> p1.getPrazoEntrega().compareTo(p2.getPrazoEntrega()));
         
 
-        LocalDate today = projetos.get(projetos.size() - 1).getPrazoEntrega();
-        LocalDate limit = today.minusYears(5);
 
-        List<Projeto> projetosGrafico = new java.util.ArrayList<>();
-        for(Projeto projeto : projetos) {
-            if(projeto.getPrazoEntrega().isAfter(limit) && projeto.getPrazoEntrega().isBefore(today)) {
-                projetosGrafico.add(projeto);
-            }
-        }
-
-        if (projetosGrafico.isEmpty()) {
+        if (projetos.isEmpty()) {
             throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
                 "Nenhum projeto encontrado para o usuário dentro do período especificado"
             );
         }
 
-        return projetosGrafico.stream()
+        return projetos.stream()
             .map(projeto -> {
                 GraficoDeLinhaFreelancerDTO dto = new GraficoDeLinhaFreelancerDTO();
                 dto.setPrazoEntrega(projeto.getPrazoEntrega());

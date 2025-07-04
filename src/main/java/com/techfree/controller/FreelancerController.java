@@ -27,6 +27,7 @@ import com.techfree.model.AvaliacaoFreelancer;
 import com.techfree.dto.AlterarEmailRequestDTO;
 import com.techfree.dto.AlterarEmailResponseDTO;
 import com.techfree.dto.AlterarSenhaRequestDTO;
+import com.techfree.dto.ConfiguracaoNotificacaoDTO;
 import com.techfree.security.JwtUtil;
 import com.techfree.service.LogService;
 import com.techfree.enums.TipoLog;
@@ -87,6 +88,40 @@ public class FreelancerController {
 
         FreelancerAutoVisualizacaoResponseDTO response = new FreelancerAutoVisualizacaoResponseDTO(freelancer, avaliacoes);
         return response;
+    }
+
+    @GetMapping("/perfil/config-notificacoes")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<ConfiguracaoNotificacaoDTO> pegarConfiguracaoNotificacoes(Authentication authentication) {
+        String email = authentication.getName();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        ConfiguracaoNotificacaoDTO configuracao = new ConfiguracaoNotificacaoDTO(
+            usuario.isNotificacoesAtivas(),
+            usuario.isNotificacoesPorEmailAtivas()
+        );
+
+        return ResponseEntity.ok(configuracao);
+    }
+
+    @PutMapping("/perfil/config-notificacoes")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<Void> configurarNotificacoes(
+            @RequestBody ConfiguracaoNotificacaoDTO dto,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        
+        usuario.setNotificacoesAtivas(dto.isNotificacoesAtivas());
+        usuario.setNotificacoesPorEmailAtivas(dto.isNotificacoesPorEmailAtivas());
+
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.noContent().build();
     }
 
     // FREELANCER: atualizar o perfil do freelancer logado

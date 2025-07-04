@@ -16,6 +16,7 @@ import com.techfree.model.Usuario;
 import com.techfree.dto.AlterarEmailRequestDTO;
 import com.techfree.dto.AlterarEmailResponseDTO;
 import com.techfree.dto.AlterarSenhaRequestDTO;
+import com.techfree.dto.ConfiguracaoNotificacaoDTO;
 import com.techfree.dto.EmpresaAutoVisualizacaoResponseDTO;
 import com.techfree.dto.EmpresaVisualizacaoResponseDTO;
 import com.techfree.dto.ListarTodosEmpresaDTO;
@@ -227,6 +228,39 @@ public class EmpresaController {
         List<AvaliacaoEmpresa> avaliacoes = avaliacaoEmpresaRepository.findByEmpresa(empresa);
         EmpresaVisualizacaoResponseDTO response = new EmpresaVisualizacaoResponseDTO(empresa, projetos, avaliacoes);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/perfil/config-notificacoes")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<ConfiguracaoNotificacaoDTO> pegarConfiguracaoNotificacoes(Authentication authentication) {
+        String email = authentication.getName();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        ConfiguracaoNotificacaoDTO configuracao = new ConfiguracaoNotificacaoDTO(
+            usuario.isNotificacoesAtivas(),
+            usuario.isNotificacoesPorEmailAtivas()
+        );
+
+        return ResponseEntity.ok(configuracao);
+    }
+
+    @PutMapping("/perfil/config-notificacoes")
+    @PreAuthorize("hasRole('EMPRESA')")
+    public ResponseEntity<Void> configurarNotificacoes(
+            @RequestBody ConfiguracaoNotificacaoDTO dto,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        usuario.setNotificacoesAtivas(dto.isNotificacoesAtivas());
+        usuario.setNotificacoesPorEmailAtivas(dto.isNotificacoesPorEmailAtivas());
+
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/upload-assinatura")

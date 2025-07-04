@@ -37,6 +37,12 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private int quantidadeDeFlags;
 
+    @Column(nullable = false)
+    private boolean notificacoesAtivas;
+
+    @Column(nullable = false)
+    private boolean notificacoesPorEmailAtivas;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

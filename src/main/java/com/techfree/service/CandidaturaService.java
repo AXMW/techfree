@@ -77,17 +77,23 @@ public class CandidaturaService {
             );
         }
 
-        notificacaoService.criarNotificacao(TituloDeNotificacao.CANDIDATURA_ENVIADA,
-            freelancer.getUsuario(),
-            "Você se candidatou ao projeto '" + projeto.getTitulo() + "'", 
-            projeto.getEmpresa().getUsuario(), projeto.getId()
-        );
+        if(freelancer.getUsuario().isNotificacoesAtivas()) {
+            notificacaoService.criarNotificacao(TituloDeNotificacao.CANDIDATURA_ENVIADA,
+                freelancer.getUsuario(),
+                "Você se candidatou ao projeto '" + projeto.getTitulo() + "'", 
+                projeto.getEmpresa().getUsuario(), projeto.getId()
+            );
+        }
 
-        notificacaoService.criarNotificacao(TituloDeNotificacao.CANDIDATURA_RECEBIDA,
-            projeto.getEmpresa().getUsuario(),
-            "Você recebeu uma candidatura para o projeto '" + projeto.getTitulo() + "'",
-             freelancer.getUsuario(), projeto.getId()
-        );
+        if(projeto.getEmpresa().getUsuario().isNotificacoesAtivas()) {
+            notificacaoService.criarNotificacao(TituloDeNotificacao.CANDIDATURA_RECEBIDA,
+                projeto.getEmpresa().getUsuario(),
+                "Você recebeu uma candidatura para o projeto '" + projeto.getTitulo() + "'",
+                freelancer.getUsuario(), projeto.getId()
+            );
+        }
+
+        
 
         logService.registrar(TipoLog.CANDIDATURA_ENVIADA, 
             "Candidatura enviada pelo freelancer " + freelancer.getId() + " para o projeto " + projeto.getId(), 
@@ -178,22 +184,28 @@ public class CandidaturaService {
         String titulo = projeto.getTitulo();
         StatusCandidatura status = StatusCandidatura.RECUSADA;
         candidatura.setStatus(status);
-        notificacaoService.criarNotificacao(TituloDeNotificacao.REJEICAO_DE_CANDIDATURA,
-            candidatura.getFreelancer().getUsuario(),
-            "Sua candidatura para o projeto '" + titulo + "' foi recusada",
-            projeto.getEmpresa().getUsuario(), projeto.getId()
-        );
+
+        if(candidatura.getFreelancer().getUsuario().isNotificacoesAtivas()) {
+            notificacaoService.criarNotificacao(TituloDeNotificacao.REJEICAO_DE_CANDIDATURA,
+                candidatura.getFreelancer().getUsuario(),
+                "Sua candidatura para o projeto '" + titulo + "' foi recusada",
+                projeto.getEmpresa().getUsuario(), projeto.getId()
+            );
+        }
+        
 
         logService.registrar(TipoLog.CANDIDATURA_RECUSADA, 
             "Candidatura " + candidaturaId + " recusada pelo usuário " + emailEmpresa, 
             projeto.getEmpresa().getUsuario()
         );
 
-        emailService.enviarHtml(
-            candidatura.getFreelancer().getUsuario().getEmail(),
-            "Sua candidatura foi " + status.name().toLowerCase(),
-            emailTemplateService.gerarTemplate(nome, titulo, status)
-        );
+        if(candidatura.getFreelancer().getUsuario().isNotificacoesPorEmailAtivas()) {
+            emailService.enviarHtml(
+                candidatura.getFreelancer().getUsuario().getEmail(),
+                "Sua candidatura foi " + status.name().toLowerCase(),
+                emailTemplateService.gerarTemplate(nome, titulo, status)
+            );
+        }
 
         candidaturaRepository.save(candidatura);
     }

@@ -80,10 +80,14 @@ public class ConviteService {
                 );
         }
 
-        notificacaoService.criarNotificacao(TituloDeNotificacao.CONVITE_DE_EMPRESA, freelancer.getUsuario(), 
+        if(freelancer.getUsuario().isNotificacoesAtivas()) {
+            notificacaoService.criarNotificacao(TituloDeNotificacao.CONVITE_DE_EMPRESA, freelancer.getUsuario(), 
             "Você recebeu um convite para o projeto: " + projeto.getTitulo(),
             projeto.getEmpresa().getUsuario(), projeto.getId()
         );
+        }
+
+        
 
         logService.registrar(TipoLog.CONVITE_ENVIADO, 
             "Convite enviado para o freelancer " + freelancer.getId() + " para o projeto " + projeto.getId(), 

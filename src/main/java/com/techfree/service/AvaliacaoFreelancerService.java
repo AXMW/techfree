@@ -98,7 +98,9 @@ public class AvaliacaoFreelancerService {
         repository.save(avaliacao);
 
         // Notificar a empresa sobre o novo feedback
-        notificacaoService.criarNotificacao(TituloDeNotificacao.FEEDBACK_RECEBIDO, projeto.getFreelancerSelecionado().getUsuario(), "Você recebeu um novo feedback no projeto " + projeto.getTitulo(), null, projeto.getId());
+        if(projeto.getFreelancerSelecionado().getUsuario().isNotificacoesAtivas()) {
+            notificacaoService.criarNotificacao(TituloDeNotificacao.FEEDBACK_RECEBIDO, projeto.getFreelancerSelecionado().getUsuario(), "Você recebeu um novo feedback no projeto " + projeto.getTitulo(), null, projeto.getId());
+        }
 
         logService.registrar(TipoLog.FEEDBACK_DE_FREELANCER,
             "Avaliação criada para o freelancer " + projeto.getFreelancerSelecionado().getId() + " no projeto " + projeto.getId(),

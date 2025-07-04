@@ -96,8 +96,10 @@ public class AvaliacaoEmpresaService {
         repository.save(avaliacao);
 
         // Notificar a empresa sobre o novo feedback
-        notificacaoService.criarNotificacao(TituloDeNotificacao.FEEDBACK_RECEBIDO, projeto.getEmpresa().getUsuario(), 
-            "Você recebeu um novo feedback no projeto" + projeto.getTitulo(), null, projeto.getId());
+        if(projeto.getEmpresa().getUsuario().isNotificacoesAtivas()) {
+            notificacaoService.criarNotificacao(TituloDeNotificacao.FEEDBACK_RECEBIDO, projeto.getEmpresa().getUsuario(), 
+                "Você recebeu um novo feedback no projeto" + projeto.getTitulo(), null, projeto.getId());
+        }
 
         logService.registrar(TipoLog.FEEDBACK_DE_EMPRESA,
             "Avaliação criada para a empresa " + projeto.getEmpresa().getId() + " no projeto " + projeto.getId(),

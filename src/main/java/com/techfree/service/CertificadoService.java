@@ -64,8 +64,12 @@ public class CertificadoService {
         c.setFreelancer(freelancer);
         c.setProjeto(projeto);
 
-        notificacaoService.criarNotificacao(TituloDeNotificacao.CERTIFICADO_DE_CONCLUSAO, freelancer.getUsuario(),
+        if(freelancer.getUsuario().isNotificacoesAtivas()) {
+            notificacaoService.criarNotificacao(TituloDeNotificacao.CERTIFICADO_DE_CONCLUSAO, freelancer.getUsuario(),
             "Você recebeu um certificado de conclusão", null, projeto.getId());
+        }
+
+        
 
         logService.registrar(TipoLog.CERTIFICADO_DE_CONCLUSAO, 
             "Certificado criado para o freelancer " + freelancer.getId() + " no projeto " + projeto.getId(), 
