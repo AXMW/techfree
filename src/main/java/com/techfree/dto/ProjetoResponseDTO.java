@@ -49,6 +49,8 @@ public class ProjetoResponseDTO {
 
     private String anexoAuxiliar;
 
+    private String avatarEmpresa;
+
     public ProjetoResponseDTO(Projeto projeto) {
         this.id = projeto.getId();
         this.titulo = projeto.getTitulo();
@@ -70,5 +72,6 @@ public class ProjetoResponseDTO {
         this.mensagem = projeto.getMensagem();
         this.linkProjetoHospedagem = projeto.getLinkProjetoHospedagem();
         this.anexoAuxiliar = projeto.getAnexoAuxiliar();
+        this.avatarEmpresa = projeto.getEmpresa().getAvatar();
     }
 }
