@@ -38,10 +38,12 @@ public class Usuario implements UserDetails {
     private int quantidadeDeFlags;
 
     @Column(nullable = false)
-    private boolean notificacoesAtivas;
+    @Builder.Default
+    private boolean notificacoesAtivas = true;
 
     @Column(nullable = false)
-    private boolean notificacoesPorEmailAtivas;
+    @Builder.Default
+    private boolean notificacoesPorEmailAtivas = true;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
