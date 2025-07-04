@@ -118,7 +118,9 @@ function fillPopup(type) {
         <div class="mb-3 text-center">
             <div>
                 <label class="form-label d-block" style="margin-bottom:1.2rem;">Assinatura</label>
-                ${(assinaturaPreviewDataUrl || assinaturaPath) ? `<div><img src="${assinaturaPreviewDataUrl || assinaturaPath}" id="assinaturaPreview" class="mb-2" style="width:220px;height:110px;object-fit:contain;border:2px solid #FF6F00;background:#fff;"></div>` : ''}
+                <div>
+                    <img src="${assinaturaPreviewDataUrl || assinaturaPath || 'assets/img/default-signature.png'}" id="assinaturaPreview" class="mb-2" style="width:220px;height:110px;object-fit:contain;border:2px solid #FF6F00;background:#fff;">
+                </div>
                 <input type="file" class="form-control mb-2" id="assinaturaInput" style="padding: 0 1.1rem !important; height: 50px; align-content: center; margin-bottom:2.2rem !important;" accept="image/png">
                 <input type="hidden" id="assinaturaUrlInput" value="${assinaturaPreviewDataUrl || assinaturaPath || ''}">
             </div>
@@ -195,11 +197,11 @@ function fillPopup(type) {
                 const reader = new FileReader();
                 reader.onload = function (ev) {
                     avatarPreview.src = ev.target.result;
-                    avatarPreviewDataUrl = ev.target.result; // Armazena o dado da URL para envio posterior
-                    avatarUrlInput.value = ev.target.result; // Atualiza o campo hidden
+                    avatarPreviewDataUrl = ev.target.result;
+                    avatarUrlInput.value = ev.target.result;
                 };
                 reader.readAsDataURL(file);
-                avatarInput._selectedFile = file; // Guarda o arquivo para upload posterior
+                avatarInput._selectedFile = file;
             }
         });
         // Assinatura preview ao selecionar arquivo
@@ -225,43 +227,42 @@ function fillPopup(type) {
                     assinaturaUrlInput.value = ev.target.result;
                 };
                 reader.readAsDataURL(file);
-                assinaturaInput._selectedFile = file; // Guarda o arquivo para upload posterior
+                assinaturaInput._selectedFile = file;
             } else {
                 assinaturaPreview.src = assinaturaPath || 'assets/img/default-signature.png';
             }
         });
-
-// Função para mostrar modal de erro de assinatura PNG
-function showModalAssinaturaPng() {
-    let modal = document.getElementById('assinaturaPngModal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'assinaturaPngModal';
-        modal.style.position = 'fixed';
-        modal.style.top = '0';
-        modal.style.left = '0';
-        modal.style.width = '100vw';
-        modal.style.height = '100vh';
-        modal.style.background = 'rgba(0,0,0,0.5)';
-        modal.style.display = 'flex';
-        modal.style.alignItems = 'center';
-        modal.style.justifyContent = 'center';
-        modal.style.zIndex = '9999';
-        modal.innerHTML = `
-            <div style="background:#fff;padding:2rem 2.5rem;border-radius:1rem;min-width:320px;max-width:90vw;text-align:center;box-shadow:0 2px 16px #0002;">
-                <h5 style="color:#FF6F00;font-weight:700;">Atenção</h5>
-                <p style="margin:1.5rem 0 2rem 0;">O arquivo de assinatura deve estar no formato de PNG.</p>
-                <button id="closeAssinaturaPngModal" class="btn btn-warning" style="font-weight:700;min-width:120px;">OK</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        document.getElementById('closeAssinaturaPngModal').onclick = function() {
-            modal.style.display = 'none';
-        };
-    } else {
-        modal.style.display = 'flex';
-    }
-}
+        // Função para mostrar modal de erro de assinatura PNG
+        function showModalAssinaturaPng() {
+            let modal = document.getElementById('assinaturaPngModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'assinaturaPngModal';
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100vw';
+                modal.style.height = '100vh';
+                modal.style.background = 'rgba(0,0,0,0.5)';
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.zIndex = '9999';
+                modal.innerHTML = `
+                    <div style="background:#fff;padding:2rem 2.5rem;border-radius:1rem;min-width:320px;max-width:90vw;text-align:center;box-shadow:0 2px 16px #0002;">
+                        <h5 style="color:#FF6F00;font-weight:700;">Atenção</h5>
+                        <p style="margin:1.5rem 0 2rem 0;">O arquivo de assinatura deve estar no formato de PNG.</p>
+                        <button id="closeAssinaturaPngModal" class="btn btn-warning" style="font-weight:700;min-width:120px;">OK</button>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                document.getElementById('closeAssinaturaPngModal').onclick = function() {
+                    modal.style.display = 'none';
+                };
+            } else {
+                modal.style.display = 'flex';
+            }
+        }
         // Aplica máscara ao telefone
         const telefoneInput = document.getElementById('editTelefone');
         if (telefoneInput) aplicarMascaraTelefone(telefoneInput);
@@ -393,6 +394,7 @@ document.getElementById('editForm').onsubmit = async function (e) {
     }
 
     renderEmpresaProfile();
+    atualizarBarraProgressoEmpresa();
     closeOverlay();
 };
 
@@ -411,7 +413,7 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
             body: formData
         });
         if (resp.ok) {
-            avatar = await resp.text(); // Atualiza o avatar com a URL real
+            avatar = await resp.text();
             avatarPreviewDataUrl = '';
         } else {
             alert('Erro ao enviar imagem');
@@ -432,7 +434,7 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
             body: formData
         });
         if (resp.ok) {
-            assinaturaPath = await resp.text(); // Atualiza o path da assinatura
+            assinaturaPath = (await resp.text()) || '';
             assinaturaPreviewDataUrl = '';
         } else {
             alert('Erro ao enviar assinatura');
@@ -441,7 +443,7 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
     }
 
     const dto = {
-       nomeFantasia,
+        nomeFantasia,
         areaAtuacao: areaatuacao,
         avatar,
         emailContato,
@@ -457,8 +459,9 @@ document.getElementById('btnAplicarAlteracoes').onclick = async function () {
         body: JSON.stringify(dto)
     });
     if (resp.ok) {
+        await carregarPerfilEmpresa(); // Atualiza variáveis globais
+        atualizarBarraProgressoEmpresa(); // <-- Atualiza a barra de progresso
         alert('Perfil atualizado com sucesso!');
-        carregarPerfilEmpresa();
         window.location.href = '/pagina-profile-empresa';
     } else {
         alert('Erro ao atualizar perfil');

@@ -330,7 +330,6 @@ if (projetoDropdown) {
 
 // Lista de títulos que levam para detalhes do projeto
 const TITULOS_PROJETO = [
-    'ALTERACAO_DE_PROJETO',
     'CERTIFICADO_DE_CONCLUSAO',
     'PROJETO_ENTREGUE',
     'PROJETO_FINALIZADO',
@@ -340,6 +339,7 @@ const TITULOS_PROJETO = [
 ];
 
 const TITULOS_VAGA = [
+    'ALTERACAO_DE_PROJETO',
     'CRIACAO_DE_PROJETO',
     'CANDIDATURA_ENVIADA',
     'REJEICAO_DE_CANDIDATURA',
