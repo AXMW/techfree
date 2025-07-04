@@ -53,7 +53,7 @@ public class DashboardService {
         }
             
 
-        List<Projeto> projetos = projetoRepository.findByFreelancerSelecionadoUsuarioEmail(email);
+        List<Projeto> projetos = projetoRepository.findByFreelancerSelecionadoUsuarioEmailAndStatus(email, StatusProjeto.CONCLUIDO);
         if (projetos.isEmpty()) {
             throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, // 404
