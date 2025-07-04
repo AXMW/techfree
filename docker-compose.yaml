@@ -23,7 +23,7 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: F@tec123
     ports:
-      - "8080:8080"
+      - "8082:8082"
     volumes:
       - ./src/main/resources/uploads:/app/uploads
     restart: always
