@@ -49,9 +49,18 @@ function addTag(tag) {
     removeBtn.onclick = function () {
         tags = tags.filter(t => t !== tag);
         tagEl.remove();
+        // Se não houver tags, volta o placeholder
+        if (tags.length === 0) {
+            techSearch.placeholder = 'Adicionar requisito...';
+        }
     };
     tagEl.appendChild(removeBtn);
     tagsInputWrapper.insertBefore(tagEl, techSearch);
+
+    // Remove o placeholder se já houver pelo menos uma tag
+    if (tags.length > 0) {
+        techSearch.placeholder = '';
+    }
 }
 
 // Pesquisa dinâmica e seleção por Enter

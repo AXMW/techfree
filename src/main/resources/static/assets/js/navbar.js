@@ -385,3 +385,19 @@ function formatarTempo(dataIso) {
     if (diffD < 7) return `${diffD} dia${diffD > 1 ? 's' : ''}`;
     return data.toLocaleDateString('pt-BR');
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const logoLink = document.getElementById('logoLink');
+    if (logoLink) {
+        logoLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            const tipoUsuario = localStorage.getItem('tipoUsuario');
+            const token = localStorage.getItem('token');
+            if (token && (tipoUsuario === 'FREELANCER' || tipoUsuario === 'EMPRESA')) {
+                window.location.href = '/dashboard';
+            } else {
+                window.location.href = '/';
+            }
+        });
+    }
+});
