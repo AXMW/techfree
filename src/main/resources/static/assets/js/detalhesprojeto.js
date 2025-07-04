@@ -30,6 +30,7 @@ async function carregarDetalhesDoProjeto() {
         // Adapte conforme o formato retornado pela API
         projeto = {
             titulo: data.titulo,
+            subtitulo: data.subtitulo,
             empresa: data.empresa,
             status: data.status, // ajuste conforme o campo correto
             requisitos: data.requisitos ? data.requisitos.split(',') : [],
@@ -73,7 +74,7 @@ function preencherProjeto(projeto) {
             <img src="${imgSrc}" class="company-logo me-3" alt="Logo da Empresa" style="object-fit: cover;">
             <div>
                 <h1 class="fw-bold mb-1">${projeto.titulo}</h1>
-                <span class="fs-5 fw-semibold">${projeto.empresa}</span>
+                <span class="fs-5 fw-semibold">${projeto.subtitulo}</span>
                 <div class="project-meta mt-1"><i class="bi bi-clock"></i> Publicado em ${projeto.publicada}</div>
             </div>
         </div>
