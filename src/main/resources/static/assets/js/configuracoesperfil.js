@@ -275,4 +275,65 @@ document.addEventListener('DOMContentLoaded', async function () {
             div.classList.remove('d-none');
         }
     }
+
+    // Função para carregar configurações de notificações
+    function carregarConfigNotificacoes() {
+        let urlGet;
+        if (tipoUsuario === 'EMPRESA') {
+            urlGet = '/empresa/perfil/config-notificacoes';
+        } else {
+            urlGet = '/freelancer/perfil/config-notificacoes';
+        }
+        fetch(urlGet, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Erro ao buscar configurações');
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('notif-app').checked = !!data.notificacoesAtivas;
+                document.getElementById('notif-email').checked = !!data.notificacoesPorEmailAtivas;
+            })
+            .catch(() => {
+                document.getElementById('notif-app').checked = false;
+                document.getElementById('notif-email').checked = false;
+            });
+    }
+
+    // Chama ao abrir a página
+    carregarConfigNotificacoes();
+
+    // Salvar configurações ao clicar no botão
+    const btnSalvarPreferencias = document.querySelector('#notification button[type="button"]');
+    if (btnSalvarPreferencias) {
+        btnSalvarPreferencias.addEventListener('click', function () {
+            const notificacoesAtivas = document.getElementById('notif-app').checked;
+            const notificacoesPorEmailAtivas = document.getElementById('notif-email').checked;
+            let urlPost;
+            if (tipoUsuario === 'EMPRESA') {
+                urlPost = '/empresa/perfil/config-notificacoes';
+            } else {
+                urlPost = '/freelancer/perfil/config-notificacoes';
+            }
+            fetch(urlPost, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    notificacoesAtivas: notificacoesAtivas,
+                    notificacoesPorEmailAtivas: notificacoesPorEmailAtivas
+                })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Erro ao salvar configurações');
+                alert('Preferências salvas com sucesso!');
+            })
+            .catch(() => {
+                alert('Erro ao salvar preferências.');
+            });
+        });
+    }
 });
