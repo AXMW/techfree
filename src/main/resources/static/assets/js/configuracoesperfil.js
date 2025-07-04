@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 urlPost = '/freelancer/perfil/config-notificacoes';
             }
             fetch(urlPost, {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Authorization': 'Bearer ' + token,
                     'Content-Type': 'application/json'
