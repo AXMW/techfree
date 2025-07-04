@@ -198,7 +198,7 @@ public class AuthenticationService {
         tokenEntity.setExpiracao(LocalDateTime.now().plusHours(1));
         tokenRepository.save(tokenEntity);
 
-        String link = "http://localhost:8080/reset-password/" + token;
+        String link = "http://techfree.217.196.60.165.sslip.io/reset-password/" + token;
 
         emailService.enviarEmail(
             dto.email(),
