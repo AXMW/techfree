@@ -50,7 +50,8 @@ async function carregarDetalhesDoProjeto() {
                 : null,
             emailPraContato: data.emailPraContato,
             site: data.site,
-            publicada: convertDate(data.dataCriacao) 
+            publicada: convertDate(data.dataCriacao),
+            avatar: data.avatarEmpresa || null
         };
     } catch (e) {
         console.error(e);
@@ -66,9 +67,10 @@ function convertDate(dateString) {
 
 // Preenche o header principal do projeto
 function preencherProjeto(projeto) {
+    const imgSrc = projeto.avatar || '/assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png';
     document.getElementById('projectHeader').innerHTML = `
         <div class="d-flex align-items-center mb-3">
-            <img src="/assets/img/Captura_de_tela_2025-05-16_211248-removebg-preview.png" class="company-logo me-3" alt="Logo da Empresa">
+            <img src="${imgSrc}" class="company-logo me-3" alt="Logo da Empresa" style="object-fit: cover;">
             <div>
                 <h1 class="fw-bold mb-1">${projeto.titulo}</h1>
                 <span class="fs-5 fw-semibold">${projeto.empresa}</span>
