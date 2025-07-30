@@ -7,6 +7,7 @@ TechFree é uma plataforma digital desenvolvida para conectar programadores free
 ## Sumário
 
 - [Sobre o Projeto](#sobre-o-projeto)
+- [Roles de Usuário](#roles-de-usuários)
 - [Funcionalidades](#funcionalidades)
 - [Arquitetura e Tecnologias](#arquitetura-e-tecnologias)
 - [Instalação e Execução](#instalação-e-execução)
@@ -30,6 +31,16 @@ TechFree foi desenvolvido como Trabalho de Graduação (TG) para a FATEC, com o 
 A plataforma atua como intermediária, permitindo que empresas publiquem vagas, freelancers se candidatem, ambos acompanhem o andamento dos projetos e realizem avaliações mútuas ao final de cada trabalho.
 
 ---
+
+## Roles de Usuário
+
+Na plataforma TechFree, há dois tipos de usuários com permissões e funcionalidades específicas:
+
+- **Freelancer**: Usuário que se cadastra para buscar oportunidades de trabalho, criar e editar seu perfil, buscar perfis de empresas, se candidatar a vagas, acompanhar projetos, enviar e receber avaliações.
+- **Empresa**: Usuário que se cadastra para publicar vagas, buscar perfis de freelancers, gerenciar projetos, enviar briefings, enviar e receber avaliações dos profissionais contratados.
+
+---
+
 
 ## Funcionalidades
 
