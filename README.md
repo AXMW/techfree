@@ -7,7 +7,7 @@ TechFree é uma plataforma digital desenvolvida para conectar programadores free
 ## Sumário
 
 - [Sobre o Projeto](#sobre-o-projeto)
-- [Roles de Usuário](#roles-de-usuários)
+- [Roles de Usuário](#roles-de-usuário)
 - [Funcionalidades](#funcionalidades)
 - [Arquitetura e Tecnologias](#arquitetura-e-tecnologias)
 - [Instalação e Execução](#instalação-e-execução)
